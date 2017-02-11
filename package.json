@@ -1,7 +1,7 @@
 {
   "name": "fotingo",
   "version": "1.0.1",
-  "description": "A CLI to ease the interaction between git, gith and jira.",
+  "description": "A CLI to ease the interaction between git, github and jira.",
   "main": "lib/fotingo.js",
   "bin": {
     "fotingo": "./lib/fotingo.js"
@@ -14,6 +14,18 @@
   },
   "author": "Victor Mora",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tagoro9/fotingo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tagoro9/fotingo.git"
+  },
+  "keywords": [
+    "jira",
+    "github",
+    "git"
+  ],
   "dependencies": {
     "chalk": "^1.1.3",
     "commander": "^2.9.0",
