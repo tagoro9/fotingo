@@ -173,6 +173,14 @@ If you want to extend this tool with anything, feel free to submit a pull reques
 to start using [conventional changelog](https://github.com/conventional-changelog/conventional-changelog) and that 
 would help a lot.
 
+## Troubleshooting
+
+This library uses [nodegit](https://github.com/nodegit/nodegit) and it's installation may sometimes [fail](https://github.com/nodegit/nodegit/issues/1134).
+In order to fix it, you could try to run:
+
+* In OSX: `sudo xcode-select --install`
+* In ubuntu: `sudo apt install libssl-dev`
+
 ## What is a fotingo?
 
 This word in Spanish (Canary Islands) means *Rickety old car*, but what is more interesting is the word's origin: In 1908 the *Ford Motor Company* released the *Ford Model T* with the slogan of *foot 'n go*, as in, just put your "foot on the pedal and go". In some hispanic regions this morphed into the current version of *fotingo*. With a single command, you can put your *foot 'n go* on your next issue.
