@@ -51,7 +51,7 @@ try {
               R.map(R.composeP(
                 R.partial(
                   issueTracker.setIssueStatus,
-                  [{ status: issueTracker.status.CODE_REVIEW, comment: `PR: ${pullRequest.html_url}` }]
+                  [{ status: issueTracker.status.IN_PROGRESS, comment: `PR: ${pullRequest.html_url}` }]
                 ),
                 issueTracker.getIssue,
                 R.compose(wrapInPromise, R.prop('key'))
