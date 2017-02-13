@@ -3,6 +3,7 @@ import R from 'ramda';
 export const ISSUE_TYPES = {
   Bug: 'b',
   Feature: 'f',
+  Story: 'f',
   'Sub-task': 'f',
   Task: 'c'
 };
