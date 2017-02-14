@@ -10,6 +10,7 @@
     "clean": "rimraf lib",
     "build": "gulp build",
     "lint": "eslint",
+    "release": "standard-version",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Victor Mora",
@@ -56,6 +57,7 @@
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
-    "rimraf": "^2.5.4"
+    "rimraf": "^2.5.4",
+    "standard-version": "^4.0.0"
   }
 }
