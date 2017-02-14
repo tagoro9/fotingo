@@ -86,7 +86,7 @@ An example file might look like this:
           "BACKLOG": 1,
           "SELECTED_FOR_DEVELOPMENT": 2,
           "IN_PROGRESS": 3,
-          "CODE_REVIEW": 4
+          "IN_REVIEW": 4
         }
         "login": "jira_user",
         "password": "jira_password",
