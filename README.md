@@ -157,13 +157,8 @@ There are still tons of things that I would like to do to improve this tool:
 * Switch from promises to generators or monads.
 * Use JIRA OAuth instead of Basic authentication.
 * Support multiple github owners (instead of having it globally in the config)
-
-There are also a few features that could be added to the script:
-
+* Add support to assign and add labels to pull requests.
 * Rebase current branch onto master. This may be tricky if there are conflicts.
-* Add support to assign and add labels to pull requests (this is limited by the Github API and our current workflow: the API doesn't allow you to add labels unless they are linked to a Github issue, and we don't currently use Github issues).
-* Integrate with Pollito.
-* Integrate with TeamCity to create mini instances.
 
 ## Contributing 
 
