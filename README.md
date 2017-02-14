@@ -2,6 +2,8 @@
 
 A CLI to ease the interaction between *git*, *github* and *jira* when working on tasks.
 
+[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
+
 ## The problem
 
 When working on projects or fixing bugs at my $company, I see a common pattern I repeat several times a day:
@@ -168,10 +170,8 @@ There are also a few features that could be added to the script:
 If you want to extend this tool with anything, feel free to submit a pull request.  There are a few things that I would like to keep this tool up-to-date:
 
 * Functional programming. That means use Ramda everywhere.
-* A clean commit history. I would encourage the use of the Angular JS 
-[commit convention](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format). I plan 
-to start using [conventional changelog](https://github.com/conventional-changelog/conventional-changelog) and that 
-would help a lot.
+* A clean commit history. I would encourage the use of the conventional changelog angular
+[commit convention](https://github.com/conventional-changelog/conventional-changelog-angular/blob/master/convention.md).
 
 ## Troubleshooting
 
