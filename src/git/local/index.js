@@ -1,5 +1,6 @@
 import Git from 'nodegit';
 import R from 'ramda';
+import conventionalCommitsParser from 'conventional-commits-parser';
 import { throwControlledError, errors } from '../../error';
 import { createBranchName, getIssueIdFromBranch } from '../util';
 import { debug, debugCurried, debugCurriedP, wrapInPromise } from '../../util';
@@ -24,37 +25,20 @@ const getCurrentBranchName = R.composeP(
   () => repository.head(),
 );
 
-const footerRegex = /^(closes|fixes)\s+((#\w+-\d+)(,?\s+#\w+-\d+)*)\s*$/i;
-
-// String -> Array
-const getIssues = R.compose(
-  R.reject(R.isEmpty),
-  R.map(R.trim),
-  R.split(','),
-  R.when(R.isNil, R.always('')),
-  R.nth(2),
-  R.match(footerRegex),
-  R.last,
-  R.reject(R.isEmpty),
-  R.split('\n')
-);
-
-// String -> String
-const formatMessage = R.compose(
-  R.join('\n'),
-  R.when(R.compose(R.lt(1), R.length), R.init),
-  R.reject(R.isEmpty),
-  R.split('\n')
-);
-
 // Commit -> Object
 const transformCommit = R.compose(
-  R.converge(
-    R.unapply(([issues, message]) => ({ issues, message })),
-    [getIssues, formatMessage]
-  ),
+  conventionalCommitsParser.sync,
   R.invoker(0, 'message')
 );
+
+// Object -> Array -> Array
+const getIssues = R.converge(R.concat, [
+  R.compose(R.ifElse(R.isNil,
+    R.always([]),
+    ({ key }) => ([{ raw: `#${key}`, issue: key }])
+  ), R.nthArg(0)),
+  R.compose(R.flatten, R.map(R.compose(R.map(R.pick(['raw', 'issue'])), R.prop('references'))), R.nthArg(1))
+]);
 
 export default {
   init: (config, pathToRepo) => () => {
@@ -99,7 +83,7 @@ export default {
       R.compose(wrapInPromise, getIssueIdFromBranch),
       getCurrentBranchName
     )(),
-  getBranchInfo() {
+  getBranchInfo(issue) {
     debug('git', 'Getting branch commit history');
     return Promise.all([
       repository.getHeadCommit(),
@@ -121,6 +105,10 @@ export default {
             .then(commits => R.compose(R.reverse, R.map(transformCommit), R.init)(commits)),
           getCurrentBranchName()
         ])
-      .then(([commits, name]) => ({ name, commits })));
+      .then(([commits, name]) => ({
+        name,
+        commits,
+        issues: getIssues(issue, commits)
+      })));
   }
 };

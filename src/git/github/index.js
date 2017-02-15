@@ -50,40 +50,25 @@ const buildPullRequestTitle = R.ifElse(
 // Array -> String
 const buildPullRequestBody = R.compose(
   R.join('\n'),
-  R.map(
-    R.compose(
-      R.join('\n'),
-      R.converge(R.prepend, [
-        R.compose(R.concat('* '), R.head),
-        R.compose(R.map(R.concat('  ')), R.tail)
-      ]),
-      R.split('\n'),
-      R.prop('message')
-    )
-  )
+  R.map(R.converge(R.concat, [
+    R.compose(R.concat('* '), R.prop('header')),
+    R.compose(R.replace(/\n|^/g, '\n  '), R.prop('body'))
+  ]))
 );
-// Object -> Array -> String
+// Array -> String
 const buildPullRequestFooter = issueRoot => R.compose(
-  R.concat('\nFixes '),
-  R.join(', '),
-  R.map((issue) => `[${issue}](${issueRoot}${R.tail(issue)})`),
-  R.uniq,
-  R.flatten,
-  R.map(R.ifElse(R.has('key'), R.compose(R.concat('#'), R.prop('key')), R.prop('issues'))),
-  R.reject(R.either(R.isEmpty, R.isNil)),
-  R.prepend
+  R.ifElse(R.isEmpty, R.always(''), R.compose(R.concat('\nFixes '), R.join(', '))),
+  R.map(({ raw, issue }) => `[${raw}](${issueRoot}${issue})`),
+  R.uniqBy(R.prop('issue')),
 );
 
-// Object -> Array -> String
+// Object -> Object -> String
 const buildPullRequestDescription = issueRoot => R.converge(
   R.compose(wrapInPromise, R.unapply(R.join('\n'))),
   [
     buildPullRequestTitle,
-    R.compose(buildPullRequestBody, R.nthArg(2)),
-    R.compose(
-      R.apply(buildPullRequestFooter(issueRoot)),
-      R.unapply(R.remove(1, 1)),
-    )
+    R.compose(buildPullRequestBody, R.prop('commits'), R.nthArg(1)),
+    R.compose(buildPullRequestFooter(issueRoot), R.prop('issues'), R.nthArg(1))
   ]
 );
 
@@ -147,7 +132,6 @@ export default {
       debug('github', 'No user token present. Attempting login');
       return doLogin();
     });
-
   },
   // Object -> Array -> Promise
   createPullRequest: R.curryN(5, (config, project, issue, issueRoot, branchInfo) =>
@@ -156,18 +140,6 @@ export default {
         throwControlledError(errors.github.pullRequestDescriptionInvalid),
         // Assign the PR link to all the issues that were created
         R.composeP(
-          R.converge(
-            (issues, pullRequest) => ({ issues, pullRequest }),
-            [
-              R.compose(
-                R.ifElse(R.partial(R.isNil, [issue]), R.identity, R.append(issue)),
-                R.map(R.compose(R.set(R.lensProp('key'), R.__, {}), R.tail)),
-                R.flatten,
-                R.map(R.prop('issues')), R.view(R.lensPath(['branchInfo', 'commits']))
-              ),
-              R.prop('pullRequest')
-            ]
-          ),
           R.compose(wrapInPromise, R.set(R.lensProp('pullRequest'), R.__, { branchInfo })),
           submitPullRequest(config, project, branchInfo)
         )
@@ -176,5 +148,5 @@ export default {
       allowUserToEditPullRequest,
       debugCurriedP('github', 'Editing pull request description'),
       buildPullRequestDescription(issueRoot),
-    )(issue, branchInfo.name, branchInfo.commits))
+    )(issue, branchInfo))
 };

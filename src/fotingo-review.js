@@ -39,13 +39,13 @@ try {
         ))
         .then(issue => {
           step(5 - stepOffset, 'Getting your commit history', 'books');
-          return git.getBranchInfo()
+          return git.getBranchInfo(issue)
             .then(step(6 - stepOffset, 'Creating pull request', 'speaker'))
             .then(github.createPullRequest(config, project, issue, issueTracker.issueRoot));
         })
         .then(R.ifElse(
           R.partial(R.compose(R.not, R.propEq('simple', true)), [program]),
-          ({ issues, pullRequest }) =>
+          ({ branchInfo: { issues }, pullRequest }) =>
             R.compose(
               promises => Promise.all(promises),
               R.map(R.composeP(
@@ -54,9 +54,9 @@ try {
                   [{ status: issueTracker.status.IN_REVIEW, comment: `PR: ${pullRequest.html_url}` }]
                 ),
                 issueTracker.getIssue,
-                R.compose(wrapInPromise, R.prop('key'))
+                R.compose(wrapInPromise, R.prop('issue'))
               )),
-              stepCurried(7 - stepOffset, `Setting issues to code review on ${issueTracker.name}`, 'bookmark')
+              stepCurried(7 - stepOffset, `Setting issues to code review on ${issueTracker.name}`, 'bookmark'),
             )(issues),
           R.identity
         )))
