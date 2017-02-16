@@ -47,6 +47,7 @@ try {
           R.partial(R.compose(R.not, R.propEq('simple', true)), [program]),
           ({ branchInfo: { issues }, pullRequest }) =>
             R.compose(
+              () => wrapInPromise({ pullRequest }),
               promises => Promise.all(promises),
               R.map(R.composeP(
                 R.partial(
@@ -60,7 +61,10 @@ try {
             )(issues),
           R.identity
         )))
-    .then(reporter.footer)
+    .then(R.compose(
+      reporter.footer,
+      R.ifElse(R.isNil, R.identity, R.path(['pullRequest', 'html_url']))
+    ))
     .catch(handleError);
 } catch (e) {
   handleError(e);
