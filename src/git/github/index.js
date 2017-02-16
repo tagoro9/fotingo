@@ -40,10 +40,10 @@ const authenticateAndGetCurrentUser = R.composeP(
 );
 
 
-// Object -> String -> String
+// Object -> Object -> String
 const buildPullRequestTitle = R.ifElse(
   R.isNil,
-  R.compose(R.concat(R.__, '\n'), R.nthArg(1)),
+  R.compose(R.concat(R.__, '\n'), R.prop('name'), R.nthArg(1)),
   issue => `${ISSUE_TYPES[issue.fields.issuetype.name]}/${issue.key} ${R.take(60, issue.fields.summary)}\n`
 );
 
