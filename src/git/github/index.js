@@ -52,7 +52,10 @@ const buildPullRequestBody = R.compose(
   R.join('\n'),
   R.map(R.converge(R.concat, [
     R.compose(R.concat('* '), R.prop('header')),
-    R.compose(R.replace(/\n|^/g, '\n  '), R.prop('body'))
+    R.compose(
+      R.ifElse(R.isNil, R.always(''), R.replace(/\n|^/g, '\n  ')),
+      R.prop('body')
+    )
   ]))
 );
 // Array -> String
