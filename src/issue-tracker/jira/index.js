@@ -10,7 +10,8 @@ export default config => () => {
   const root = config.get(['jira', 'root'])
     ? wrapInPromise(config.get(['jira', 'root']))
     : R.composeP(config.update(['jira', 'root']), reporter.question)({ question: 'What\'s your jira root?' });
-  const statusPromise = R.either(R.isNil, R.isEmpty)(config.get(['jira', 'status']))
+  const statusPromise = root.then(() =>
+    (R.either(R.isNil, R.isEmpty)(config.get(['jira', 'status']))
     ? R.composeP(
         config.update(['jira', 'status']),
         R.compose(
@@ -23,7 +24,8 @@ export default config => () => {
         R.compose(wrapInPromise, R.concat('['), R.concat(R.__, ']')),
         reporter.question
     )({ question: 'What are your jira step ids (Backlog, to do, in progress, in review)? Enter a comma separated list' })
-    : wrapInPromise(config.get(['jira', 'status']));
+    : wrapInPromise(config.get(['jira', 'status'])))
+  );
 
   return Promise.all([root, statusPromise]).then(([jiraRoot, status]) => {
     const { get, post, setAuth } = httpClient(jiraRoot);
