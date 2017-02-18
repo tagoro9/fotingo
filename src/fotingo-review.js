@@ -19,13 +19,18 @@ try {
     R.compose(R.equals(true), R.prop('branchIssue')),
     R.compose(R.not, R.equals(true), R.prop('simple'))
   ), [program]);
-  const { step, stepCurried } = reporter.stepFactory(shouldGetIssue() ? 7 : 4);
-  const stepOffset = shouldGetIssue ? 0 : 2;
+  const getTotalSteps = R.ifElse(
+    R.propEq('simple', true),
+    R.always(4),
+    R.ifElse(R.propEq('branchIssue', false), R.always(5), R.always(7))
+  );
+  const { step, stepCurried } = reporter.stepFactory(getTotalSteps(program));
+  const stepOffset = shouldGetIssue() ? 0 : 2;
   const project = getProject(process.cwd());
   step(1, 'Initializing services', 'rocket');
   init(config, program)
     .then(({ git, github, issueTracker }) =>
-      wrapInPromise(stepCurried(2, 'Pushing current branch to Github', 'arrow_up'))
+      wrapInPromise(step(2, 'Pushing current branch to Github', 'arrow_up'))
         .then(git.pushBranchToGithub(config))
         .then(R.ifElse(
           shouldGetIssue,
