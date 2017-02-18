@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/tagoro9/fotingo/compare/v1.1.0...v1.1.1) (2017-02-18)
+
+
+### Bug Fixes
+
+* **github:** handle empty commit bodies ([5626d0e](https://github.com/tagoro9/fotingo/commit/5626d0e))
+* **jira:** do not skip root question ([3bbb764](https://github.com/tagoro9/fotingo/commit/3bbb764))
+* **review:** show correct total number of steps ([894556b](https://github.com/tagoro9/fotingo/commit/894556b))
+* **review:** wait for all promises to print footer ([c820678](https://github.com/tagoro9/fotingo/commit/c820678))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/tagoro9/fotingo/compare/v1.0.4...v1.1.0) (2017-02-16)
 
