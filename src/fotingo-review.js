@@ -47,7 +47,7 @@ try {
           R.partial(R.compose(R.not, R.propEq('simple', true)), [program]),
           ({ branchInfo: { issues }, pullRequest }) =>
             R.compose(
-              () => wrapInPromise({ pullRequest }),
+              promise => promise.then(R.always(wrapInPromise({ pullRequest }))),
               promises => Promise.all(promises),
               R.map(R.composeP(
                 R.partial(
