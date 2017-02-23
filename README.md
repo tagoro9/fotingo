@@ -170,11 +170,19 @@ If you want to extend this tool with anything, feel free to submit a pull reques
 
 ## Troubleshooting
 
+### Can't install fotingo
+
 This library uses [nodegit](https://github.com/nodegit/nodegit) and it's installation may sometimes [fail](https://github.com/nodegit/nodegit/issues/1134).
 In order to fix it, you could try to run:
 
-* In OSX: `sudo xcode-select --install`
-* In ubuntu: `sudo apt install libssl-dev`
+  * In OSX: `sudo xcode-select --install`
+  * In ubuntu: `sudo apt install libssl-dev`
+
+### `fotingo not found ` when installing with yarn.
+
+You need to have the directory where yarn installs global packages in your path. You can read more about that [here](https://github.com/yarnpkg/yarn/issues/648)
+and [here](https://github.com/yarnpkg/yarn/issues/851). You just need to add `export PATH="$(yarn global bin | grep -o '/.*'):$PATH"`
+to your `.bash_profile` or equivalent.
 
 ## What is a fotingo?
 
