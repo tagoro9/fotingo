@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 export default {
   git: {
+    branchAlreadyExists: 'It looks like you already have a branch for this issue.',
     couldNotInitializeRepo: 'We have problems accessing the repo in \'${pathToRepo}\'. Make sure it exists.',
     noChanges: 'You haven\'t made any changes to this branch'
   },

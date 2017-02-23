@@ -1,7 +1,7 @@
 import Git from 'nodegit';
 import R from 'ramda';
 import conventionalCommitsParser from 'conventional-commits-parser';
-import { throwControlledError, errors } from '../../error';
+import { catchPromiseAndThrow, throwControlledError, errors } from '../../error';
 import { createBranchName, getIssueIdFromBranch } from '../util';
 import { debug, debugCurried, debugCurriedP, wrapInPromise } from '../../util';
 import app from '../../../package.json';
@@ -70,7 +70,10 @@ export default {
       ))
       .then(() => repository.getBranchCommit(`${remote}/${branch}`))
       .then(debugCurriedP('git', 'Creating new branch'))
-      .then((commit) => repository.createBranch(name, commit))
+      .then(R.compose(
+        catchPromiseAndThrow('git', errors.git.branchAlreadyExists),
+        (commit) => repository.createBranch(name, commit)
+      ))
       .then(() => repository.checkoutBranch(name));
   }),
   pushBranchToGithub: R.curryN(1, config => {
