@@ -31,7 +31,7 @@ try {
   init(config, program)
     .then(({ git, github, issueTracker }) =>
       wrapInPromise(step(2, 'Pushing current branch to Github', 'arrow_up'))
-        .then(git.pushBranchToGithub(config))
+        .then(R.partial(git.pushBranchToGithub, [config]))
         .then(R.ifElse(
           shouldGetIssue,
           R.compose(

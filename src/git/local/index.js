@@ -76,10 +76,20 @@ export default {
       ))
       .then(() => repository.checkoutBranch(name));
   }),
-  pushBranchToGithub: R.curryN(1, config => {
-    // TODO implmement this
-    return Promise.resolve(config);
-  }),
+  pushBranchToGithub: R.converge(
+    R.composeP(([remote, branch, { branchName, ref }]) => remote.push([ref], fetchOptions)
+        .then(() => Git.Branch.setUpstream(branch, `${remote.name()}/${branchName}`)),
+    (...promises) => Promise.all(promises)),
+    [
+      R.compose(
+        remote => Git.Remote.lookup(repository, remote),
+        R.prop('remote'),
+        R.invoker(1, 'get')(['git'])
+      ),
+      () => repository.head(),
+      () => getCurrentBranchName().then(name => ({ branchName: name, ref: `refs/heads/${name}:refs/heads/${name}` }))
+    ]
+  ),
   extractIssueFromCurrentBranch: () =>
     R.composeP(
       debugCurriedP('git', 'Extracting issue from current branch'),
