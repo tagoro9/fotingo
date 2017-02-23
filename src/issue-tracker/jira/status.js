@@ -5,7 +5,7 @@ import reporter from '../../reporter';
 export const status = {
   BACKLOG: 'BACKLOG',
   IN_PROGRESS: 'IN_PROGRESS',
-  IN_REVIEW: 'IN_PREVIEW',
+  IN_REVIEW: 'IN_REVIEW',
   SELECTED_FOR_DEVELOPMENT: 'SELECTED_FOR_DEVELOPMENT'
 };
 
