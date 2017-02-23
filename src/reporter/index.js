@@ -43,6 +43,7 @@ export default {
     return { step: step(totalSteps), stepCurried: stepCurried(totalSteps) };
   },
   log,
+  info: (msg) => log(`${format.grey('info')} ${msg}`),
   error(msg) {
     log(`${format.red('error')} ${prependEmoji(msg, emojis.get('boom'))}`);
   },

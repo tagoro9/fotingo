@@ -4,30 +4,16 @@ import { debug, debugCurried, debugCurriedP, wrapInPromise } from '../../util';
 import reporter from '../../reporter';
 import { errors, catchPromiseAndThrow } from '../../error';
 import issueUtil from './issue';
+import readIssueStatus, { status } from './status';
+
 
 export default config => () => {
   debug('jira', 'Initializing Jira api');
   const root = config.get(['jira', 'root'])
     ? wrapInPromise(config.get(['jira', 'root']))
     : R.composeP(config.update(['jira', 'root']), reporter.question)({ question: 'What\'s your jira root?' });
-  const statusPromise = root.then(() =>
-    (R.either(R.isNil, R.isEmpty)(config.get(['jira', 'status']))
-    ? R.composeP(
-        config.update(['jira', 'status']),
-        R.compose(
-          wrapInPromise,
-          ([BACKLOG, SELECTED_FOR_DEVELOPMENT, IN_PROGRESS, IN_REVIEW]) => ({
-            BACKLOG, SELECTED_FOR_DEVELOPMENT, IN_PROGRESS, IN_REVIEW
-          })
-        ),
-        R.compose(wrapInPromise, JSON.parse),
-        R.compose(wrapInPromise, R.concat('['), R.concat(R.__, ']')),
-        reporter.question
-    )({ question: 'What are your jira step ids (Backlog, to do, in progress, in review)? Enter a comma separated list' })
-    : wrapInPromise(config.get(['jira', 'status'])))
-  );
 
-  return Promise.all([root, statusPromise]).then(([jiraRoot, status]) => {
+  return root.then(jiraRoot => {
     const { get, post, setAuth } = httpClient(jiraRoot);
     const issueRoot = `${jiraRoot}/browse/`;
     const readUserInfo = () => {
@@ -86,19 +72,30 @@ export default config => () => {
         // Jira api for transition is not adding the comment so we need an extra api call
         R.partial(R.unless(R.isNil, addCommentToIssue(issue)), [comment]),
         post(`/rest/api/2/issue/${issue.key}/transitions`),
-        debugCurriedP('jira', `Updating issue status to ${issueStatus}`)
-        )({
+        debugCurriedP('jira', `Updating issue status to ${issueStatus}`),
+        statuses => wrapInPromise({
           body: {
             transition: R.compose(
               R.pick(['id']),
-              R.find(R.compose(R.equals(issueStatus), Number, R.path(['to', 'id']))),
+              R.find(R.compose(R.equals(statuses[issueStatus]), Number, R.path(['to', 'id']))),
               R.prop('transitions')
             )(issue),
             fields: {},
           }
-        })
+        }),
+        readIssueStatus(config)
+        )(issue)
       ),
-      canWorkOnIssue: issueUtil(status).canWorkOnIssue,
+      canWorkOnIssue: R.curryN(2, R.converge(
+        (canWonOnIssue, promise) => promise.then(canWonOnIssue),
+        [
+          R.curryN(2, R.invoker(2, 'canWorkOnIssue')),
+          R.composeP(
+            R.compose(wrapInPromise, issueUtil),
+            R.flip(readIssueStatus(config))
+          )
+        ]
+      )),
       status
     }));
   });
