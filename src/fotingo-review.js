@@ -13,6 +13,7 @@ try {
   program
     .option('-n, --no-branch-issue', 'Do not pick issue from branch name')
     .option('-s, --simple', 'Do not use any issue tracker')
+    .option('-l, --label [labels]', 'Labels to add to the PR', R.append, [])
     .parse(process.argv);
 
   const shouldGetIssue = R.partial(R.both(
@@ -46,6 +47,7 @@ try {
           step(5 - stepOffset, 'Getting your commit history', 'books');
           return git.getBranchInfo(issue)
             .then(step(6 - stepOffset, 'Creating pull request', 'speaker'))
+            .then(github.checkAndGetLabels(config, project, program.label))
             .then(github.createPullRequest(config, project, issue, issueTracker.issueRoot));
         })
         .then(R.ifElse(

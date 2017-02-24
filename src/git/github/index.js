@@ -14,7 +14,9 @@ const getCurrentUser = R.compose(
   promisify
 )(github.users.get);
 
-const createPullRequest = promisify(github.pullRequests.create);
+const createPullRequest = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.pullRequests.create));
+const addLabels = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.issues.addLabels));
+const getLabels = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.issues.getLabels));
 
 const authenticate = R.compose(
   wrapInPromise,
@@ -39,7 +41,6 @@ const authenticateAndGetCurrentUser = R.composeP(
   }), getCurrentUser),
   authenticate
 );
-
 
 // Object -> Object -> String
 const buildPullRequestTitle = R.ifElse(
@@ -109,6 +110,16 @@ const submitPullRequest = R.curryN(4, (config, project, branchInfo, description)
   body: R.compose(R.join('\n'), R.tail, R.split('\n'))(description)
 }));
 
+const addLabelsToPullRequest = R.curryN(4, (config, project, branchInfo, pullRequest) => R.composeP(
+  R.compose(wrapInPromise, R.always(pullRequest)),
+  addLabels)({
+    owner: config.get(['github', 'owner']),
+    repo: project,
+    number: pullRequest.number,
+    labels: branchInfo.labels
+  })
+);
+
 export default {
   init: config => () => {
     debug('github', 'Initializing Github api');
@@ -145,6 +156,7 @@ export default {
         // Assign the PR link to all the issues that were created
         R.composeP(
           R.compose(wrapInPromise, R.set(R.lensProp('pullRequest'), R.__, { branchInfo })),
+          addLabelsToPullRequest(config, project, branchInfo),
           submitPullRequest(config, project, branchInfo)
         )
       ),
@@ -152,5 +164,17 @@ export default {
       allowUserToEditPullRequest,
       debugCurriedP('github', 'Editing pull request description'),
       buildPullRequestDescription(issueRoot),
-    )(issue, branchInfo))
+    )(issue, branchInfo)),
+  checkAndGetLabels: R.curryN(4, (config, project, labels, branchInfo) => R.composeP(
+    R.compose(
+      R.set(R.lensProp('labels'), R.__, branchInfo),
+      R.map(R.prop('name')),
+      R.filter(R.compose(R.contains(R.__, labels), R.prop('name')))
+    ),
+    R.unless(R.compose(
+      names => R.all(R.contains(R.__, names), labels),
+      R.map(R.prop('name'))
+    ), throwControlledError(errors.github.invalidLabel)),
+    getLabels
+  )({ owner: config.get(['github', 'owner']), repo: project }))
 };

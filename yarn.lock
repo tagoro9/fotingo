@@ -1930,13 +1930,14 @@ github-url-from-git@^1.4.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/github-url-from-git/-/github-url-from-git-1.5.0.tgz#f985fedcc0a9aa579dc88d7aff068d55cc6251a0"
 
-github@^5.1.0:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/github/-/github-5.3.3.tgz#8d0d587b3d4556ea7be90d1c5a20fce96f3826ad"
+github@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/github/-/github-9.0.0.tgz#b26c815965956975d96a668263306e011214095f"
   dependencies:
     follow-redirects "0.0.7"
     https-proxy-agent "^1.0.0"
     mime "^1.2.11"
+    netrc "^0.1.4"
 
 glob-base@^0.3.0:
   version "0.3.0"
@@ -2926,6 +2927,10 @@ nan@^2.2.0, nan@^2.3.0:
 natives@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/natives/-/natives-1.1.0.tgz#e9ff841418a6b2ec7a495e939984f78f163e6e31"
+
+netrc@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/netrc/-/netrc-0.1.4.tgz#6be94fcaca8d77ade0a9670dc460914c94472444"
 
 node-emoji:
   version "1.4.1"
