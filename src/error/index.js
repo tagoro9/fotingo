@@ -1,6 +1,6 @@
 import R from 'ramda';
 import errors from './errors';
-import { debugCurried, error, errorCurried } from '../util';
+import { debugCurried, error } from '../util';
 import reporter from '../reporter';
 
 export class ControlledError extends Error {
