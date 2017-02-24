@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/tagoro9/fotingo/compare/v1.1.1...v1.2.0) (2017-02-24)
+
+
+### Bug Fixes
+
+* **config:** only create config file when there is none ([57de6b2](https://github.com/tagoro9/fotingo/commit/57de6b2))
+* **errors:** do not show ugly end message for unknown errors ([339ebb1](https://github.com/tagoro9/fotingo/commit/339ebb1))
+* **git:** handle duplicate branch errors ([b22da57](https://github.com/tagoro9/fotingo/commit/b22da57))
+* **jira:** fix typo in IN_REVIEW status value ([83d70af](https://github.com/tagoro9/fotingo/commit/83d70af))
+
+
+### Features
+
+* **git:** push and track branch to remote ([7ac254b](https://github.com/tagoro9/fotingo/commit/7ac254b))
+* **jira:** improve setup UI for transition ids ([69576a0](https://github.com/tagoro9/fotingo/commit/69576a0))
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/tagoro9/fotingo/compare/v1.1.0...v1.1.1) (2017-02-18)
 
