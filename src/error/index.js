@@ -3,7 +3,7 @@ import errors from './errors';
 import { debugCurried, error, errorCurried } from '../util';
 import reporter from '../reporter';
 
-class ControlledError extends Error {
+export class ControlledError extends Error {
   constructor(message, parameters = {}) {
     super(R.compose(
       R.reduce((msg, [k, v]) => R.replace(`\${${k}}`, v, msg), message),

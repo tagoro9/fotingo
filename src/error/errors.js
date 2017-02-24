@@ -1,5 +1,8 @@
 /* eslint-disable max-len */
 export default {
+  config: {
+    malformedFile: 'It looks like your config file is not correct. If you have modified it, make sure it is a valid JSON'
+  },
   git: {
     branchAlreadyExists: 'It looks like you already have a branch for this issue.',
     couldNotInitializeRepo: 'We have problems accessing the repo in \'${pathToRepo}\'. Make sure it exists.',
