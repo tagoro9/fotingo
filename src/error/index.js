@@ -21,7 +21,7 @@ const isKnownError = R.either(R.is(ControlledError), R.propEq('message', 'cancel
 const exit = code => () => process.exit(code);
 const userIsExiting = R.compose(R.equals('canceled'), R.prop('message'));
 const handleErrorAndExit = R.compose(exit(0), error, R.prop('message'));
-const handleUnknownError = R.compose(exit(1), errorCurried('I DON\'T KNOW HOW TO HANDLE THIS ERROR'), error);
+const handleUnknownError = R.compose(exit(1), error);
 const sayBye = () => reporter.log('Hasta la vista baby!', 'wave');
 export const handleError = R.ifElse(
   isKnownError,
