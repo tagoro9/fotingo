@@ -29,6 +29,7 @@ const readUserToken = R.compose(
 
 const authenticateAndGetCurrentUser = R.composeP(
   R.compose(catchPromiseAndThrow('github', e => {
+    debug('github', `Error when authenticating: ${e.message}`);
     switch (e.code) {
       case '500':
         return errors.github.cantConnect;
