@@ -12,7 +12,7 @@ export const debugCurried = R.curryN(3, (module, msg, args) => {
 
 export const error = R.ifElse(
   R.is(Error),
-  R.compose(R.forEach(reporter.error), R.props(['stack'])),
+  R.compose(reporter.error, R.last, R.reject(R.isNil), R.props(['message', 'stack'])),
   R.compose(
     reporter.error,
     R.ifElse(R.is(String), R.identity, R.partialRight(JSON.stringify, [null, 2]))
