@@ -115,7 +115,7 @@ The command line supports the following commands:
  
  * `fotingo --help` - to display usage information.
  * `fotingo start <issue-id>` - to start working on an issue.
- * `fotingo review` - to submit the current issue for review.  Additional options available by using `fotingo review -h`
+ * `fotingo review` - to submit the current issue for review.  Additional options available (e.g. adding labels, not using an issue tracker) by using `fotingo review -h`
 
 As of today, SSH  is the only supported authorization type for communicating with Github. Your SSH key should be loaded into the SSH agent (i.e. `ssh-add -k path-to-private-key`). Otherwise, the tool will enter an infinite loop and hang.
 
@@ -168,7 +168,7 @@ There are still tons of things that I would like to do to improve this tool:
 * Allow changes to the configuration via the CLI.
 * Switch from promises to generators or monads.
 * Use JIRA OAuth instead of Basic authentication.
-* Add support to assign and add labels to pull requests.
+* Add support to request reviews to pull requests.
 * Rebase current branch onto master. This may be tricky if there are conflicts.
 * Lookup config file in parent folders.
 
