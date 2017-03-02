@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/tagoro9/fotingo/compare/v1.2.0...v1.3.0) (2017-03-02)
+
+
+### Features
+
+* **config:** allow to have local config files ([#9](https://github.com/tagoro9/fotingo/issues/9)) ([4d436dd](https://github.com/tagoro9/fotingo/commit/4d436dd))
+* **review:** allow to add labels to PRs ([#10](https://github.com/tagoro9/fotingo/issues/10)) ([5d4d487](https://github.com/tagoro9/fotingo/commit/5d4d487))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/tagoro9/fotingo/compare/v1.1.1...v1.2.0) (2017-02-24)
 
