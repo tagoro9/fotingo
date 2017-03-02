@@ -23,8 +23,11 @@ const data = {
     R.isNil(data.get(['jira', 'user', 'login']))
   )),
   update: R.curryN(2, (path, value) => {
-    config = R.set(R.lensPath(path), value)(config);
-    writeConfigFile(config);
+    config = R.set(R.lensPath(path), value, config);
+    writeConfigFile(
+      config.local ? R.set(R.lensPath(path), value, {}) : config,
+      config.local
+    );
     return value;
   }),
   get: (path) => R.view(R.lensPath(path), config)
