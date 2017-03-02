@@ -96,6 +96,18 @@ An example file might look like this:
     
 Right now this file will store the username and password to your JIRA account in plaintext. I'm working on 
 improving that.
+
+### Local configuration files
+
+You can create local configuration files to your project. Just create a `.fotingo` file inside your project root folder.
+This file, needs to be in JSON format as well. If such file exist, any missing configuration will be added to this file instead.
+You can also overwrite global configuration in this file. An example config file may just be:
+
+    {
+      "github": {
+        "owner": "another-github-username"
+      }
+    }
     
 ## Usage
 
@@ -156,9 +168,9 @@ There are still tons of things that I would like to do to improve this tool:
 * Allow changes to the configuration via the CLI.
 * Switch from promises to generators or monads.
 * Use JIRA OAuth instead of Basic authentication.
-* Support multiple github owners (instead of having it globally in the config)
 * Add support to assign and add labels to pull requests.
 * Rebase current branch onto master. This may be tricky if there are conflicts.
+* Lookup config file in parent folders.
 
 ## Contributing 
 
