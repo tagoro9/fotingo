@@ -10,6 +10,7 @@ export default {
   },
   github: {
     cantConnect: 'We can\' connect to github right now. Try in a few moments',
+    invalidLabel: 'One of the labels you typed does not exist.',
     pullRequestDescriptionInvalid: 'The description provided for the pull request is not valid',
     tokenInvalid: 'The provided Github token is not valid'
   },
