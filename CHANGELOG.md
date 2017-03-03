@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/tagoro9/fotingo/compare/v1.3.0...v1.3.1) (2017-03-03)
+
+
+### Bug Fixes
+
+* **ui:** show issues and branch names in ui ([#13](https://github.com/tagoro9/fotingo/issues/13)) ([67c40a9](https://github.com/tagoro9/fotingo/commit/67c40a9)), closes [#12](https://github.com/tagoro9/fotingo/issues/12)
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/tagoro9/fotingo/compare/v1.2.0...v1.3.0) (2017-03-02)
 
