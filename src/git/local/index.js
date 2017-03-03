@@ -49,9 +49,9 @@ export default {
     })
       .catch(throwControlledError(errors.git.couldNotInitializeRepo, { pathToRepo }));
   },
-  createIssueBranch: R.curryN(2, (config, issue) => {
+  createBranchName,
+  createIssueBranch: R.curryN(2, (config, name) => {
     debug('git', 'Creating branch for issue');
-    const name = createBranchName(issue);
     const { remote, branch } = config.get(['git']);
     debug('git', 'Fetching data from remote');
     // We should fetch -> co master -> reset to origin/master -> create branch
@@ -76,6 +76,7 @@ export default {
       ))
       .then(() => repository.checkoutBranch(name));
   }),
+  getCurrentBranchName,
   pushBranchToGithub: R.converge(
     R.composeP(([remote, branch, { branchName, ref }]) => remote.push([ref], fetchOptions)
         .then(() => Git.Branch.setUpstream(branch, `${remote.name()}/${branchName}`)),
