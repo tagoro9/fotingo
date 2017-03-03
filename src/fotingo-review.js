@@ -25,21 +25,22 @@ try {
     R.always(4),
     R.ifElse(R.propEq('branchIssue', false), R.always(5), R.always(7))
   );
-  const { step, stepCurried } = reporter.stepFactory(getTotalSteps(program));
+  const { step, stepCurried, stepCurriedP } = reporter.stepFactory(getTotalSteps(program));
   const stepOffset = shouldGetIssue() ? 0 : 2;
   const project = getProject(process.cwd());
   step(1, 'Initializing services', 'rocket');
   init(config, program)
     .then(({ git, github, issueTracker }) =>
-      wrapInPromise(step(2, 'Pushing current branch to Github', 'arrow_up'))
+      git.getCurrentBranchName()
+        .then(R.compose(wrapInPromise, stepCurried(2, name => `Pushing '${name}' to Github`, 'arrow_up')))
         .then(R.partial(git.pushBranchToGithub, [config]))
         .then(R.ifElse(
           shouldGetIssue,
-          R.compose(
+          R.composeP(
             issueTracker.getIssue,
-            stepCurried(4, `Getting issue from ${issueTracker.name}`, 'bug'),
+            stepCurriedP(4, issue => `Getting '${issue}' from ${issueTracker.name}`, 'bug'),
             git.extractIssueFromCurrentBranch,
-            stepCurried(3, 'Extracting issue from current branch', 'mag_right')
+            stepCurriedP(3, 'Extracting issue from branch', 'mag_right')
           ),
           R.always(undefined),
         ))
@@ -64,7 +65,16 @@ try {
                 issueTracker.getIssue,
                 R.compose(wrapInPromise, R.prop('issue'))
               )),
-              stepCurried(7 - stepOffset, `Setting issues to code review on ${issueTracker.name}`, 'bookmark'),
+              stepCurried(
+                7 - stepOffset,
+                `Setting ${
+                  R.compose(
+                    R.join(', '),
+                    R.map(R.prop('issue'))
+                  )(issues)
+                } to code review on ${issueTracker.name}`,
+                'bookmark'
+              ),
             )(issues),
           R.identity
         )))

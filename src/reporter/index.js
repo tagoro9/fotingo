@@ -3,6 +3,7 @@ import readline from 'readline';
 import emojis from 'node-emoji';
 import R from 'ramda';
 import read from 'read';
+import { wrapInPromise } from '../util';
 
 const stdout = process.stdout;
 const startTime = Date.now();
@@ -34,13 +35,27 @@ const step = R.curryN(4, (total, current, msg, emojiStr) => {
 });
 
 const stepCurried = R.curryN(5, (total, current, msg, emojiStr, args) => {
-  step(total, current, msg, emojiStr);
+  step(
+    total,
+    current,
+    R.ifElse(R.is(Function), m => m(args), R.identity())(msg),
+    emojiStr
+  );
   return args;
+});
+
+const stepCurriedP = R.curryN(5, (total, current, msg, emojiStr, args) => {
+  stepCurried(total, current, msg, emojiStr, args);
+  return Promise.resolve(args);
 });
 
 export default {
   stepFactory(totalSteps) {
-    return { step: step(totalSteps), stepCurried: stepCurried(totalSteps) };
+    return {
+      step: step(totalSteps),
+      stepCurried: stepCurried(totalSteps),
+      stepCurriedP: stepCurriedP(totalSteps)
+    };
   },
   log,
   info: (msg) => log(`${format.grey('info')} ${msg}`),

@@ -6,6 +6,7 @@ import config from './config';
 import { handleError } from './error';
 import init from './init';
 import reporter from './reporter';
+import { wrapInPromise } from './util';
 
 const { step, stepCurried } = reporter.stepFactory(4);
 const getIssueId = R.compose(validate, R.head, R.prop('args'));
@@ -17,13 +18,14 @@ try {
   init(config, program)
     .then(({ git, issueTracker }) =>
       issueTracker.getCurrentUser()
-        .then(stepCurried(2, `Getting issue from ${issueTracker.name}`, 'bug'))
+        .then(stepCurried(2, `Getting '${issueId}' from ${issueTracker.name}`, 'bug'))
         .then(user =>
           issueTracker.getIssue(issueId)
             .then(issueTracker.canWorkOnIssue(user))
-            .then(stepCurried(3, 'Updating issue status', 'bookmark'))
+            .then(stepCurried(3, `Setting '${issueId}' in progress`, 'bookmark'))
             .then(issueTracker.setIssueStatus({ status: issueTracker.status.IN_PROGRESS }))
-            .then(stepCurried(4, 'Creating branch to work on issue', 'tada'))
+            .then(R.compose(wrapInPromise, git.createBranchName))
+            .then(stepCurried(4, name => `Creating branch '${name}'`, 'tada'))
             .then(git.createIssueBranch(config))
         ))
     .then(reporter.footer)
