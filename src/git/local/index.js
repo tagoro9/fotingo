@@ -97,11 +97,12 @@ export default {
       R.compose(wrapInPromise, getIssueIdFromBranch),
       getCurrentBranchName
     )(),
-  getBranchInfo(issue) {
+  getBranchInfo(config, issue) {
     debug('git', 'Getting branch commit history');
+    const { remote, branch } = config.get(['git']);
     return Promise.all([
       repository.getHeadCommit(),
-      repository.getBranchCommit('origin/master')
+      repository.getBranchCommit(`${remote}/${branch}`)
     ]).then(R.when(
       R.compose(R.not, R.allUniq, R.map(R.compose(R.toString, R.invoker(0, 'id')))),
       throwControlledError(errors.git.noChanges))
