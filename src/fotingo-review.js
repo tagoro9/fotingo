@@ -46,7 +46,7 @@ try {
         ))
         .then(issue => {
           step(5 - stepOffset, 'Getting your commit history', 'books');
-          return git.getBranchInfo(issue)
+          return git.getBranchInfo(config, issue)
             .then(step(6 - stepOffset, 'Creating pull request', 'speaker'))
             .then(github.checkAndGetLabels(config, project, program.label))
             .then(github.createPullRequest(config, project, issue, issueTracker.issueRoot));
