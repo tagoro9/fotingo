@@ -98,7 +98,11 @@ export default {
   extractIssueFromCurrentBranch: () =>
     R.composeP(
       debugCurriedP('git', 'Extracting issue from current branch'),
-      R.compose(wrapInPromise, getIssueIdFromBranch),
+      R.compose(
+        wrapInPromise,
+        R.when(R.isNil, throwControlledError(errors.git.noIssueInBranchName)),
+        getIssueIdFromBranch
+      ),
       getCurrentBranchName
     )(),
   getBranchInfo(config, issue) {

@@ -10,7 +10,7 @@
     "clean": "rimraf lib",
     "build": "npm run clean && gulp build && chmod 755 ./lib/fotingo.js",
     "lint": "eslint src",
-    "release": "standard-version",
+    "release": "npm run build && standard-version",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "gulp watch"
   },
