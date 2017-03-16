@@ -157,7 +157,17 @@ export default {
         R.composeP(
           R.compose(wrapInPromise, R.set(R.lensProp('pullRequest'), R.__, { branchInfo })),
           addLabelsToPullRequest(config, project, branchInfo),
-          submitPullRequest(config, project, branchInfo)
+          R.compose(
+            catchPromiseAndThrow('github', e => {
+              switch (e.code) {
+                case 500:
+                  return errors.github.cantConnect;
+                default:
+                  return errors.github.pullRequestAlreadyExists;
+              }
+            }, branchInfo),
+            submitPullRequest(config, project, branchInfo)
+          )
         )
       ),
       debugCurriedP('github', 'Submitting pull request to github'),

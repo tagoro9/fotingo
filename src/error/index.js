@@ -1,6 +1,6 @@
 import R from 'ramda';
 import errors from './errors';
-import { debugCurried, error } from '../util';
+import { debug, debugCurried, error } from '../util';
 import reporter from '../reporter';
 
 export class ControlledError extends Error {
@@ -29,11 +29,12 @@ export const handleError = R.ifElse(
   handleUnknownError
 );
 // String -> Promise -> Promise
-export const catchPromiseAndThrow = (module, e) => p => p.catch(err => {
+export const catchPromiseAndThrow = (module, e, parameters) => p => p.catch(err => {
   if (R.is(Function, e)) {
-    throwControlledError(e(err))(err);
+    debug(module, err);
+    throwControlledError(e(err), parameters)(err);
   } else {
-    R.compose(throwControlledError(e), debugCurried(module, err))(err);
+    R.compose(throwControlledError(e, parameters), debugCurried(module, err))(err);
   }
 });
 export { errors };
