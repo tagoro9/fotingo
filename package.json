@@ -8,7 +8,7 @@
   },
   "scripts": {
     "clean": "rimraf lib",
-    "build": "gulp build",
+    "build": "npm run clean && gulp build",
     "lint": "eslint src",
     "release": "standard-version",
     "test": "echo \"Error: no test specified\" && exit 1"
