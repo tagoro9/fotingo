@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/tagoro9/fotingo/compare/v1.3.2...v1.4.0) (2017-03-16)
+
+
+### Features
+
+* **Jira:** improve issue transition setup ([#24](https://github.com/tagoro9/fotingo/issues/24)) ([c214884](https://github.com/tagoro9/fotingo/commit/c214884)), closes [#11](https://github.com/tagoro9/fotingo/issues/11)
+
+
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/tagoro9/fotingo/compare/v1.3.1...v1.3.2) (2017-03-16)
 
