@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.1"></a>
+## [1.4.1](https://github.com/tagoro9/fotingo/compare/v1.4.0...v1.4.1) (2017-03-16)
+
+
+### Bug Fixes
+
+* **build:** build it correctly ([add0014](https://github.com/tagoro9/fotingo/commit/add0014))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/tagoro9/fotingo/compare/v1.3.2...v1.4.0) (2017-03-16)
 
