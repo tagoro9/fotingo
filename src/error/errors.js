@@ -12,7 +12,8 @@ export default {
     cantConnect: 'We can\' connect to github right now. Try in a few moments',
     invalidLabel: 'One of the labels you typed does not exist.',
     pullRequestDescriptionInvalid: 'The description provided for the pull request is not valid',
-    tokenInvalid: 'The provided Github token is not valid'
+    tokenInvalid: 'The provided Github token is not valid',
+    pullRequestAlreadyExists: 'A pull request already exists for \'${name}\''
   },
   jira: {
     cantWorkOnIssue: 'It looks like you can\'t work on this issue right now. It may have already been fixed or someone else may be working on it.',
