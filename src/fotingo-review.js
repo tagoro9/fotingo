@@ -49,7 +49,9 @@ try {
           return git.getBranchInfo(config, issue)
             .then(step(6 - stepOffset, 'Creating pull request', 'speaker'))
             .then(github.checkAndGetLabels(config, project, program.label))
-            .then(github.createPullRequest(config, project, issue, issueTracker.issueRoot));
+            .then(github.createPullRequest(config, project, issue, issueTracker.issueRoot, {
+              addLinksToIssues: !program.simple
+            }));
         })
         .then(R.ifElse(
           R.partial(R.compose(R.not, R.propEq('simple', true)), [program]),
