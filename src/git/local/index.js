@@ -37,7 +37,11 @@ const getIssues = R.converge(R.concat, [
     R.always([]),
     ({ key }) => ([{ raw: `#${key}`, issue: key }])
   ), R.nthArg(0)),
-  R.compose(R.flatten, R.map(R.compose(R.map(R.pick(['raw', 'issue'])), R.prop('references'))), R.nthArg(1))
+  R.compose(R.flatten, R.map(R.compose(
+    R.map(ref => ({ raw: `${ref.prefix}${ref.issue}`, issue: ref.issue })),
+    R.prop('references'))),
+    R.nthArg(1)
+  )
 ]);
 
 export default {
