@@ -25,4 +25,8 @@ export const createBranchName = ({ key, fields: { issuetype: { name: type }, sum
 
 export const getProject = R.compose(R.nth(1), R.match(/\/((\w|-)+)$/));
 
-export const getIssueIdFromBranch = R.compose(R.toUpper, R.last, R.match(/\w\/(\w+-\d+)/));
+export const getIssueIdFromBranch = R.compose(
+  R.ifElse(R.isNil, R.identity, R.toUpper),
+  R.last,
+  R.match(/\w\/(\w+-\d+)/)
+);
