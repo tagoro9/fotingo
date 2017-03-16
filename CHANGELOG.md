@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/tagoro9/fotingo/compare/v1.3.1...v1.3.2) (2017-03-16)
+
+
+### Bug Fixes
+
+* **git:** parse issues correctly ([#22](https://github.com/tagoro9/fotingo/issues/22)) ([ca571fb](https://github.com/tagoro9/fotingo/commit/ca571fb)), closes [#15](https://github.com/tagoro9/fotingo/issues/15)
+* **git:** read remote and branch from config when getting history ([#21](https://github.com/tagoro9/fotingo/issues/21)) ([6b062eb](https://github.com/tagoro9/fotingo/commit/6b062eb))
+* **Github:** do not add links to issues if mode is simple ([#23](https://github.com/tagoro9/fotingo/issues/23)) ([411a2bd](https://github.com/tagoro9/fotingo/commit/411a2bd)), closes [#14](https://github.com/tagoro9/fotingo/issues/14)
+
+
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/tagoro9/fotingo/compare/v1.3.0...v1.3.1) (2017-03-03)
 
