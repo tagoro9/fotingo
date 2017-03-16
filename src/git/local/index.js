@@ -75,7 +75,14 @@ export default {
       .then(() => repository.getBranchCommit(`${remote}/${branch}`))
       .then(debugCurriedP('git', 'Creating new branch'))
       .then(R.compose(
-        catchPromiseAndThrow('git', errors.git.branchAlreadyExists),
+        catchPromiseAndThrow('git', e => {
+          switch (e.errno) {
+            case Git.Error.CODE.EEXISTS:
+              return errors.git.branchAlreadyExists;
+            default:
+              throw e;
+          }
+        }),
         (commit) => repository.createBranch(name, commit)
       ))
       .then(() => repository.checkoutBranch(name));
