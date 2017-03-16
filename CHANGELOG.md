@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.2"></a>
+## [1.4.2](https://github.com/tagoro9/fotingo/compare/v1.4.1...v1.4.2) (2017-03-16)
+
+
+### Bug Fixes
+
+* **script:** make lib/fotingo.js executable ([97b20b4](https://github.com/tagoro9/fotingo/commit/97b20b4))
+
+
+
 <a name="1.4.1"></a>
 ## [1.4.1](https://github.com/tagoro9/fotingo/compare/v1.4.0...v1.4.1) (2017-03-16)
 
