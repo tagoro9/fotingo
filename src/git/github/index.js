@@ -60,20 +60,20 @@ const buildPullRequestBody = R.compose(
     )
   ]))
 );
-// Array -> String
-const buildPullRequestFooter = issueRoot => R.compose(
-  R.ifElse(R.isEmpty, R.always(''), R.compose(R.concat('\nFixes '), R.join(', '))),
-  R.map(({ raw, issue }) => `[${raw}](${issueRoot}${issue})`),
+// Array -> Boolean -> String
+const buildPullRequestFooter = (issueRoot, addLinksToIssues) => R.compose(
+  R.ifElse(R.isEmpty, R.always(''), R.compose(R.concat(R.__, '.'), R.concat('\nFixes '), R.join(', '))),
+  R.map(({ raw, issue }) => (addLinksToIssues ? `[${raw}](${issueRoot}${issue})` : `${raw}`)),
   R.uniqBy(R.prop('issue')),
 );
 
-// Object -> Object -> String
-const buildPullRequestDescription = issueRoot => R.converge(
+// Object -> Boolean -> Object -> String
+const buildPullRequestDescription = (issueRoot, addLinksToIssues) => R.converge(
   R.compose(wrapInPromise, R.unapply(R.join('\n'))),
   [
     buildPullRequestTitle,
     R.compose(buildPullRequestBody, R.prop('commits'), R.nthArg(1)),
-    R.compose(buildPullRequestFooter(issueRoot), R.prop('issues'), R.nthArg(1))
+    R.compose(buildPullRequestFooter(issueRoot, addLinksToIssues), R.prop('issues'), R.nthArg(1))
   ]
 );
 
@@ -149,7 +149,7 @@ export default {
     });
   },
   // Object -> Array -> Promise
-  createPullRequest: R.curryN(5, (config, project, issue, issueRoot, branchInfo) =>
+  createPullRequest: R.curryN(6, (config, project, issue, issueRoot, { addLinksToIssues }, branchInfo) =>
     R.composeP(
       R.ifElse(R.isEmpty,
         throwControlledError(errors.github.pullRequestDescriptionInvalid),
@@ -163,8 +163,8 @@ export default {
       debugCurriedP('github', 'Submitting pull request to github'),
       allowUserToEditPullRequest,
       debugCurriedP('github', 'Editing pull request description'),
-      buildPullRequestDescription(issueRoot),
-    )(issue, branchInfo)),
+      buildPullRequestDescription(issueRoot, addLinksToIssues),
+    )(issue, branchInfo, addLinksToIssues)),
   checkAndGetLabels: R.curryN(4, (config, project, labels, branchInfo) => R.composeP(
     R.compose(
       R.set(R.lensProp('labels'), R.__, branchInfo),
