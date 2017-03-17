@@ -3,7 +3,6 @@ import readline from 'readline';
 import emojis from 'node-emoji';
 import R from 'ramda';
 import read from 'read';
-import { wrapInPromise } from '../util';
 
 const stdout = process.stdout;
 const startTime = Date.now();

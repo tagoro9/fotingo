@@ -24,7 +24,6 @@ const statusMatcher = statusToFind => R.compose(
 );
 
 export default R.curryN(2, (config, issue) => {
-
   const askForStatus = R.composeP(
     config.update(['jira', 'status']),
     R.compose(
