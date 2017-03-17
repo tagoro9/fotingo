@@ -155,23 +155,6 @@ Also, the code has been written in ES6 using [babel](https://babeljs.io/).
 
 The CLI output has been inspired by yarn.
 
-I've tried to comment the majority of the code, but I think it is pretty much self explanatory, save for some ramda tricks.
-
-These scripts have been developed in my *free* time, if you find a bug please create an issue and I can try to fix it, but *patches are welcome*. 
-
-## Things to do
-
-There are still tons of things that I would like to do to improve this tool:
-
-* ADD TESTS.
-* Push current branch to Github.
-* Allow changes to the configuration via the CLI.
-* Switch from promises to generators or monads.
-* Use JIRA OAuth instead of Basic authentication.
-* Add support to request reviews to pull requests.
-* Rebase current branch onto master. This may be tricky if there are conflicts.
-* Lookup config file in parent folders.
-
 ## Contributing 
 
 If you want to extend this tool with anything, feel free to submit a pull request.  There are a few things that I would like to keep this tool up-to-date:
