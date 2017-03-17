@@ -6,16 +6,19 @@ import { createBranchName, getIssueIdFromBranch } from '../util';
 import { debug, debugCurried, debugCurriedP, wrapInPromise } from '../../util';
 import app from '../../../package.json';
 
-const fetchOptions = {
-  callbacks: {
-    certificateCheck: R.always(1),
-    credentials: R.compose(
-      Git.Cred.sshKeyFromAgent,
-      debugCurried('git', 'Getting authentication from SSH agent'),
-      // TODO Detect ssh key not present
-      R.nthArg(1)
-    )
-  }
+const fetchOptions = () => {
+  let credentialsCallCount = 0;
+  return {
+    callbacks: {
+      certificateCheck: R.always(1),
+      credentials: R.compose(
+        Git.Cred.sshKeyFromAgent,
+        debugCurried('git', 'Getting authentication from SSH agent'),
+        username => (credentialsCallCount++ > 0 ? undefined : username),
+        R.nthArg(1)
+      )
+    }
+  };
 };
 
 let repository = null;
@@ -59,7 +62,8 @@ export default {
     const { remote, branch } = config.get(['git']);
     debug('git', 'Fetching data from remote');
     // We should fetch -> co master -> reset to origin/master -> create branch
-    return repository.fetch(remote, fetchOptions)
+    return repository.fetch(remote, fetchOptions())
+      .catch(throwControlledError(errors.git.noSshKey))
       .then(debugCurriedP('git', 'Getting local repository status'))
       .then(() => repository.getStatus())
       .then(R.ifElse(
@@ -89,7 +93,8 @@ export default {
   }),
   getCurrentBranchName,
   pushBranchToGithub: R.converge(
-    R.composeP(([remote, branch, { branchName, ref }]) => remote.push([ref], fetchOptions)
+    R.composeP(([remote, branch, { branchName, ref }]) => remote.push([ref], fetchOptions())
+        .catch(throwControlledError(errors.git.noSshKey))
         .then(() => Git.Branch.setUpstream(branch, `${remote.name()}/${branchName}`)),
     (...promises) => Promise.all(promises)),
     [
