@@ -4,6 +4,7 @@ import reporter from '../../reporter';
 
 export const status = {
   BACKLOG: 'BACKLOG',
+  DONE: 'DONE',
   IN_PROGRESS: 'IN_PROGRESS',
   IN_REVIEW: 'IN_REVIEW',
   SELECTED_FOR_DEVELOPMENT: 'SELECTED_FOR_DEVELOPMENT'
@@ -12,7 +13,8 @@ export const status = {
 const statusRegex = {
   BACKLOG: /backlog/i,
   IN_PROGRESS: /in progress/i,
-  IN_REVIEW: /review|done/i,
+  IN_REVIEW: /review/i,
+  DONE: /done/i,
   SELECTED_FOR_DEVELOPMENT: /(todo)|(to do)|(selected for development)/i
 };
 
@@ -69,7 +71,8 @@ export default R.curryN(2, (config, issue) => {
     transitions => ({
       [status.BACKLOG]:
         statusMatcher(status.BACKLOG)(transitions) || statusMatcher(status.SELECTED_FOR_DEVELOPMENT)(transitions),
-      [status.IN_PROGRESS]: statusMatcher(status.IN_PROGRESS)(transitions),
+      [status.IN_PROGRESS]:
+        statusMatcher(status.IN_PROGRESS)(transitions) || statusMatcher(status.DONE)(transitions),
       [status.IN_REVIEW]: statusMatcher(status.IN_REVIEW)(transitions),
       [status.SELECTED_FOR_DEVELOPMENT]: statusMatcher(status.SELECTED_FOR_DEVELOPMENT)(transitions),
       transitions
