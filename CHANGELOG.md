@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.3"></a>
+## [1.4.3](https://github.com/tagoro9/fotingo/compare/v1.4.2...v1.4.3) (2017-03-17)
+
+
+### Bug Fixes
+
+* **git:** show an error when there is no key in the agent ([#30](https://github.com/tagoro9/fotingo/issues/30)) ([d275199](https://github.com/tagoro9/fotingo/commit/d275199)), closes [#8](https://github.com/tagoro9/fotingo/issues/8)
+* **Github:** show error message when PR already exists ([#26](https://github.com/tagoro9/fotingo/issues/26)) ([eeecd18](https://github.com/tagoro9/fotingo/commit/eeecd18)), closes [#25](https://github.com/tagoro9/fotingo/issues/25)
+* **Jira:** infer in review state correctly ([#31](https://github.com/tagoro9/fotingo/issues/31)) ([da1fbcf](https://github.com/tagoro9/fotingo/commit/da1fbcf)), closes [#29](https://github.com/tagoro9/fotingo/issues/29)
+* **Review:** show error message when no issue in branch ([#27](https://github.com/tagoro9/fotingo/issues/27)) ([b5fee66](https://github.com/tagoro9/fotingo/commit/b5fee66)), closes [#16](https://github.com/tagoro9/fotingo/issues/16)
+
+
+
 <a name="1.4.2"></a>
 ## [1.4.2](https://github.com/tagoro9/fotingo/compare/v1.4.1...v1.4.2) (2017-03-16)
 
