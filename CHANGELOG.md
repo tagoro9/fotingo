@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/tagoro9/fotingo/compare/v1.4.3...v1.5.0) (2017-03-18)
+
+
+### Features
+
+* **review:** allow to add reviewers to the PR ([#33](https://github.com/tagoro9/fotingo/issues/33)) ([1eea1a1](https://github.com/tagoro9/fotingo/commit/1eea1a1)), closes [#4](https://github.com/tagoro9/fotingo/issues/4)
+* **Start:** add -n option ([#32](https://github.com/tagoro9/fotingo/issues/32)) ([6271083](https://github.com/tagoro9/fotingo/commit/6271083)), closes [#18](https://github.com/tagoro9/fotingo/issues/18)
+
+
+
 <a name="1.4.3"></a>
 ## [1.4.3](https://github.com/tagoro9/fotingo/compare/v1.4.2...v1.4.3) (2017-03-17)
 
