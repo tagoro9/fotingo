@@ -16,6 +16,10 @@ const getCurrentUser = R.compose(
 
 const createPullRequest = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.pullRequests.create));
 const addLabels = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.issues.addLabels));
+const addReviewers = R.composeP(
+  R.compose(wrapInPromise, R.prop('data')),
+  promisify(github.pullRequests.createReviewRequest)
+);
 const getLabels = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.issues.getLabels));
 
 const authenticate = R.compose(
@@ -120,6 +124,16 @@ const addLabelsToPullRequest = R.curryN(4, (config, project, branchInfo, pullReq
   })
 );
 
+const addReviewersToPullRequest = R.curryN(4, (config, project, branchInfo, pullRequest) => R.composeP(
+  R.compose(wrapInPromise, R.always(pullRequest)),
+  addReviewers)({
+    owner: config.get(['github', 'owner']),
+    repo: project,
+    number: pullRequest.number,
+    reviewers: branchInfo.reviewers
+  })
+);
+
 export default {
   init: config => () => {
     debug('github', 'Initializing Github api');
@@ -156,7 +170,10 @@ export default {
         // Assign the PR link to all the issues that were created
         R.composeP(
           R.compose(wrapInPromise, R.set(R.lensProp('pullRequest'), R.__, { branchInfo })),
+          addReviewersToPullRequest(config, project, branchInfo),
+          debugCurriedP('github', `Adding reviewers: ${branchInfo.reviewers} to PR`),
           addLabelsToPullRequest(config, project, branchInfo),
+          debugCurriedP('github', `Adding labels: ${branchInfo.labels} to PR`),
           R.compose(
             catchPromiseAndThrow('github', e => {
               switch (e.code) {

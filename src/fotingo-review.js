@@ -13,7 +13,8 @@ try {
   program
     .option('-n, --no-branch-issue', 'Do not pick issue from branch name')
     .option('-s, --simple', 'Do not use any issue tracker')
-    .option('-l, --label [labels]', 'Labels to add to the PR', R.append, [])
+    .option('-l, --label [label]', 'Label to add to the PR', R.append, [])
+    .option('-r, --reviewer [reviewer]', 'Request some people to review your PR', R.append, [])
     .parse(process.argv);
 
   const shouldGetIssue = R.partial(R.both(
@@ -49,6 +50,7 @@ try {
           return git.getBranchInfo(config, issue)
             .then(step(6 - stepOffset, 'Creating pull request', 'speaker'))
             .then(github.checkAndGetLabels(config, project, program.label))
+            .then(R.set(R.lensProp('reviewers'), program.reviewer))
             .then(github.createPullRequest(config, project, issue, issueTracker.issueRoot, {
               addLinksToIssues: !program.simple
             }));
