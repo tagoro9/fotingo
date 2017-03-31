@@ -5,7 +5,7 @@ export const ISSUE_TYPES = {
   Feature: 'f',
   Story: 'f',
   'Sub-task': 'f',
-  Task: 'c'
+  Task: 'c',
 };
 
 const sanitizeSummary = R.compose(
@@ -16,7 +16,7 @@ const sanitizeSummary = R.compose(
   R.replace(/\s|\(|\)/g, '_'),
   R.replace(/\/|\./g, '-'),
   R.replace(/,|\[|]|"|'|”|“|@|’|`|:|\$|\?|\*/g, ''),
-  R.toLower
+  R.toLower,
 );
 
 // This should go in the issue?
@@ -28,5 +28,5 @@ export const getProject = R.compose(R.nth(1), R.match(/\/((\w|-)+)$/));
 export const getIssueIdFromBranch = R.compose(
   R.ifElse(R.isNil, R.identity, R.toUpper),
   R.last,
-  R.match(/\w\/(\w+-\d+)/)
+  R.match(/\w\/(\w+-\d+)/),
 );

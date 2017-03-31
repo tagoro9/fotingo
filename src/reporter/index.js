@@ -34,12 +34,7 @@ const step = R.curryN(4, (total, current, msg, emojiStr) => {
 });
 
 const stepCurried = R.curryN(5, (total, current, msg, emojiStr, args) => {
-  step(
-    total,
-    current,
-    R.ifElse(R.is(Function), m => m(args), R.identity())(msg),
-    emojiStr
-  );
+  step(total, current, R.ifElse(R.is(Function), m => m(args), R.identity())(msg), emojiStr);
   return args;
 });
 
@@ -53,11 +48,11 @@ export default {
     return {
       step: step(totalSteps),
       stepCurried: stepCurried(totalSteps),
-      stepCurriedP: stepCurriedP(totalSteps)
+      stepCurriedP: stepCurriedP(totalSteps),
     };
   },
   log,
-  info: (msg) => log(`${format.grey('info')} ${msg}`),
+  info: msg => log(`${format.grey('info')} ${msg}`),
   error(msg) {
     log(`${format.red('error')} ${prependEmoji(msg, emojis.get('boom'))}`);
   },
@@ -74,5 +69,5 @@ export default {
     const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
     const msg = `Done in ${totalTime}s ${artifact ? `=> ${artifact}` : '.'}`;
     log(prependEmoji(msg, emojis.get('sparkles')));
-  }
+  },
 };

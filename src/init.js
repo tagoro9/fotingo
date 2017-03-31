@@ -5,8 +5,8 @@ import getIssueTracker from './issue-tracker';
 
 // config -> project -> promise
 export default R.curryN(2, (c, program) =>
-  github.init(c)()
+  github
+    .init(c)()
     .then(git.init(c, process.cwd()))
     .then(getIssueTracker(program)(c))
-    .then(issueTracker => ({ github, git, issueTracker }))
-);
+    .then(issueTracker => ({ github, git, issueTracker })));
