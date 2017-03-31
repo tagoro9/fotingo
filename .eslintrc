@@ -1,23 +1,26 @@
-{ "extends": "eslint-config-airbnb",
+{
+  "extends": "eslint-config-airbnb",
   "env": {
     "node": true
   },
   "rules": {
+    "no-confusing-arrow": 0,
     "no-underscore-dangle": 0,
     "max-len": [
       "error",
       121
     ]
   },
-  "plugins": [
-  ],
+  "plugins": [],
   "parser": "babel-eslint",
   "settings": {
     "import/parser": "babel-eslint",
     "import/resolve": {
-      "moduleDirectory": ["node_modules", "src"]
+      "moduleDirectory": [
+        "node_modules",
+        "src"
+      ]
     }
   },
-  "globals": {
-  }
+  "globals": {}
 }
