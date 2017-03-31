@@ -3,7 +3,6 @@
     "node": true
   },
   "rules": {
-    "comma-dangle": 0,
     "no-underscore-dangle": 0,
     "max-len": [
       "error",
