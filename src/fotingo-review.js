@@ -78,6 +78,7 @@ try {
                 ),
                 stepCurried(
                   7 - stepOffset,
+                  // eslint-disable-next-line max-len
                   `Setting ${R.compose(R.join(', '), R.map(R.prop('issue')))(issues)} to code review on ${issueTracker.name}`,
                   'bookmark',
                 ),
