@@ -1,7 +1,7 @@
 import Git from 'nodegit';
 import R from 'ramda';
 import conventionalCommitsParser from 'conventional-commits-parser';
-import { catchPromiseAndThrow, throwControlledError, errors } from '../../error';
+import { ControlledError, throwControlledError, errors } from '../../error';
 import { createBranchName, getIssueIdFromBranch } from '../util';
 import { debug, debugCurried, debugCurriedP, wrapInPromise } from '../../util';
 import app from '../../../package.json';
@@ -16,7 +16,7 @@ const fetchOptions = () => {
         debugCurried('git', 'Getting authentication from SSH agent'),
         (username) => {
           credentialsCallCount = R.inc(credentialsCallCount);
-          return credentialsCallCount > 0 ? undefined : username;
+          return credentialsCallCount > 1 ? undefined : username;
         },
         R.nthArg(1),
       ),
@@ -66,10 +66,8 @@ export default {
     debug('git', 'Creating branch for issue');
     const { remote, branch } = config.get(['git']);
     debug('git', 'Fetching data from remote');
-    // We should fetch -> co master -> reset to origin/master -> create branch
     return repository
       .fetch(remote, fetchOptions())
-      .catch(throwControlledError(errors.git.noSshKey))
       .then(debugCurriedP('git', 'Getting local repository status'))
       .then(() => repository.getStatus())
       .then(
@@ -83,20 +81,21 @@ export default {
       )
       .then(() => repository.getBranchCommit(`${remote}/${branch}`))
       .then(debugCurriedP('git', 'Creating new branch'))
-      .then(
-        R.compose(
-          catchPromiseAndThrow('git', (e) => {
-            switch (e.errno) {
-              case Git.Error.CODE.EEXISTS:
-                return errors.git.branchAlreadyExists;
-              default:
-                throw e;
+      .then(commit => repository.createBranch(name, commit))
+      .then(() => repository.checkoutBranch(name))
+      .catch((e) => {
+        switch (e.errno) {
+          case Git.Error.CODE.EEXISTS:
+            throw new ControlledError(errors.git.branchAlreadyExists);
+          case Git.Error.CODE.ENOTFOUND:
+            throw new ControlledError(errors.git.branchNotFound, { branch });
+          default:
+            if (e.message === 'callback failed to initialize SSH credentials') {
+              throw new ControlledError(errors.git.noSshKey);
             }
-          }),
-          commit => repository.createBranch(name, commit),
-        ),
-      )
-      .then(() => repository.checkoutBranch(name));
+            throw e;
+        }
+      });
   }),
   getCurrentBranchName,
   pushBranchToGithub: R.converge(

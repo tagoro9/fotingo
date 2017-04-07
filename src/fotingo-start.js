@@ -12,10 +12,12 @@ const getIssueId = R.compose(validate, R.head, R.prop('args'));
 
 try {
   program
+    .option('-b, --branch [branch]', 'Name of the base branch to use')
     .option('-n, --no-branch-issue', 'Do not create a branch with the issue name')
     .parse(process.argv);
+  config.update(['git', 'branch'], program.branch, true);
   const issueId = getIssueId(program);
-  const { step, stepCurried } = reporter.stepFactory(program.branchInfo ? 4 : 3);
+  const { step, stepCurried } = reporter.stepFactory(program.branchIssue ? 4 : 3);
   step(1, 'Initializing services', 'rocket');
   init(config, program)
     .then(({ git, issueTracker }) =>

@@ -10,12 +10,14 @@ import { wrapInPromise } from './util';
 
 try {
   program
-    .option('-n, --no-branch-issue', 'Do not pick issue from branch name')
-    .option('-s, --simple', 'Do not use any issue tracker')
+    .option('-b, --branch [branch]', 'Name of the base branch of the pull request')
     .option('-l, --label [label]', 'Label to add to the PR', R.append, [])
+    .option('-n, --no-branch-issue', 'Do not pick issue from branch name')
     .option('-r, --reviewer [reviewer]', 'Request some people to review your PR', R.append, [])
+    .option('-s, --simple', 'Do not use any issue tracker')
     .parse(process.argv);
 
+  config.update(['github', 'base'], program.branch, true);
   const shouldGetIssue = R.partial(
     R.both(
       R.compose(R.equals(true), R.prop('branchIssue')),

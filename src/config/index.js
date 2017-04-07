@@ -16,6 +16,13 @@ let config = readConfigFile({
   },
 });
 
+let inMemoryConfig = {};
+const set = (path, value, obj) => R.set(R.lensPath(path), value, obj);
+const get = R.curryN(2, (obj, path) => R.view(R.lensPath(path), obj));
+function recursiveMerge(a, b = {}) {
+  return R.mergeWith(R.ifElse(R.is(Object), recursiveMerge, R.nthArg(1)))(a, b);
+}
+
 const data = {
   isGithubLoggedIn: () => R.not(R.isNil(data.get(['github', 'token']))),
   isJiraLoggedIn: () =>
@@ -25,12 +32,19 @@ const data = {
         R.isNil(data.get(['jira', 'user', 'login'])),
       ),
     ),
-  update: R.curryN(2, (path, value) => {
-    config = R.set(R.lensPath(path), value, config);
-    writeConfigFile(config.local ? R.set(R.lensPath(path), value, {}) : config, config.local);
+  update: R.curryN(2, (path, value, inMemory) => {
+    if (inMemory) {
+      inMemoryConfig = set(path, value, inMemoryConfig);
+    } else {
+      config = set(path, value, config);
+      writeConfigFile(config.local ? R.set(R.lensPath(path), value, {}) : config, config.local);
+    }
     return value;
   }),
-  get: path => R.view(R.lensPath(path), config),
+  get: R.converge(R.ifElse(R.is(Object), recursiveMerge, (file, memory) => memory || file), [
+    path => get(config, path),
+    path => get(inMemoryConfig, path),
+  ]),
 };
 
 export default data;
