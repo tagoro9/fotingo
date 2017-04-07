@@ -5,7 +5,11 @@ import reporter from '../reporter';
 
 export class ControlledError extends Error {
   constructor(message, parameters = {}) {
-    super(R.compose(R.reduce((msg, [k, v]) => R.replace(`\${${k}}`, v, msg), message), R.toPairs)(parameters));
+    super(
+      R.compose(R.reduce((msg, [k, v]) => R.replace(`{${k}}`, v, msg), message), R.toPairs)(
+        parameters,
+      ),
+    );
   }
 }
 
@@ -29,7 +33,7 @@ export const handleError = R.ifElse(
 // String -> Promise -> Promise
 export const catchPromiseAndThrow = (module, e, parameters) =>
   p =>
-    p.catch(err => {
+    p.catch((err) => {
       if (R.is(Function, e)) {
         debug(module, err);
         throwControlledError(e(err), parameters)(err);

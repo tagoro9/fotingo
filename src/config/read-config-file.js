@@ -12,7 +12,11 @@ const getGlobalConfig = R.tryCatch(
     R.propEq('code', 'ENOENT'),
     R.converge(R.identity, [
       R.nthArg(1),
-      R.compose(createEmptyConfigFile(globalConfigFilePath), defaults => JSON.stringify(defaults, null, 2), R.nthArg(1)),
+      R.compose(
+        createEmptyConfigFile(globalConfigFilePath),
+        defaults => JSON.stringify(defaults, null, 2),
+        R.nthArg(1),
+      ),
     ]),
     () => handleError(new ControlledError(errors.config.malformedFile)),
   ),
@@ -24,4 +28,7 @@ const getLocalConfig = R.tryCatch(
     handleError(new ControlledError(errors.config.malformedFile))),
 );
 
-export default R.converge(R.mergeWith(R.ifElse(R.is(Object), R.merge, R.nthArg(1))), [getGlobalConfig, getLocalConfig]);
+export default R.converge(R.mergeWith(R.ifElse(R.is(Object), R.merge, R.nthArg(1))), [
+  getGlobalConfig,
+  getLocalConfig,
+]);

@@ -72,9 +72,12 @@ export default R.curryN(2, (config, issue) => {
     transitions => ({
       [status.BACKLOG]: statusMatcher(status.BACKLOG)(transitions) ||
         statusMatcher(status.SELECTED_FOR_DEVELOPMENT)(transitions),
-      [status.IN_PROGRESS]: statusMatcher(status.IN_PROGRESS)(transitions) || statusMatcher(status.DONE)(transitions),
+      [status.IN_PROGRESS]: statusMatcher(status.IN_PROGRESS)(transitions) ||
+        statusMatcher(status.DONE)(transitions),
       [status.IN_REVIEW]: statusMatcher(status.IN_REVIEW)(transitions),
-      [status.SELECTED_FOR_DEVELOPMENT]: statusMatcher(status.SELECTED_FOR_DEVELOPMENT)(transitions),
+      [status.SELECTED_FOR_DEVELOPMENT]: statusMatcher(status.SELECTED_FOR_DEVELOPMENT)(
+        transitions,
+      ),
       transitions,
     }),
   );

@@ -14,7 +14,10 @@ const fetchOptions = () => {
       credentials: R.compose(
         Git.Cred.sshKeyFromAgent,
         debugCurried('git', 'Getting authentication from SSH agent'),
-        username => credentialsCallCount++ > 0 ? undefined : username,
+        (username) => {
+          credentialsCallCount = R.inc(credentialsCallCount);
+          return credentialsCallCount > 0 ? undefined : username;
+        },
         R.nthArg(1),
       ),
     },
@@ -30,10 +33,18 @@ const transformCommit = R.compose(conventionalCommitsParser.sync, R.invoker(0, '
 
 // Object -> Array -> Array
 const getIssues = R.converge(R.concat, [
-  R.compose(R.ifElse(R.isNil, R.always([]), ({ key }) => [{ raw: `#${key}`, issue: key }]), R.nthArg(0)),
+  R.compose(
+    R.ifElse(R.isNil, R.always([]), ({ key }) => [{ raw: `#${key}`, issue: key }]),
+    R.nthArg(0),
+  ),
   R.compose(
     R.flatten,
-    R.map(R.compose(R.map(ref => ({ raw: `${ref.prefix}${ref.issue}`, issue: ref.issue })), R.prop('references'))),
+    R.map(
+      R.compose(
+        R.map(ref => ({ raw: `${ref.prefix}${ref.issue}`, issue: ref.issue })),
+        R.prop('references'),
+      ),
+    ),
     R.nthArg(1),
   ),
 ]);
@@ -44,7 +55,7 @@ export default {
       debug('git', `Initializing ${pathToRepo} repository`);
       return Git.Repository
         .open(pathToRepo)
-        .then(repo => {
+        .then((repo) => {
           repository = repo;
           return Promise.resolve(this);
         })
@@ -74,7 +85,7 @@ export default {
       .then(debugCurriedP('git', 'Creating new branch'))
       .then(
         R.compose(
-          catchPromiseAndThrow('git', e => {
+          catchPromiseAndThrow('git', (e) => {
             switch (e.errno) {
               case Git.Error.CODE.EEXISTS:
                 return errors.git.branchAlreadyExists;
@@ -98,9 +109,17 @@ export default {
       (...promises) => Promise.all(promises),
     ),
     [
-      R.compose(remote => Git.Remote.lookup(repository, remote), R.prop('remote'), R.invoker(1, 'get')(['git'])),
+      R.compose(
+        remote => Git.Remote.lookup(repository, remote),
+        R.prop('remote'),
+        R.invoker(1, 'get')(['git']),
+      ),
       () => repository.head(),
-      () => getCurrentBranchName().then(name => ({ branchName: name, ref: `refs/heads/${name}:refs/heads/${name}` })),
+      () =>
+        getCurrentBranchName().then(name => ({
+          branchName: name,
+          ref: `refs/heads/${name}:refs/heads/${name}`,
+        })),
     ],
   ),
   extractIssueFromCurrentBranch: () =>
@@ -116,7 +135,10 @@ export default {
   getBranchInfo(config, issue) {
     debug('git', 'Getting branch commit history');
     const { remote, branch } = config.get(['git']);
-    return Promise.all([repository.getHeadCommit(), repository.getBranchCommit(`${remote}/${branch}`)])
+    return Promise.all([
+      repository.getHeadCommit(),
+      repository.getBranchCommit(`${remote}/${branch}`),
+    ])
       .then(
         R.when(
           R.compose(R.not, R.allUniq, R.map(R.compose(R.toString, R.invoker(0, 'id')))),
@@ -127,7 +149,7 @@ export default {
         Promise.all([
           Git.Merge
             .base(repository, latestCommit, latestMasterCommit)
-            .then(latestCommonCommit => {
+            .then((latestCommonCommit) => {
               debug('git', `Created history walker. Latest common commit: ${latestCommonCommit}`);
               const historyWalker = repository.createRevWalk();
               const commitStopper = commit => !latestCommonCommit.equal(commit.id());

@@ -11,9 +11,11 @@ export default config =>
     debug('jira', 'Initializing Jira api');
     const root = config.get(['jira', 'root'])
       ? wrapInPromise(config.get(['jira', 'root']))
-      : R.composeP(config.update(['jira', 'root']), reporter.question)({ question: "What's your jira root?" });
+      : R.composeP(config.update(['jira', 'root']), reporter.question)({
+        question: "What's your jira root?",
+      });
 
-    return root.then(jiraRoot => {
+    return root.then((jiraRoot) => {
       const { get, post, setAuth } = httpClient(jiraRoot);
       const issueRoot = `${jiraRoot}/browse/`;
       const readUserInfo = () => {
@@ -21,9 +23,14 @@ export default config =>
         debug('jira', 'Reading user login info');
         const readUsernamePromise = reporter.question({ question: "What's your Jira username?" });
         const readPasswordPromise = readUsernamePromise.then(
-          R.partial(reporter.question, [{ question: "What's your Jira password?", password: true }]),
+          R.partial(reporter.question, [
+            { question: "What's your Jira password?", password: true },
+          ]),
         );
-        return Promise.all([readUsernamePromise, readPasswordPromise]).then(([login, password]) => ({
+        return Promise.all([readUsernamePromise, readPasswordPromise]).then(([
+          login,
+          password,
+        ]) => ({
           login,
           password,
         }));
@@ -31,12 +38,20 @@ export default config =>
 
       const getCurrentUser = () => get('/rest/api/2/myself?expand=groups').then(R.prop('body'));
 
-      const doLogin = R.composeP(getCurrentUser, setAuth, config.update(['jira', 'user']), readUserInfo);
+      const doLogin = R.composeP(
+        getCurrentUser,
+        setAuth,
+        config.update(['jira', 'user']),
+        readUserInfo,
+      );
       let loginPromise;
       if (config.isJiraLoggedIn()) {
         setAuth(config.get(['jira', 'user']));
         loginPromise = getCurrentUser().catch(
-          R.compose(doLogin, debugCurried('jira', 'Current authentication failed. Attempting login')),
+          R.compose(
+            doLogin,
+            debugCurried('jira', 'Current authentication failed. Attempting login'),
+          ),
         );
       } else {
         loginPromise = doLogin();
@@ -44,7 +59,10 @@ export default config =>
 
       const parseIssue = R.compose(
         wrapInPromise,
-        R.converge(R.set(R.lensProp('url')), [R.compose(R.concat(issueRoot), R.prop('key')), R.identity]),
+        R.converge(R.set(R.lensProp('url')), [
+          R.compose(R.concat(issueRoot), R.prop('key')),
+          R.identity,
+        ]),
         R.prop('body'),
       );
 
@@ -77,7 +95,9 @@ export default config =>
                 body: {
                   transition: R.compose(
                     R.pick(['id']),
-                    R.find(R.compose(R.equals(statuses[issueStatus]), Number, R.path(['to', 'id']))),
+                    R.find(
+                      R.compose(R.equals(statuses[issueStatus]), Number, R.path(['to', 'id'])),
+                    ),
                     R.prop('transitions'),
                   )(issue),
                   fields: {},

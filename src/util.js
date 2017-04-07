@@ -13,7 +13,10 @@ export const debugCurried = R.curryN(3, (module, msg, args) => {
 export const error = R.ifElse(
   R.is(Error),
   R.compose(reporter.error, R.last, R.reject(R.isNil), R.props(['message', 'stack'])),
-  R.compose(reporter.error, R.ifElse(R.is(String), R.identity, R.partialRight(JSON.stringify, [null, 2]))),
+  R.compose(
+    reporter.error,
+    R.ifElse(R.is(String), R.identity, R.partialRight(JSON.stringify, [null, 2])),
+  ),
 );
 
 export const errorCurried = R.curryN(2, (msg, args) => {
@@ -33,5 +36,9 @@ export const promisify = func =>
     new Promise((resolve, reject) =>
       R.apply(func, [
         ...R.reject(R.isNil, args),
-        R.ifElse(R.compose(R.not, R.isNil, R.nthArg(0)), reject, R.unapply(R.compose(R.apply(resolve), R.tail))),
+        R.ifElse(
+          R.compose(R.not, R.isNil, R.nthArg(0)),
+          reject,
+          R.unapply(R.compose(R.apply(resolve), R.tail)),
+        ),
       ]));

@@ -5,11 +5,7 @@
   },
   "rules": {
     "no-confusing-arrow": 0,
-    "no-underscore-dangle": 0,
-    "max-len": [
-      "error",
-      121
-    ]
+    "no-underscore-dangle": 0
   },
   "plugins": [],
   "parser": "babel-eslint",

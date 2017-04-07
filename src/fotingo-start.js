@@ -11,7 +11,9 @@ import { wrapInPromise } from './util';
 const getIssueId = R.compose(validate, R.head, R.prop('args'));
 
 try {
-  program.option('-n, --no-branch-issue', 'Do not create a branch with the issue name').parse(process.argv);
+  program
+    .option('-n, --no-branch-issue', 'Do not create a branch with the issue name')
+    .parse(process.argv);
   const issueId = getIssueId(program);
   const { step, stepCurried } = reporter.stepFactory(program.branchInfo ? 4 : 3);
   step(1, 'Initializing services', 'rocket');
@@ -30,7 +32,10 @@ try {
             .then(
               R.ifElse(
                 R.partial(R.propEq('branchIssue', true), [program]),
-                R.compose(git.createIssueBranch(config), stepCurried(4, name => `Creating branch '${name}'`, 'tada')),
+                R.compose(
+                  git.createIssueBranch(config),
+                  stepCurried(4, name => `Creating branch '${name}'`, 'tada'),
+                ),
                 R.always(undefined),
               ),
             )))

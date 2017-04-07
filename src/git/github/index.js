@@ -11,13 +11,22 @@ const github = new GithubApi({});
 
 const getCurrentUser = R.compose(R.partial(R.__, [{}]), promisify)(github.users.get);
 
-const createPullRequest = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.pullRequests.create));
-const addLabels = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.issues.addLabels));
+const createPullRequest = R.composeP(
+  R.compose(wrapInPromise, R.prop('data')),
+  promisify(github.pullRequests.create),
+);
+const addLabels = R.composeP(
+  R.compose(wrapInPromise, R.prop('data')),
+  promisify(github.issues.addLabels),
+);
 const addReviewers = R.composeP(
   R.compose(wrapInPromise, R.prop('data')),
   promisify(github.pullRequests.createReviewRequest),
 );
-const getLabels = R.composeP(R.compose(wrapInPromise, R.prop('data')), promisify(github.issues.getLabels));
+const getLabels = R.composeP(
+  R.compose(wrapInPromise, R.prop('data')),
+  promisify(github.issues.getLabels),
+);
 
 const authenticate = R.compose(
   wrapInPromise,
@@ -32,7 +41,7 @@ const readUserToken = R.compose(
 
 const authenticateAndGetCurrentUser = R.composeP(
   R.compose(
-    catchPromiseAndThrow('github', e => {
+    catchPromiseAndThrow('github', (e) => {
       debug('github', `Error when authenticating: ${e.message}`);
       switch (e.code) {
         case '500':
@@ -50,7 +59,8 @@ const authenticateAndGetCurrentUser = R.composeP(
 const buildPullRequestTitle = R.ifElse(
   R.isNil,
   R.compose(R.concat(R.__, '\n'), R.prop('name'), R.nthArg(1)),
-  issue => `${ISSUE_TYPES[issue.fields.issuetype.name]}/${issue.key} ${R.take(60, issue.fields.summary)}\n`,
+  issue =>
+    `${ISSUE_TYPES[issue.fields.issuetype.name]}/${issue.key} ${R.take(60, issue.fields.summary)}\n`,
 );
 
 // Array -> String
@@ -66,7 +76,11 @@ const buildPullRequestBody = R.compose(
 // Array -> Boolean -> String
 const buildPullRequestFooter = (issueRoot, addLinksToIssues) =>
   R.compose(
-    R.ifElse(R.isEmpty, R.always(''), R.compose(R.concat(R.__, '.'), R.concat('\nFixes '), R.join(', '))),
+    R.ifElse(
+      R.isEmpty,
+      R.always(''),
+      R.compose(R.concat(R.__, '.'), R.concat('\nFixes '), R.join(', ')),
+    ),
     R.map(({ raw, issue }) => addLinksToIssues ? `[${raw}](${issueRoot}${issue})` : `${raw}`),
     R.uniqBy(R.prop('issue')),
   );
@@ -94,7 +108,7 @@ const editFile = file =>
     });
 
 // Object -> String -> String
-const allowUserToEditPullRequest = description => {
+const allowUserToEditPullRequest = (description) => {
   const prFile = `/tmp/fotingo-pr-${Date.now()}`;
   return R.composeP(
     R.compose(wrapInPromise, R.trim),
@@ -136,7 +150,11 @@ export default {
     () => {
       debug('github', 'Initializing Github api');
 
-      const doLogin = R.composeP(authenticateAndGetCurrentUser, config.update(['github', 'token']), readUserToken);
+      const doLogin = R.composeP(
+        authenticateAndGetCurrentUser,
+        config.update(['github', 'token']),
+        readUserToken,
+      );
 
       const configPromise = R.isNil(config.get(['github', 'owner']))
         ? R.composeP(config.update(['github', 'owner']), reporter.question)({
@@ -150,7 +168,12 @@ export default {
           return (
             authenticateAndGetCurrentUser(config.get(['github', 'token']))
               // TODO differentiate error codes so only login is attempted when tokenInvalid
-              .catch(R.composeP(doLogin, debugCurriedP('github', 'Current authentication failed. Attempting login')))
+              .catch(
+                R.composeP(
+                  doLogin,
+                  debugCurriedP('github', 'Current authentication failed. Attempting login'),
+                ),
+              )
           );
         }
         debug('github', 'No user token present. Attempting login');
@@ -158,7 +181,9 @@ export default {
       });
     },
   // Object -> Array -> Promise
-  createPullRequest: R.curryN(6, (config, project, issue, issueRoot, { addLinksToIssues }, branchInfo) =>
+  createPullRequest: R.curryN(6, (config, project, issue, issueRoot, {
+    addLinksToIssues,
+  }, branchInfo) =>
     R.composeP(
       R.ifElse(
         R.isEmpty,
@@ -173,7 +198,7 @@ export default {
           R.compose(
             catchPromiseAndThrow(
               'github',
-              e => {
+              (e) => {
                 switch (e.code) {
                   case 500:
                     return errors.github.cantConnect;

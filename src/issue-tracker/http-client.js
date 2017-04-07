@@ -11,8 +11,13 @@ const handleServerResponse = (resolve, reject) =>
       R.unapply(R.compose(resolve, args => ({ response: args[1], body: args[2] }))),
       R.compose(
         reject,
-        R.unapply(args => {
-          R.compose(debug('http'), R.concat('Request failed with status code '), R.prop('statusCode'), R.nth(1))(args);
+        R.unapply((args) => {
+          R.compose(
+            debug('http'),
+            R.concat('Request failed with status code '),
+            R.prop('statusCode'),
+            R.nth(1),
+          )(args);
           return args[2];
         }),
       ),
@@ -38,7 +43,10 @@ export default function (rootUrl) {
         );
       }),
   );
-  const setCookieToJar = R.compose(R.bind(R.partialRight(jar.setCookie, [rootUrl]), jar), request.cookie);
+  const setCookieToJar = R.compose(
+    R.bind(R.partialRight(jar.setCookie, [rootUrl]), jar),
+    request.cookie,
+  );
 
   return {
     post: serverCall('POST'),

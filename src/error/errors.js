@@ -5,7 +5,7 @@ export default {
   },
   git: {
     branchAlreadyExists: 'It looks like you already have a branch for this issue.',
-    couldNotInitializeRepo: "We have problems accessing the repo in '${pathToRepo}'. Make sure it exists.",
+    couldNotInitializeRepo: "We have problems accessing the repo in '{pathToRepo}'. Make sure it exists.",
     noChanges: "You haven't made any changes to this branch",
     noIssueInBranchName: "We couldn't find the issue name on the branch. Maybe you should run `fotingo review -n`.",
     noSshKey: "It looks like you haven't added you ssh key. Remember to `ssh-add -k path_to_private_key` so we can communicate with the remote repository.",
@@ -15,7 +15,7 @@ export default {
     invalidLabel: 'One of the labels you typed does not exist.',
     pullRequestDescriptionInvalid: 'The description provided for the pull request is not valid',
     tokenInvalid: 'The provided Github token is not valid',
-    pullRequestAlreadyExists: "A pull request already exists for '${name}'",
+    pullRequestAlreadyExists: "A pull request already exists for '{name}'",
   },
   jira: {
     cantWorkOnIssue: "It looks like you can't work on this issue right now. It may have already been fixed or someone else may be working on it.",

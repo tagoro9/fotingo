@@ -17,7 +17,10 @@ try {
     .parse(process.argv);
 
   const shouldGetIssue = R.partial(
-    R.both(R.compose(R.equals(true), R.prop('branchIssue')), R.compose(R.not, R.equals(true), R.prop('simple'))),
+    R.both(
+      R.compose(R.equals(true), R.prop('branchIssue')),
+      R.compose(R.not, R.equals(true), R.prop('simple')),
+    ),
     [program],
   );
   const getTotalSteps = R.ifElse(
@@ -33,7 +36,12 @@ try {
     .then(({ git, github, issueTracker }) =>
       git
         .getCurrentBranchName()
-        .then(R.compose(wrapInPromise, stepCurried(2, name => `Pushing '${name}' to Github`, 'arrow_up')))
+        .then(
+          R.compose(
+            wrapInPromise,
+            stepCurried(2, name => `Pushing '${name}' to Github`, 'arrow_up'),
+          ),
+        )
         .then(R.partial(git.pushBranchToGithub, [config]))
         .then(
           R.ifElse(
@@ -47,7 +55,7 @@ try {
             R.always(undefined),
           ),
         )
-        .then(issue => {
+        .then((issue) => {
           step(5 - stepOffset, 'Getting your commit history', 'books');
           return git
             .getBranchInfo(config, issue)
@@ -70,7 +78,10 @@ try {
                 R.map(
                   R.composeP(
                     R.partial(issueTracker.setIssueStatus, [
-                      { status: issueTracker.status.IN_REVIEW, comment: `PR: ${pullRequest.html_url}` },
+                      {
+                        status: issueTracker.status.IN_REVIEW,
+                        comment: `PR: ${pullRequest.html_url}`,
+                      },
                     ]),
                     issueTracker.getIssue,
                     R.compose(wrapInPromise, R.prop('issue')),
@@ -86,7 +97,12 @@ try {
             R.identity,
           ),
         ))
-    .then(R.compose(reporter.footer, R.ifElse(R.isNil, R.identity, R.path(['pullRequest', 'html_url']))))
+    .then(
+      R.compose(
+        reporter.footer,
+        R.ifElse(R.isNil, R.identity, R.path(['pullRequest', 'html_url'])),
+      ),
+    )
     .catch(handleError);
 } catch (e) {
   handleError(e);
