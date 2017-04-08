@@ -20,7 +20,7 @@ This seems like a reasonable workflow, but when addressing several issues on a g
 
 ## The solution
 
-Fotingo is composed of two commands:
+Fotingo - A CLI tool that does all the work for me. It is composed of two commands:
 
 * `fotingo start <issue-id>` - Start working on a new issue.
 
