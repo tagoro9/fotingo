@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/tagoro9/fotingo/compare/v1.5.0...v1.6.0) (2017-04-08)
+
+
+### Features
+
+* allow to overwrite base branch ([#35](https://github.com/tagoro9/fotingo/issues/35)) ([a581f22](https://github.com/tagoro9/fotingo/commit/a581f22)), closes [#34](https://github.com/tagoro9/fotingo/issues/34)
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/tagoro9/fotingo/compare/v1.4.3...v1.5.0) (2017-03-18)
 
