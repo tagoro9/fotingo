@@ -20,7 +20,7 @@ let inMemoryConfig = {};
 const set = (path, value, obj) => R.set(R.lensPath(path), value, obj);
 const get = R.curryN(2, (obj, path) => R.view(R.lensPath(path), obj));
 function recursiveMerge(a, b = {}) {
-  return R.mergeWith(R.ifElse(R.is(Object), recursiveMerge, R.nthArg(1)))(a, b);
+  return R.mergeWith(R.ifElse(R.is(Object), recursiveMerge, R.flip(R.or)))(a, b);
 }
 
 const data = {
