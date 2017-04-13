@@ -18,6 +18,7 @@ try {
     .parse(process.argv);
 
   config.update(['github', 'base'], program.branch, true);
+  config.update(['git', 'branch'], program.branch, true);
   const shouldGetIssue = R.partial(
     R.both(
       R.compose(R.equals(true), R.prop('branchIssue')),
