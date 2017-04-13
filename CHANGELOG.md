@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.1"></a>
+## [1.6.1](https://github.com/tagoro9/fotingo/compare/v1.6.0...v1.6.1) (2017-04-13)
+
+
+### Bug Fixes
+
+* **config:** defaul to file if no in memory value ([2e7c4e0](https://github.com/tagoro9/fotingo/commit/2e7c4e0))
+* **review:** update git base branch too with -b ([d31cf64](https://github.com/tagoro9/fotingo/commit/d31cf64))
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/tagoro9/fotingo/compare/v1.5.0...v1.6.0) (2017-04-08)
 
