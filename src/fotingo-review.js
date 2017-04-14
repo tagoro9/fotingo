@@ -58,7 +58,7 @@ try {
             R.always(undefined),
           ),
         )
-        .then((issue) => {
+        .then(issue => {
           step(5 - stepOffset, 'Getting your commit history', 'books');
           return git
             .getBranchInfo(config, issue)
@@ -99,7 +99,8 @@ try {
               )(issues),
             R.identity,
           ),
-        ))
+        ),
+    )
     .then(
       R.compose(
         reporter.footer,

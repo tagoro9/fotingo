@@ -1,7 +1,7 @@
 import R from 'ramda';
 import { throwControlledError, errors } from '../../error';
 
-export default (status) => {
+export default status => {
   // issue -> boolean
   const isInNoGroup = R.compose(R.isEmpty, R.path(['fields', 'labels']));
   // issue -> login -> Boolean

@@ -25,7 +25,8 @@ const getGlobalConfig = R.tryCatch(
 const getLocalConfig = R.tryCatch(
   R.compose(R.set(R.lensProp('local'), true), readConfigFile, R.always(localConfigFilePath)),
   R.ifElse(R.propEq('code', 'ENOENT'), R.always({}), () =>
-    handleError(new ControlledError(errors.config.malformedFile))),
+    handleError(new ControlledError(errors.config.malformedFile)),
+  ),
 );
 
 export default R.converge(R.mergeWith(R.ifElse(R.is(Object), R.merge, R.nthArg(1))), [

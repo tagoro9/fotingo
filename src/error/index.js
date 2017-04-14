@@ -13,10 +13,9 @@ export class ControlledError extends Error {
   }
 }
 
-export const throwControlledError = (message, parameters) =>
-  () => {
-    throw new ControlledError(message, parameters);
-  };
+export const throwControlledError = (message, parameters) => () => {
+  throw new ControlledError(message, parameters);
+};
 
 // Error -> Boolean
 const isKnownError = R.either(R.is(ControlledError), R.propEq('message', 'canceled'));
@@ -31,14 +30,13 @@ export const handleError = R.ifElse(
   handleUnknownError,
 );
 // String -> Promise -> Promise
-export const catchPromiseAndThrow = (module, e, parameters) =>
-  p =>
-    p.catch((err) => {
-      if (R.is(Function, e)) {
-        debug(module, err);
-        throwControlledError(e(err), parameters)(err);
-      } else {
-        R.compose(throwControlledError(e, parameters), debugCurried(module, err))(err);
-      }
-    });
+export const catchPromiseAndThrow = (module, e, parameters) => p =>
+  p.catch(err => {
+    if (R.is(Function, e)) {
+      debug(module, err);
+      throwControlledError(e(err), parameters)(err);
+    } else {
+      R.compose(throwControlledError(e, parameters), debugCurried(module, err))(err);
+    }
+  });
 export { errors };

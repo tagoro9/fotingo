@@ -9,4 +9,5 @@ export default R.curryN(2, (c, program) =>
     .init(c)()
     .then(git.init(c, process.cwd()))
     .then(getIssueTracker(program)(c))
-    .then(issueTracker => ({ github, git, issueTracker })));
+    .then(issueTracker => ({ github, git, issueTracker })),
+);

@@ -31,14 +31,14 @@ export const debugCurriedP = R.curryN(3, (module, msg, args) => {
 
 export const wrapInPromise = val => Promise.resolve(val);
 
-export const promisify = func =>
-  (...args) =>
-    new Promise((resolve, reject) =>
-      R.apply(func, [
-        ...R.reject(R.isNil, args),
-        R.ifElse(
-          R.compose(R.not, R.isNil, R.nthArg(0)),
-          reject,
-          R.unapply(R.compose(R.apply(resolve), R.tail)),
-        ),
-      ]));
+export const promisify = func => (...args) =>
+  new Promise((resolve, reject) =>
+    R.apply(func, [
+      ...R.reject(R.isNil, args),
+      R.ifElse(
+        R.compose(R.not, R.isNil, R.nthArg(0)),
+        reject,
+        R.unapply(R.compose(R.apply(resolve), R.tail)),
+      ),
+    ]),
+  );

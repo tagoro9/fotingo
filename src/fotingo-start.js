@@ -40,7 +40,9 @@ try {
                 ),
                 R.always(undefined),
               ),
-            )))
+            ),
+        ),
+    )
     .then(reporter.footer)
     .catch(handleError);
 } catch (e) {

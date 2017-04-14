@@ -63,7 +63,8 @@ export default {
           return reject(err);
         }
         return resolve(text);
-      }));
+      }),
+    );
   },
   footer(artifact) {
     const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);

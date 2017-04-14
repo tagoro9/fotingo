@@ -41,7 +41,7 @@ const readUserToken = R.compose(
 
 const authenticateAndGetCurrentUser = R.composeP(
   R.compose(
-    catchPromiseAndThrow('github', (e) => {
+    catchPromiseAndThrow('github', e => {
       debug('github', `Error when authenticating: ${e.message}`);
       switch (e.code) {
         case '500':
@@ -81,7 +81,7 @@ const buildPullRequestFooter = (issueRoot, addLinksToIssues) =>
       R.always(''),
       R.compose(R.concat(R.__, '.'), R.concat('\nFixes '), R.join(', ')),
     ),
-    R.map(({ raw, issue }) => addLinksToIssues ? `[${raw}](${issueRoot}${issue})` : `${raw}`),
+    R.map(({ raw, issue }) => (addLinksToIssues ? `[${raw}](${issueRoot}${issue})` : `${raw}`)),
     R.uniqBy(R.prop('issue')),
   );
 
@@ -100,15 +100,14 @@ const readFile = file => () => promisify(fs.readFile)(file, 'utf8');
 // String -> String -> String
 const deleteFile = file => content => promisify(fs.unlink)(file).then(() => wrapInPromise(content));
 // * -> String
-const editFile = file =>
-  () =>
-    new Promise((resolve, reject) => {
-      const vim = childProcess.spawn('vim', [file], { stdio: 'inherit' });
-      vim.on('exit', R.ifElse(R.equals(0), resolve, reject));
-    });
+const editFile = file => () =>
+  new Promise((resolve, reject) => {
+    const vim = childProcess.spawn('vim', [file], { stdio: 'inherit' });
+    vim.on('exit', R.ifElse(R.equals(0), resolve, reject));
+  });
 
 // Object -> String -> String
-const allowUserToEditPullRequest = (description) => {
+const allowUserToEditPullRequest = description => {
   const prFile = `/tmp/fotingo-pr-${Date.now()}`;
   return R.composeP(
     R.compose(wrapInPromise, R.trim),
@@ -127,7 +126,8 @@ const submitPullRequest = R.curryN(4, (config, project, branchInfo, description)
     base: config.get(['github', 'base']),
     title: R.compose(R.head, R.split('\n'))(description),
     body: R.compose(R.join('\n'), R.tail, R.split('\n'))(description),
-  }));
+  }),
+);
 
 const addLabelsToPullRequest = R.curryN(4, (config, project, branchInfo, pullRequest) =>
   R.composeP(R.compose(wrapInPromise, R.always(pullRequest)), addLabels)({
@@ -135,7 +135,8 @@ const addLabelsToPullRequest = R.curryN(4, (config, project, branchInfo, pullReq
     repo: project,
     number: pullRequest.number,
     labels: branchInfo.labels,
-  }));
+  }),
+);
 
 const addReviewersToPullRequest = R.curryN(4, (config, project, branchInfo, pullRequest) =>
   R.composeP(R.compose(wrapInPromise, R.always(pullRequest)), addReviewers)({
@@ -143,43 +144,43 @@ const addReviewersToPullRequest = R.curryN(4, (config, project, branchInfo, pull
     repo: project,
     number: pullRequest.number,
     reviewers: branchInfo.reviewers,
-  }));
+  }),
+);
 
 export default {
-  init: config =>
-    () => {
-      debug('github', 'Initializing Github api');
+  init: config => () => {
+    debug('github', 'Initializing Github api');
 
-      const doLogin = R.composeP(
-        authenticateAndGetCurrentUser,
-        config.update(['github', 'token']),
-        readUserToken,
-      );
+    const doLogin = R.composeP(
+      authenticateAndGetCurrentUser,
+      config.update(['github', 'token']),
+      readUserToken,
+    );
 
-      const configPromise = R.isNil(config.get(['github', 'owner']))
-        ? R.composeP(config.update(['github', 'owner']), reporter.question)({
+    const configPromise = R.isNil(config.get(['github', 'owner']))
+      ? R.composeP(config.update(['github', 'owner']), reporter.question)({
           question: "What's the github repository owner?",
         })
-        : wrapInPromise(config.get(['github', 'owner']));
+      : wrapInPromise(config.get(['github', 'owner']));
 
-      return configPromise.then(() => {
-        if (config.isGithubLoggedIn()) {
-          debug('github', 'User token is present. Using current authentication');
-          return (
-            authenticateAndGetCurrentUser(config.get(['github', 'token']))
-              // TODO differentiate error codes so only login is attempted when tokenInvalid
-              .catch(
-                R.composeP(
-                  doLogin,
-                  debugCurriedP('github', 'Current authentication failed. Attempting login'),
-                ),
-              )
-          );
-        }
-        debug('github', 'No user token present. Attempting login');
-        return doLogin();
-      });
-    },
+    return configPromise.then(() => {
+      if (config.isGithubLoggedIn()) {
+        debug('github', 'User token is present. Using current authentication');
+        return (
+          authenticateAndGetCurrentUser(config.get(['github', 'token']))
+            // TODO differentiate error codes so only login is attempted when tokenInvalid
+            .catch(
+              R.composeP(
+                doLogin,
+                debugCurriedP('github', 'Current authentication failed. Attempting login'),
+              ),
+            )
+        );
+      }
+      debug('github', 'No user token present. Attempting login');
+      return doLogin();
+    });
+  },
   // Object -> Array -> Promise
   createPullRequest: R.curryN(6, (config, project, issue, issueRoot, {
     addLinksToIssues,
@@ -198,7 +199,7 @@ export default {
           R.compose(
             catchPromiseAndThrow(
               'github',
-              (e) => {
+              e => {
                 switch (e.code) {
                   case 500:
                     return errors.github.cantConnect;
@@ -216,7 +217,8 @@ export default {
       allowUserToEditPullRequest,
       debugCurriedP('github', 'Editing pull request description'),
       buildPullRequestDescription(issueRoot, addLinksToIssues),
-    )(issue, branchInfo, addLinksToIssues)),
+    )(issue, branchInfo, addLinksToIssues),
+  ),
   checkAndGetLabels: R.curryN(4, (config, project, labels, branchInfo) =>
     R.composeP(
       R.compose(
@@ -229,5 +231,6 @@ export default {
         throwControlledError(errors.github.invalidLabel),
       ),
       getLabels,
-    )({ owner: config.get(['github', 'owner']), repo: project })),
+    )({ owner: config.get(['github', 'owner']), repo: project }),
+  ),
 };

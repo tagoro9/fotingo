@@ -14,7 +14,7 @@ const fetchOptions = () => {
       credentials: R.compose(
         Git.Cred.sshKeyFromAgent,
         debugCurried('git', 'Getting authentication from SSH agent'),
-        (username) => {
+        username => {
           credentialsCallCount = R.inc(credentialsCallCount);
           return credentialsCallCount > 1 ? undefined : username;
         },
@@ -50,17 +50,16 @@ const getIssues = R.converge(R.concat, [
 ]);
 
 export default {
-  init: (config, pathToRepo) =>
-    () => {
-      debug('git', `Initializing ${pathToRepo} repository`);
-      return Git.Repository
-        .open(pathToRepo)
-        .then((repo) => {
-          repository = repo;
-          return Promise.resolve(this);
-        })
-        .catch(throwControlledError(errors.git.couldNotInitializeRepo, { pathToRepo }));
-    },
+  init: (config, pathToRepo) => () => {
+    debug('git', `Initializing ${pathToRepo} repository`);
+    return Git.Repository
+      .open(pathToRepo)
+      .then(repo => {
+        repository = repo;
+        return Promise.resolve(this);
+      })
+      .catch(throwControlledError(errors.git.couldNotInitializeRepo, { pathToRepo }));
+  },
   createBranchName,
   createIssueBranch: R.curryN(2, (config, name) => {
     debug('git', 'Creating branch for issue');
@@ -77,13 +76,14 @@ export default {
             repository.defaultSignature(),
             `auto generated stash by ${app.name}`,
             Git.Stash.FLAGS.INCLUDE_UNTRACKED,
-          )),
+          ),
+        ),
       )
       .then(() => repository.getBranchCommit(`${remote}/${branch}`))
       .then(debugCurriedP('git', 'Creating new branch'))
       .then(commit => repository.createBranch(name, commit))
       .then(() => repository.checkoutBranch(name))
-      .catch((e) => {
+      .catch(e => {
         switch (e.errno) {
           case Git.Error.CODE.EEXISTS:
             throw new ControlledError(errors.git.branchAlreadyExists);
@@ -148,7 +148,7 @@ export default {
         Promise.all([
           Git.Merge
             .base(repository, latestCommit, latestMasterCommit)
-            .then((latestCommonCommit) => {
+            .then(latestCommonCommit => {
               debug('git', `Created history walker. Latest common commit: ${latestCommonCommit}`);
               const historyWalker = repository.createRevWalk();
               const commitStopper = commit => !latestCommonCommit.equal(commit.id());
@@ -161,6 +161,7 @@ export default {
           name,
           commits,
           issues: getIssues(issue, commits),
-        })));
+        })),
+      );
   },
 };

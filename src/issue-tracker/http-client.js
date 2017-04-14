@@ -11,7 +11,7 @@ const handleServerResponse = (resolve, reject) =>
       R.unapply(R.compose(resolve, args => ({ response: args[1], body: args[2] }))),
       R.compose(
         reject,
-        R.unapply((args) => {
+        R.unapply(args => {
           R.compose(
             debug('http'),
             R.concat('Request failed with status code '),
@@ -26,7 +26,7 @@ const handleServerResponse = (resolve, reject) =>
 
 const headers = { accept: 'application/json' };
 
-export default function (rootUrl) {
+export default function(rootUrl) {
   const makeUrl = R.concat(rootUrl);
   let auth = {};
   const jar = request.jar();
