@@ -33,7 +33,7 @@ export default config => () => {
     const getCurrentUser = () => get('/rest/api/2/myself?expand=groups').then(R.prop('body'));
 
     const doLogin = R.composeP(
-      getCurrentUser,
+      R.compose(catchPromiseAndThrow('jira', errors.jira.couldNotAuthenticate), getCurrentUser),
       setAuth,
       config.update(['jira', 'user']),
       readUserInfo,

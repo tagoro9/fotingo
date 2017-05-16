@@ -20,6 +20,7 @@ export default {
   },
   jira: {
     cantWorkOnIssue: "It looks like you can't work on this issue right now. It may have already been fixed or someone else may be working on it.",
+    couldNotAuthenticate: 'We have trouble authenticating with Jira. Make sure username and password are correct.',
     issueIdNotValid: 'The name of this issue is not valid. Make sure your input is correct.',
     issueNotFound: 'We have problems finding that issue in Jira',
     userNotLoggedIn: 'User is not logged in',
