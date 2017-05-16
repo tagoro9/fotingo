@@ -6,6 +6,7 @@ export default {
   git: {
     branchAlreadyExists: 'It looks like you already have a branch for this issue.',
     branchNotFound: "We could not find the branch '{branch}'. Make sure the name is written correcly",
+    cantPush: "We have trouble pushing to the remote server. It looks like the remote branch '{branch}' is behind the local one.",
     couldNotInitializeRepo: "We have problems accessing the repo in '{pathToRepo}'. Make sure it exists.",
     noChanges: "You haven't made any changes to this branch",
     noIssueInBranchName: "We couldn't find the issue name on the branch. Maybe you should run `fotingo review -n`.",

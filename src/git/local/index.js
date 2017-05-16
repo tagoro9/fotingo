@@ -49,6 +49,22 @@ const getIssues = R.converge(R.concat, [
   ),
 ]);
 
+const handleError = R.curryN(2, ({ branch }, e) => {
+  switch (e.errno) {
+    case Git.Error.CODE.EEXISTS:
+      throw new ControlledError(errors.git.branchAlreadyExists);
+    case Git.Error.CODE.ENOTFOUND:
+      throw new ControlledError(errors.git.branchNotFound, { branch });
+    case Git.Error.CODE.ENONFASTFORWARD:
+      throw new ControlledError(errors.git.cantPush, { branch });
+    default:
+      if (e.message === 'callback failed to initialize SSH credentials') {
+        throw new ControlledError(errors.git.noSshKey);
+      }
+      throw e;
+  }
+});
+
 export default {
   init: (config, pathToRepo) => () => {
     debug('git', `Initializing ${pathToRepo} repository`);
@@ -83,19 +99,7 @@ export default {
       .then(debugCurriedP('git', 'Creating new branch'))
       .then(commit => repository.createBranch(name, commit))
       .then(() => repository.checkoutBranch(name))
-      .catch(e => {
-        switch (e.errno) {
-          case Git.Error.CODE.EEXISTS:
-            throw new ControlledError(errors.git.branchAlreadyExists);
-          case Git.Error.CODE.ENOTFOUND:
-            throw new ControlledError(errors.git.branchNotFound, { branch });
-          default:
-            if (e.message === 'callback failed to initialize SSH credentials') {
-              throw new ControlledError(errors.git.noSshKey);
-            }
-            throw e;
-        }
-      });
+      .catch(handleError({ branch }));
   }),
   getCurrentBranchName,
   pushBranchToGithub: R.converge(
@@ -103,7 +107,7 @@ export default {
       ([remote, branch, { branchName, ref }]) =>
         remote
           .push([ref], fetchOptions())
-          .catch(throwControlledError(errors.git.noSshKey))
+          .catch(handleError({ branch: branchName }))
           .then(() => Git.Branch.setUpstream(branch, `${remote.name()}/${branchName}`)),
       (...promises) => Promise.all(promises),
     ),
