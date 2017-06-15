@@ -106,7 +106,7 @@ In order to use the tool, you need to have a password for JIRA. Using SSO with y
 
 The first time the tool is run, it will ask for all the needed data to run. That includes:
 
-* A github personal access token. You can create one [here](https://github.com/settings/tokens).
+* A github personal access token. You can create one [here](https://github.com/settings/tokens). Only *repo* permissions are needed.
 * The default github account owner of the repositories.
 * THe root to your Jira service.
 * It will try to infer the ids of the issue status steps in jira. This depends on how the Jira workflows have been configured. Accessing them through the API requires admin access, so it is not implemented for now. If you wanna get them,
