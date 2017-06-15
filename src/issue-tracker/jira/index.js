@@ -32,6 +32,39 @@ export default config => () => {
 
     const getCurrentUser = () => get('/rest/api/2/myself?expand=groups').then(R.prop('body'));
 
+    const getIssueTypes = () => get('/rest/api/2/issuetype').then(R.prop('body'));
+
+    const getShortName = name => {
+      if (name.match(/feature|story/i)) {
+        return 'f';
+      }
+      if (name.match(/task/i)) {
+        return 'c';
+      }
+      return name[0].toLowerCase();
+    };
+
+    const initialize = user =>
+      R.composeP(
+        R.always(user),
+        R.compose(
+          R.ifElse(
+            R.compose(R.either(R.isNil, R.isEmpty)),
+            R.composeP(
+              R.compose(
+                wrapInPromise,
+                config.update(['jira', 'issueTypes']),
+                R.mergeAll,
+                R.map(({ id, name }) => ({ [id]: { name, shortName: getShortName(name) } })),
+              ),
+              getIssueTypes,
+            ),
+            R.compose(wrapInPromise, R.identity),
+          ),
+          config.get,
+        ),
+      )(['jira', 'issueTypes']);
+
     const doLogin = R.composeP(
       R.compose(catchPromiseAndThrow('jira', errors.jira.couldNotAuthenticate), getCurrentUser),
       setAuth,
@@ -61,7 +94,7 @@ export default config => () => {
       post(`/rest/api/2/issue/${issue.key}/comment`, { body: { body: comment } }),
     );
 
-    return loginPromise.then(user => ({
+    return loginPromise.then(initialize).then(user => ({
       name: 'jira',
       issueRoot,
       getCurrentUser: R.always(wrapInPromise(user)),

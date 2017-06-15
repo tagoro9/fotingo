@@ -30,7 +30,7 @@ try {
             .then(issueTracker.canWorkOnIssue(user))
             .then(stepCurried(3, `Setting '${issueId}' in progress`, 'bookmark'))
             .then(issueTracker.setIssueStatus({ status: issueTracker.status.IN_PROGRESS }))
-            .then(R.compose(wrapInPromise, git.createBranchName))
+            .then(R.compose(wrapInPromise, git.createBranchName(config)))
             .then(
               R.ifElse(
                 R.partial(R.propEq('branchIssue', true), [program]),
