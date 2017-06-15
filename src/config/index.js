@@ -1,5 +1,5 @@
 import R from 'ramda';
-import readConfigFile from './read-config-file';
+import readConfigFile, { getLocalConfig } from './read-config-file';
 import writeConfigFile from './write-config-file';
 
 let config = readConfigFile({
@@ -37,7 +37,10 @@ const data = {
       inMemoryConfig = set(path, value, inMemoryConfig);
     } else {
       config = set(path, value, config);
-      writeConfigFile(config.local ? R.set(R.lensPath(path), value, {}) : config, config.local);
+      writeConfigFile(
+        config.local ? R.set(R.lensPath(path), value, R.omit(['local'], getLocalConfig())) : config,
+        config.local,
+      );
     }
     return value;
   }),

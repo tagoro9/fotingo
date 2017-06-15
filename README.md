@@ -117,6 +117,30 @@ fotingo can be used to create pull requests in github without having to connect 
 current branch you can just run `fotingo review -s`. The default base branch for pull requests is *master*, but that can be
 overwritten by modifying the config files or using the `-b` option.
 
+### Issue types
+
+The first time the tool connects with Jira, it will fetch all the possible issue types and save them in the config file under `jira.issueTypes`. It will also associate a short name to any of these types. By default, the short name will be the
+first letter of the name, except for stories that it will be *f* and for tasks, which will be *c*.
+
+### Customizing branch names
+
+The default branch name fotingo creates can be overriden in the config file by setting a template under `jira.templates.branch` and using `{` and `}` to interpolate the deseired data. The data that is currently
+passed to the template is the following:
+
+* `issue.shortName`. The a short name that represents a Jira issue type (e.g. *f* for features).
+* `issue.key`. The key of the issue.
+* `issue.sanitizedSummary`. This is the summary of the issuebut sanitized so a branch name can be created with it.
+
+An example config file with a custom branch name may look like this:
+
+    {
+      "jira": {
+        "templates": {
+          "branch": "{issue.shortName}-{issue.key}"
+        }
+      }
+    }
+
 ## Debugging
 
 If you run into problems, you can get a more verbose output of the tool by adding:
