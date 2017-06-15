@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/tagoro9/fotingo/compare/v1.6.1...v1.7.0) (2017-06-15)
+
+
+### Bug Fixes
+
+* **engines:** accept newer versions of yarn ([#39](https://github.com/tagoro9/fotingo/issues/39)) ([9536691](https://github.com/tagoro9/fotingo/commit/9536691)), closes [#37](https://github.com/tagoro9/fotingo/issues/37)
+* **git:** handle push errors ([#45](https://github.com/tagoro9/fotingo/issues/45)) ([b0f27c4](https://github.com/tagoro9/fotingo/commit/b0f27c4)), closes [#40](https://github.com/tagoro9/fotingo/issues/40)
+* **jira:** show error when login fails in second attempt ([#44](https://github.com/tagoro9/fotingo/issues/44)) ([eb2be89](https://github.com/tagoro9/fotingo/commit/eb2be89)), closes [#42](https://github.com/tagoro9/fotingo/issues/42)
+
+
+### Features
+
+* **start:** allow user to define branch name templates ([#47](https://github.com/tagoro9/fotingo/issues/47)) ([b5af3dc](https://github.com/tagoro9/fotingo/commit/b5af3dc)), closes [#43](https://github.com/tagoro9/fotingo/issues/43) [#38](https://github.com/tagoro9/fotingo/issues/38)
+
+
+
 <a name="1.6.1"></a>
 ## [1.6.1](https://github.com/tagoro9/fotingo/compare/v1.6.0...v1.6.1) (2017-04-13)
 
