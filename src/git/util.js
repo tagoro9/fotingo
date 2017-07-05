@@ -8,6 +8,12 @@ export const ISSUE_TYPES = {
   Task: 'c',
 };
 
+const TEMPLATE_KEY_MATCHERS = {
+  'issue.key': '(\\w+-\\d+)',
+  'issue.shortName': '\\w+',
+  'issue.sanitizedSummary': '[\\w_-]+',
+};
+
 const sanitizeSummary = R.compose(
   R.take(72),
   R.replace(/(_|-)$/, ''),
@@ -23,7 +29,8 @@ const defaultBranchTemplate = '{issue.shortName}/{issue.key}_{issue.sanitizedSum
 
 const getTemplateData = (config, issue) => ({
   template: config.get(['jira', 'templates', 'branch']) || defaultBranchTemplate,
-  data: {
+  matchers: TEMPLATE_KEY_MATCHERS,
+  data: issue && {
     'issue.shortName': config.get(['jira', 'issueTypes', issue.fields.issuetype.id]).shortName,
     'issue.key': issue.key.toLowerCase(),
     'issue.sanitizedSummary': sanitizeSummary(issue.fields.summary),
@@ -45,7 +52,10 @@ export const createBranchName = R.curryN(
 export const getProject = R.compose(R.nth(1), R.match(/\/((\w|-)+)$/));
 
 export const getIssueIdFromBranch = R.compose(
-  R.ifElse(R.isNil, R.identity, R.toUpper),
-  R.last,
-  R.match(/\w\/(\w+-\d+)/),
+  re => R.compose(R.ifElse(R.isNil, R.identity, R.toUpper), R.last, R.match(re)),
+  R.converge(R.reduce((msg, [k, v]) => R.replace(`{${k}}`, v, msg)), [
+    R.prop('template'),
+    R.compose(R.toPairs, R.prop('matchers')),
+  ]),
+  getTemplateData,
 );

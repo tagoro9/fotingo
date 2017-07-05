@@ -125,16 +125,16 @@ export default {
         })),
     ],
   ),
-  extractIssueFromCurrentBranch: () =>
+  extractIssueFromCurrentBranch: config =>
     R.composeP(
       debugCurriedP('git', 'Extracting issue from current branch'),
       R.compose(
         wrapInPromise,
         R.when(R.isNil, throwControlledError(errors.git.noIssueInBranchName)),
-        getIssueIdFromBranch,
+        getIssueIdFromBranch(config),
       ),
       getCurrentBranchName,
-    )(),
+    ),
   getBranchInfo(config, issue) {
     debug('git', 'Getting branch commit history');
     const { remote, branch } = config.get(['git']);

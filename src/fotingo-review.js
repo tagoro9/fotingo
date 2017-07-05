@@ -52,7 +52,7 @@ try {
             R.composeP(
               issueTracker.getIssue,
               stepCurriedP(4, issue => `Getting '${issue}' from ${issueTracker.name}`, 'bug'),
-              git.extractIssueFromCurrentBranch,
+              git.extractIssueFromCurrentBranch(config),
               stepCurriedP(3, 'Extracting issue from branch', 'mag_right'),
             ),
             R.always(undefined),
