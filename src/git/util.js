@@ -27,8 +27,10 @@ const sanitizeSummary = R.compose(
 
 const defaultBranchTemplate = '{issue.shortName}/{issue.key}_{issue.sanitizedSummary}';
 
+const getTemplate = config => config.get(['jira', 'templates', 'branch']) || defaultBranchTemplate;
+
 const getTemplateData = (config, issue) => ({
-  template: config.get(['jira', 'templates', 'branch']) || defaultBranchTemplate,
+  template: getTemplate(config),
   matchers: TEMPLATE_KEY_MATCHERS,
   data: issue && {
     'issue.shortName': config.get(['jira', 'issueTypes', issue.fields.issuetype.id]).shortName,
