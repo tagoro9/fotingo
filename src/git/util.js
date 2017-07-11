@@ -53,11 +53,21 @@ export const createBranchName = R.curryN(
 
 export const getProject = R.compose(R.nth(1), R.match(/\/((\w|-)+)$/));
 
-export const getIssueIdFromBranch = R.compose(
-  re => R.compose(R.ifElse(R.isNil, R.identity, R.toUpper), R.last, R.match(re)),
-  R.converge(R.reduce((msg, [k, v]) => R.replace(`{${k}}`, v, msg)), [
-    R.prop('template'),
-    R.compose(R.toPairs, R.prop('matchers')),
-  ]),
-  getTemplateData,
+export const getIssueIdFromBranch = R.curryN(
+  2,
+  R.compose(
+    R.converge(R.compose(R.ifElse(R.isNil, R.identity, R.toUpper), R.last, R.match), [
+      R.compose(
+        // This returns the regex
+        R.reduce(
+          (msg, [k, v]) => R.replace(`{${k}}`, v, msg),
+          R.__, // Here goes the template
+          R.toPairs(TEMPLATE_KEY_MATCHERS),
+        ),
+        getTemplate, // New function that I suggested above
+        R.nthArg(0), // Config
+      ),
+      R.nthArg(1), // Branch name
+    ]),
+  ),
 );
