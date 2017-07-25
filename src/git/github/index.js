@@ -60,7 +60,10 @@ const buildPullRequestTitle = R.ifElse(
   R.isNil,
   R.compose(R.concat(R.__, '\n'), R.prop('name'), R.nthArg(1)),
   issue =>
-    `${ISSUE_TYPES[issue.fields.issuetype.name]}/${issue.key} ${R.take(60, issue.fields.summary)}\n`,
+    `${ISSUE_TYPES[issue.fields.issuetype.name]}/${issue.key} ${R.take(
+      60,
+      issue.fields.summary,
+    )}\n`,
 );
 
 // Array -> String
@@ -182,42 +185,42 @@ export default {
     });
   },
   // Object -> Array -> Promise
-  createPullRequest: R.curryN(6, (config, project, issue, issueRoot, {
-    addLinksToIssues,
-  }, branchInfo) =>
-    R.composeP(
-      R.ifElse(
-        R.isEmpty,
-        throwControlledError(errors.github.pullRequestDescriptionInvalid),
-        // Assign the PR link to all the issues that were created
-        R.composeP(
-          R.compose(wrapInPromise, R.set(R.lensProp('pullRequest'), R.__, { branchInfo })),
-          addReviewersToPullRequest(config, project, branchInfo),
-          debugCurriedP('github', `Adding reviewers: ${branchInfo.reviewers} to PR`),
-          addLabelsToPullRequest(config, project, branchInfo),
-          debugCurriedP('github', `Adding labels: ${branchInfo.labels} to PR`),
-          R.compose(
-            catchPromiseAndThrow(
-              'github',
-              e => {
-                switch (e.code) {
-                  case 500:
-                    return errors.github.cantConnect;
-                  default:
-                    return errors.github.pullRequestAlreadyExists;
-                }
-              },
-              branchInfo,
+  createPullRequest: R.curryN(
+    6,
+    (config, project, issue, issueRoot, { addLinksToIssues }, branchInfo) =>
+      R.composeP(
+        R.ifElse(
+          R.isEmpty,
+          throwControlledError(errors.github.pullRequestDescriptionInvalid),
+          // Assign the PR link to all the issues that were created
+          R.composeP(
+            R.compose(wrapInPromise, R.set(R.lensProp('pullRequest'), R.__, { branchInfo })),
+            addReviewersToPullRequest(config, project, branchInfo),
+            debugCurriedP('github', `Adding reviewers: ${branchInfo.reviewers} to PR`),
+            addLabelsToPullRequest(config, project, branchInfo),
+            debugCurriedP('github', `Adding labels: ${branchInfo.labels} to PR`),
+            R.compose(
+              catchPromiseAndThrow(
+                'github',
+                e => {
+                  switch (e.code) {
+                    case 500:
+                      return errors.github.cantConnect;
+                    default:
+                      return errors.github.pullRequestAlreadyExists;
+                  }
+                },
+                branchInfo,
+              ),
+              submitPullRequest(config, project, branchInfo),
             ),
-            submitPullRequest(config, project, branchInfo),
           ),
         ),
-      ),
-      debugCurriedP('github', 'Submitting pull request to github'),
-      allowUserToEditPullRequest,
-      debugCurriedP('github', 'Editing pull request description'),
-      buildPullRequestDescription(issueRoot, addLinksToIssues),
-    )(issue, branchInfo, addLinksToIssues),
+        debugCurriedP('github', 'Submitting pull request to github'),
+        allowUserToEditPullRequest,
+        debugCurriedP('github', 'Editing pull request description'),
+        buildPullRequestDescription(issueRoot, addLinksToIssues),
+      )(issue, branchInfo, addLinksToIssues),
   ),
   checkAndGetLabels: R.curryN(4, (config, project, labels, branchInfo) =>
     R.composeP(
