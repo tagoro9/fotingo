@@ -35,7 +35,9 @@ export default function(rootUrl) {
       new Promise((resolve, reject) => {
         debug(
           'http',
-          `Performing ${method} ${makeUrl(url)} ${body ? `with body ${JSON.stringify(body, null, 2)}` : ''}`,
+          `Performing ${method} ${makeUrl(url)} ${body
+            ? `with body ${JSON.stringify(body, null, 2)}`
+            : ''}`,
         );
         return request(
           { url: makeUrl(url), body, form, headers, jar, json: true, method, auth },
