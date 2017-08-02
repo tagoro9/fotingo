@@ -44,7 +44,7 @@ Fotingo - A CLI tool that does all the work for me. It is composed of two comman
 `fotingo` has been developed using [yarn](https://github.com/yarnpkg/yarn), the new kid on the block,
 so I highly recommend you give it a try and do:
 
-    yarn add global fotingo
+    yarn global add fotingo
 
 Otherwise, just go with the classic:
 
@@ -71,7 +71,7 @@ An example file might look like this:
           "SELECTED_FOR_DEVELOPMENT": 2,
           "IN_PROGRESS": 3,
           "IN_REVIEW": 4
-        }
+        },
         "login": "jira_user",
         "password": "jira_password",
         "root": "https://issues.apache.org/jira"
