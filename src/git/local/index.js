@@ -144,7 +144,7 @@ export default {
     ])
       .then(
         R.when(
-          R.compose(R.not, R.allUniq, R.map(R.compose(R.toString, R.invoker(0, 'id')))),
+          R.compose(R.apply(R.equals), R.map(R.compose(R.toString, R.invoker(0, 'id')))),
           throwControlledError(errors.git.noChanges),
         ),
       )
