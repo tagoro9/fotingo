@@ -10,7 +10,6 @@
     "clean": "rimraf lib",
     "coverage": "jest --coverage --silent",
     "build": "npm run lint && npm run clean && gulp build && chmod 755 ./lib/fotingo.js",
-    "format": "prettier \"src/**/*.js\" --print-width 100 --single-quote --trailing-comma all --write",
     "lint": "eslint src test",
     "precommit": "lint-staged",
     "prepublish": "npm run build",
@@ -19,10 +18,7 @@
     "watch": "gulp watch"
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "prettier --print-width 100 --single-quote --trailing-comma all --write",
-      "git add"
-    ]
+    "src/**/*.js": ["prettier --write", "git add"]
   },
   "author": "Victor Mora",
   "license": "MIT",
@@ -33,11 +29,7 @@
     "type": "git",
     "url": "https://github.com/tagoro9/fotingo.git"
   },
-  "keywords": [
-    "jira",
-    "github",
-    "git"
-  ],
+  "keywords": ["jira", "github", "git"],
   "dependencies": {
     "chalk": "^1.1.3",
     "commander": "^2.9.0",
@@ -62,7 +54,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "eslint": "^4.3.0",
     "eslint-config-airbnb": "^15.1.0",
-    "eslint-config-prettier": "^2.3.0",
+    "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
@@ -75,7 +67,7 @@
     "husky": "^0.13.3",
     "jest": "^20.0.4",
     "lint-staged": "^3.4.0",
-    "prettier": "^1.5.3",
+    "prettier": "^1.7.4",
     "rimraf": "^2.5.4",
     "standard-version": "^4.0.0"
   },
@@ -85,8 +77,6 @@
   },
   "jest": {
     "coverageDirectory": "./coverage/",
-    "coverageReporters": [
-      "html"
-    ]
+    "coverageReporters": ["html"]
   }
 }
