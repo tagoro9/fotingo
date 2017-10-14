@@ -1,16 +1,10 @@
 {
-  "presets": [
-    "airbnb",
-    "es2015",
-    "stage-0"
-  ],
+  "presets": ["airbnb", "stage-0"],
   "plugins": [
     [
       "babel-plugin-transform-builtin-extend",
       {
-        "globals": [
-          "Error"
-        ]
+        "globals": ["Error"]
       }
     ]
   ]
