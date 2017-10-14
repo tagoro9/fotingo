@@ -68,7 +68,7 @@ export default {
   },
   footer(artifact) {
     const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
-    const msg = `Done in ${totalTime}s ${artifact ? `=> ${artifact}` : '.'}`;
+    const msg = `Done in ${totalTime}s${artifact ? ` => ${artifact}` : '.'}`;
     log(prependEmoji(msg, emojis.get('sparkles')));
   },
 };
