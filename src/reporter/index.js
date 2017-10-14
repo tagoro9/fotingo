@@ -4,9 +4,9 @@ import emojis from 'node-emoji';
 import R from 'ramda';
 import read from 'read';
 
-const stdout = process.stdout;
+const { stdout } = process;
 const startTime = Date.now();
-const isTTY = stdout.isTTY;
+const { isTTY } = stdout;
 
 const clearLine = () => {
   if (!supportsColor) {
