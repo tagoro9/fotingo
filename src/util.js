@@ -1,4 +1,6 @@
 import R from 'ramda';
+import childProcess from 'child_process';
+import fs from 'fs';
 import createDebugger from 'debug';
 import app from '../package.json';
 import reporter from './reporter';
@@ -42,3 +44,29 @@ export const promisify = func => (...args) =>
       ),
     ]),
   );
+
+// String -> String -> *
+export const writeFile = R.curryN(2, (file, content) =>
+  promisify(fs.writeFile)(file, content, 'utf8'),
+);
+// String -> * -> String
+export const readFile = file => () => promisify(fs.readFile)(file, 'utf8');
+// String -> String -> String
+export const deleteFile = file => content =>
+  promisify(fs.unlink)(file).then(() => wrapInPromise(content));
+// * -> String
+export const editFile = file => () =>
+  new Promise((resolve, reject) => {
+    const vim = childProcess.spawn('vim', [file], { stdio: 'inherit' });
+    vim.on('exit', R.ifElse(R.equals(0), resolve, reject));
+  });
+
+export const allowUserToEditMessage = R.curryN(2, (tmpFileName, initialContent) =>
+  R.composeP(
+    R.compose(wrapInPromise, R.trim),
+    deleteFile(tmpFileName),
+    readFile(tmpFileName),
+    editFile(tmpFileName),
+    writeFile(tmpFileName),
+  )(initialContent),
+);

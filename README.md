@@ -15,6 +15,9 @@ When working on *jira* backed projects, I see a common pattern I repeat several 
 * Create a *github* pull request with a description very similar to the ticket and a link back to the *jira* issue.
 * Set different labels and request people to review the changes.
 * Set the *jira* issue state to *In Review* and add a comment with the pull request URL.
+* Merge the PR and deploy the code via a CI server.
+* Create a Jira release and update the issue fix version and status.
+* Create a github release that points back to jira and have meaningful release notes.
 
 This seems like a reasonable workflow, but when addressing several issues on a given day, this process becomes very cumbersome. Thus... Fotingo.
 
@@ -38,6 +41,13 @@ Fotingo - A CLI tool that does all the work for me. It is composed of two comman
   * Create a new pull request against master with the messages of the commits and a link to the issue. *Default editor will open so user can edit message.*
   * Add labels and review requests to the pull request if any.
   * Set issue to *In Review* and add comment with a link to the pull request.
+
+* `fotingo release -i <issue-id> -i <another-issue-id> <release-name>
+
+  * Create a Jira version with the indicated name.
+  * Set the issues fix version to the newly created version.
+  * Update the issues status to *Done*.
+  * Create a github release pointing to the Jira release. *Default editor will open so use can edit the release notes*.
 
 ## Installation
 
@@ -71,6 +81,7 @@ An example file might look like this:
           "SELECTED_FOR_DEVELOPMENT": 2,
           "IN_PROGRESS": 3,
           "IN_REVIEW": 4
+          "DONE": 5
         },
         "login": "jira_user",
         "password": "jira_password",
@@ -99,6 +110,7 @@ The command line supports the following commands:
  * `fotingo --help` - to display usage information.
  * `fotingo start <issue-id>` - to start working on an issue. Additional options available via `fotingo start -h`.
  * `fotingo review` - to submit the current issue for review.  Additional options available (e.g. adding labels, not using an issue tracker) by using `fotingo review -h`.
+* `fotingo release <release-id>` - to create a release with the issues mentioned in the current branch. Additional options available (e.g specifying more issues to include in the release) by using `fotingo release -h`.
 
 As of today, SSH  is the only supported authorization type for communicating with Github. Your SSH key should be loaded into the SSH agent (i.e. `ssh-add -k path-to-private-key`). Also, fotingo cannot communicate with remotes via HTTPS.
 
