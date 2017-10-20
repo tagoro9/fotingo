@@ -17,6 +17,7 @@ export default {
       "We couldn't find the issue name on the branch. Maybe you should run `fotingo review -n`.",
     noSshKey:
       "It looks like you haven't added you ssh key. Remember to `ssh-add -k path_to_private_key` so we can communicate with the remote repository.",
+    noIssues: "We couldn't find any issue to assciate with the release",
   },
   github: {
     cantConnect: "We can' connect to github right now. Try in a few moments",

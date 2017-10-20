@@ -65,7 +65,7 @@ const handleError = R.curryN(2, ({ branch }, e) => {
   }
 });
 
-export default {
+const git = {
   init: (config, pathToRepo) => () => {
     debug('git', `Initializing ${pathToRepo} repository`);
     return Git.Repository
@@ -135,7 +135,7 @@ export default {
       ),
       getCurrentBranchName,
     ),
-  getBranchInfo(config, issue) {
+  getBranchInfo: R.curryN(2, (config, issue) => {
     debug('git', 'Getting branch commit history');
     const { remote, branch } = config.get(['git']);
     return Promise.all([
@@ -167,5 +167,25 @@ export default {
           issues: getIssues(issue, commits),
         })),
       );
-  },
+  }),
+  getIssuesInBranch: (config, issues, extractIssueFromCurrentBranch) =>
+    R.composeP(
+      R.when(R.isEmpty, throwControlledError(errors.git.noIssues)),
+      R.uniq,
+      R.concat(issues),
+      R.map(R.prop('issue')),
+      R.prop('issues'),
+      git.getBranchInfo(config),
+      debugCurriedP('git', 'Creating release notes'),
+      R.ifElse(
+        R.always(extractIssueFromCurrentBranch),
+        R.composeP(
+          R.compose(wrapInPromise, R.set(R.lensProp('key'), R.__, {})),
+          git.extractIssueFromCurrentBranch(config),
+        ),
+        R.always(Promise.resolve(undefined)),
+      ),
+    ),
 };
+
+export default git;
