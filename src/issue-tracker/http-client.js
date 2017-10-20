@@ -15,6 +15,7 @@ const handleServerResponse = (resolve, reject) =>
           R.compose(
             debug('http'),
             R.concat('Request failed with status code '),
+            R.toString,
             R.prop('statusCode'),
             R.nth(1),
           )(args);
@@ -53,6 +54,7 @@ export default function(rootUrl) {
   return {
     post: serverCall('POST'),
     get: serverCall('GET', R.__, {}),
+    put: serverCall('PUT'),
     setAuth: ({ login, password }) => {
       auth = { ...auth, user: login, pass: password };
     },
