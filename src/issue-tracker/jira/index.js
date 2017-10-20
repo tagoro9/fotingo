@@ -202,8 +202,8 @@ export default config => () => {
             wrapInPromise,
           )(issues),
         ),
-        setIssuesFixVersion: R.curryN(2, (issues, version) => {
-          return R.compose(
+        setIssuesFixVersion: R.curryN(2, (issues, version) =>
+          R.compose(
             promises => Promise.all(promises),
             R.map(
               R.converge((...promises) => Promise.all(promises), [
@@ -225,8 +225,8 @@ export default config => () => {
                 jira.setIssueStatus({ status: status.DONE }),
               ]),
             ),
-          )(issues);
-        }),
+          )(issues),
+        ),
         status,
       };
       return jira;
