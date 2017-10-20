@@ -87,8 +87,11 @@ export default R.curryN(2, (config, issue) => {
     }),
   );
 
+  const anyStatusIsMissing = (configStatus = {}) =>
+    R.compose(R.not, R.all(R.contains(R.__, R.keys(configStatus))), R.values)(status);
+
   return R.ifElse(
-    R.compose(R.either(R.isNil, R.isEmpty), R.invoker(1, 'get')(['jira', 'status'])),
+    R.compose(anyStatusIsMissing, R.invoker(1, 'get')(['jira', 'status'])),
     R.partial(R.compose(inferStatus, R.map(R.prop('to')), R.prop('transitions')), [issue]),
     R.compose(wrapInPromise, R.invoker(1, 'get')(['jira', 'status'])),
   )(config);
