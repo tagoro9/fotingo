@@ -34,6 +34,9 @@ export default {
     issueIdNotValid: 'The name of this issue is not valid. Make sure your input is correct.',
     issueNotFound: 'We have problems finding that issue in Jira',
     userNotLoggedIn: 'User is not logged in',
+    issuesInMultipleProjects:
+      'There are issues associated with different projects. A release can only contain issues associated with a project',
+    releaseNotesInvalid: 'The release notes provided are not valid',
   },
 };
 /* eslint-enable max-len */
