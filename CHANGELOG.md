@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/tagoro9/fotingo/compare/v1.7.1...v1.8.0) (2017-10-20)
+
+
+### Bug Fixes
+
+* **createBranchName:** del < and > from sanitized summary ([#55](https://github.com/tagoro9/fotingo/issues/55)) ([45c6422](https://github.com/tagoro9/fotingo/commit/45c6422))
+* **readme:** fix typo in sample .fotingo file and fix yarn install cmd([#54](https://github.com/tagoro9/fotingo/issues/54)) ([d1056b9](https://github.com/tagoro9/fotingo/commit/d1056b9))
+
+
+### Features
+
+* create a release command ([#57](https://github.com/tagoro9/fotingo/issues/57)) ([3aa10e2](https://github.com/tagoro9/fotingo/commit/3aa10e2))
+
+
+
 <a name="1.7.1"></a>
 ## [1.7.1](https://github.com/tagoro9/fotingo/compare/v1.7.0...v1.7.1) (2017-07-25)
 
