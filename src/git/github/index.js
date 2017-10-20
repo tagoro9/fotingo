@@ -33,6 +33,11 @@ const getLabels = R.composeP(
   promisify(github.issues.getLabels),
 );
 
+const createRelease = R.composeP(
+  R.compose(wrapInPromise, R.prop('data')),
+  promisify(github.repos.createRelease),
+);
+
 const authenticate = R.compose(
   wrapInPromise,
   token => github.authenticate(token),
@@ -216,4 +221,12 @@ export default {
       getLabels,
     )({ owner: config.get(['github', 'owner']), repo: project }),
   ),
+  createOrUpdateRelease: (config, project, notes, releaseId) => () =>
+    createRelease({
+      owner: config.get(['github', 'owner']),
+      repo: project,
+      tag_name: releaseId,
+      name: notes.title,
+      body: notes.body,
+    }).then(R.prop('html_url')),
 };
