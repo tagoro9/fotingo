@@ -1,9 +1,14 @@
-import childProcess from 'child_process';
-import fs from 'fs';
 import GithubApi from 'github';
 import R from 'ramda';
 import { ISSUE_TYPES } from '../util';
-import { debug, debugCurried, debugCurriedP, promisify, wrapInPromise } from '../../util';
+import {
+  debug,
+  debugCurried,
+  debugCurriedP,
+  promisify,
+  wrapInPromise,
+  allowUserToEditMessage,
+} from '../../util';
 import { errors, catchPromiseAndThrow, throwControlledError } from '../../error';
 import reporter from '../../reporter';
 
@@ -95,31 +100,6 @@ const buildPullRequestDescription = (issueRoot, addLinksToIssues) =>
     R.compose(buildPullRequestBody, R.prop('commits'), R.nthArg(1)),
     R.compose(buildPullRequestFooter(issueRoot, addLinksToIssues), R.prop('issues'), R.nthArg(1)),
   ]);
-
-// String -> String -> *
-const writeFile = R.curryN(2, (file, content) => promisify(fs.writeFile)(file, content, 'utf8'));
-// String -> * -> String
-const readFile = file => () => promisify(fs.readFile)(file, 'utf8');
-// String -> String -> String
-const deleteFile = file => content => promisify(fs.unlink)(file).then(() => wrapInPromise(content));
-// * -> String
-const editFile = file => () =>
-  new Promise((resolve, reject) => {
-    const vim = childProcess.spawn('vim', [file], { stdio: 'inherit' });
-    vim.on('exit', R.ifElse(R.equals(0), resolve, reject));
-  });
-
-// Object -> String -> String
-const allowUserToEditPullRequest = description => {
-  const prFile = `/tmp/fotingo-pr-${Date.now()}`;
-  return R.composeP(
-    R.compose(wrapInPromise, R.trim),
-    deleteFile(prFile),
-    readFile(prFile),
-    editFile(prFile),
-    writeFile(prFile),
-  )(description);
-};
 
 const submitPullRequest = R.curryN(4, (config, project, branchInfo, description) =>
   createPullRequest({
@@ -217,7 +197,7 @@ export default {
           ),
         ),
         debugCurriedP('github', 'Submitting pull request to github'),
-        allowUserToEditPullRequest,
+        allowUserToEditMessage(`/tmp/fotingo-pr-${Date.now()}`),
         debugCurriedP('github', 'Editing pull request description'),
         buildPullRequestDescription(issueRoot, addLinksToIssues),
       )(issue, branchInfo, addLinksToIssues),
