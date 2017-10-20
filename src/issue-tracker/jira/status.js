@@ -27,12 +27,16 @@ const statusMatcher = statusToFind =>
 export default R.curryN(2, (config, issue) => {
   const askForStatus = R.composeP(
     config.update(['jira', 'status']),
-    R.compose(wrapInPromise, ([BACKLOG, SELECTED_FOR_DEVELOPMENT, IN_PROGRESS, IN_REVIEW]) => ({
-      BACKLOG,
-      SELECTED_FOR_DEVELOPMENT,
-      IN_PROGRESS,
-      IN_REVIEW,
-    })),
+    R.compose(
+      wrapInPromise,
+      ([BACKLOG, SELECTED_FOR_DEVELOPMENT, IN_PROGRESS, IN_REVIEW, DONE]) => ({
+        BACKLOG,
+        SELECTED_FOR_DEVELOPMENT,
+        IN_PROGRESS,
+        IN_REVIEW,
+        DONE,
+      }),
+    ),
     R.compose(wrapInPromise, JSON.parse),
     R.compose(wrapInPromise, R.concat('['), R.concat(R.__, ']')),
     R.compose(
@@ -43,15 +47,15 @@ export default R.curryN(2, (config, issue) => {
       reporter.info,
       R.concat(
         R.__,
-        "\n     We need you to input the ids of the 'Backlog', 'To do', 'In progress', 'In review'\n    " +
+        "\n     We need you to input the ids of the 'Backlog', 'To do', 'In progress', 'In review' and 'Done'\n    " +
           " (one state can represent multiple values (e.g. 'Backlog' and 'To do' could be the same id).\n     " +
           'It all depends on your workflow.\n',
       ),
       R.concat(
         'In order to update the jira issues correctly, we need to know a little bit more about your workflow.\n     ' +
           'We need to identify the different states an issue can be on. We tried inferring those values, but we\n     ' +
-          "were unable to do so. We are looking for 4 specific states: 'Backlog', 'To do', 'In progress'\n     " +
-          "and 'In review'. These are the names and ids of the states the issue can transition to:\n     ",
+          "were unable to do so. We are looking for 5 specific states: 'Backlog', 'To do', 'In progress',\n     " +
+          "'In review' and 'Done'. These are the names and ids of the states the issue can transition to:\n     ",
       ),
     ),
   );
@@ -73,8 +77,8 @@ export default R.curryN(2, (config, issue) => {
       [status.BACKLOG]:
         statusMatcher(status.BACKLOG)(transitions) ||
         statusMatcher(status.SELECTED_FOR_DEVELOPMENT)(transitions),
-      [status.IN_PROGRESS]:
-        statusMatcher(status.IN_PROGRESS)(transitions) || statusMatcher(status.DONE)(transitions),
+      [status.IN_PROGRESS]: statusMatcher(status.IN_PROGRESS)(transitions),
+      [status.DONE]: statusMatcher(status.DONE)(transitions),
       [status.IN_REVIEW]: statusMatcher(status.IN_REVIEW)(transitions),
       [status.SELECTED_FOR_DEVELOPMENT]: statusMatcher(status.SELECTED_FOR_DEVELOPMENT)(
         transitions,
