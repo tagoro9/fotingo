@@ -42,12 +42,12 @@ Fotingo - A CLI tool that does all the work for me. It is composed of two comman
   * Add labels and review requests to the pull request if any.
   * Set issue to *In Review* and add comment with a link to the pull request.
 
-* `fotingo release -i <issue-id> -i <another-issue-id> <release-name>
+* `fotingo release -i <issue-id> -i <another-issue-id> <release-name>` - Creates a JIRA release and updates GitHub release
 
-  * Create a Jira version with the indicated name.
+  * Create a Jira version with the indicated name (e.g. `release-699`)
   * Set the issues fix version to the newly created version.
   * Update the issues status to *Done*.
-  * Create a github release pointing to the Jira release. *Default editor will open so use can edit the release notes*.
+  * Create a github release pointing to the Jira release. *Default editor will open so user can edit the release notes*.
 
 ## Installation
 
