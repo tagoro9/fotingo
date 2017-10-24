@@ -180,7 +180,7 @@ export default config => () => {
             ),
           ),
         ),
-        createVersion: R.curryN(2, (releaseId, issues) =>
+        createVersion: R.curryN(3, (releaseId, issues, notes) =>
           R.composeP(
             R.prop('body'),
             post('/rest/api/2/version'),
@@ -190,7 +190,7 @@ export default config => () => {
                 released: true,
                 releaseDate: new Date().toISOString().substring(0, 10),
                 name: releaseId,
-                description: 'Release from fotingo',
+                description: notes.title,
               },
             }),
             R.head,

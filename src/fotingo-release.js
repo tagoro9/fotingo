@@ -33,7 +33,7 @@ try {
             issueTracker.setIssuesFixVersion(issues),
             stepCurried(4, 'Setting the fix version to the affected issues', 'pencil2'),
             issueTracker.createVersion(releaseId),
-          )(issues),
+          )(issues, notes),
         stepCurried(3, `Creating release ${releaseId} in ${issueTracker.name}`, 'ship'),
         R.apply(R.merge),
         R.converge((...promises) => Promise.all(promises), [
