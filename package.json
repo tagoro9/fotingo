@@ -1,6 +1,6 @@
 {
   "name": "fotingo",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "A CLI to ease the interaction between git, github and jira.",
   "main": "lib/fotingo.js",
   "bin": {
@@ -18,7 +18,10 @@
     "watch": "gulp watch"
   },
   "lint-staged": {
-    "src/**/*.js": ["prettier --write", "git add"]
+    "src/**/*.js": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "author": "Victor Mora",
   "license": "MIT",
@@ -29,7 +32,11 @@
     "type": "git",
     "url": "https://github.com/tagoro9/fotingo.git"
   },
-  "keywords": ["jira", "github", "git"],
+  "keywords": [
+    "jira",
+    "github",
+    "git"
+  ],
   "dependencies": {
     "chalk": "^2.1.0",
     "commander": "^2.11.0",
@@ -76,6 +83,8 @@
   },
   "jest": {
     "coverageDirectory": "./coverage/",
-    "coverageReporters": ["html"]
+    "coverageReporters": [
+      "html"
+    ]
   }
 }
