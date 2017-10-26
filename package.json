@@ -18,10 +18,7 @@
     "watch": "gulp watch"
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "prettier --write",
-      "git add"
-    ]
+    "src/**/*.js": ["prettier --write", "git add"]
   },
   "author": "Victor Mora",
   "license": "MIT",
@@ -32,11 +29,7 @@
     "type": "git",
     "url": "https://github.com/tagoro9/fotingo.git"
   },
-  "keywords": [
-    "jira",
-    "github",
-    "git"
-  ],
+  "keywords": ["jira", "github", "git"],
   "dependencies": {
     "chalk": "^2.1.0",
     "commander": "^2.11.0",
@@ -78,13 +71,11 @@
     "standard-version": "^4.2.0"
   },
   "engines": {
-    "node": "^6.3.1",
+    "node": ">=6.3.1",
     "yarn": ">=0.19.1"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
-    "coverageReporters": [
-      "html"
-    ]
+    "coverageReporters": ["html"]
   }
 }
