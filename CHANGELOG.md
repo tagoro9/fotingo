@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.8.1"></a>
+## [1.8.1](https://github.com/tagoro9/fotingo/compare/v1.8.0...v1.8.1) (2017-10-26)
+
+
+### Bug Fixes
+
+* **release:** use notes title for jira release desc ([#59](https://github.com/tagoro9/fotingo/issues/59)) ([494fc8f](https://github.com/tagoro9/fotingo/commit/494fc8f))
+
+
+
 <a name="1.8.0"></a>
 # [1.8.0](https://github.com/tagoro9/fotingo/compare/v1.7.1...v1.8.0) (2017-10-20)
 
