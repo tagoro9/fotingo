@@ -1,23 +1,23 @@
 # Fotingo
 
-A CLI to ease the interaction between *git*, *github* and *jira* when working on tasks.
+A CLI to ease the interaction between *Git*, *GitHub* and *Jira* when working on tasks.
 
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
 ## The problem
 
-When working on *jira* backed projects, I see a common pattern I repeat several times a day:
+When working on *Jira* backed projects, I see a common pattern I repeat several times a day:
 
-* Pick an issue in *jira* to work on.
+* Pick an issue in *Jira* to work on.
 * Assign the issue to me and transition it to *in progress*.
-* Create a new branch in my local git repository that follows certain naming conventions.
+* Create a new branch in my local Git repository that follows certain naming conventions.
 * Do the work and commit some changes.
-* Create a *github* pull request with a description very similar to the ticket and a link back to the *jira* issue.
-* Set different *github* labels and request reviewers.
-* Set the *jira* issue state to *In Review* and add a comment with the pull request URL.
+* Create a *GitHub* pull request with a description very similar to the ticket and a link back to the *Jira* issue.
+* Set different *GitHub* labels and request reviewers.
+* Set the *Jira* issue state to *In Review* and add a comment with the pull request URL.
 * Merge the PR and deploy the code via a CI server.
 * Create a Jira release and update the issue fix version and status.
-* Create a github release that points back to jira and have meaningful release notes.
+* Create a GitHub release that points back to Jira and have meaningful release notes.
 
 This seems like a reasonable workflow, but when addressing several issues on a given day, this process becomes very cumbersome. Thus... Fotingo.
 
@@ -36,17 +36,17 @@ Fotingo - A CLI tool that does all the work for me. It is composed of two comman
 * `fotingo review -l mylabel -l "Another Label" -r github_user` - Submit a pull request for review.
 
   * _Halt if you are not in the correct branch or if the pull request already exists._
-  * Push the current branch to *github*.
+  * Push the current branch to *GitHub*.
   * Create a new pull request against master with the commit messages and a link to the issue. *Default editor will open so user can edit message.*
   * Add labels and review requests, if any, to the pull request.
   * Set issue to *In Review* and add comment with a link to the pull request.
 
-* `fotingo release -i <issue-id> -i <another-issue-id> <release-name>` - Creates a JIRA release and updates GitHub release
+* `fotingo release -i <issue-id> -i <another-issue-id> <release-name>` - Creates a Jira release and updates GitHub release
 
   * Create a Jira version with the indicated name (e.g. `release-699`)
   * Set the issues fix version to the newly created version.
   * Update the issues' status to *Done*.
-  * Create a github release pointing to the Jira release. *Default editor will open so user can edit the release notes*.
+  * Create a GitHub release pointing to the Jira release. *Default editor will open so user can edit the release notes*.
 
 ## Installation
 
@@ -88,7 +88,7 @@ An example file might look like this:
       }
     }
 
-Right now this file will store the username and password to your JIRA account in plaintext.
+Right now this file will store the username and password to your Jira account in plaintext.
 
 ### Local configuration files
 
@@ -111,20 +111,20 @@ The command line supports the following commands:
 * `fotingo review` - to submit the current issue for review. Additional options available (e.g. adding labels, not using an issue tracker) by using `fotingo review -h`.
 * `fotingo release <release-id>` - to create a release with the issues mentioned in the current branch. Additional options available (e.g specifying more issues to include in the release) by using `fotingo release -h`.
 
-As of today, SSH is the only supported authorization type for communicating with Github. Your SSH key should be loaded into the SSH agent (i.e. `ssh-add -k path-to-private-key`). Also, fotingo cannot communicate with remotes via HTTPS.
+As of today, SSH is the only supported authorization type for communicating with GitHub. Your SSH key should be loaded into the SSH agent (i.e. `ssh-add -k path-to-private-key`). Also, fotingo cannot communicate with remotes via HTTPS.
 
-In order to use the tool, you need to have a password for JIRA. Using SSO with your Google account will not work; you will have to create a generic user with a set password.
+In order to use the tool, you need to have a password for Jira. Using SSO with your Google account will not work; you will have to create a generic user with a set password.
 
 The first time the tool is run, it will ask for all the needed data. This includes:
 
-* A github personal access token. You can create one [here](https://github.com/settings/tokens). Only *repo* permissions are needed.
-* The default github account owner of the repositories.
+* A GitHub personal access token. You can create one [here](https://github.com/settings/tokens). Only *repo* permissions are needed.
+* The default GitHub account owner of the repositories.
 * The root to your Jira service.
-* It will try to infer the ids of the issue status steps in jira. This depends on how the Jira workflows have been configured. Accessing them through the API requires admin access, so it is not implemented for now. If you want to get them,
+* It will try to infer the ids of the issue status steps in Jira. This depends on how the Jira workflows have been configured. Accessing them through the API requires admin access, so it is not implemented for now. If you want to get them,
 you can read more about it [here](https://docs.atlassian.com/jira/REST/cloud/#api/2/issue-getIssue). In case it cannot infer the values, you will need to provide the ids for the workflow status that represent the Backlog, To Do, In Progress and In Review steps.
 * Your Jira username and password.
 
-fotingo can be used to create pull requests in github without having to connect it to jira. If you want to create a PR of the
+fotingo can be used to create pull requests in GitHub without having to connect it to Jira. If you want to create a PR of the
 current branch you can just run `fotingo review -s`. The default base branch for pull requests is *master*, but that can be
 overridden by modifying the config files or using the `-b` option.
 
@@ -204,7 +204,7 @@ Before building this tool I had been using a set of scripts inside the browser t
 This tool also enforces a clean commit history, as commit messages will be the default description of the
 pull request.
 
-The JIRA integration with Github helps you to do some of these tasks, such as: creating the branch (in github, but not locally) and updating the issue status if user has enabled the triggers. But, the creation of pull requests with meaningful content, and linking them to the JIRA ticket (not the ticket to the PR) has to be done manually.
+The Jira integration with GitHub helps you to do some of these tasks, such as: creating the branch (in GitHub, but not locally) and updating the issue status if user has enabled the triggers. But, the creation of pull requests with meaningful content, and linking them to the Jira ticket (not the ticket to the PR) has to be done manually.
 
 ## Contributing
 
