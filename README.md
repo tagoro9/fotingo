@@ -1,23 +1,23 @@
 # Fotingo
 
-A CLI to ease the interaction between *git*, *github* and *jira* when working on tasks.
+A CLI to ease the interaction between *Git*, *GitHub* and *Jira* when working on tasks.
 
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
 ## The problem
 
-When working on *jira* backed projects, I see a common pattern I repeat several times a day:
+When working on *Jira* backed projects, I see a common pattern I repeat several times a day:
 
-* Pick an issue in *jira* to work on.
+* Pick an issue in *Jira* to work on.
 * Assign the issue to me and transition it to *in progress*.
-* Create a new branch in my local git repository that follows certain naming conventions.
+* Create a new branch in my local Git repository that follows certain naming conventions.
 * Do the work and commit some changes.
-* Create a *github* pull request with a description very similar to the ticket and a link back to the *jira* issue.
-* Set different labels and request people to review the changes.
-* Set the *jira* issue state to *In Review* and add a comment with the pull request URL.
+* Create a *GitHub* pull request with a description very similar to the ticket and a link back to the *Jira* issue.
+* Set different *GitHub* labels and request reviewers.
+* Set the *Jira* issue state to *In Review* and add a comment with the pull request URL.
 * Merge the PR and deploy the code via a CI server.
 * Create a Jira release and update the issue fix version and status.
-* Create a github release that points back to jira and have meaningful release notes.
+* Create a GitHub release that points back to Jira and have meaningful release notes.
 
 This seems like a reasonable workflow, but when addressing several issues on a given day, this process becomes very cumbersome. Thus... Fotingo.
 
@@ -30,24 +30,23 @@ Fotingo - A CLI tool that does all the work for me. It is composed of two comman
   * Assign the issue to current user. _Halt if ticket is already assigned to other person or if the ticket is not assigned to my team._
   * Clean current working directory (stash it).
   * Checkout latest from master.
-  * Create a new branch following naming convention.
+  * Create a new branch that follows the naming convention.
   * Set the issue to *In Progress*.
 
-
-* `fotingo review -l label -l another_label -r github_user` - Submit a pull request for review.
+* `fotingo review -l mylabel -l "Another Label" -r github_user` - Submit a pull request for review.
 
   * _Halt if you are not in the correct branch or if the pull request already exists._
-  * Push the current brunch to *github*.
-  * Create a new pull request against master with the messages of the commits and a link to the issue. *Default editor will open so user can edit message.*
-  * Add labels and review requests to the pull request if any.
+  * Push the current branch to *GitHub*.
+  * Create a new pull request against master with the commit messages and a link to the issue. *Default editor will open so user can edit message.*
+  * Add labels and review requests, if any, to the pull request.
   * Set issue to *In Review* and add comment with a link to the pull request.
 
-* `fotingo release -i <issue-id> -i <another-issue-id> <release-name>` - Creates a JIRA release and updates GitHub release
+* `fotingo release -i <issue-id> -i <another-issue-id> <release-name>` - Creates a Jira release and updates GitHub release
 
   * Create a Jira version with the indicated name (e.g. `release-699`)
   * Set the issues fix version to the newly created version.
-  * Update the issues status to *Done*.
-  * Create a github release pointing to the Jira release. *Default editor will open so user can edit the release notes*.
+  * Update the issues' status to *Done*.
+  * Create a GitHub release pointing to the Jira release. *Default editor will open so user can edit the release notes*.
 
 ## Installation
 
@@ -89,12 +88,12 @@ An example file might look like this:
       }
     }
 
-Right now this file will store the username and password to your JIRA account in plaintext.
+Right now this file will store the username and password to your Jira account in plaintext.
 
 ### Local configuration files
 
-You can create local configuration files to your project. Just create a `.fotingo` file inside your project root folder.
-This file, needs to be in JSON format as well. If such file exist, any missing configuration will be added to this file instead.
+You can create project-specific configuration files. Just create a `.fotingo` file inside your project root folder.
+This file, needs to be in JSON format as well. If such a file exist, any missing configuration will be added to this file instead.
 You can also overwrite global configuration in this file. An example config file may just be:
 
     {
@@ -107,41 +106,41 @@ You can also overwrite global configuration in this file. An example config file
 
 The command line supports the following commands:
 
- * `fotingo --help` - to display usage information.
- * `fotingo start <issue-id>` - to start working on an issue. Additional options available via `fotingo start -h`.
- * `fotingo review` - to submit the current issue for review.  Additional options available (e.g. adding labels, not using an issue tracker) by using `fotingo review -h`.
+* `fotingo --help` - to display usage information.
+* `fotingo start <issue-id>` - to start working on an issue. Additional options available via `fotingo start -h`.
+* `fotingo review` - to submit the current issue for review. Additional options available (e.g. adding labels, not using an issue tracker) by using `fotingo review -h`.
 * `fotingo release <release-id>` - to create a release with the issues mentioned in the current branch. Additional options available (e.g specifying more issues to include in the release) by using `fotingo release -h`.
 
-As of today, SSH  is the only supported authorization type for communicating with Github. Your SSH key should be loaded into the SSH agent (i.e. `ssh-add -k path-to-private-key`). Also, fotingo cannot communicate with remotes via HTTPS.
+As of today, SSH is the only supported authorization type for communicating with GitHub. Your SSH key should be loaded into the SSH agent (i.e. `ssh-add -k path-to-private-key`). Also, fotingo cannot communicate with remotes via HTTPS.
 
-In order to use the tool, you need to have a password for JIRA. Using SSO with your Google account will not work; you will have to create a generic user with a set password.
+In order to use the tool, you need to have a password for Jira. Using SSO with your Google account will not work; you will have to create a generic user with a set password.
 
-The first time the tool is run, it will ask for all the needed data to run. That includes:
+The first time the tool is run, it will ask for all the needed data. This includes:
 
-* A github personal access token. You can create one [here](https://github.com/settings/tokens). Only *repo* permissions are needed.
-* The default github account owner of the repositories.
-* THe root to your Jira service.
-* It will try to infer the ids of the issue status steps in jira. This depends on how the Jira workflows have been configured. Accessing them through the API requires admin access, so it is not implemented for now. If you wanna get them,
-you can read more aboutit [here](https://docs.atlassian.com/jira/REST/cloud/#api/2/issue-getIssue). In case it cannot infer the values, you will need to provide the ids for the workflow status that represent the Backlog, To Do, In Progress and In Review steps.
+* A GitHub personal access token. You can create one [here](https://github.com/settings/tokens). Only *repo* permissions are needed.
+* The default GitHub account owner of the repositories.
+* The root to your Jira service.
+* It will try to infer the ids of the issue status steps in Jira. This depends on how the Jira workflows have been configured. Accessing them through the API requires admin access, so it is not implemented for now. If you want to get them,
+you can read more about it [here](https://docs.atlassian.com/jira/REST/cloud/#api/2/issue-getIssue). In case it cannot infer the values, you will need to provide the ids for the workflow status that represent the Backlog, To Do, In Progress and In Review steps.
 * Your Jira username and password.
 
-fotingo can be used to create pull requests in github without having to connect it to jira. If you want to create a PR of the
+fotingo can be used to create pull requests in GitHub without having to connect it to Jira. If you want to create a PR of the
 current branch you can just run `fotingo review -s`. The default base branch for pull requests is *master*, but that can be
-overwritten by modifying the config files or using the `-b` option.
+overridden by modifying the config files or using the `-b` option.
 
 ### Issue types
 
-The first time the tool connects with Jira, it will fetch all the possible issue types and save them in the config file under `jira.issueTypes`. It will also associate a short name to any of these types. By default, the short name will be the
-first letter of the name, except for stories that it will be *f* and for tasks, which will be *c*.
+The first time the tool connects with Jira, it will fetch all the possible issue types and save them in the config file under `jira.issueTypes`. It will also associate a short name with all of these types. By default, the short name will be the
+first letter of the name, except for stories (*f*) and tasks (*c*).
 
 ### Customizing branch names
 
 The default branch name fotingo creates can be overriden in the config file by setting a template under `jira.templates.branch` and using `{` and `}` to interpolate the deseired data. The data that is currently
 passed to the template is the following:
 
-* `issue.shortName`. The a short name that represents a Jira issue type (e.g. *f* for features).
+* `issue.shortName`. A short name that represents a Jira issue type (e.g. *f* for features).
 * `issue.key`. The key of the issue.
-* `issue.sanitizedSummary`. This is the summary of the issuebut sanitized so a branch name can be created with it.
+* `issue.sanitizedSummary`. This is the summary of the issue, sanitized for use as a branch name.
 
 An example config file with a custom branch name may look like this:
 
@@ -155,7 +154,7 @@ An example config file with a custom branch name may look like this:
 
 ## Debugging
 
-If you run into problems, you can get a more verbose output of the tool by adding:
+If you run into problems, you can get more verbose output from the tool by adding:
 
     DEBUG="fotingo:*" fotingo ...
 
@@ -186,14 +185,14 @@ to your `.bash_profile` or equivalent.
 
 ## Implementation details
 
-My secondary goal when building this tool, apart from saving time, was to learn how to use [ramda](http://ramdajs.com/), a functional programming library.  As a result, this tool heavily leverages [functional programming concepts](https://github.com/MostlyAdequate/mostly-adequate-guide). This may lead to difficulties understanding the code at first, but after a little research on these concepts (e.g currying, function composition, ...), it should become more clear.
+My secondary goal when building this tool, apart from saving time, was to learn how to use [ramda](http://ramdajs.com/), a functional programming library. As a result, this tool heavily leverages [functional programming concepts](https://github.com/MostlyAdequate/mostly-adequate-guide). This may lead to difficulties understanding the code at first, but after a little research on these concepts (e.g currying, function composition, ...), it should become more clear.
 
 Also, the code has been written in ES6 using [babel](https://babeljs.io/).
 
 The CLI output has been inspired by yarn.
 
 Before building this tool I had been using a set of scripts inside the browser to build the branch name and
-[hub](https://github.com/github/hub) to create pull requests.  Unfortunately:
+[hub](https://github.com/github/hub) to create pull requests. Unfortunately:
 
 * I still had to manually assign issues to me and set them to *In Progress*.
 * I still had to manually create a branch and copy the name from the browser.
@@ -205,11 +204,11 @@ Before building this tool I had been using a set of scripts inside the browser t
 This tool also enforces a clean commit history, as commit messages will be the default description of the
 pull request.
 
-The JIRA integration with Github helps you to do some of these tasks, such as: creating the branch (in github, but not locally) and updating the issue status if user has enabled the triggers.  But, the creation of pull requests with meaningful content, and linking them to the JIRA ticket (not the ticket to the PR) has to be done manually.
+The Jira integration with GitHub helps you to do some of these tasks, such as: creating the branch (in GitHub, but not locally) and updating the issue status if user has enabled the triggers. But, the creation of pull requests with meaningful content, and linking them to the Jira ticket (not the ticket to the PR) has to be done manually.
 
 ## Contributing
 
-If you want to extend this tool with anything, feel free to submit a pull request.  There are a few things that I would like to keep this tool up-to-date:
+If you want to extend this tool with anything, feel free to submit a pull request. There are a few things that I would like to keep this tool up-to-date:
 
 * Functional programming. That means use Ramda everywhere.
 * A clean commit history. I would encourage the use of the conventional changelog angular
