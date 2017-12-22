@@ -2,13 +2,17 @@ import program from 'commander';
 import R from 'ramda';
 
 import { getProject } from './git/util';
-import { handleError } from './error';
+import { handleError, throwControlledError, errors } from './error';
 import config from './config';
 import init from './init';
 import reporter from './reporter';
 import { wrapInPromise } from './util';
 
-const getReleaseId = R.compose(R.head, R.prop('args'));
+const getReleaseId = R.compose(
+  R.when(R.isNil, throwControlledError(errors.jira.releaseNameRequired)),
+  R.head,
+  R.prop('args'),
+);
 
 try {
   program

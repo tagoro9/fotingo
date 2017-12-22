@@ -37,6 +37,7 @@ export default {
     issuesInMultipleProjects:
       'There are issues associated with different projects. A release can only contain issues associated with a project',
     releaseNotesInvalid: 'The release notes provided are not valid',
+    releaseNameRequired: 'It looks like you did not specify a release name',
   },
 };
 /* eslint-enable max-len */
