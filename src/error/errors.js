@@ -33,11 +33,19 @@ export default {
       'We have trouble authenticating with Jira. Make sure username and password are correct.',
     issueIdNotValid: 'The name of this issue is not valid. Make sure your input is correct.',
     issueNotFound: 'We have problems finding that issue in Jira',
+    issueTypeNotFound: 'We could not find this issue type, make sure it exists',
+    projectNotFound: 'We have problems finding that project in Jira',
     userNotLoggedIn: 'User is not logged in',
     issuesInMultipleProjects:
       'There are issues associated with different projects. A release can only contain issues associated with a project',
     releaseNotesInvalid: 'The release notes provided are not valid',
     releaseNameRequired: 'It looks like you did not specify a release name',
+    issueDescriptionNotValid:
+      'The description of this issue is not valid. Please make sure your input is correct',
+  },
+  start: {
+    createSyntaxError:
+      'In order to create a new issue you need to specify a project and an issue type',
   },
 };
 /* eslint-enable max-len */

@@ -100,21 +100,33 @@ export default config => () => {
       post(`/rest/api/2/issue/${issue.key}/comment`, { body: { body: comment } }),
     );
 
+    const getProject = R.composeP(
+      R.prop('body'),
+      R.compose(
+        catchPromiseAndThrow('jira', errors.jira.projectNotFound),
+        get,
+        R.concat('/rest/api/2/project/'),
+      ),
+      debugCurriedP('jira', 'Getting project from Jira'),
+    );
+
+    const getIssue = R.composeP(
+      parseIssue,
+      R.compose(
+        catchPromiseAndThrow('jira', errors.jira.issueNotFound),
+        get,
+        R.concat(R.__, '?expand=transitions'),
+        R.concat('/rest/api/2/issue/'),
+      ),
+      debugCurriedP('jira', 'Getting issue from jira'),
+    );
+
     return loginPromise.then(initialize).then(user => {
       const jira = {
         name: 'jira',
         issueRoot,
         getCurrentUser: R.always(wrapInPromise(user)),
-        getIssue: R.composeP(
-          parseIssue,
-          R.compose(
-            catchPromiseAndThrow('jira', errors.jira.issueNotFound),
-            get,
-            R.concat(R.__, '?expand=transitions'),
-            R.concat('/rest/api/2/issue/'),
-          ),
-          debugCurriedP('jira', 'Getting issue from jira'),
-        ),
+        getIssue,
         setIssueStatus: R.curryN(2, ({ status: issueStatus, comment }, issue) =>
           R.composeP(
             R.always(issue),
@@ -226,6 +238,50 @@ export default config => () => {
               ]),
             ),
           )(issues),
+        ),
+        getProject,
+        createIssue: R.curryN(
+          2,
+          R.composeP(
+            getIssue,
+            R.prop('key'),
+            R.prop('body'),
+            post('/rest/api/2/issue'),
+            debugCurriedP('jira', 'Creating issue in Jira'),
+            R.converge(
+              R.composeP(
+                ([project, issueType, summary, transition]) => ({
+                  body: {
+                    fields: {
+                      summary,
+                      assignee: {
+                        name: user.name,
+                      },
+                      project: {
+                        id: project.id,
+                      },
+                      issuetype: {
+                        id: issueType,
+                      },
+                      transition,
+                    },
+                  },
+                }),
+                (...promises) => Promise.all(promises),
+              ),
+              [
+                getProject,
+                R.compose(
+                  wrapInPromise,
+                  R.when(R.isNil, throwControlledError(errors.jira.issueTypeNotFound)),
+                  R.partialRight(R.find, [Object.keys(config.get(['jira', 'issueTypes']))]),
+                  type => id => config.get(['jira', 'issueTypes', id, 'name']) === type,
+                  R.nthArg(1),
+                ),
+                R.compose(wrapInPromise, R.nthArg(2)),
+              ],
+            ),
+          ),
         ),
         status,
       };
