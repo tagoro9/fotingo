@@ -24,7 +24,7 @@ const statusMatcher = statusToFind =>
     R.find(R.compose(R.test(statusRegex[statusToFind]), R.prop('name'))),
   );
 
-export default R.curryN(2, (config, issue) => {
+export default R.curryN(2, (config, issue = { transitions: [] }) => {
   const askForStatus = R.composeP(
     config.update(['jira', 'status']),
     R.compose(
