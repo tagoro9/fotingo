@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.9.1"></a>
+## [1.9.1](https://github.com/tagoro9/fotingo/compare/v1.9.0...v1.9.1) (2018-01-04)
+
+
+### Bug Fixes
+
+* **issue:** replace & when sanitizing the summary ([#68](https://github.com/tagoro9/fotingo/issues/68)) ([2708f89](https://github.com/tagoro9/fotingo/commit/2708f89))
+
+
+
 <a name="1.9.0"></a>
 # [1.9.0](https://github.com/tagoro9/fotingo/compare/v1.8.3...v1.9.0) (2017-12-29)
 
