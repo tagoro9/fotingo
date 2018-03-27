@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.9.2"></a>
+## [1.9.2](https://github.com/tagoro9/fotingo/compare/v1.9.1...v1.9.2) (2018-03-27)
+
+
+### Bug Fixes
+
+* **GitUtil:** relace ignore ~ when creating branch name ([#69](https://github.com/tagoro9/fotingo/issues/69)) ([531e6a7](https://github.com/tagoro9/fotingo/commit/531e6a7))
+
+
+
 <a name="1.9.1"></a>
 ## [1.9.1](https://github.com/tagoro9/fotingo/compare/v1.9.0...v1.9.1) (2018-01-04)
 
