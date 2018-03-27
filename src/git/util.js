@@ -21,7 +21,7 @@ const sanitizeSummary = R.compose(
   R.replace(/__+/, '_'),
   R.replace(/\s|\(|\)/g, '_'),
   R.replace(/\/|\./g, '-'),
-  R.replace(/,|\[|]|"|'|”|“|@|’|`|:|\$|\?|\*|<|>|&/g, ''),
+  R.replace(/,|\[|]|"|'|”|“|@|’|`|:|\$|\?|\*|<|>|&|~/g, ''),
   R.toLower,
 );
 
