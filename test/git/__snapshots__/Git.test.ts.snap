@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-3178"`;
+
+exports[`Git getRemote should fall back to the first remote if it cannot find the specified one 1`] = `
+Object {
+  "commit": undefined,
+  "filepath": "",
+  "filepathtype": "",
+  "full_name": "tagoro9/fotingo-rewrite",
+  "git_suffix": true,
+  "hash": "",
+  "href": "git@github.com:tagoro9/fotingo-rewrite.git",
+  "name": "fotingo-rewrite",
+  "organization": "tagoro9",
+  "owner": "tagoro9",
+  "pathname": "/tagoro9/fotingo-rewrite.git",
+  "port": null,
+  "protocol": "ssh",
+  "protocols": Array [],
+  "query": Object {},
+  "ref": "",
+  "resource": "github.com",
+  "search": "",
+  "source": "github.com",
+  "toString": [Function],
+  "token": "",
+  "user": "git",
+}
+`;
+
+exports[`Git getRemote should return the parsed remote 1`] = `
+Object {
+  "commit": undefined,
+  "filepath": "",
+  "filepathtype": "",
+  "full_name": "tagoro9/fotingo-rewrite",
+  "git_suffix": true,
+  "hash": "",
+  "href": "git@github.com:tagoro9/fotingo-rewrite.git",
+  "name": "fotingo-rewrite",
+  "organization": "tagoro9",
+  "owner": "tagoro9",
+  "pathname": "/tagoro9/fotingo-rewrite.git",
+  "port": null,
+  "protocol": "ssh",
+  "protocols": Array [],
+  "query": Object {},
+  "ref": "",
+  "resource": "github.com",
+  "search": "",
+  "source": "github.com",
+  "toString": [Function],
+  "token": "",
+  "user": "git",
+}
+`;

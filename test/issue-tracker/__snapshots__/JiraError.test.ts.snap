@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JiraError should store the message and the code 1`] = `"Test message"`;
+
+exports[`JiraError should store the message and the code 2`] = `"ERR_CODE"`;

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    // "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["es2017"],
+    "jsx": "react",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "outDir": "lib",
+    "types": ["node"],
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    "typeRoots": ["./types", "node_modules/@types"],
+    "rootDir": "./src"
+  },
+  "include": ["src", "types"]
+}
