@@ -174,7 +174,7 @@ export interface Tracker {
   getIssue: (issueId: string) => Observable<Issue>;
   getIssueEditMeta: (issueId: string) => Observable<IssueEditMeta>;
   isValidIssueName: (name: string) => boolean;
-  setIssueStatus: Curry.Curry<(status: IssueStatus, issueId: string) => Observable<Issue>>;
+  setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
   setIssuesFixVersion(release: Release): Observable<Release>;
 }
 

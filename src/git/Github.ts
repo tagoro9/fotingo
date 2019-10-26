@@ -296,14 +296,21 @@ export class Github implements Remote {
    * and collaborators
    */
   private async listContributors(): Promise<Array<{ login: string }>> {
-    const groups = await Promise.all(
-      [this.api.repos.listCollaborators, this.api.repos.listContributors].map(fn =>
-        fn({ owner: this.config.owner, repo: this.config.repo, per_page: 100 }),
-      ),
-    );
+    const groups = await Promise.all([
+      this.api.repos.listCollaborators({
+        owner: this.config.owner,
+        per_page: 100,
+        repo: this.config.repo,
+      }),
+      this.api.repos.listContributors({
+        owner: this.config.owner,
+        per_page: 100,
+        repo: this.config.repo,
+      }),
+    ]);
 
     return compose(
-      data => flatten<{ login: string }>(data),
+      data => flatten<Array<Array<{ readonly login: string }>>>(data),
       map<{ data: Array<{ login: string }> }, Array<{ login: string }>>(
         compose(
           map<{ login: string }, { login: string }>(pick(['login'])),

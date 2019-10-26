@@ -15,7 +15,7 @@ export interface Tracker {
   createIssue: (data: CreateIssue, user: User) => Observable<Issue>;
   createIssueForCurrentUser: (data: CreateIssue) => Observable<Issue>;
   getCurrentUser: () => Observable<User>;
-  setIssueStatus: Curry.Curry<(status: IssueStatus, issueId: string) => Observable<Issue>>;
+  setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
   addCommentToIssue: (issueId: string, comment: string) => Observable<IssueComment>;
   addLabelToIssue: (issueId: string, label: string) => Observable<Issue>;
   getIssueEditMeta: (issueId: string) => Observable<IssueEditMeta>;

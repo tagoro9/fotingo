@@ -106,6 +106,13 @@ export interface Project {
   key: string;
 }
 
+export interface JiraProject {
+  id: number;
+  issueTypes: Array<{ id: number; name: string }>;
+  name: string;
+  key: string;
+}
+
 export interface ReleaseNotes {
   title: string;
   body: string;

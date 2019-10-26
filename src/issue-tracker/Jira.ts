@@ -1,17 +1,15 @@
 import { boundMethod } from 'autobind-decorator';
 import {
-  __,
   always,
   compose,
   converge,
-  curry,
+  // curry,
   evolve,
   groupBy,
   head,
   indexBy,
   join,
   length,
-  Lens,
   lensProp,
   lt,
   map as rMap,
@@ -51,6 +49,7 @@ import {
   IssueTransition,
   IssueType,
   IssueTypeData,
+  JiraProject,
   JiraRelease,
   Project,
   Release,
@@ -97,27 +96,6 @@ const ISSUE_TYPE_TO_RELEASE_SECTION: { [k in IssueType]: string } = {
 
 // Using Jira REST API v2 (https://developer.atlassian.com/cloud/jira/platform/rest/v2)
 export class Jira implements Tracker {
-  public setIssueStatus = curry(
-    (status: IssueStatus, issueId: string): Observable<Issue> => {
-      return this.getIssue(issueId).pipe(
-        switchMap(issue => {
-          const transition = this.getTransitionForStatus(issue, status);
-          if (!transition) {
-            throw new Error('Missing status');
-          }
-          return this.client
-            .post<Issue>(`/issue/${issue.key}/transitions`, {
-              body: {
-                transition: transition.id,
-              },
-            })
-            .pipe(map(always(issue)));
-        }),
-        catchError(this.mapError),
-      );
-    },
-  );
-
   private client: HttpClient;
   private config: JiraConfig;
   private messenger: Messenger;
@@ -131,6 +109,25 @@ export class Jira implements Tracker {
       auth: { pass: config.user.token, user: config.user.login },
       root: `${config.root}/rest/api/2`,
     });
+  }
+
+  public setIssueStatus(status: IssueStatus, issueId: string): Observable<Issue> {
+    return this.getIssue(issueId).pipe(
+      switchMap(issue => {
+        const transition = this.getTransitionForStatus(issue, status);
+        if (!transition) {
+          throw new Error('Missing status');
+        }
+        return this.client
+          .post<Issue>(`/issue/${issue.key}/transitions`, {
+            body: {
+              transition: transition.id,
+            },
+          })
+          .pipe(map(always(issue)));
+      }),
+      catchError(this.mapError),
+    );
   }
 
   public getCurrentUser(): Observable<User> {
@@ -180,10 +177,10 @@ export class Jira implements Tracker {
   }
 
   public getProject(id: string): Observable<Project> {
-    return this.client.get<Project>(`/project/${id}`).pipe(
+    return this.client.get<JiraProject>(`/project/${id}`).pipe(
       map(
         compose(
-          (data: Project) =>
+          (data: JiraProject) =>
             evolve(
               {
                 issueTypes: compose(
@@ -194,7 +191,7 @@ export class Jira implements Tracker {
                       shortName: getShortName(typeData.name),
                     }),
                   ),
-                ),
+                ) as (d: JiraProject['issueTypes']) => Project['issueTypes'],
               },
               data,
             ),
@@ -349,13 +346,13 @@ export class Jira implements Tracker {
               })
               .pipe(map(prop('body'))),
           ).pipe(
-            reduce<Issue>((acc, val) => acc.concat(val), []),
+            reduce<Issue, Issue[]>((acc, val) => acc.concat(val), []),
             map(issues => head(issues)),
           ),
         ),
       )
       .pipe(
-        reduce<Issue>((acc, val) => acc.concat(val), []),
+        reduce<Issue, Issue[]>((acc, val) => acc.concat(val), []),
         map(always(release)),
       );
   }
@@ -394,7 +391,7 @@ export class Jira implements Tracker {
           ),
           groupBy(
             compose(
-              view((__ as unknown) as Lens, ISSUE_TYPE_TO_RELEASE_SECTION),
+              lens => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION),
               lensProp,
               prop('type'),
             ),

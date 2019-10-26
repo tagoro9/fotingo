@@ -58,7 +58,7 @@ const updateIssues = (jira: Tracker, messenger: Messenger) => (pullRequest: Pull
           jira.addCommentToIssue(issue.key, `PR: ${pullRequest.url}`),
         ),
       ),
-    ).pipe(reduce<Issue>((acc, val) => acc.concat(val), [])),
+    ).pipe(reduce<Issue, Issue[]>((acc, val) => acc.concat(val), [])),
   ).pipe(map(zipObj(['pullRequest', 'comments']))) as unknown) as Observable<Review>;
 
 export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<Review> => {

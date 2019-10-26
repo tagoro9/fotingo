@@ -38,6 +38,6 @@ export const getLocalChangesInformation = (issueTracker: Tracker, messenger: Mes
       ...allIssues
         .filter(issue => issueTracker.isValidIssueName(issue))
         .map(issue => issueTracker.getIssue(issue)),
-    ).pipe(reduce<Issue>((acc, val) => acc.concat(val), [])),
+    ).pipe(reduce<Issue, Issue[]>((acc, val) => acc.concat(val), [])),
   ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown) as ObservableInput<LocalChanges>;
 };

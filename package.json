@@ -85,7 +85,7 @@
     "@types/keyv": "^3.1.0",
     "@types/node": "^11.13.8",
     "@types/node-emoji": "^1.8.1",
-    "@types/ramda": "^0.26.8",
+    "@types/ramda": "^0.26.33",
     "@types/request": "^2.48.1",
     "@types/tmp": "^0.1.0",
     "@types/yargs": "^13.0.0",
@@ -103,7 +103,7 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-sonarts": "^1.9.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.6.4"
   },
   "engines": {
     "node": ">=6.3.1",
