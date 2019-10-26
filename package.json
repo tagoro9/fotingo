@@ -51,7 +51,7 @@
     "request": "^2.83.0"
   },
   "devDependencies": {
-    "@types/jest": "21.1.2",
+    "@types/jest": "24.0.20",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-jest": "^21.2.0",
