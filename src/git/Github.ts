@@ -308,7 +308,7 @@ export class Github implements Remote {
           .join('\n'),
         [PR_TEMPLATE_KEYS.FIXED_ISSUES]:
           issues.length > 0
-            ? rConcat('Fixes ', issues.map(issue => `[#${issue.key}](${issue.url})`).join(','))
+            ? rConcat('Fixes ', issues.map(issue => `[#${issue.key}](${issue.url})`).join(', '))
             : '',
         [PR_TEMPLATE_KEYS.BRANCH_NAME]: branchInfo.name,
         [PR_TEMPLATE_KEYS.FIRST_ISSUE_SUMMARY]:
