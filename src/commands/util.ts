@@ -29,7 +29,7 @@ export const getLocalChangesInformation = (issueTracker: Tracker, messenger: Mes
   const allIssues = concat(branchInfo.issues.map(prop('issue')), issues);
 
   if (allIssues.length > 0) {
-    messenger.emit(`Getting information for ${allIssues.join(',')}`, Emoji.BUG);
+    messenger.emit(`Getting information for ${allIssues.join(', ')}`, Emoji.BUG);
   }
   // TODO Use forkJoin
   return (zip(
