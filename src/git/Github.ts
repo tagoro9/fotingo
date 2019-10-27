@@ -13,12 +13,11 @@ import {
   split,
   tail,
   take,
-  uniqBy,
 } from 'ramda';
 import { cacheable, ONE_DAY } from 'src/io/cacheable';
 import { editVirtualFile } from 'src/io/file-util';
+import { maybeAskUserToSelectMatches } from 'src/io/input-util';
 import { Messenger } from 'src/io/messenger';
-import { series } from 'src/io/promise-util';
 import { parseTemplate } from 'src/io/template-util';
 import { findMatches } from 'src/io/text-util';
 import { Issue, Release } from 'src/issue-tracker/Issue';
@@ -28,15 +27,6 @@ import * as GithubApi from '@octokit/rest';
 import { GithubConfig } from './Config';
 import { BranchInfo } from './Git';
 import { JointRelease, Label, PullRequest, PullRequestData, Remote, Reviewer } from './Remote';
-
-interface AskToSelectMatchData<T> {
-  data: T[][];
-  options: string[];
-  useDefaults: boolean;
-  getQuestion: (item: string) => string;
-  getLabel: (item: T) => string;
-  getValue: (item: T) => string;
-}
 
 enum PR_TEMPLATE_KEYS {
   // TODO Use better names
@@ -86,25 +76,31 @@ export class Github implements Remote {
         findMatches({ fields: ['login', 'name', 'email'], data: ghReviewers }, [reviewer])[0],
     );
 
-    const selectedReviewers = await this.maybeAskUserToSelectMatches({
-      data: foundReviewers,
-      getLabel: r => `${r.name} (${r.login})`,
-      getQuestion: match =>
-        `We couldn't find a unique match for reviewer "${match}", which one best matches?`,
-      getValue: r => r.login,
-      options: reviewers,
-      useDefaults,
-    });
+    const selectedReviewers = await maybeAskUserToSelectMatches(
+      {
+        data: foundReviewers,
+        getLabel: r => `${r.name} (${r.login})`,
+        getQuestion: match =>
+          `We couldn't find a unique match for reviewer "${match}", which one best matches?`,
+        getValue: r => r.login,
+        options: reviewers,
+        useDefaults,
+      },
+      this.messenger,
+    );
 
-    const selectedLabels = await this.maybeAskUserToSelectMatches({
-      data: foundLabels,
-      getLabel: l => `${l.name}`,
-      getQuestion: match =>
-        `We couldn't find a unique match for labels "${match}", which one best matches?`,
-      getValue: l => String(l.id),
-      options: labels,
-      useDefaults,
-    });
+    const selectedLabels = await maybeAskUserToSelectMatches(
+      {
+        data: foundLabels,
+        getLabel: l => `${l.name}`,
+        getQuestion: match =>
+          `We couldn't find a unique match for labels "${match}", which one best matches?`,
+        getValue: l => String(l.id),
+        options: labels,
+        useDefaults,
+      },
+      this.messenger,
+    );
 
     const initialPrContent = this.getPullRequestContentFromTemplate(branchInfo, issues);
     this.messenger.inThread(true);
@@ -190,44 +186,6 @@ export class Github implements Remote {
   @boundMethod
   private getUserInfo(username: string): Promise<GithubApi.UsersGetByUsernameResponse> {
     return this.api.users.getByUsername({ username }).then(prop('data'));
-  }
-
-  /**
-   * Given the options that a user selected and the found matches, ask the user to select
-   * the best match out of the first 5 matches. Select the first match in the list if using defaults
-   * or the list only has one element
-   * @param options Options for selecting the matches
-   * @param options.data Data found for the options introduced by the user
-   * @param options.getLabel Function that given a match, returns the label to present to the user
-   * @param options.getQuestion Function that returns the question to present to the user. It receives the option introduced by the user
-   * @param options.getValue Function that given a match, returns its value (typically an id)
-   * @param options.options List of options that the use introduced
-   * @param options.useDefaults Flag indicating if the useDefaults options was set
-   */
-  private maybeAskUserToSelectMatches<T>({
-    data,
-    getLabel,
-    getQuestion,
-    getValue,
-    options,
-    useDefaults,
-  }: AskToSelectMatchData<T>): Promise<T[]> {
-    return series(
-      data.map((matches, i) => () => {
-        if (useDefaults || matches.length === 1) {
-          return Promise.resolve(matches[0]);
-        }
-        return this.messenger
-          .request(getQuestion(options[i]), {
-            options: uniqBy<T, string>(getValue, take(5, matches)).map(r => ({
-              label: getLabel(r),
-              value: getValue(r),
-            })),
-          })
-          .toPromise()
-          .then(option => matches.find(r => String(getValue(r)) === String(option)));
-      }),
-    );
   }
 
   /**
