@@ -38,6 +38,7 @@ const buildSearcher: <T>(options: SearchOptions<T>) => (t: string[]) => T[] = co
       caseSensitive: false,
       keys: opts.fields,
       shouldSort: true,
+      threshold: 0.3,
     }),
 );
 
