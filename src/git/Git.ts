@@ -19,18 +19,19 @@ import {
   props,
   replace,
   trim,
+  uniqBy,
 } from 'ramda';
 import * as simpleGit from 'simple-git/promise';
 import { BranchSummary } from 'simple-git/typings/response';
+import { maybeAskUserToSelectMatches } from 'src/io/input-util';
 import { Emoji, Messenger } from 'src/io/messenger';
+import { findMatches } from 'src/io/text-util';
 import { Issue } from 'src/issue-tracker/Issue';
 
 import { getIssueId, getName } from './Branch';
 import { GitConfig } from './Config';
 import { GitErrorImpl, GitErrorType } from './GitError';
 import { GitRemote } from './Remote';
-import { findMatches } from 'src/io/text-util';
-import { maybeAskUserToSelectMatches } from 'src/io/input-util';
 
 const debug = createDebugger('fotingo:git');
 
@@ -250,26 +251,32 @@ export class Git {
   }
 
   private getIssues(commits: ParsedCommit[], issueId?: string): CommitIssue[] {
-    return converge(concat, [
-      compose(
-        ifElse(isNil, always([]), key => [{ raw: `#${key}`, issue: key }]),
-        nthArg(0),
+    return converge(
+      compose<CommitIssue[], CommitIssue[], CommitIssue[], CommitIssue[]>(
+        uniqBy((issue: CommitIssue) => issue.issue),
+        concat,
       ),
-      compose(
-        flatten,
-        map(
-          compose(
-            map((ref: CommitReference) => ({
-              issue: ref.issue,
-              raw: `${ref.prefix}${ref.issue}`,
-            })),
-            filter(propEq('action', 'Fixes')),
-            prop('references'),
-          ),
+      [
+        compose(
+          ifElse(isNil, always([]), key => [{ raw: `#${key}`, issue: key }]),
+          nthArg(0),
         ),
-        nthArg(1),
-      ),
-    ])(issueId, commits);
+        compose(
+          flatten,
+          map(
+            compose(
+              map((ref: CommitReference) => ({
+                issue: ref.issue,
+                raw: `${ref.prefix}${ref.issue}`,
+              })),
+              filter(propEq('action', 'Fixes')),
+              prop('references'),
+            ),
+          ),
+          nthArg(1),
+        ),
+      ],
+    )(issueId, commits);
   }
 
   @boundMethod
