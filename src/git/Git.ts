@@ -29,6 +29,8 @@ import { getIssueId, getName } from './Branch';
 import { GitConfig } from './Config';
 import { GitErrorImpl, GitErrorType } from './GitError';
 import { GitRemote } from './Remote';
+import { findMatches } from 'src/io/text-util';
+import { maybeAskUserToSelectMatches } from 'src/io/input-util';
 
 const debug = createDebugger('fotingo:git');
 
@@ -108,11 +110,8 @@ export class Git {
         }
       })
       .then(() => this.maybeStashChanges())
-      .then(() =>
-        this.getLatestCommit(`${this.config.remote}/${this.config.baseBranch}`).then(
-          log => log.latest.hash,
-        ),
-      )
+      .then(this.findBaseBranch)
+      .then(baseBranch => this.getLatestCommit(baseBranch).then(log => log.latest.hash))
       .then(lastCommitHash => this.git.checkoutBranch(branchName, lastCommitHash))
       .catch(this.mapAndThrowError);
   }
@@ -203,6 +202,48 @@ export class Git {
       });
   }
 
+  /**
+   * Find the base branch based on the remote config and baseBranch prefix.
+   * If none can be found, then throw an error
+   */
+  @boundMethod
+  // TODO This is going to get called several times. It should be memoized
+  private async findBaseBranch(): Promise<string> {
+    const branchPrefix = `remotes/${this.config.remote}`;
+    const branches: Array<{ name: string }> = ((await this.git.branch(['-a'])) as BranchSummary).all
+      .filter(b => b.startsWith(branchPrefix))
+      .map(name => ({ name }));
+
+    const matches = findMatches(
+      {
+        data: branches,
+        fields: ['name'],
+      },
+      [this.config.baseBranch],
+    );
+
+    if (matches.length === 0) {
+      throw new Error(
+        `Could not find a branch in ${this.config.remote} that matches ${this.config.baseBranch}. Make sure that the branch is published in the remote`,
+      );
+    }
+
+    const baseBranch = await maybeAskUserToSelectMatches(
+      {
+        data: matches,
+        getLabel: branch => branch.name.replace(`${branchPrefix}/`, ''),
+        getQuestion: item =>
+          `We couldn't find a unique match for the base branch "${item}", which one best matches?`,
+        getValue: branch => branch.name,
+        options: [this.config.baseBranch],
+        useDefaults: false,
+      },
+      this.messenger,
+    );
+
+    return baseBranch[0].name;
+  }
+
   private async publish(): Promise<any> {
     const branchName = await this.getCurrentBranchName();
     return this.git.push(['-u', this.config.remote, branchName]);
@@ -264,7 +305,7 @@ export class Git {
    */
   private async fetch(): Promise<void> {
     this.messenger.inThread(true);
-    await this.git.fetch(this.config.remote, this.config.baseBranch);
+    await this.git.fetch(this.config.remote);
     this.messenger.inThread(false);
   }
 
@@ -305,11 +346,8 @@ export class Git {
    * and the fotingo configured remote
    */
   private async getBranchCommitsFromMergeBase(): Promise<GitLogLine[]> {
-    const ref = await this.git.raw([
-      'merge-base',
-      'HEAD',
-      `${this.config.remote}/${this.config.baseBranch}`,
-    ]);
+    const baseBranch = await this.findBaseBranch();
+    const ref = await this.git.raw(['merge-base', 'HEAD', baseBranch]);
     return this.git
       .log({
         from: 'HEAD',
