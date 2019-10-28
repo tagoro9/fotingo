@@ -82,7 +82,7 @@ By default fotingo will ask the user to edit the contents of pull requests and r
 
 ### A different base branch
 
-The default base branch for any fotingo command is `master`, but sometimes this is not true for some people. In that case, the option `-b` (`--branch`) allows to specify the base branch in every command. This config can also be made permanent via the configuration file
+The default base branch for any fotingo command is `master`, but sometimes this is not true for some people. In that case, the option `-b` (`--branch`) allows to specify the base branch in every command. This config can also be made permanent via the configuration file. The branch lookup is also done via a fuzzy search like it is done for labels and reviewers
 
 ## Configuration
 
