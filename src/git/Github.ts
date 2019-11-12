@@ -25,7 +25,7 @@ import { Issue, Release } from 'src/issue-tracker/Issue';
 import * as GithubApi from '@octokit/rest';
 
 import { GithubConfig } from './Config';
-import { BranchInfo } from './Git';
+import { BranchInfo, Git } from './Git';
 import { JointRelease, Label, PullRequest, PullRequestData, Remote, Reviewer } from './Remote';
 
 enum PR_TEMPLATE_KEYS {
@@ -41,13 +41,15 @@ enum PR_TEMPLATE_KEYS {
 export class Github implements Remote {
   private api: GithubApi;
   private config: GithubConfig;
+  private git: Git;
   private messenger: Messenger;
 
-  constructor(config: GithubConfig, messenger: Messenger) {
+  constructor(config: GithubConfig, messenger: Messenger, git: Git) {
     this.messenger = messenger;
     this.api = new GithubApi({
       auth: `token ${config.authToken}`,
     });
+    this.git = git;
     this.config = config;
   }
 
@@ -193,13 +195,14 @@ export class Github implements Remote {
    * @param content Content of the pull request
    * @param pullRequestHead Name of the branch to use as head of the pull request
    */
-  private submitPullRequest(
+  private async submitPullRequest(
     content: string,
     pullRequestHead: string,
   ): Promise<GithubApi.PullsCreateResponse> {
+    const baseBranch = await this.git.findBaseBranch(true);
     return this.api.pulls
       .create({
-        base: this.config.baseBranch,
+        base: baseBranch,
         body: compose<string, string[], string[], string>(
           join('\n'),
           tail,

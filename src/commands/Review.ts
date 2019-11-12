@@ -64,7 +64,7 @@ const updateIssues = (jira: Tracker, messenger: Messenger) => (pullRequest: Pull
 export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<Review> => {
   const git: Git = new Git(args.config.git, messenger);
   const jira: Tracker = new Jira(args.config.jira, messenger);
-  const github: Remote = new Github(args.config.github, messenger);
+  const github: Remote = new Github(args.config.github, messenger, git);
   const commandData$ = of(args).pipe(map(getCommandData));
   return commandData$.pipe(
     switchMap(git.push),

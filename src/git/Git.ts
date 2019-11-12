@@ -209,7 +209,7 @@ export class Git {
    */
   @boundMethod
   // TODO This is going to get called several times. It should be memoized
-  private async findBaseBranch(): Promise<string> {
+  public async findBaseBranch(removePrefix: boolean = false): Promise<string> {
     const branchPrefix = `remotes/${this.config.remote}`;
     const branches: Array<{ name: string }> = ((await this.git.branch(['-a'])) as BranchSummary).all
       .filter(b => b.startsWith(branchPrefix))
@@ -242,7 +242,8 @@ export class Git {
       this.messenger,
     );
 
-    return baseBranch[0].name;
+    const name = baseBranch[0].name;
+    return removePrefix ? name.replace(`${branchPrefix}/`, '') : name;
   }
 
   private async publish(): Promise<any> {
