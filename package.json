@@ -114,6 +114,7 @@
   },
   "resolutions": {
     "lodash": ">= 4.5.0",
-    "lodash.template": ">= 4.5.0"
+    "lodash.template": ">= 4.5.0",
+    "sql": ">= 0.78.0"
   }
 }
