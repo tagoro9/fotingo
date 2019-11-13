@@ -213,7 +213,7 @@ export class Git {
     const branchPrefix = `remotes/${this.config.remote}`;
     const branches: Array<{ name: string }> = ((await this.git.branch(['-a'])) as BranchSummary).all
       .filter(b => b.startsWith(branchPrefix))
-      .map(name => ({ name }));
+      .map(branchName => ({ name: branchName }));
 
     const matches = findMatches(
       {
