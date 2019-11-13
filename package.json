@@ -97,7 +97,7 @@
     "prettier": "^1.17.0",
     "rimraf": "^2.6.3",
     "serialize-error": "^4.1.0",
-    "standard-version": "^5.0.2",
+    "standard-version": "^7.0.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
