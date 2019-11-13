@@ -111,5 +111,9 @@
   },
   "_moduleAliases": {
     "src": "./lib"
+  },
+  "resolutions": {
+    "lodash": ">= 4.5.0",
+    "lodash.template": ">= 4.5.0"
   }
 }
