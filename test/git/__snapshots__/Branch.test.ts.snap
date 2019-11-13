@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Branch getName ignores unknown template data 1`] = `"{does_not_exist}"`;
+
+exports[`Branch getName replaces the placeholders with the issue data 1`] = `"fotingo-3178.f.National"`;
