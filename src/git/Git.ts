@@ -111,7 +111,7 @@ export class Git {
         }
       })
       .then(() => this.maybeStashChanges())
-      .then(this.findBaseBranch)
+      .then(() => this.findBaseBranch())
       .then(baseBranch => this.getLatestCommit(baseBranch).then(log => log.latest.hash))
       .then(lastCommitHash => this.git.checkoutBranch(branchName, lastCommitHash))
       .catch(this.mapAndThrowError);
@@ -213,7 +213,7 @@ export class Git {
     const branchPrefix = `remotes/${this.config.remote}`;
     const branches: Array<{ name: string }> = ((await this.git.branch(['-a'])) as BranchSummary).all
       .filter(b => b.startsWith(branchPrefix))
-      .map(branchName => ({ name: branchName }));
+      .map((branchName: string) => ({ name: branchName }));
 
     const matches = findMatches(
       {
