@@ -1,4 +1,4 @@
-# Fotingo
+# Fotingo (beta)
 
 A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on tasks.
 
@@ -9,13 +9,13 @@ A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on
 Run:
 
 ```bash
-yarn global add fotingo
+yarn global add fotingo@next
 ```
 
 Or if yu prefer npm:
 
 ```bash
-npm install -g fotingo
+npm install -g fotingo@next
 ```
 
 ## Requirements
