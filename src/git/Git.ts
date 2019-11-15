@@ -217,6 +217,8 @@ export class Git {
 
     const matches = findMatches(
       {
+        checkForExactMatchFirst: true,
+        cleanData: item => item.replace(`${branchPrefix}/`, ''),
         data: branches,
         fields: ['name'],
       },
