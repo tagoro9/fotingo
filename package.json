@@ -96,7 +96,7 @@
     "madge": "^3.4.4",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
-    "serialize-error": "^4.1.0",
+    "serialize-error": "^5.0.0",
     "standard-version": "^7.0.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
