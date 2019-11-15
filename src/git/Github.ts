@@ -13,6 +13,7 @@ import {
   split,
   tail,
   take,
+  uniqBy,
 } from 'ramda';
 import { cacheable, ONE_DAY } from 'src/io/cacheable';
 import { editVirtualFile } from 'src/io/file-util';
@@ -81,7 +82,12 @@ export class Github implements Remote {
     const selectedReviewers = await maybeAskUserToSelectMatches(
       {
         data: foundReviewers,
-        getLabel: r => `${r.name} (${r.login})`,
+        getLabel: r => {
+          if (r.name) {
+            return `${r.name} (${r.login})`;
+          }
+          return r.login;
+        },
         getQuestion: match =>
           `We couldn't find a unique match for reviewer "${match}", which one best matches?`,
         getValue: r => r.login,
@@ -167,13 +173,15 @@ export class Github implements Remote {
     minutes: ONE_DAY,
   })
   public getPossibleReviewers(): Promise<Reviewer[]> {
-    return this.listContributors().then(
-      compose(
-        (promises: Array<Promise<GithubApi.UsersGetByUsernameResponse>>) => Promise.all(promises),
-        map(this.getUserInfo),
-        map<{ login: string }, string>(prop('login')),
-      ),
-    );
+    return this.listContributors()
+      .then(
+        compose(
+          (promises: Array<Promise<GithubApi.UsersGetByUsernameResponse>>) => Promise.all(promises),
+          map(this.getUserInfo),
+          map<{ login: string }, string>(prop('login')),
+        ),
+      )
+      .then(uniqBy(prop('login')));
   }
 
   /**
