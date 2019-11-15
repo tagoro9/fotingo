@@ -2,6 +2,11 @@ import * as Fuse from 'fuse.js';
 import { compose, converge, filter, flip, invoker, isEmpty, map, not, nthArg } from 'ramda';
 
 interface SearchOptions<T extends any> {
+  // Allow to search for exact matches before using fuzzy search
+  checkForExactMatchFirst?: boolean;
+  // In order to search for exact matches, we can pass a function that cleans the data
+  // before searching for the exact match
+  cleanData?: (item: string) => string;
   fields: string[];
   data: T[];
 }
@@ -29,17 +34,35 @@ const searchAndGetFirstResult: <T>(searcher: (t: string) => T[], data: string[])
  */
 const buildSearcher: <T>(options: SearchOptions<T>) => (t: string[]) => T[] = compose<
   SearchOptions<any>,
-  Fuse<any>,
+  { search: (s: string) => any[] },
   (t: string[]) => any[]
 >(
   flip(invoker(1, 'search')),
-  opts =>
-    new Fuse(opts.data, {
+  opts => {
+    const fuse = new Fuse(opts.data, {
       caseSensitive: false,
       keys: opts.fields,
       shouldSort: true,
       threshold: 0.3,
-    }),
+    });
+    if (opts.checkForExactMatchFirst) {
+      return {
+        search: (s: string) => {
+          const exactMatch = opts.data.find(item =>
+            opts.fields.some(field => {
+              const cleanedData = opts.cleanData ? opts.cleanData(item[field]) : item[field];
+              return cleanedData === s;
+            }),
+          );
+          if (exactMatch) {
+            return [exactMatch];
+          }
+          return fuse.search(s);
+        },
+      };
+    }
+    return fuse;
+  },
 );
 
 /**
