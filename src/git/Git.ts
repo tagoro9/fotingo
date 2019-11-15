@@ -174,12 +174,7 @@ export class Git {
    * Get the root dir of the repository
    */
   public getRootDir(): Promise<string> {
-    return this.git.raw(['rev-parse', '--show-toplevel']).then(
-      compose(
-        trim,
-        replace('\n', ''),
-      ),
-    );
+    return this.git.raw(['rev-parse', '--show-toplevel']).then(compose(trim, replace('\n', '')));
   }
 
   public async doesBranchExist(branchName: string): Promise<boolean> {
@@ -284,15 +279,7 @@ export class Git {
 
   @boundMethod
   private transformCommits(commits: GitLogLine[]): ParsedCommit[] {
-    return map(
-      compose(
-        sync,
-        compose(
-          join('\n'),
-          props(['message', 'body']),
-        ),
-      ),
-    )(commits);
+    return map(compose(sync, compose(join('\n'), props(['message', 'body']))))(commits);
   }
 
   /**
@@ -361,10 +348,7 @@ export class Git {
     return this.git
       .log({
         from: 'HEAD',
-        to: compose(
-          trim,
-          replace('\n', ''),
-        )(ref),
+        to: compose(trim, replace('\n', ''))(ref),
       })
       .then((data: GitLog) => data.all);
   }

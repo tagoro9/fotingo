@@ -21,8 +21,5 @@ enhanceConfig(read()).then((config: Config) => {
     .completion()
     .help();
 
-  compose(
-    run,
-    prop('argv'),
-  )(program);
+  compose(run, prop('argv'))(program);
 });

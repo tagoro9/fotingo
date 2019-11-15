@@ -145,12 +145,7 @@ export class Github implements Remote {
         owner: this.config.owner,
         repo: this.config.repo,
       })
-      .then(
-        compose(
-          map(pick(['id', 'name']) as (label: any) => Label),
-          prop('data'),
-        ),
-      );
+      .then(compose(map(pick(['id', 'name']) as (label: any) => Label), prop('data')));
   }
 
   @boundMethod
@@ -203,18 +198,11 @@ export class Github implements Remote {
     return this.api.pulls
       .create({
         base: baseBranch,
-        body: compose<string, string[], string[], string>(
-          join('\n'),
-          tail,
-          split('\n'),
-        )(content),
+        body: compose<string, string[], string[], string>(join('\n'), tail, split('\n'))(content),
         head: pullRequestHead,
         owner: this.config.owner,
         repo: this.config.repo,
-        title: compose<string, string[], string>(
-          head,
-          split('\n'),
-        )(content),
+        title: compose<string, string[], string>(head, split('\n'))(content),
       })
       .then(response => response.data);
   }
@@ -273,10 +261,7 @@ export class Github implements Remote {
     return compose(
       data => flatten<Array<Array<{ readonly login: string }>>>(data),
       map<{ data: Array<{ login: string }> }, Array<{ login: string }>>(
-        compose(
-          map<{ login: string }, { login: string }>(pick(['login'])),
-          prop('data'),
-        ),
+        compose(map<{ login: string }, { login: string }>(pick(['login'])), prop('data')),
       ),
     )(groups);
   }

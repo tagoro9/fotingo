@@ -78,13 +78,10 @@ function getTemplateData(config: GitConfig, issue: Issue): TemplateData {
 export const getName = curryN(
   2,
   compose(
-    converge(reduce((msg: string, [k, v]: string[]) => replace(`{${k}}`, v, msg)), [
-      prop('template'),
-      compose(
-        toPairs,
-        prop('data'),
-      ),
-    ]),
+    converge(
+      reduce((msg: string, [k, v]: string[]) => replace(`{${k}}`, v, msg)),
+      [prop('template'), compose(toPairs, prop('data'))],
+    ),
     getTemplateData,
   ),
 );
@@ -138,13 +135,7 @@ export const getIssueId = curryN(
     converge(
       compose(
         ifElse(isNil, identity, toUpper),
-        converge(nth, [
-          compose(
-            prop(TemplateKey.ISSUE_KEY),
-            getTemplateKeysMatchIndexMap,
-          ),
-          match,
-        ]),
+        converge(nth, [compose(prop(TemplateKey.ISSUE_KEY), getTemplateKeysMatchIndexMap), match]),
       ),
       [buildBranchTemplateRegex, nthArg(1)],
     ),

@@ -19,15 +19,7 @@ const searchAndGetFirstResult: <T>(searcher: (t: string) => T[], data: string[])
   string[],
   any[],
   any[][]
->(
-  filter(
-    compose(
-      not,
-      isEmpty,
-    ),
-  ),
-  map,
-);
+>(filter(compose(not, isEmpty)), map);
 
 /**
  * Given search options produce a search method that will find the matches
@@ -36,40 +28,37 @@ const buildSearcher: <T>(options: SearchOptions<T>) => (t: string[]) => T[] = co
   SearchOptions<any>,
   { search: (s: string) => any[] },
   (t: string[]) => any[]
->(
-  flip(invoker(1, 'search')),
-  opts => {
-    const fuse = new Fuse(opts.data, {
-      caseSensitive: false,
-      keys: opts.fields,
-      shouldSort: true,
-      threshold: 0.3,
-    });
-    if (opts.checkForExactMatchFirst) {
-      return {
-        search: (s: string) => {
-          const exactMatch = opts.data.find(item =>
-            opts.fields.some(field => {
-              const cleanedData = opts.cleanData ? opts.cleanData(item[field]) : item[field];
-              return cleanedData === s;
-            }),
-          );
-          if (exactMatch) {
-            return [exactMatch];
-          }
-          return fuse.search(s);
-        },
-      };
-    }
-    return fuse;
-  },
-);
+>(flip(invoker(1, 'search')), opts => {
+  const fuse = new Fuse(opts.data, {
+    caseSensitive: false,
+    keys: opts.fields,
+    shouldSort: true,
+    threshold: 0.3,
+  });
+  if (opts.checkForExactMatchFirst) {
+    return {
+      search: (s: string) => {
+        const exactMatch = opts.data.find(item =>
+          opts.fields.some(field => {
+            const cleanedData = opts.cleanData ? opts.cleanData(item[field]) : item[field];
+            return cleanedData === s;
+          }),
+        );
+        if (exactMatch) {
+          return [exactMatch];
+        }
+        return fuse.search(s);
+      },
+    };
+  }
+  return fuse;
+});
 
 /**
  * Given a search options and a list of strings to find, return the list of data objects that
  * have any match in the specified fields for the list of strings
  */
-export const findMatches: <T>(options: SearchOptions<T>, search: string[]) => T[][] = converge(
-  searchAndGetFirstResult,
-  [buildSearcher, nthArg(1)],
-);
+export const findMatches: <T>(
+  options: SearchOptions<T>,
+  search: string[],
+) => T[][] = converge(searchAndGetFirstResult, [buildSearcher, nthArg(1)]);

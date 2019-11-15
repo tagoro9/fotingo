@@ -54,10 +54,7 @@ const getOrCreateIssue = (tracker: Tracker, messenger: Messenger) =>
   );
 
 const setIssueInProgress = (tracker: Tracker) =>
-  compose(
-    (id: string) => tracker.setIssueStatus(IssueStatus.IN_PROGRESS, id),
-    prop('id'),
-  );
+  compose((id: string) => tracker.setIssueStatus(IssueStatus.IN_PROGRESS, id), prop('id'));
 
 const shouldCreateBranch = pathEq(['commandData', 'git', 'createBranch'], true);
 
@@ -71,10 +68,7 @@ const createBranch = (git: Git, messenger: Messenger) =>
     prop('issue'),
   );
 
-const justReturnTheIssue = compose(
-  (issue: Issue) => of(issue),
-  prop('issue'),
-);
+const justReturnTheIssue = compose((issue: Issue) => of(issue), prop('issue'));
 
 export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<any> => {
   const tracker: Tracker = new Jira(args.config.jira, messenger);

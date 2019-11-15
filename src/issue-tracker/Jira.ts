@@ -135,10 +135,7 @@ export class Jira implements Tracker {
       .get<User>('/myself', {
         qs: { expand: 'groups' },
       })
-      .pipe(
-        map(prop('body')),
-        catchError(this.mapError),
-      );
+      .pipe(map(prop('body')), catchError(this.mapError));
   }
 
   @boundMethod
@@ -231,10 +228,7 @@ export class Jira implements Tracker {
               },
             },
           })
-          .pipe(
-            map(prop('body')),
-            catchError(this.mapError),
-          ),
+          .pipe(map(prop('body')), catchError(this.mapError)),
       ),
     );
   }
@@ -256,10 +250,9 @@ export class Jira implements Tracker {
   }
 
   public getIssueEditMeta(issueId: string): Observable<IssueEditMeta> {
-    return this.client.get<IssueEditMeta>(`/issue/${issueId}/editmeta`).pipe(
-      map(prop('body')),
-      catchError(this.mapError),
-    );
+    return this.client
+      .get<IssueEditMeta>(`/issue/${issueId}/editmeta`)
+      .pipe(map(prop('body')), catchError(this.mapError));
   }
 
   public addCommentToIssue(issueId: string, comment: string): Observable<IssueComment> {
@@ -279,13 +272,7 @@ export class Jira implements Tracker {
     return of(data).pipe(
       map(
         when(
-          compose(
-            lt(1),
-            length,
-            uniq,
-            rMap(path(['fields', 'project', 'id'])),
-            prop('issues'),
-          ),
+          compose(lt(1), length, uniq, rMap(path(['fields', 'project', 'id'])), prop('issues')),
           () => {
             throw new Error('Issues in multiple projects');
           },
@@ -294,11 +281,7 @@ export class Jira implements Tracker {
       switchMap(this.createReleaseNotes),
       map(
         converge(unapply(zipObj(['title', 'body'])), [
-          compose<string, string, string, string[], string>(
-            head,
-            split('\n'),
-            trim,
-          ),
+          compose<string, string, string, string[], string>(head, split('\n'), trim),
           compose<string, string, string, string[], string[], string>(
             join('\n'),
             tail,
@@ -390,11 +373,7 @@ export class Jira implements Tracker {
             ),
           ),
           groupBy(
-            compose(
-              lens => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION),
-              lensProp,
-              prop('type'),
-            ),
+            compose(lens => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION), lensProp, prop('type')),
           ),
         )(data.issues),
         [RELEASE_TEMPLATE_KEYS.VERSION]: data.name,

@@ -54,11 +54,7 @@ const createConfigFolder = () => {
 };
 
 export const run: (args: FotingoArguments) => void = R.ifElse(
-  R.compose(
-    R.contains(R.__, Object.values(CommandName)),
-    R.head,
-    R.prop('_'),
-  ),
+  R.compose(R.contains(R.__, Object.values(CommandName)), R.head, R.prop('_')),
   R.compose(
     R.converge(
       (
@@ -75,12 +71,7 @@ export const run: (args: FotingoArguments) => void = R.ifElse(
         });
       },
       [
-        R.compose(
-          (path: string) => require(path).cmd,
-          R.concat('./'),
-          R.head,
-          R.prop('_'),
-        ),
+        R.compose((path: string) => require(path).cmd, R.concat('./'), R.head, R.prop('_')),
         (a: FotingoArguments) => ({
           ...a,
           config: enhanceConfigWithRuntimeArgs(a.config, a as any),
