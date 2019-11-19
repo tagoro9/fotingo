@@ -48,7 +48,7 @@
     "autobind-decorator": "^2.4.0",
     "chalk": "^3.0.0",
     "conventional-commits-parser": "^3.0.1",
-    "cosmiconfig": "^5.2.0",
+    "cosmiconfig": "^6.0.0",
     "debug": "^4.1.1",
     "editor": "^1.0.0",
     "escape-string-regexp": "^2.0.0",
@@ -75,7 +75,6 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
-    "@types/cosmiconfig": "^6.0.0",
     "@types/debug": "^4.1.4",
     "@types/escape-string-regexp": "^2.0.1",
     "@types/faker": "^4.1.5",

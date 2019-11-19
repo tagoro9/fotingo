@@ -2,7 +2,7 @@
  * Configuration management
  */
 
-import * as cosmiconfig from 'cosmiconfig';
+import { cosmiconfigSync as cosmiconfig } from 'cosmiconfig';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
 import * as R from 'ramda';
@@ -31,7 +31,7 @@ const configSearch = cosmiconfig('fotingo');
  */
 const readConfig: (path?: string) => string = R.compose(
   R.ifElse(R.either(R.isNil, R.propEq('isEmpty', true)), R.always({}), R.prop('config')),
-  (p?: string) => configSearch.searchSync(p),
+  (p?: string) => configSearch.search(p),
 );
 
 /**
@@ -49,7 +49,7 @@ export const read: () => Config = () =>
  * @param config Partial configuration
  */
 export const write: (data: Partial<Config>) => Partial<Config> = data => {
-  const search = configSearch.searchSync() || { filepath: undefined, config: {} };
+  const search = configSearch.search() || { filepath: undefined, config: {} };
   const mergedConfigs = R.mergeDeepLeft(data, search.config);
   writeFileSync(
     // TODO Use homedir() instead of env variable
