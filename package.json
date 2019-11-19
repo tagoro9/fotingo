@@ -72,7 +72,7 @@
     "sqlite3": "^4.0.8",
     "tmp": "^0.1.0",
     "turndown": "^5.0.3",
-    "yargs": "^13.2.4"
+    "yargs": "^15.0.2"
   },
   "devDependencies": {
     "@types/cosmiconfig": "^5.0.3",
