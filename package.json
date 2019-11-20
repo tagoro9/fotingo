@@ -89,7 +89,7 @@
     "@types/tmp": "^0.1.0",
     "@types/yargs": "^13.0.0",
     "faker": "^4.1.0",
-    "husky": "^2.2.0",
+    "husky": "^3.1.0",
     "jest": "^24.7.1",
     "lint-staged": "^8.1.5",
     "madge": "^3.4.4",
