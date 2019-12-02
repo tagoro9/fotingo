@@ -308,13 +308,13 @@
     sql "~0.78.0"
 
 "@keyv/sqlite@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@keyv/sqlite/-/sqlite-2.0.1.tgz#d9c8222f79efa09fd3a3a4991ed9e7ecbc17df0e"
-  integrity sha512-WvyYuF40vFsd7N4tY/sxNruJPZnv89b+R1+gp/gsJwOS135a83qFvA7zNEa3DIqQOunZRC0LQuM4wE48ElRaLw==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@keyv/sqlite/-/sqlite-2.0.2.tgz#bfaee1e514af6d950edb865836d3468393f09b31"
+  integrity sha512-vVaAOK/oCNCzNyB8AjiozAuJ0MqXt9uLsJ0oyQIEEdVw61HHOFiyjdYOGVkxHkgXDoJGF7g6T5ekh5JpdYFz5w==
   dependencies:
     "@keyv/sql" "1.1.2"
     pify "3.0.0"
-    sqlite3 "4.0.8"
+    sqlite3 "^4.1.0"
 
 "@octokit/endpoint@^5.5.0":
   version "5.5.0"
@@ -5386,16 +5386,7 @@ sprintf-js@~1.0.2:
     lodash "4.1.x"
     sliced "0.0.x"
 
-sqlite3@4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/sqlite3/-/sqlite3-4.0.8.tgz#81ee60d54befaa52f5421fe6337050bd43d4bb95"
-  integrity sha512-kgwHu4j10KhpCHtx//dejd/tVQot7jc3sw+Sn0vMuKOw0X00Ckyg9VceKgzPyGmmz+zEoYue9tOLriWTvYy0ww==
-  dependencies:
-    nan "^2.12.1"
-    node-pre-gyp "^0.11.0"
-    request "^2.87.0"
-
-sqlite3@^4.0.8:
+sqlite3@^4.0.8, sqlite3@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/sqlite3/-/sqlite3-4.1.0.tgz#e051fb9c133be15726322a69e2e37ec560368380"
   integrity sha512-RvqoKxq+8pDHsJo7aXxsFR18i+dU2Wp5o12qAJOV5LNcDt+fgJsc2QKKg3sIRfXrN9ZjzY1T7SNe/DFVqAXjaw==
