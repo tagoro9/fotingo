@@ -14,7 +14,7 @@ interface SearchOptions<T extends any> {
 /**
  * Given a searcher and the data where to search, return a list of items matching any of the strings to match
  */
-const searchAndGetFirstResult: <T>(searcher: (t: string) => T[], data: string[]) => T[][] = compose<
+const search: <T>(searcher: (t: string) => T[], data: string[]) => T[][] = compose<
   (t: string) => any[],
   string[],
   any[],
@@ -61,4 +61,4 @@ const buildSearcher: <T>(options: SearchOptions<T>) => (t: string[]) => T[] = co
 export const findMatches: <T>(
   options: SearchOptions<T>,
   search: string[],
-) => T[][] = converge(searchAndGetFirstResult, [buildSearcher, nthArg(1)]);
+) => T[][] = converge(search, [buildSearcher, nthArg(1)]);
