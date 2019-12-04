@@ -30,6 +30,9 @@ export function maybeAskUserToSelectMatches<T>(
 ): Promise<T[]> {
   return series(
     data.map((matches, i) => () => {
+      if (!matches || matches.length === 0) {
+        throw new Error(`No match found for ${options[i]}`);
+      }
       if (useDefaults || matches.length === 1) {
         return Promise.resolve(matches[0]);
       }
