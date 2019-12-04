@@ -174,7 +174,10 @@ export class Git {
    * Get the root dir of the repository
    */
   public getRootDir(): Promise<string> {
-    return this.git.raw(['rev-parse', '--show-toplevel']).then(compose(trim, replace('\n', '')));
+    return this.git
+      .raw(['rev-parse', '--show-toplevel'])
+      .then(compose(trim, replace('\n', '')))
+      .catch(this.mapAndThrowError);
   }
 
   public async doesBranchExist(branchName: string): Promise<boolean> {
@@ -194,7 +197,7 @@ export class Git {
         if (/no upstream configured for branch/.test(e.message)) {
           return false;
         }
-        throw e;
+        this.mapAndThrowError(e);
       });
   }
 
@@ -286,7 +289,7 @@ export class Git {
    * Get the name for the current branch
    */
   private getCurrentBranchName(): Promise<string> {
-    return this.git.revparse(['--abbrev-ref', 'HEAD']);
+    return this.git.revparse(['--abbrev-ref', 'HEAD']).catch(this.mapAndThrowError);
   }
 
   /**
@@ -334,6 +337,9 @@ export class Git {
   private mapAndThrowError(e: Error): void {
     if (e.message.match(/A branch named .* already exists/)) {
       throw new GitErrorImpl(e.message, GitErrorType.BRANCH_ALREADY_EXISTS);
+    }
+    if (e.message.match(/not a git repository/)) {
+      throw new GitErrorImpl(e.message, GitErrorType.NOT_A_GIT_REPO);
     }
     throw e;
   }

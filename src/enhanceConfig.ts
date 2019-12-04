@@ -1,6 +1,7 @@
 import { mergeDeepLeft } from 'ramda';
 import { Config } from './config';
 import { Git } from './git/Git';
+import { GitErrorType } from './git/GitError';
 import { getFileContent } from './io/file-util';
 
 interface DefaultConfig {
@@ -86,7 +87,7 @@ export async function enhanceConfig(config: Config): Promise<Config> {
         ) as Config,
     );
   } catch (e) {
-    if (e.message && e.message.match(/not a git repository/)) {
+    if (e.code && e.code === GitErrorType.NOT_A_GIT_REPO) {
       // Ignore the error, as it means we are running fotingo outside a repo
       return configWithDefaults;
     }
