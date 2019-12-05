@@ -1,6 +1,7 @@
 import { mergeDeepLeft } from 'ramda';
 import { Config } from './config';
 import { Git } from './git/Git';
+import { GitErrorType } from './git/GitError';
 import { getFileContent } from './io/file-util';
 
 interface DefaultConfig {
@@ -62,26 +63,34 @@ export function enhanceConfigWithRuntimeArgs(config: Config, data: { branch?: st
  */
 export async function enhanceConfig(config: Config): Promise<Config> {
   const configWithDefaults = mergeDeepLeft(config, defaultConfig) as Config;
-  const git = new Git(configWithDefaults.git);
-  const rootDir = await git.getRootDir();
-  const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDir, ['.', '.github']);
-  return git.getRemote(configWithDefaults.git.remote).then(
-    remote =>
-      mergeDeepLeft(
-        {
-          github: {
-            // TODO Fix this
-            pullRequestTemplate: prTemplate || configWithDefaults.github.pullRequestTemplate,
+  try {
+    const git = new Git(configWithDefaults.git);
+    const rootDir = await git.getRootDir();
+    const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDir, ['.', '.github']);
+    return git.getRemote(configWithDefaults.git.remote).then(
+      remote =>
+        mergeDeepLeft(
+          {
+            github: {
+              // TODO Fix this
+              pullRequestTemplate: prTemplate || configWithDefaults.github.pullRequestTemplate,
+            },
           },
-        },
-        {
-          ...configWithDefaults,
-          github: {
-            ...configWithDefaults.github,
-            owner: remote.owner,
-            repo: remote.name,
+          {
+            ...configWithDefaults,
+            github: {
+              ...configWithDefaults.github,
+              owner: remote.owner,
+              repo: remote.name,
+            },
           },
-        },
-      ) as Config,
-  );
+        ) as Config,
+    );
+  } catch (e) {
+    if (e.code && e.code === GitErrorType.NOT_A_GIT_REPO) {
+      // Ignore the error, as it means we are running fotingo outside a repo
+      return configWithDefaults;
+    }
+    throw e;
+  }
 }

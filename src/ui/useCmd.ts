@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Observable } from 'rxjs';
 import { Message, MessageType, Messenger, Request, Status } from 'src/io/messenger';
+import { ERROR_CODE_TO_MESSAGE } from './errorCodeToMessage';
 
 type Setter<T> = (data: T) => void;
 
@@ -45,7 +46,13 @@ function useCmdRunner(cmd: () => Observable<any>, addMessage: Setter<Message>) {
     const time = Date.now();
     cmd()
       .toPromise()
-      .catch(e => addMessage({ type: MessageType.ERROR, showSpinner: false, message: e.message }))
+      .catch(e =>
+        addMessage({
+          message: (e.code && ERROR_CODE_TO_MESSAGE[e.code]) || e.message,
+          showSpinner: false,
+          type: MessageType.ERROR,
+        }),
+      )
       .finally(() => setDone(Date.now() - time));
   }, []);
 
