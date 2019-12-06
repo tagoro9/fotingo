@@ -3,6 +3,5 @@ export interface JiraConfig {
     login: string;
     token: string;
   };
-  releaseTemplate: string;
   root: string;
 }
