@@ -6,7 +6,7 @@ import { Messages } from './Messages';
 import { FotingoProps } from './props';
 import { useCmd } from './useCmd';
 
-export function Fotingo({ cmd, messenger }: FotingoProps) {
+export function Fotingo({ cmd, isDebugging, messenger }: FotingoProps) {
   const { executionTime, isDone, isInThread, messages, request, sendRequestData } = useCmd(
     messenger,
     cmd,
@@ -15,6 +15,7 @@ export function Fotingo({ cmd, messenger }: FotingoProps) {
   return (
     <>
       <Messages
+        isDebugging={isDebugging}
         isDone={isDone}
         isRequesting={request !== undefined}
         isInThread={isInThread}
