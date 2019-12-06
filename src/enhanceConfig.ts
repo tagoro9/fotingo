@@ -14,8 +14,8 @@ interface DefaultConfig {
     baseBranch: string;
     pullRequestTemplate: string;
   };
-  jira: {
-    releaseTemplate: string;
+  release: {
+    template: string;
   };
 }
 
@@ -30,8 +30,9 @@ const defaultConfig: DefaultConfig = {
     pullRequestTemplate:
       '{firstIssue.summary}\n\n**Description**\n\n{firstIssue.description}\n\n{fixedIssues}\n\n**Changes**\n\n{changes}\n\n{fotingo.banner}',
   },
-  jira: {
-    releaseTemplate: '{version}\n\n{fixedIssuesByCategory}\n\n{fotingo.banner}',
+  release: {
+    template:
+      '{version}\n\n{fixedIssuesByCategory}\n\nSee [Jira release]({jira.release})\n\n{fotingo.banner}',
   },
 };
 

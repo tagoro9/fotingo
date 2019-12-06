@@ -2,38 +2,23 @@ import { boundMethod } from 'autobind-decorator';
 import {
   always,
   compose,
-  converge,
-  // curry,
   evolve,
-  groupBy,
   head,
   indexBy,
-  join,
   length,
-  lensProp,
   lt,
   map as rMap,
-  mapObjIndexed,
   path,
   prop,
   replace,
-  split,
-  tail,
   take,
   toLower,
-  toPairs,
-  trim,
-  unapply,
   uniq,
-  view,
   when,
-  zipObj,
 } from 'ramda';
 import { from, merge, Observable, of, throwError } from 'rxjs';
 import { catchError, map, reduce, switchMap } from 'rxjs/operators';
-import { editVirtualFile } from 'src/io/file-util';
 import { Messenger } from 'src/io/messenger';
-import { parseTemplate } from 'src/io/template-util';
 import { HttpClient } from 'src/network/HttpClient';
 import { HttpError } from 'src/network/HttpError';
 import * as Turndown from 'turndown';
@@ -53,7 +38,6 @@ import {
   JiraRelease,
   Project,
   Release,
-  ReleaseNotes,
   User,
 } from './Issue';
 import { JiraErrorImpl } from './JiraError';
@@ -78,20 +62,6 @@ const statusRegex = {
   [IssueStatus.IN_REVIEW]: /review/i,
   [IssueStatus.DONE]: /done/i,
   [IssueStatus.SELECTED_FOR_DEVELOPMENT]: /(todo)|(to do)|(selected for development)/i,
-};
-
-enum RELEASE_TEMPLATE_KEYS {
-  VERSION = 'version',
-  FIXED_ISSUES_BY_CATEGORY = 'fixedIssuesByCategory',
-  FOTINGO_BANNER = 'fotingo.banner',
-}
-
-const ISSUE_TYPE_TO_RELEASE_SECTION: { [k in IssueType]: string } = {
-  [IssueType.TASK]: 'Features',
-  [IssueType.SUB_TASK]: 'Features',
-  [IssueType.BUG]: 'Bug fixes',
-  [IssueType.STORY]: 'Features',
-  [IssueType.FEATURE]: 'Features',
 };
 
 // Using Jira REST API v2 (https://developer.atlassian.com/cloud/jira/platform/rest/v2)
@@ -278,26 +248,13 @@ export class Jira implements Tracker {
           },
         ),
       ),
-      switchMap(this.createReleaseNotes),
-      map(
-        converge(unapply(zipObj(['title', 'body'])), [
-          compose<string, string, string, string[], string>(head, split('\n'), trim),
-          compose<string, string, string, string[], string[], string>(
-            join('\n'),
-            tail,
-            split('\n'),
-            trim,
-          ),
-        ]),
-      ),
-      switchMap(notes => {
+      switchMap(() => {
         if (data.submitRelease) {
-          return this.createVersion(data, notes).pipe(
+          return this.createVersion(data).pipe(
             map(release => ({
               id: release.id,
               issues: data.issues,
               name: release.name,
-              notes,
               url: `${this.config.root}/projects/${release.project.key}/versions/${release.id}`,
             })),
           );
@@ -306,7 +263,6 @@ export class Jira implements Tracker {
           id: data.name,
           issues: data.issues,
           name: data.name,
-          notes,
         });
       }),
     );
@@ -340,56 +296,12 @@ export class Jira implements Tracker {
       );
   }
 
-  @boundMethod
-  private createReleaseNotes(data: CreateRelease): Observable<string> {
-    const initialReleaseNotes = this.getReleaseNotesFromTemplate(data);
-    return from(
-      data.useDefaults ? [initialReleaseNotes] : this.editReleaseNotes(initialReleaseNotes),
-    );
-  }
-
-  private async editReleaseNotes(initialReleaseNotes: string): Promise<string> {
-    this.messenger.inThread(true);
-    const notes = await editVirtualFile({
-      extension: 'md',
-      initialContent: initialReleaseNotes,
-      prefix: 'fotingo-review',
-    });
-    this.messenger.inThread(false);
-    return notes;
-  }
-
-  private getReleaseNotesFromTemplate(data: CreateRelease): string {
-    return parseTemplate<RELEASE_TEMPLATE_KEYS>({
-      data: {
-        [RELEASE_TEMPLATE_KEYS.FIXED_ISSUES_BY_CATEGORY]: compose(
-          join('\n'),
-          rMap(([title, list]) => `# ${title}:\n\n${list}`),
-          toPairs,
-          mapObjIndexed(
-            compose(
-              join('\n'),
-              rMap((issue: Issue) => `* [#${issue.key}](${issue.url}): ${issue.fields.summary}`),
-            ),
-          ),
-          groupBy(
-            compose(lens => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION), lensProp, prop('type')),
-          ),
-        )(data.issues),
-        [RELEASE_TEMPLATE_KEYS.VERSION]: data.name,
-        [RELEASE_TEMPLATE_KEYS.FOTINGO_BANNER]:
-          '🚀 Release created with [fotingo](https://github.com/tagoro9/fotingo)',
-      },
-      template: this.config.releaseTemplate,
-    });
-  }
-
-  private createVersion(data: CreateRelease, releaseNotes: ReleaseNotes): Observable<JiraRelease> {
+  private createVersion(data: CreateRelease): Observable<JiraRelease> {
     return this.client
       .post<JiraRelease>(`/version`, {
         body: {
           archived: false,
-          description: releaseNotes.title,
+          description: data.name,
           name: data.name,
           projectId: head(data.issues.map(path(['fields', 'project', 'id']))),
           releaseDate: new Date().toISOString().substring(0, 10),

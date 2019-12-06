@@ -1,10 +1,10 @@
-import { Issue, Release } from 'src/issue-tracker/Issue';
+import { Issue, Release, ReleaseNotes } from 'src/issue-tracker/Issue';
 import { BranchInfo } from './Git';
 
 export interface Remote {
   createPullRequest: (data: PullRequestData) => Promise<PullRequest>;
   getLabels: () => Promise<Label[]>;
-  createRelease: (release: Release) => Promise<JointRelease>;
+  createRelease: (release: Release, notes: ReleaseNotes) => Promise<JointRelease>;
   getPossibleReviewers: () => Promise<Reviewer[]>;
 }
 

@@ -9,11 +9,13 @@ import * as R from 'ramda';
 
 import { GitConfig, GithubConfig } from './git/Config';
 import { JiraConfig } from './issue-tracker/Config';
+import { ReleaseConfig } from './types';
 
 export interface Config {
   git: GitConfig;
   github: GithubConfig;
   jira: JiraConfig;
+  release: ReleaseConfig;
 }
 
 export const requiredConfigs = [

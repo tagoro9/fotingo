@@ -121,7 +121,6 @@ export interface ReleaseNotes {
 export interface Release {
   id: string;
   name: string;
-  notes: ReleaseNotes;
   issues: Issue[];
   url?: string;
 }
