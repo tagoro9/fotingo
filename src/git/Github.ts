@@ -21,7 +21,7 @@ import { maybeAskUserToSelectMatches } from 'src/io/input-util';
 import { Messenger } from 'src/io/messenger';
 import { parseTemplate } from 'src/io/template-util';
 import { findMatches } from 'src/io/text-util';
-import { Issue, Release } from 'src/issue-tracker/Issue';
+import { Issue, Release, ReleaseNotes } from 'src/issue-tracker/Issue';
 
 import * as GithubApi from '@octokit/rest';
 
@@ -155,10 +155,10 @@ export class Github implements Remote {
   }
 
   @boundMethod
-  public async createRelease(release: Release): Promise<JointRelease> {
+  public async createRelease(release: Release, notes: ReleaseNotes): Promise<JointRelease> {
     const ghRelease = await this.api.repos.createRelease({
-      body: release.notes.body,
-      name: release.notes.title,
+      body: notes.body,
+      name: notes.title,
       owner: this.config.owner,
       repo: this.config.repo,
       tag_name: release.name,
