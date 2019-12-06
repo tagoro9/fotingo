@@ -29,10 +29,15 @@ interface TrackerConfig {
   };
 }
 
+export interface ReleaseConfig {
+  template: string;
+}
+
 export interface Config {
   git: GitConfig;
   github: RemoteConfig;
   jira: TrackerConfig;
+  release: ReleaseConfig;
 }
 
 export interface DefaultConfig {
