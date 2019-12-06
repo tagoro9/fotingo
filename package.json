@@ -11,7 +11,7 @@
     "coverage": "jest --coverage --silent",
     "build": "yarn lint && yarn run clean && tsc -p ./ && chmod 755 ./lib/fotingo.js",
     "lint": "tslint -p .",
-    "prepublish": "yarn run build",
+    "prepare": "yarn run build",
     "release": "yarn run build && standard-version",
     "watch": "tsc -w -p ./",
     "test": "jest",
