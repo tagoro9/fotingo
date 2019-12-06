@@ -197,7 +197,7 @@ export class Git {
         if (/no upstream configured for branch/.test(e.message)) {
           return false;
         }
-        this.mapAndThrowError(e);
+        return this.mapAndThrowError(e);
       });
   }
 
@@ -334,7 +334,7 @@ export class Git {
    * known errors
    * @param e Error
    */
-  private mapAndThrowError(e: Error): void {
+  private mapAndThrowError(e: Error): never {
     if (e.message.match(/A branch named .* already exists/)) {
       throw new GitErrorImpl(e.message, GitErrorType.BRANCH_ALREADY_EXISTS);
     }
