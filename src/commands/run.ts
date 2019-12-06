@@ -67,6 +67,7 @@ export const run: (args: FotingoArguments) => void = R.ifElse(
             askForConfigs(messenger, args).pipe(
               switchMap(augmentedArgs => cmd(augmentedArgs, messenger)),
             ),
+          isDebugging: process.env.DEBUG !== undefined,
           messenger,
         });
       },

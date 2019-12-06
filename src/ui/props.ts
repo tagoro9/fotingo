@@ -18,6 +18,7 @@ export interface MessageProps {
 }
 
 export interface MessagesProps {
+  isDebugging: boolean;
   isDone: boolean;
   isInThread: boolean;
   isRequesting: boolean;
@@ -26,6 +27,7 @@ export interface MessagesProps {
 
 export interface FotingoProps {
   args: FotingoArguments;
+  isDebugging: boolean;
   messenger: Messenger;
   cmd: () => Observable<any>;
 }
