@@ -18,10 +18,10 @@ import {
 } from 'ramda';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { editVirtualFile } from 'src/io/file-util';
+import { editVirtualFile } from 'src/io/file';
 import { Messenger } from 'src/io/messenger';
-import { parseTemplate } from 'src/io/template-util';
 import { Issue, IssueType, Release, ReleaseConfig, ReleaseNotes } from 'src/types';
+import { parseTemplate } from 'src/util/template';
 
 enum RELEASE_TEMPLATE_KEYS {
   VERSION = 'version',

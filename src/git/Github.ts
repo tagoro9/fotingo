@@ -16,12 +16,12 @@ import {
   uniqBy,
 } from 'ramda';
 import { cacheable, ONE_DAY } from 'src/io/cacheable';
-import { editVirtualFile } from 'src/io/file-util';
-import { maybeAskUserToSelectMatches } from 'src/io/input-util';
+import { editVirtualFile } from 'src/io/file';
+import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Messenger } from 'src/io/messenger';
-import { parseTemplate } from 'src/io/template-util';
-import { findMatches } from 'src/io/text-util';
 import { Issue, Release, ReleaseNotes } from 'src/types';
+import { parseTemplate } from 'src/util/template';
+import { findMatches } from 'src/util/text';
 
 import * as GithubApi from '@octokit/rest';
 

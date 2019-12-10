@@ -23,10 +23,10 @@ import {
 } from 'ramda';
 import * as simpleGit from 'simple-git/promise';
 import { BranchSummary } from 'simple-git/typings/response';
-import { maybeAskUserToSelectMatches } from 'src/io/input-util';
+import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
-import { findMatches } from 'src/io/text-util';
 import { Issue } from 'src/types';
+import { findMatches } from 'src/util/text';
 
 import { getIssueId, getName } from './Branch';
 import { GitConfig } from './Config';

@@ -1,7 +1,7 @@
 import { take, uniqBy } from 'ramda';
+import { series } from 'src/util/promise';
 
 import { Messenger } from './messenger';
-import { series } from './promise-util';
 
 interface AskToSelectMatchData<T> {
   data: T[][];
