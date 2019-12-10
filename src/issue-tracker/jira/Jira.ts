@@ -19,6 +19,7 @@ import {
 import { from, merge, Observable, of, throwError } from 'rxjs';
 import { catchError, map, reduce, switchMap } from 'rxjs/operators';
 import { Messenger } from 'src/io/messenger';
+import { Tracker } from 'src/issue-tracker/Tracker';
 import { HttpClient } from 'src/network/HttpClient';
 import { HttpError } from 'src/network/HttpError';
 import {
@@ -35,7 +36,6 @@ import * as Turndown from 'turndown';
 
 import { JiraConfig } from './Config';
 import { JiraErrorImpl } from './JiraError';
-import { Tracker } from './Tracker';
 import {
   IssueTransition,
   IssueTypeData,
