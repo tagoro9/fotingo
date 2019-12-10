@@ -51,6 +51,10 @@ export interface SelectRequest extends Request {
   options: Array<{ label: string; value: any }>;
 }
 
+/**
+ * Class used to allow the commands to send messages / data requests to
+ * the UI
+ */
 export class Messenger {
   private subject: Subject<Message | Request | Status>;
   private requestSubject: Subject<any>;

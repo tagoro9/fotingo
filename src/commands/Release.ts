@@ -4,10 +4,10 @@ import { Git } from 'src/git/Git';
 import { Github } from 'src/git/Github';
 import { JointRelease, Remote } from 'src/git/Remote';
 import { Emoji, Messenger } from 'src/io/messenger';
-import { CreateRelease } from 'src/issue-tracker/Issue';
-import { Jira } from 'src/issue-tracker/Jira';
+import { Jira } from 'src/issue-tracker/jira/Jira';
 import { Tracker } from 'src/issue-tracker/Tracker';
 import { getReleaseNotes } from 'src/templates/getReleaseNotes';
+import { CreateRelease } from 'src/types';
 
 import { FotingoArguments } from './FotingoArguments';
 import { getLocalChangesInformation, LocalChanges } from './util';

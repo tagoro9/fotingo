@@ -12,6 +12,14 @@ type Cacheable = (
   descriptor: TypedPropertyDescriptor<PromiseFunction>,
 ) => TypedPropertyDescriptor<PromiseFunction>;
 
+/**
+ * Decorator that caches the output of the decorated function
+ * in an external data source (SQLite DB) so it can be
+ * accessed across multiple executions
+ * Caching is based on the function input, the specified
+ * prefix and the number of minutes the data is supposed to be
+ * cached
+ */
 export function cacheable({
   getPrefix,
   minutes,

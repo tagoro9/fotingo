@@ -18,11 +18,10 @@ import {
 } from 'ramda';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { editVirtualFile } from 'src/io/file-util';
+import { editVirtualFile } from 'src/io/file';
 import { Messenger } from 'src/io/messenger';
-import { parseTemplate } from 'src/io/template-util';
-import { Issue, IssueType, Release } from 'src/issue-tracker/Issue';
-import { ReleaseConfig, ReleaseNotes } from 'src/types';
+import { Issue, IssueType, Release, ReleaseConfig, ReleaseNotes } from 'src/types';
+import { parseTemplate } from 'src/util/template';
 
 enum RELEASE_TEMPLATE_KEYS {
   VERSION = 'version',
@@ -64,7 +63,7 @@ function getReleaseNotesFromTemplate(data: Release, releaseConfig: ReleaseConfig
         mapObjIndexed(
           compose(
             join('\n'),
-            rMap((issue: Issue) => `* [#${issue.key}](${issue.url}): ${issue.fields.summary}`),
+            rMap((issue: Issue) => `* [#${issue.key}](${issue.url}): ${issue.summary}`),
           ),
         ),
         groupBy(compose(lens => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION), lensProp, prop('type'))),
