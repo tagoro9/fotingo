@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-3178"`;
+exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-2484"`;
 
 exports[`Git getRemote should fall back to the first remote if it cannot find the specified one 1`] = `
 Object {

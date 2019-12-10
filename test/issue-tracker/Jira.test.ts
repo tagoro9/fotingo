@@ -1,14 +1,15 @@
 import 'jest';
 import { pick } from 'ramda';
 import { of, throwError } from 'rxjs';
-import serializeError from 'serialize-error';
-import { Jira } from 'src/issue-tracker/Jira';
+import { serializeError } from 'serialize-error';
+import { Messenger } from 'src/io/messenger';
+import { Jira } from 'src/issue-tracker/jira/Jira';
 import * as httpClient from 'src/network/HttpClient';
 import data from 'test/lib/data';
 
 jest.mock('src/network/HttpClient');
 
-const httpClientMock = (httpClient.default as any) as jest.Mock;
+const httpClientMock = ((httpClient as unknown) as { HttpClient: jest.Mock }).HttpClient;
 
 const httpClientMocks = {
   get: jest.fn(),
@@ -19,7 +20,7 @@ let jira: Jira;
 describe('jira', () => {
   beforeEach(() => {
     httpClientMock.mockImplementation(() => httpClientMocks);
-    jira = new Jira(data.createJiraConfig());
+    jira = new Jira(data.createJiraConfig(), new Messenger());
   });
 
   afterEach(() => {

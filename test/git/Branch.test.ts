@@ -12,12 +12,10 @@ const gitConfig: GitConfig = {
   remote: 'origin',
 };
 
-const issue = data.createIssue();
-
 describe('Branch', () => {
   describe('getName', () => {
     test('replaces the placeholders with the issue data', () => {
-      expect(getName(gitConfig, issue)).toMatchSnapshot();
+      expect(getName(gitConfig, data.createIssue())).toMatchSnapshot();
     });
 
     test('ignores unknown template data', () => {
@@ -27,7 +25,7 @@ describe('Branch', () => {
             ...gitConfig,
             branchTemplate: '{does_not_exist}',
           },
-          issue,
+          data.createIssue(),
         ),
       ).toMatchSnapshot();
     });

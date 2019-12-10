@@ -2,6 +2,7 @@ module.exports = {
   roots: ['<rootDir>/src', '<rootDir>/test'],
   coverageDirectory: './coverage/',
   coverageReporters: ['html'],
+  setupFilesAfterEnv: ['<rootDir>test/setupTests.ts'],
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },

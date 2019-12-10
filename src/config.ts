@@ -25,15 +25,13 @@ export const requiredConfigs = [
   { path: ['github', 'authToken'], request: "What's your Github token?" },
 ];
 
-const configSearch = cosmiconfig('fotingo');
-
 /**
  * Read the configuration file in the specified folder. Go up until the user home
  * directory
  */
 const readConfig: (path?: string) => string = R.compose(
   R.ifElse(R.either(R.isNil, R.propEq('isEmpty', true)), R.always({}), R.prop('config')),
-  (p?: string) => configSearch.search(p),
+  (p?: string) => cosmiconfig('fotingo').search(p),
 );
 
 /**
@@ -51,7 +49,7 @@ export const read: () => Config = () =>
  * @param config Partial configuration
  */
 export const write: (data: Partial<Config>) => Partial<Config> = data => {
-  const search = configSearch.search() || { filepath: undefined, config: {} };
+  const search = cosmiconfig('fotingo').search() || { filepath: undefined, config: {} };
   const mergedConfigs = R.mergeDeepLeft(data, search.config);
   writeFileSync(
     // TODO Use homedir() instead of env variable
