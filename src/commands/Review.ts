@@ -5,9 +5,9 @@ import { Git } from 'src/git/Git';
 import { Github } from 'src/git/Github';
 import { PullRequest, Remote } from 'src/git/Remote';
 import { Emoji, Messenger } from 'src/io/messenger';
-import { Issue, IssueStatus } from 'src/issue-tracker/Issue';
 import { Jira } from 'src/issue-tracker/Jira';
 import { Tracker } from 'src/issue-tracker/Tracker';
+import { Issue, IssueStatus } from 'src/types';
 
 import { FotingoArguments } from './FotingoArguments';
 import { getLocalChangesInformation } from './util';

@@ -26,7 +26,7 @@ import { BranchSummary } from 'simple-git/typings/response';
 import { maybeAskUserToSelectMatches } from 'src/io/input-util';
 import { Emoji, Messenger } from 'src/io/messenger';
 import { findMatches } from 'src/io/text-util';
-import { Issue } from 'src/issue-tracker/Issue';
+import { Issue } from 'src/types';
 
 import { getIssueId, getName } from './Branch';
 import { GitConfig } from './Config';

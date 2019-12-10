@@ -1,4 +1,4 @@
-import { Issue, Release, ReleaseNotes } from 'src/issue-tracker/Issue';
+import { Issue, Release, ReleaseNotes } from 'src/types';
 import { BranchInfo } from './Git';
 
 export interface Remote {

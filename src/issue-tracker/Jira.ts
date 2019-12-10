@@ -21,27 +21,29 @@ import { catchError, map, reduce, switchMap } from 'rxjs/operators';
 import { Messenger } from 'src/io/messenger';
 import { HttpClient } from 'src/network/HttpClient';
 import { HttpError } from 'src/network/HttpError';
-import * as Turndown from 'turndown';
-
-import { JiraConfig } from './Config';
 import {
   CreateIssue,
   CreateRelease,
   Issue,
   IssueComment,
-  IssueEditMeta,
   IssueStatus,
-  IssueTransition,
   IssueType,
-  IssueTypeData,
-  JiraProject,
-  JiraRelease,
-  Project,
   Release,
   User,
-} from './Issue';
+} from 'src/types';
+import * as Turndown from 'turndown';
+
+import { JiraConfig } from './Config';
 import { JiraErrorImpl } from './JiraError';
 import { Tracker } from './Tracker';
+import {
+  IssueTransition,
+  IssueTypeData,
+  JiraIssue,
+  JiraRelease,
+  Project,
+  RawProject,
+} from './types';
 
 const turnDownService = new Turndown();
 
@@ -82,7 +84,7 @@ export class Jira implements Tracker {
   }
 
   public setIssueStatus(status: IssueStatus, issueId: string): Observable<Issue> {
-    return this.getIssue(issueId).pipe(
+    return this.getJiraIssue(issueId).pipe(
       switchMap(issue => {
         const transition = this.getTransitionForStatus(issue, status);
         if (!transition) {
@@ -96,6 +98,7 @@ export class Jira implements Tracker {
           })
           .pipe(map(always(issue)));
       }),
+      map(this.convertIssue),
       catchError(this.mapError),
     );
   }
@@ -110,33 +113,7 @@ export class Jira implements Tracker {
 
   @boundMethod
   public getIssue(id: string): Observable<Issue> {
-    return this.client
-      .get<Issue>(`/issue/${id}`, {
-        qs: { expand: 'transitions, renderedFields' },
-      })
-      .pipe(
-        map(prop('body')),
-        map(issue => ({
-          ...issue,
-          fields: {
-            ...issue.fields,
-            description: issue.renderedFields.description
-              ? turnDownService.turndown(issue.renderedFields.description)
-              : undefined,
-          },
-          sanitizedSummary: compose<string, string, string, string, string, string, string>(
-            take(72),
-            replace(/(_|-)$/, ''),
-            replace(/\s|\(|\)|__+/g, '_'),
-            replace(/\/|\.|--=/g, '-'),
-            replace(/,|\[|]|"|'|”|“|@|’|`|:|\$|\?|\*|<|>|&|~/g, ''),
-            toLower,
-          )(issue.fields.summary),
-          type: issue.fields.issuetype.name as IssueType,
-          url: `${this.config.root}/browse/${issue.key}`,
-        })),
-        catchError(this.mapError),
-      );
+    return this.getJiraIssue(id).pipe(map(this.convertIssue));
   }
 
   public isValidIssueName(name: string): boolean {
@@ -144,10 +121,10 @@ export class Jira implements Tracker {
   }
 
   public getProject(id: string): Observable<Project> {
-    return this.client.get<JiraProject>(`/project/${id}`).pipe(
+    return this.client.get<RawProject>(`/project/${id}`).pipe(
       map(
         compose(
-          (data: JiraProject) =>
+          (data: RawProject) =>
             evolve(
               {
                 issueTypes: compose(
@@ -158,7 +135,7 @@ export class Jira implements Tracker {
                       shortName: getShortName(typeData.name),
                     }),
                   ),
-                ) as (d: JiraProject['issueTypes']) => Project['issueTypes'],
+                ) as (d: RawProject['issueTypes']) => Project['issueTypes'],
               },
               data,
             ),
@@ -217,12 +194,6 @@ export class Jira implements Tracker {
         catchError(this.mapError),
         switchMap(() => this.getIssue(issueId)),
       );
-  }
-
-  public getIssueEditMeta(issueId: string): Observable<IssueEditMeta> {
-    return this.client
-      .get<IssueEditMeta>(`/issue/${issueId}/editmeta`)
-      .pipe(map(prop('body')), catchError(this.mapError));
   }
 
   public addCommentToIssue(issueId: string, comment: string): Observable<IssueComment> {
@@ -296,6 +267,38 @@ export class Jira implements Tracker {
       );
   }
 
+  @boundMethod
+  private getJiraIssue(id: string): Observable<JiraIssue> {
+    return this.client
+      .get<JiraIssue>(`/issue/${id}`, {
+        qs: { expand: 'transitions, renderedFields' },
+      })
+      .pipe(map(prop('body')), catchError(this.mapError));
+  }
+
+  @boundMethod
+  private convertIssue(issue: JiraIssue): Issue {
+    return {
+      description: issue.renderedFields.description
+        ? turnDownService.turndown(issue.renderedFields.description)
+        : undefined,
+      id: issue.id,
+      key: issue.key,
+      project: issue.fields.project.id,
+      sanitizedSummary: compose<string, string, string, string, string, string, string>(
+        take(72),
+        replace(/(_|-)$/, ''),
+        replace(/\s|\(|\)|__+/g, '_'),
+        replace(/\/|\.|--=/g, '-'),
+        replace(/,|\[|]|"|'|”|“|@|’|`|:|\$|\?|\*|<|>|&|~/g, ''),
+        toLower,
+      )(issue.fields.summary),
+      summary: issue.fields.summary,
+      type: issue.fields.issuetype.name as IssueType,
+      url: `${this.config.root}/browse/${issue.key}`,
+    };
+  }
+
   private createVersion(data: CreateRelease): Observable<JiraRelease> {
     return this.client
       .post<JiraRelease>(`/version`, {
@@ -318,7 +321,10 @@ export class Jira implements Tracker {
       );
   }
 
-  private getTransitionForStatus(issue: Issue, status: IssueStatus): IssueTransition | undefined {
+  private getTransitionForStatus(
+    issue: JiraIssue,
+    status: IssueStatus,
+  ): IssueTransition | undefined {
     return issue.transitions.find(transition => statusRegex[status].test(transition.name));
   }
 

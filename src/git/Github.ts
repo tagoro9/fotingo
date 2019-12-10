@@ -21,7 +21,7 @@ import { maybeAskUserToSelectMatches } from 'src/io/input-util';
 import { Messenger } from 'src/io/messenger';
 import { parseTemplate } from 'src/io/template-util';
 import { findMatches } from 'src/io/text-util';
-import { Issue, Release, ReleaseNotes } from 'src/issue-tracker/Issue';
+import { Issue, Release, ReleaseNotes } from 'src/types';
 
 import * as GithubApi from '@octokit/rest';
 
@@ -308,11 +308,9 @@ export class Github implements Remote {
             : '',
         [PR_TEMPLATE_KEYS.BRANCH_NAME]: branchInfo.name,
         [PR_TEMPLATE_KEYS.FIRST_ISSUE_SUMMARY]:
-          issues.length > 0
-            ? take(60, `${issues[0].key}: ${issues[0].fields.summary}`)
-            : branchInfo.name,
+          issues.length > 0 ? take(60, `${issues[0].key}: ${issues[0].summary}`) : branchInfo.name,
         [PR_TEMPLATE_KEYS.FIRST_ISSUE_DESCRIPTION]:
-          issues.length > 0 ? replace(/\r\n/g, '\n', issues[0].fields.description || '') : '',
+          issues.length > 0 ? replace(/\r\n/g, '\n', issues[0].description || '') : '',
         [PR_TEMPLATE_KEYS.FOTINGO_BANNER]:
           '🚀 PR created with [fotingo](https://github.com/tagoro9/fotingo)',
       },

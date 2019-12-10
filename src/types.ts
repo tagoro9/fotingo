@@ -1,5 +1,4 @@
 import { ParsedCommit } from 'conventional-commits-parser';
-import { Observable } from 'rxjs';
 import { Arguments } from 'yargs';
 
 /**
@@ -59,17 +58,6 @@ export interface DefaultConfig {
  * Tracker
  */
 
-interface IssueTypeData {
-  id: number;
-  name: string;
-  shortName: string;
-}
-
-interface IssueTransition {
-  id: number;
-  name: string;
-}
-
 export enum IssueType {
   BUG = 'Bug',
   FEATURE = 'Feature',
@@ -86,6 +74,7 @@ export enum IssueStatus {
   SELECTED_FOR_DEVELOPMENT = 'SELECTED_FOR_DEVELOPMENT',
 }
 
+// TODO This should be Jira only
 export interface User {
   groups: {
     items: {
@@ -96,20 +85,12 @@ export interface User {
 }
 
 export interface Issue {
-  fields: {
-    description?: string;
-    issuetype: {
-      name: string;
-    };
-    project: {
-      id: string;
-    };
-    summary: string;
-  };
+  description: string;
   id: number;
   key: string;
+  project: string;
   sanitizedSummary: string;
-  transitions: IssueTransition[];
+  summary: string;
   type: IssueType;
   url: string;
 }
@@ -129,26 +110,18 @@ export interface IssueComment {
   updated: string;
 }
 
-export interface IssueEditMeta {
-  fields: object;
-}
-
-export interface Project {
-  id: number;
-  issueTypes: { [type in IssueType]: IssueTypeData };
-  key: string;
-  name: string;
-}
-
 export interface CreateIssue {
-  description: string;
+  description?: string;
+  labels?: string[];
   project: string;
+  title: string;
   type: IssueType;
 }
 
 export interface CreateRelease {
   issues: Issue[];
   name: string;
+  submitRelease: boolean;
   useDefaults: boolean;
 }
 
@@ -165,22 +138,8 @@ export interface Release {
   id: string;
   issues: Issue[];
   name: string;
-  notes: ReleaseNotes;
-  url: string;
-}
-
-export interface Tracker {
-  addCommentToIssue: (issueId: string, comment: string) => Observable<IssueComment>;
-  addLabelToIssue: (issueId: string, label: string) => Observable<Issue>;
-  createIssue: (data: CreateIssue, user: User) => Observable<Issue>;
-  createIssueForCurrentUser: (data: CreateIssue) => Observable<Issue>;
-  createRelease: (data: CreateRelease) => Observable<Release>;
-  getCurrentUser: () => Observable<User>;
-  getIssue: (issueId: string) => Observable<Issue>;
-  getIssueEditMeta: (issueId: string) => Observable<IssueEditMeta>;
-  isValidIssueName: (name: string) => boolean;
-  setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
-  setIssuesFixVersion(release: Release): Observable<Release>;
+  // notes: ReleaseNotes;
+  url?: string;
 }
 
 /**

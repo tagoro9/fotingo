@@ -4,9 +4,9 @@ import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { Git } from 'src/git/Git';
 import { Emoji, Messenger } from 'src/io/messenger';
-import { CreateIssue, GetIssue, Issue, IssueStatus, IssueType } from 'src/issue-tracker/Issue';
 import { Jira } from 'src/issue-tracker/Jira';
 import { Tracker } from 'src/issue-tracker/Tracker';
+import { CreateIssue, GetIssue, Issue, IssueStatus, IssueType } from 'src/types';
 
 interface StartData {
   git: {

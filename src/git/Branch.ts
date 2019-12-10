@@ -22,7 +22,7 @@ import {
   toPairs,
   toUpper,
 } from 'ramda';
-import { Issue, IssueType } from 'src/issue-tracker/Issue';
+import { Issue, IssueType } from 'src/types';
 import { GitConfig } from './Config';
 
 const ISSUE_TYPE_TO_BRANCH_PREFIX: { [S in IssueType]: string } = {

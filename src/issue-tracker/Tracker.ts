@@ -4,11 +4,10 @@ import {
   CreateRelease,
   Issue,
   IssueComment,
-  IssueEditMeta,
   IssueStatus,
   Release,
   User,
-} from 'src/issue-tracker/Issue';
+} from 'src/types';
 
 export interface Tracker {
   getIssue: (issueId: string) => Observable<Issue>;
@@ -18,7 +17,6 @@ export interface Tracker {
   setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
   addCommentToIssue: (issueId: string, comment: string) => Observable<IssueComment>;
   addLabelToIssue: (issueId: string, label: string) => Observable<Issue>;
-  getIssueEditMeta: (issueId: string) => Observable<IssueEditMeta>;
   createRelease: (data: CreateRelease) => Observable<Release>;
   isValidIssueName: (name: string) => boolean;
   setIssuesFixVersion(release: Release): Observable<Release>;

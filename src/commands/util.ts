@@ -3,8 +3,8 @@ import { merge, ObservableInput, of, zip } from 'rxjs';
 import { map, reduce } from 'rxjs/operators';
 import { BranchInfo } from 'src/git/Git';
 import { Emoji, Messenger } from 'src/io/messenger';
-import { Issue } from 'src/issue-tracker/Issue';
 import { Tracker } from 'src/issue-tracker/Tracker';
+import { Issue } from 'src/types';
 
 export interface LocalChanges {
   branchInfo: BranchInfo;
