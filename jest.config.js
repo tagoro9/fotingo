@@ -3,9 +3,7 @@ module.exports = {
   coverageDirectory: './coverage/',
   coverageReporters: ['html'],
   setupFilesAfterEnv: ['<rootDir>test/setupTests.ts'],
-  transform: {
-    '^.+\\.ts$': 'ts-jest',
-  },
+  preset: 'ts-jest',
   testRegex: '(/test/.*(test|spec))\\.(tsx?)$',
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   moduleNameMapper: {
