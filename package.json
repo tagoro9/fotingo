@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf lib",
     "coverage": "jest --coverage --silent",
-    "build": "yarn lint && yarn run clean && tsc -p ./ && chmod 755 ./lib/fotingo.js",
+    "build": "yarn run clean && tsc -p ./ && chmod 755 ./lib/fotingo.js",
     "lint": "tslint -p .",
     "prepare": "yarn run build",
     "release": "yarn run build && standard-version",
