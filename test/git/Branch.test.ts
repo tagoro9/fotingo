@@ -4,7 +4,7 @@
 import 'jest';
 import { getIssueId, getName } from 'src/git/Branch';
 import { GitConfig } from 'src/git/Config';
-import data from '../lib/data';
+import data from 'test/lib/data';
 
 const gitConfig: GitConfig = {
   baseBranch: 'master',
