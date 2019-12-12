@@ -1,5 +1,5 @@
 import 'jest';
-import { JiraErrorImpl } from 'src/issue-tracker/JiraError';
+import { JiraErrorImpl } from 'src/issue-tracker/jira/JiraError';
 
 describe('JiraError', () => {
   it('should store the message and the code', () => {

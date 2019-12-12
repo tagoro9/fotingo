@@ -3,6 +3,7 @@ import 'jest';
 import * as simpleGitMock from 'simple-git/promise';
 import { Git } from 'src/git/Git';
 import { GitErrorType } from 'src/git/GitError';
+import { Messenger } from 'src/io/messenger';
 import data from 'test/lib/data';
 
 const simpleGit = (simpleGitMock as any) as jest.Mock;
@@ -12,10 +13,12 @@ const issue = data.createIssue();
 const gitConfig = data.createGitConfig();
 const branchName = issue.key;
 const latestCommitHash = '547433c';
-const remoteBranch = `${gitConfig.remote}/${gitConfig.baseBranch}`;
+const remoteBranch = `remotes/${gitConfig.remote}/${gitConfig.baseBranch}`;
 const remote = 'git@github.com:tagoro9/fotingo-rewrite.git';
 
 const gitMocks = {
+  branch: jest.fn().mockResolvedValue({ all: ['remotes/origin/master'] }),
+  branchLocal: jest.fn().mockResolvedValue({ all: [] }),
   checkoutBranch: jest.fn().mockResolvedValue(undefined),
   fetch: jest.fn().mockResolvedValue(undefined),
   getRemotes: jest.fn().mockResolvedValue([
@@ -42,8 +45,8 @@ const gitMocks = {
 
 describe('Git', () => {
   beforeEach(() => {
-    simpleGit.mockReturnValue(gitMocks);
-    git = new Git(gitConfig);
+    simpleGit.mockReturnValue({ silent: () => gitMocks });
+    git = new Git(gitConfig, new Messenger());
   });
 
   afterEach(() => {
@@ -52,15 +55,7 @@ describe('Git', () => {
 
   describe('getBranchNameForIssue', () => {
     it('should generate a branch name for an issue', () => {
-      expect(git.getBranchNameForIssue(issue)).toMatchSnapshot();
-    });
-  });
-
-  describe('getIssues', () => {
-    it('should get the issue from the branch name', async () => {
-      const issueId = await git.getIssues();
-      expect(issueId).toBe(issue.key);
-      expect(gitMocks.revparse).toBeCalledWith(['--abrev-ref', 'HEAD']);
+      expect(git.getBranchNameForIssue(data.createIssue())).toMatchSnapshot();
     });
   });
 
@@ -68,15 +63,6 @@ describe('Git', () => {
     it('should do a git push', async () => {
       await git.push();
       expect(gitMocks.push).toBeCalledTimes(1);
-    });
-
-    it('should throw an error if there is no upstream branch', async () => {
-      gitMocks.push.mockRejectedValue(new Error('has no upstream branch'));
-      try {
-        await git.push();
-      } catch (e) {
-        expect(e.message).toBe('NO_UPSTREAM');
-      }
     });
   });
 
