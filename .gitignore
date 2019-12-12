@@ -83,5 +83,5 @@ jspm_packages
 .node_repl_history
 
 .fotingo
-lib/
+/lib/
 .vscode/
