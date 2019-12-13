@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         node-version: [10.x, 12.x]
+      fail-fast: true
 
     steps:
       - uses: actions/checkout@v1
@@ -17,6 +18,22 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn --pure-lockfile
-      - run: yarn test
+        name: Install dependencies
+      - run: yarn test --coverage
+        name: Run tests
         env:
           CI: true
+      - uses: coverallsapp/github-action@v1.0.1
+        name: Coverage
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          parallel: true
+  coverage:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: coverallsapp/github-action@v1.0.1
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          parallel-finished: true
