@@ -306,7 +306,7 @@ export class Jira implements Tracker {
           archived: false,
           description: data.name,
           name: data.name,
-          projectId: head(data.issues.map(path(['fields', 'project', 'id']))),
+          projectId: head(data.issues.map(path(['project']))),
           releaseDate: new Date().toISOString().substring(0, 10),
           released: true,
         },
