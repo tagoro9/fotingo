@@ -14,7 +14,6 @@ export function builder(yargs: Argv): Argv {
     })
     .option('branch', {
       alias: 'b',
-      default: 'master',
       describe: 'Name of the branch to use',
       type: 'string',
     })

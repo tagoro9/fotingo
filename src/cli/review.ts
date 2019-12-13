@@ -9,7 +9,6 @@ export function builder(yargs: Argv): Argv {
   return yargs
     .option('branch', {
       alias: 'b',
-      default: 'master',
       describe: 'Name of the base branch of the pull request',
       type: 'string',
     })
