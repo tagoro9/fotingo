@@ -12,7 +12,7 @@ Run:
 yarn global add fotingo@next
 ```
 
-Or if yu prefer npm:
+Or if you prefer npm:
 
 ```bash
 npm install -g fotingo@next
