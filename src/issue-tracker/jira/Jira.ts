@@ -17,7 +17,7 @@ import {
   when,
 } from 'ramda';
 import { from, merge, Observable, of, throwError } from 'rxjs';
-import { catchError, map, reduce, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, reduce, switchMap } from 'rxjs/operators';
 import { Messenger } from 'src/io/messenger';
 import { Tracker } from 'src/issue-tracker/Tracker';
 import { HttpClient } from 'src/network/HttpClient';
@@ -243,7 +243,7 @@ export class Jira implements Tracker {
   public setIssuesFixVersion(release: Release): Observable<Release> {
     return from(release.issues)
       .pipe(
-        switchMap(issue =>
+        mergeMap(issue =>
           merge(
             this.setIssueStatus(IssueStatus.DONE, issue.key),
             this.client
