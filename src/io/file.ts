@@ -6,10 +6,10 @@ import * as tmp from 'tmp';
 import { promisify } from 'util';
 
 interface EditVirtualFileOptions {
-  // Initial content of the file
-  initialContent?: string;
   // Extension the file should have
   extension: string;
+  // Initial content of the file
+  initialContent?: string;
   // Prefix to include in the file name
   prefix: string;
 }

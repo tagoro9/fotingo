@@ -5,8 +5,8 @@ import { compose, converge, prop, reduce, replace, toPairs } from 'ramda';
  * with the value
  */
 export const parseTemplate: <T extends string>(options: {
-  template: string;
   data: Record<T, string>;
+  template: string;
 }) => string = converge(
   reduce((msg: string, [k, v]: string[]) => replace(`{${k}}`, v, msg)),
   [prop('template'), compose(toPairs, prop('data'))],

@@ -3,8 +3,8 @@
  */
 import { Argv } from 'yargs';
 
-export const command: string = 'release <release-name>';
-export const describe: string = 'Create a release with your changes';
+export const command = 'release <release-name>';
+export const describe = 'Create a release with your changes';
 export function builder(yargs: Argv): Argv {
   return yargs
     .positional('release-name', {

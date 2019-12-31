@@ -2,6 +2,7 @@ import React = require('react');
 
 import { Box, Static } from 'ink';
 import { init, last } from 'ramda';
+
 import { Message } from './Message';
 import { MessagesProps } from './props';
 

@@ -1,11 +1,12 @@
 jest.mock('request');
 import 'jest';
+
 import * as req from 'request';
 import { HttpClient } from 'src/network/HttpClient';
 
 const request = (req as any) as jest.Mock;
 
-const mockRequestWithSuccess = (body: object, statusCode: number = 200) =>
+const mockRequestWithSuccess = (body: object, statusCode = 200) =>
   request.mockImplementation((_, cb) => {
     cb(null, { statusCode, body }, body);
   });

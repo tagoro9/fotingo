@@ -24,10 +24,10 @@ import { Issue, IssueType, Release, ReleaseConfig, ReleaseNotes } from 'src/type
 import { parseTemplate } from 'src/util/template';
 
 enum RELEASE_TEMPLATE_KEYS {
-  VERSION = 'version',
   FIXED_ISSUES_BY_CATEGORY = 'fixedIssuesByCategory',
   FOTINGO_BANNER = 'fotingo.banner',
   JIRA_RELEASE = 'jira.release',
+  VERSION = 'version',
 }
 
 const ISSUE_TYPE_TO_RELEASE_SECTION: { [k in IssueType]: string } = {

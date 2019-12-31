@@ -17,9 +17,9 @@ import { showHelp } from 'yargs';
 
 // TODO I think this is not needed anymore if using yargs handlers
 export enum CommandName {
-  START = 'start',
-  REVIEW = 'review',
   RELEASE = 'release',
+  REVIEW = 'review',
+  START = 'start',
 }
 
 const messenger = new Messenger();

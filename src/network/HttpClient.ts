@@ -9,37 +9,37 @@ import { HttpErrorImpl } from './HttpError';
 const requestAsPromise = promisify(request);
 
 interface HttpClientOptions {
-  root: string;
   allowConcurrentRequests?: boolean;
-  slowDownRequests?: boolean;
   auth?: HttpBasicAuth;
+  root: string;
+  slowDownRequests?: boolean;
 }
 
 interface HttpBasicAuth {
-  user: string;
   pass: string;
+  user: string;
 }
 
 interface GetOptions {
-  qs?: object;
   auth?: HttpBasicAuth;
+  qs?: object;
 }
 
 interface PostOptions extends GetOptions {
-  form?: object;
   body?: object;
+  form?: object;
 }
 
 export interface HttpResponse<T> {
-  response: object;
   body: T;
+  response: object;
 }
 
 enum HttpMethod {
-  GET = 'get',
-  PUT = 'put',
-  POST = 'post',
   DELETE = 'delete',
+  GET = 'get',
+  POST = 'post',
+  PUT = 'put',
 }
 
 const headers = { accept: 'application/json' };

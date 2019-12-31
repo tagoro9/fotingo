@@ -23,6 +23,7 @@ import {
   toUpper,
 } from 'ramda';
 import { Issue, IssueType } from 'src/types';
+
 import { GitConfig } from './Config';
 
 const ISSUE_TYPE_TO_BRANCH_PREFIX: { [S in IssueType]: string } = {
@@ -34,9 +35,9 @@ const ISSUE_TYPE_TO_BRANCH_PREFIX: { [S in IssueType]: string } = {
 };
 
 enum TemplateKey {
-  ISSUE_SHORT_NAME = 'issue.shortName',
   ISSUE_KEY = 'issue.key',
   ISSUE_SANITIZED_SUMMARY = 'issue.sanitizedSummary',
+  ISSUE_SHORT_NAME = 'issue.shortName',
 }
 
 const TEMPLATE_KEYS_TO_MATCHERS: { [S in TemplateKey]: string } = {

@@ -1,3 +1,4 @@
+import * as GithubApi from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
 import {
   __,
@@ -23,8 +24,6 @@ import { Issue, Release, ReleaseNotes } from 'src/types';
 import { parseTemplate } from 'src/util/template';
 import { findMatches } from 'src/util/text';
 
-import * as GithubApi from '@octokit/rest';
-
 import { GithubConfig } from './Config';
 import { BranchInfo, Git } from './Git';
 import { JointRelease, Label, PullRequest, PullRequestData, Remote, Reviewer } from './Remote';
@@ -33,9 +32,9 @@ enum PR_TEMPLATE_KEYS {
   // TODO Use better names
   BRANCH_NAME = 'branchName',
   CHANGES = 'changes',
-  FIXED_ISSUES = 'fixedIssues',
-  FIRST_ISSUE_SUMMARY = 'firstIssue.summary',
   FIRST_ISSUE_DESCRIPTION = 'firstIssue.description',
+  FIRST_ISSUE_SUMMARY = 'firstIssue.summary',
+  FIXED_ISSUES = 'fixedIssues',
   FOTINGO_BANNER = 'fotingo.banner',
 }
 

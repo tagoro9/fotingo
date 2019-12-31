@@ -3,8 +3,8 @@
  */
 import { Argv } from 'yargs';
 
-export const command: string = 'review';
-export const describe: string = 'Submit current issue for review';
+export const command = 'review';
+export const describe = 'Submit current issue for review';
 export function builder(yargs: Argv): Argv {
   return yargs
     .option('branch', {

@@ -1,5 +1,6 @@
 jest.mock('simple-git/promise');
 import 'jest';
+
 import * as simpleGitMock from 'simple-git/promise';
 import { Git } from 'src/git/Git';
 import { GitErrorType } from 'src/git/GitError';

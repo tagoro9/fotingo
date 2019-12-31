@@ -24,8 +24,8 @@ export function cacheable({
   getPrefix,
   minutes,
 }: {
-  minutes: number;
   getPrefix?: () => string;
+  minutes: number;
 }): Cacheable {
   return (
     target: any,

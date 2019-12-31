@@ -2,6 +2,7 @@
  * Branch tests
  */
 import 'jest';
+
 import { getIssueId, getName } from 'src/git/Branch';
 import { GitConfig } from 'src/git/Config';
 import data from 'test/lib/data';

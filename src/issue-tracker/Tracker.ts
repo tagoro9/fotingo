@@ -10,14 +10,14 @@ import {
 } from 'src/types';
 
 export interface Tracker {
-  getIssue: (issueId: string) => Observable<Issue>;
-  createIssue: (data: CreateIssue, user: User) => Observable<Issue>;
-  createIssueForCurrentUser: (data: CreateIssue) => Observable<Issue>;
-  getCurrentUser: () => Observable<User>;
-  setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
   addCommentToIssue: (issueId: string, comment: string) => Observable<IssueComment>;
   addLabelToIssue: (issueId: string, label: string) => Observable<Issue>;
+  createIssue: (data: CreateIssue, user: User) => Observable<Issue>;
+  createIssueForCurrentUser: (data: CreateIssue) => Observable<Issue>;
   createRelease: (data: CreateRelease) => Observable<Release>;
+  getCurrentUser: () => Observable<User>;
+  getIssue: (issueId: string) => Observable<Issue>;
   isValidIssueName: (name: string) => boolean;
+  setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
   setIssuesFixVersion(release: Release): Observable<Release>;
 }

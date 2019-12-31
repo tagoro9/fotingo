@@ -13,12 +13,12 @@ import { FotingoArguments } from './FotingoArguments';
 import { getLocalChangesInformation, LocalChanges } from './util';
 
 interface ReleaseData {
-  name: string;
   issues: string[];
-  useDefaults: boolean;
+  name: string;
   tracker: {
     enabled: boolean;
   };
+  useDefaults: boolean;
 }
 
 const buildReleaseData = ([data, { issues, tracker, ...releaseData }]: [

@@ -1,7 +1,7 @@
 export interface HttpError {
+  readonly body: any;
   message: string;
   readonly status: number;
-  readonly body: any;
 }
 
 export class HttpErrorImpl extends Error implements HttpError {

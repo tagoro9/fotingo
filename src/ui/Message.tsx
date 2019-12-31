@@ -3,6 +3,7 @@ import React = require('react');
 import { Box, Color } from 'ink';
 import Spinner from 'ink-spinner';
 import { get as getEmoji } from 'node-emoji';
+
 import { MessageProps } from './props';
 
 const MESSAGE_TYPE_TO_EMOJI: Record<MessageProps['message']['type'], string | undefined> = {
@@ -12,7 +13,7 @@ const MESSAGE_TYPE_TO_EMOJI: Record<MessageProps['message']['type'], string | un
   status: undefined,
 };
 
-export function Message({ message, isDone = false, isLast = false }: MessageProps) {
+export function Message({ isDone = false, isLast = false, message }: MessageProps) {
   return (
     <Box>
       <Box marginRight={2}>

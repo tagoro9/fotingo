@@ -3,9 +3,8 @@
  * can access the configuration in a typed manner
  */
 
-import { Arguments } from 'yargs';
-
 import { Config } from 'src/config';
+import { Arguments } from 'yargs';
 
 export interface FotingoArguments extends Arguments {
   // User configuration

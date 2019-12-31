@@ -7,8 +7,8 @@ interface SearchOptions<T extends any> {
   // In order to search for exact matches, we can pass a function that cleans the data
   // before searching for the exact match
   cleanData?: (item: string) => string;
-  fields: string[];
   data: T[];
+  fields: string[];
 }
 
 /**

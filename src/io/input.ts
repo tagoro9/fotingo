@@ -5,11 +5,11 @@ import { Messenger } from './messenger';
 
 interface AskToSelectMatchData<T> {
   data: T[][];
+  getLabel: (item: T) => string;
+  getQuestion: (item: string) => string;
+  getValue: (item: T) => string;
   options: string[];
   useDefaults: boolean;
-  getQuestion: (item: string) => string;
-  getLabel: (item: T) => string;
-  getValue: (item: T) => string;
 }
 
 /**

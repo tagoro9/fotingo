@@ -44,15 +44,15 @@ interface Remote {
 }
 
 interface GitLogLine {
-  hash: string;
-  date: string;
-  message: string;
-  author_name: string;
   author_email: string;
+  author_name: string;
+  date: string;
+  hash: string;
+  message: string;
 }
 interface GitLog {
-  latest: GitLogLine;
   all: GitLogLine[];
+  latest: GitLogLine;
   total: number;
 }
 
@@ -61,14 +61,14 @@ interface GitStatus {
 }
 
 export interface BranchInfo {
-  name: string;
   commits: ParsedCommit[];
   issues: CommitIssue[];
+  name: string;
 }
 
 interface CommitIssue {
-  raw: 'string';
   issue: string;
+  raw: 'string';
 }
 
 export class Git {
@@ -207,7 +207,7 @@ export class Git {
    */
   @boundMethod
   // TODO This is going to get called several times. It should be memoized
-  public async findBaseBranch(removePrefix: boolean = false): Promise<string> {
+  public async findBaseBranch(removePrefix = false): Promise<string> {
     const branchPrefix = `remotes/${this.config.remote}`;
     const branches: Array<{ name: string }> = ((await this.git.branch(['-a'])) as BranchSummary).all
       .filter(b => b.startsWith(branchPrefix))
