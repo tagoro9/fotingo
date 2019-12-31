@@ -4,7 +4,6 @@
  * Parse and run the command
  */
 
-// tslint:disable-next-line no-var-requires no-require-imports
 require('module-alias/register');
 
 import { compose, prop } from 'ramda';
