@@ -3,6 +3,16 @@ name: CI
 on: [push]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: linter
+        uses: tagoro9/action-eslint@fix_eslint_args
+        with:
+          github_token: ${{ secrets.github_token }}
+          eslint_flags: ./src ./test ./types --ext .ts --ext .tsx
+          reporter: github-check
   test:
     runs-on: macos-latest
 
