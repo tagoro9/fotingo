@@ -39,7 +39,9 @@ const getCommandData = (args: FotingoArguments): ReviewData => {
   };
 };
 
-const updateIssues = (jira: Tracker, messenger: Messenger) => (pullRequest: PullRequest) =>
+const updateIssues = (jira: Tracker, messenger: Messenger) => (
+  pullRequest: PullRequest,
+): Observable<Review> =>
   (zip(
     of(pullRequest).pipe(
       tap(pr => {

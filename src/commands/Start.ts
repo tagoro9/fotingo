@@ -1,6 +1,6 @@
-import { compose, has, ifElse, pathEq, prop, tap as rTap, unapply, zipObj } from 'ramda';
+import { compose, has, ifElse, pathEq, prop, tap as rTap } from 'ramda';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { Git } from 'src/git/Git';
 import { Emoji, Messenger } from 'src/io/messenger';
@@ -32,7 +32,10 @@ const getCommandData = (args: FotingoArguments): StartData => {
   };
 };
 
-const getOrCreateIssue = (tracker: Tracker, messenger: Messenger) =>
+const getOrCreateIssue = (
+  tracker: Tracker,
+  messenger: Messenger,
+): ((data: StartData) => Observable<Issue>) =>
   compose(
     ifElse(
       has('id'),
@@ -53,24 +56,25 @@ const getOrCreateIssue = (tracker: Tracker, messenger: Messenger) =>
     prop('issue'),
   );
 
-const setIssueInProgress = (tracker: Tracker) =>
-  compose((id: string) => tracker.setIssueStatus(IssueStatus.IN_PROGRESS, id), prop('id'));
+const setIssueInProgress = (tracker: Tracker): ((data: Issue) => Observable<Issue>) =>
+  compose((id: string) => tracker.setIssueStatus(IssueStatus.IN_PROGRESS, id), prop('key'));
 
 const shouldCreateBranch = pathEq(['commandData', 'git', 'createBranch'], true);
 
-const createBranch = (git: Git, messenger: Messenger) =>
+const createBranch = (git: Git, messenger: Messenger): ((issue: Issue) => Promise<void>) =>
   compose(
     git.createBranchAndStashChanges,
     rTap(name => {
       messenger.emit(`Creating branch ${name}`, Emoji.TADA);
     }),
     git.getBranchNameForIssue,
-    prop('issue'),
   );
 
-const justReturnTheIssue = compose((issue: Issue) => of(issue), prop('issue'));
+const justReturnTheIssue: (issue: Issue) => Observable<Issue> = compose((issue: Issue) =>
+  of(issue),
+);
 
-export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<any> => {
+export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<void | Issue> => {
   const tracker: Tracker = new Jira(args.config.jira, messenger);
   const git: Git = new Git(args.config.git, messenger);
   const commandData$ = of(args).pipe(map(getCommandData));
@@ -80,8 +84,7 @@ export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<an
       messenger.emit(`Setting ${issue.key} in progress`, Emoji.BOOKMARK);
     }),
     switchMap(setIssueInProgress(tracker)),
-    withLatestFrom(commandData$, unapply(zipObj(['issue', 'commandData']))),
-    switchMap(
+    switchMap<Issue, Observable<void | Issue>>(
       ifElse(shouldCreateBranch, compose(createBranch(git, messenger)), justReturnTheIssue),
     ),
   );

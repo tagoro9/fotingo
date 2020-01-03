@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { RequestProps } from './props';
 import { Question } from './Question';
 
-export function TextRequest({ onSubmit, request }: RequestProps) {
+export function TextRequest({ onSubmit, request }: RequestProps): JSX.Element {
   const [value, setValue] = useState<string>('');
   return (
     <Box>
@@ -16,7 +16,7 @@ export function TextRequest({ onSubmit, request }: RequestProps) {
         mask={request.requestType === 'password' ? '*' : undefined}
         value={value}
         onChange={setValue}
-        onSubmit={() => onSubmit(value)}
+        onSubmit={(): void => onSubmit(value)}
       />
     </Box>
   );

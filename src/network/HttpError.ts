@@ -1,4 +1,5 @@
 export interface HttpError {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly body: any;
   message: string;
   readonly status: number;

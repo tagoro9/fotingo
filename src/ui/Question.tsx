@@ -7,7 +7,7 @@ interface QuestionProps {
   message: string;
 }
 
-export function Question({ hint, message }: QuestionProps) {
+export function Question({ hint, message }: QuestionProps): JSX.Element {
   return (
     <Box marginRight={1}>
       <Box marginRight={2}>❔</Box>

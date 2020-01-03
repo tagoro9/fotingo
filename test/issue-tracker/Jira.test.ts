@@ -6,7 +6,7 @@ import { serializeError } from 'serialize-error';
 import { Messenger } from 'src/io/messenger';
 import { Jira } from 'src/issue-tracker/jira/Jira';
 import * as httpClient from 'src/network/HttpClient';
-import data from 'test/lib/data';
+import { data } from 'test/lib/data';
 
 jest.mock('src/network/HttpClient');
 
@@ -50,6 +50,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (e) {
+        // eslint-disable-next-line jest/no-try-expect
         expect(pick(['message', 'code'], serializeError(e))).toMatchSnapshot();
       }
     });
@@ -64,6 +65,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (e) {
+        // eslint-disable-next-line jest/no-try-expect
         expect(pick(['message', 'code'], serializeError(e))).toMatchSnapshot();
       }
     });
@@ -73,6 +75,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (e) {
+        // eslint-disable-next-line jest/no-try-expect
         expect(pick(['message', 'code'], serializeError(e))).toMatchSnapshot();
       }
     });

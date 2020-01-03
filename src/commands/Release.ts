@@ -21,12 +21,12 @@ interface ReleaseData {
   useDefaults: boolean;
 }
 
-const buildReleaseData = ([data, { issues, tracker, ...releaseData }]: [
+const buildReleaseData = ([data, { tracker, ...releaseData }]: [
   LocalChanges,
   ReleaseData,
 ]): CreateRelease => ({
-  ...data,
   ...releaseData,
+  ...data,
   submitRelease: tracker.enabled,
 });
 

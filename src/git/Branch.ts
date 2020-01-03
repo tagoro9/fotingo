@@ -3,7 +3,6 @@
  */
 import * as escapeStringRegexp from 'escape-string-regexp';
 import {
-  __,
   compose,
   converge,
   curryN,
@@ -92,11 +91,12 @@ export const getName = curryN(
  * @param config Git configuration
  */
 const buildBranchTemplateRegex = compose(
-  reduce(
-    (msg: string, [k, v]: [TemplateKey, string]) => replace(`{${k}}`, `${v}`, msg),
-    __ as any,
-    toPairs(TEMPLATE_KEYS_TO_MATCHERS),
-  ),
+  (branchTemplate: string) =>
+    reduce(
+      (msg: string, [k, v]: [TemplateKey, string]) => replace(`{${k}}`, `${v}`, msg),
+      branchTemplate,
+      toPairs(TEMPLATE_KEYS_TO_MATCHERS),
+    ),
   prop('branchTemplate'),
 );
 

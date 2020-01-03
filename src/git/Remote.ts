@@ -20,6 +20,7 @@ export interface Label {
 }
 
 export interface Reviewer {
+  email?: string;
   login: string;
   name?: string;
 }
@@ -32,7 +33,6 @@ export interface RemoteRelease {
 export interface GitRemote {
   name: string;
   owner: string;
-  repo: string;
 }
 
 // TODO Rename to CreatePullRequest

@@ -1,10 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Observable } from 'rxjs';
 import { Message, MessageType, Messenger, Request, Status } from 'src/io/messenger';
 
 import { ERROR_CODE_TO_MESSAGE } from './errorCodeToMessage';
 
 type Setter<T> = (data: T) => void;
+
+interface CmdStatus {
+  executionTime: number | undefined;
+  isDone: boolean;
+  isInThread: boolean;
+  messages: Message[];
+  request: Request | undefined;
+  sendRequestData: (value: string) => void;
+}
 
 function isRequest(message: Message): message is Request {
   return message.type === MessageType.REQUEST;
@@ -18,7 +27,7 @@ function useMessages(): [Message[], (m: Message) => void] {
   const [messages, setMessages] = useState<Message[]>([]);
   return [
     messages,
-    (message: Message) => setMessages(currentMessages => [...currentMessages, message]),
+    (message: Message): void => setMessages(currentMessages => [...currentMessages, message]),
   ];
 }
 
@@ -27,9 +36,10 @@ function useMessenger(
   addMessage: Setter<Message>,
   setRequest: Setter<Request>,
   setInThread: Setter<boolean>,
-) {
+): void {
+  const messengerRef = useRef(messenger);
   useEffect(() => {
-    messenger.onMessage(message => {
+    messengerRef.current.onMessage(message => {
       if (isRequest(message)) {
         setRequest(message);
       } else if (isStatus(message)) {
@@ -38,10 +48,13 @@ function useMessenger(
         addMessage(message);
       }
     });
-  }, []);
+  }, [messengerRef, addMessage, setRequest, setInThread]);
 }
 
-function useCmdRunner(cmd: () => Observable<any>, addMessage: Setter<Message>) {
+function useCmdRunner(
+  cmd: () => Observable<unknown>,
+  addMessage: Setter<Message>,
+): number | undefined {
   const [done, setDone] = useState<number>();
   useEffect(() => {
     const time = Date.now();
@@ -55,12 +68,12 @@ function useCmdRunner(cmd: () => Observable<any>, addMessage: Setter<Message>) {
         }),
       )
       .finally(() => setDone(Date.now() - time));
-  }, []);
+  }, [addMessage, cmd]);
 
   return done;
 }
 
-export function useCmd(messenger: Messenger, cmd: () => Observable<any>) {
+export function useCmd(messenger: Messenger, cmd: () => Observable<unknown>): CmdStatus {
   const [messages, addMessage] = useMessages();
   const [request, setRequest] = useState<Request>();
   const [isInThread, setInThread] = useState<boolean>(false);
@@ -68,7 +81,7 @@ export function useCmd(messenger: Messenger, cmd: () => Observable<any>) {
   useMessenger(messenger, addMessage, setRequest, setInThread);
   const executionTime = useCmdRunner(cmd, addMessage);
 
-  const sendRequestData = (value: any) => {
+  const sendRequestData = (value: string): void => {
     if (request) {
       addMessage({
         detail: value,

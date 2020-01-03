@@ -168,10 +168,6 @@ export interface GitLog {
   total: number;
 }
 
-export interface GitStatus {
-  files: string[];
-}
-
 interface CommitIssue {
   issue: string;
   raw: 'string';

@@ -48,6 +48,7 @@ export interface Status extends Message {
 }
 
 export interface SelectRequest extends Request {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: Array<{ label: string; value: any }>;
 }
 
@@ -57,6 +58,7 @@ export interface SelectRequest extends Request {
  */
 export class Messenger {
   private subject: Subject<Message | Request | Status>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private requestSubject: Subject<any>;
 
   constructor() {

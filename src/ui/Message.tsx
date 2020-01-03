@@ -13,7 +13,7 @@ const MESSAGE_TYPE_TO_EMOJI: Record<MessageProps['message']['type'], string | un
   status: undefined,
 };
 
-export function Message({ isDone = false, isLast = false, message }: MessageProps) {
+export function Message({ isDone = false, isLast = false, message }: MessageProps): JSX.Element {
   return (
     <Box>
       <Box marginRight={2}>

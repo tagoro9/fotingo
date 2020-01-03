@@ -27,7 +27,7 @@ export interface MessagesProps {
 
 export interface FotingoProps {
   args: FotingoArguments;
-  cmd: () => Observable<any>;
+  cmd: () => Observable<unknown>;
   isDebugging: boolean;
   messenger: Messenger;
 }

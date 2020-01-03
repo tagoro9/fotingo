@@ -8,7 +8,7 @@ function isSelectRequest(props: RequestProps): props is SelectRequestProps {
   return 'options' in props.request;
 }
 
-export function InputRequest(props: RequestProps) {
+export function InputRequest(props: RequestProps): JSX.Element {
   if (isSelectRequest(props)) {
     return <SelectRequest {...props} />;
   }

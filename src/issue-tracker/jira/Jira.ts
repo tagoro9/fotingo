@@ -47,7 +47,7 @@ import {
 
 const turnDownService = new Turndown();
 
-const getShortName = (name: string) => {
+const getShortName = (name: string): string => {
   if (name.match(/feature|story/i)) {
     return 'f';
   }
@@ -328,7 +328,7 @@ export class Jira implements Tracker {
     return issue.transitions.find(transition => statusRegex[status].test(transition.name));
   }
 
-  private mapError(e: NodeJS.ErrnoException | HttpError) {
+  private mapError(e: NodeJS.ErrnoException | HttpError): Observable<never> {
     if ('status' in e) {
       const code = e.status;
       const message =
