@@ -1,6 +1,6 @@
-import { compose, has, ifElse, pathEq, prop, tap as rTap } from 'ramda';
+import { compose, has, ifElse, pathEq, prop, tap as rTap, unapply, zipObj } from 'ramda';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { Git } from 'src/git/Git';
 import { Emoji, Messenger } from 'src/io/messenger';
@@ -84,7 +84,8 @@ export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<vo
       messenger.emit(`Setting ${issue.key} in progress`, Emoji.BOOKMARK);
     }),
     switchMap(setIssueInProgress(tracker)),
-    switchMap<Issue, Observable<void | Issue>>(
+    withLatestFrom(commandData$, unapply(zipObj(['issue', 'commandData']))),
+    switchMap<{ commandData: StartData; issue: Issue }, Observable<void | Issue>>(
       ifElse(shouldCreateBranch, compose(createBranch(git, messenger)), justReturnTheIssue),
     ),
   );
