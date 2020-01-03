@@ -38,6 +38,7 @@ function useMessenger(
   setInThread: Setter<boolean>,
 ): void {
   const messengerRef = useRef(messenger);
+  const addMessageRef = useRef(addMessage);
   useEffect(() => {
     messengerRef.current.onMessage(message => {
       if (isRequest(message)) {
@@ -45,10 +46,10 @@ function useMessenger(
       } else if (isStatus(message)) {
         setInThread(message.inThread);
       } else {
-        addMessage(message);
+        addMessageRef.current(message);
       }
     });
-  }, [messengerRef, addMessage, setRequest, setInThread]);
+  }, [addMessageRef, messenger, setRequest, setInThread]);
 }
 
 function useCmdRunner(
@@ -56,19 +57,20 @@ function useCmdRunner(
   addMessage: Setter<Message>,
 ): number | undefined {
   const [done, setDone] = useState<number>();
+  const addMessageRef = useRef(addMessage);
   useEffect(() => {
     const time = Date.now();
     cmd()
       .toPromise()
       .catch(e =>
-        addMessage({
+        addMessageRef.current({
           message: (e.code && ERROR_CODE_TO_MESSAGE[e.code]) || e.message,
           showSpinner: false,
           type: MessageType.ERROR,
         }),
       )
       .finally(() => setDone(Date.now() - time));
-  }, [addMessage, cmd]);
+  }, [addMessageRef, cmd]);
 
   return done;
 }
