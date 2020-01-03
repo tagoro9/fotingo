@@ -3,6 +3,15 @@ name: CI
 on: [push]
 
 jobs:
+  lint:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: linter
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          eslint_flags: './src ./test ./types --color --ext .ts --ext .tsx'
   test:
     runs-on: macos-latest
 
