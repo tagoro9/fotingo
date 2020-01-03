@@ -12,11 +12,9 @@ import {
   ifElse,
   isNil,
   join,
-  map, nthArg,
-  prop,
+  map, nthArg, prop,
   propEq,
-  props,
-  replace,
+  props, replace,
   trim,
   uniqBy,
 } from 'ramda';
