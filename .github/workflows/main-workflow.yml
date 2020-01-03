@@ -8,10 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: linter
-        uses: reviewdog/action-eslint@v1
+        uses: tagoro9/action-eslint@fix_eslint_args
         with:
           github_token: ${{ secrets.github_token }}
-          eslint_flags: './src ./test ./types --color --ext .ts --ext .tsx'
+          eslint_flags: ./src ./test ./types --ext .ts --ext .tsx
   test:
     runs-on: macos-latest
 
