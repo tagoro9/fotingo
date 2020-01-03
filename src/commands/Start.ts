@@ -1,6 +1,6 @@
-import { compose, has, ifElse, pathEq, prop, tap as rTap } from 'ramda';
+import { compose, has, ifElse, pathEq, prop, tap as rTap, unapply, zipObj } from 'ramda';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { Git } from 'src/git/Git';
 import { Emoji, Messenger } from 'src/io/messenger';
@@ -13,6 +13,11 @@ interface StartData {
     createBranch: boolean;
   };
   issue: CreateIssue | GetIssue;
+}
+
+interface IssueAndStartData {
+  commandData: StartData;
+  issue: Issue;
 }
 
 const getCommandData = (args: FotingoArguments): StartData => {
@@ -61,18 +66,22 @@ const setIssueInProgress = (tracker: Tracker): ((data: Issue) => Observable<Issu
 
 const shouldCreateBranch = pathEq(['commandData', 'git', 'createBranch'], true);
 
-const createBranch = (git: Git, messenger: Messenger): ((issue: Issue) => Promise<void>) =>
+const createBranch = (
+  git: Git,
+  messenger: Messenger,
+): ((data: IssueAndStartData) => Promise<void>) =>
   compose(
     git.createBranchAndStashChanges,
     rTap(name => {
       messenger.emit(`Creating branch ${name}`, Emoji.TADA);
     }),
     git.getBranchNameForIssue,
+    prop('issue'),
   );
 
-const justReturnTheIssue: (issue: Issue) => Observable<Issue> = compose((issue: Issue) =>
-  of(issue),
-);
+const justReturnTheIssue: (
+  data: IssueAndStartData,
+) => Observable<Issue> = compose((data: IssueAndStartData) => of(prop('issue', data)));
 
 export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<void | Issue> => {
   const tracker: Tracker = new Jira(args.config.jira, messenger);
@@ -84,7 +93,8 @@ export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<vo
       messenger.emit(`Setting ${issue.key} in progress`, Emoji.BOOKMARK);
     }),
     switchMap(setIssueInProgress(tracker)),
-    switchMap<Issue, Observable<void | Issue>>(
+    withLatestFrom(commandData$, unapply(zipObj(['issue', 'commandData']))),
+    switchMap<IssueAndStartData, Observable<void | Issue>>(
       ifElse(shouldCreateBranch, compose(createBranch(git, messenger)), justReturnTheIssue),
     ),
   );
