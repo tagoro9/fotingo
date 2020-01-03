@@ -6,14 +6,7 @@ export interface IssueTransition {
 }
 
 export interface JiraIssue {
-  id: number;
-  key: string;
-  sanitizedSummary: string;
-  renderedFields: {
-    description?: string;
-  };
   fields: {
-    summary: string;
     description?: string;
     issuetype: {
       name: string;
@@ -21,7 +14,14 @@ export interface JiraIssue {
     project: {
       id: string;
     };
+    summary: string;
   };
+  id: number;
+  key: string;
+  renderedFields: {
+    description?: string;
+  };
+  sanitizedSummary: string;
   transitions: IssueTransition[];
   url: string;
 }
@@ -42,19 +42,19 @@ export interface Project {
 export interface RawProject {
   id: number;
   issueTypes: Array<{ id: number; name: string }>;
-  name: string;
   key: string;
+  name: string;
 }
 
 export interface JiraRelease {
-  self: string;
-  id: string;
-  description: string;
-  name: string;
   archived: boolean;
-  released: boolean;
-  releaseDate: string;
-  userReleaseDate: string;
+  description: string;
+  id: string;
+  name: string;
   project: Project;
   projectId: number;
+  releaseDate: string;
+  released: boolean;
+  self: string;
+  userReleaseDate: string;
 }

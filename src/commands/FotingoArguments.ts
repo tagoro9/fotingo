@@ -3,11 +3,12 @@
  * can access the configuration in a typed manner
  */
 
+import { Config } from 'src/config';
 import { Arguments } from 'yargs';
 
-import { Config } from 'src/config';
-
 export interface FotingoArguments extends Arguments {
+  // Optional branch that most of commands have as option
+  branch?: string;
   // User configuration
   config: Config;
 }

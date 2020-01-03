@@ -10,22 +10,22 @@ export enum MessageType {
 }
 
 export enum RequestType {
-  TEXT = 'text',
   PASSWORD = 'password',
   SELECT = 'select',
+  TEXT = 'text',
 }
 
 export enum Emoji {
-  PENCIL = 'pencil2',
   ARROW_UP = 'arrow_up',
-  BUG = 'bug',
-  MAG_RIGHT = 'mag_right',
-  BOOKS = 'books',
   BOOKMARK = 'books',
+  BOOKS = 'books',
   BOOM = 'boom',
-  OK = 'ok_hand',
-  QUESTION = 'grey_question',
+  BUG = 'bug',
   LINK = 'link',
+  MAG_RIGHT = 'mag_right',
+  OK = 'ok_hand',
+  PENCIL = 'pencil2',
+  QUESTION = 'grey_question',
   SHIP = 'ship',
   TADA = 'tada',
 }
@@ -34,13 +34,13 @@ export interface Message {
   detail?: string;
   emoji?: Emoji;
   message: string;
-  type: MessageType;
   showSpinner: boolean;
+  type: MessageType;
 }
 
 export interface Request extends Message {
-  type: MessageType.REQUEST;
   requestType: RequestType;
+  type: MessageType.REQUEST;
 }
 
 export interface Status extends Message {
@@ -48,6 +48,7 @@ export interface Status extends Message {
 }
 
 export interface SelectRequest extends Request {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: Array<{ label: string; value: any }>;
 }
 
@@ -57,6 +58,7 @@ export interface SelectRequest extends Request {
  */
 export class Messenger {
   private subject: Subject<Message | Request | Status>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private requestSubject: Subject<any>;
 
   constructor() {
@@ -85,7 +87,7 @@ export class Messenger {
 
   public request<T>(
     question: string,
-    options: { options?: Array<{ label: string; value: T }>; hint?: string } = {},
+    options: { hint?: string; options?: Array<{ label: string; value: T }> } = {},
   ): Observable<T> {
     const request$ = this.requestSubject.pipe(take(1));
     this.subject.next({

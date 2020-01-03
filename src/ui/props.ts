@@ -3,8 +3,8 @@ import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { Message, Messenger, Request, SelectRequest } from 'src/io/messenger';
 
 export interface RequestProps {
-  request: Request | SelectRequest;
   onSubmit: (value: string) => void;
+  request: Request | SelectRequest;
 }
 
 export interface SelectRequestProps extends Omit<RequestProps, 'request'> {
@@ -27,7 +27,7 @@ export interface MessagesProps {
 
 export interface FotingoProps {
   args: FotingoArguments;
+  cmd: () => Observable<unknown>;
   isDebugging: boolean;
   messenger: Messenger;
-  cmd: () => Observable<any>;
 }

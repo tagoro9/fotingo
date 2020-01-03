@@ -5,11 +5,11 @@ import { Messenger } from './messenger';
 
 interface AskToSelectMatchData<T> {
   data: T[][];
+  getLabel: (item: T) => string;
+  getQuestion: (item: string) => string;
+  getValue: (item: T) => string;
   options: string[];
   useDefaults: boolean;
-  getQuestion: (item: string) => string;
-  getLabel: (item: T) => string;
-  getValue: (item: T) => string;
 }
 
 /**
@@ -29,22 +29,26 @@ export function maybeAskUserToSelectMatches<T>(
   messenger: Messenger,
 ): Promise<T[]> {
   return series(
-    data.map((matches, i) => () => {
+    data.map((matches, i) => (): Promise<T> => {
       if (!matches || matches.length === 0) {
         throw new Error(`No match found for ${options[i]}`);
       }
       if (useDefaults || matches.length === 1) {
         return Promise.resolve(matches[0]);
       }
-      return messenger
-        .request(getQuestion(options[i]), {
-          options: uniqBy<T, string>(getValue, take(5, matches)).map(r => ({
-            label: getLabel(r),
-            value: getValue(r),
-          })),
-        })
-        .toPromise()
-        .then((option: string) => matches.find(r => String(getValue(r)) === String(option)));
+      return (
+        messenger
+          .request(getQuestion(options[i]), {
+            options: uniqBy<T, string>(getValue, take(5, matches)).map(r => ({
+              label: getLabel(r),
+              value: getValue(r),
+            })),
+          })
+          .toPromise()
+          // We know the user selected an option
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          .then((option: string) => matches.find(r => String(getValue(r)) === String(option))!)
+      );
     }),
   );
 }

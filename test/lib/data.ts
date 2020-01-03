@@ -5,7 +5,10 @@ import { JiraIssue } from 'src/issue-tracker/jira/types';
 import { HttpResponse } from 'src/network/HttpClient';
 import { Issue, IssueType, User } from 'src/types';
 
-export default {
+/**
+ * Data factory used to generate mock data for the tests
+ */
+export const data = {
   createJiraIssue(): JiraIssue {
     const summary = faker.name.jobDescriptor();
     const sanitizedSummary = faker.helpers.slugify(summary);

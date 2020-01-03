@@ -12,14 +12,15 @@ import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { requiredConfigs, write } from 'src/config';
 import { enhanceConfigWithRuntimeArgs } from 'src/enhanceConfig';
 import { Messenger } from 'src/io/messenger';
+import { Config } from 'src/types';
 import { renderUi } from 'src/ui/ui';
 import { showHelp } from 'yargs';
 
 // TODO I think this is not needed anymore if using yargs handlers
 export enum CommandName {
-  START = 'start',
-  REVIEW = 'review',
   RELEASE = 'release',
+  REVIEW = 'review',
+  START = 'start',
 }
 
 const messenger = new Messenger();
@@ -35,7 +36,7 @@ const askForConfigs = (msg: Messenger, args: FotingoArguments): Observable<Fotin
     concatMap(requiredConfig =>
       msg.request(requiredConfig.request).pipe(map(value => [requiredConfig.path, value])),
     ),
-    reduce<[string[], string], any>((acc, val) => {
+    reduce<[string[], string], Partial<Config>>((acc, val) => {
       return R.set(R.lensPath(val[0]), val[1], acc);
     }, {}),
     map(write),
@@ -46,7 +47,7 @@ const askForConfigs = (msg: Messenger, args: FotingoArguments): Observable<Fotin
 /**
  * Create the fotingo config folder if it doesn't exist
  */
-const createConfigFolder = () => {
+const createConfigFolder: () => void = () => {
   const path = `${homedir()}/.fotingo_config`;
   if (!existsSync(path)) {
     mkdirSync(path);
@@ -58,7 +59,7 @@ export const run: (args: FotingoArguments) => void = R.ifElse(
   R.compose(
     R.converge(
       (
-        cmd: (args: FotingoArguments, messenger: Messenger) => Observable<any>,
+        cmd: (args: FotingoArguments, messenger: Messenger) => Observable<unknown>,
         args: FotingoArguments,
       ) => {
         renderUi({
@@ -73,11 +74,11 @@ export const run: (args: FotingoArguments) => void = R.ifElse(
       },
       [
         R.compose((path: string) => require(path).cmd, R.concat('./'), R.head, R.prop('_')),
-        (a: FotingoArguments) => ({
+        (a: FotingoArguments): FotingoArguments => ({
           ...a,
-          config: enhanceConfigWithRuntimeArgs(a.config, a as any),
+          config: enhanceConfigWithRuntimeArgs(a.config, a),
         }),
-        () => createConfigFolder(),
+        (): void => createConfigFolder(),
       ],
     ),
   ),

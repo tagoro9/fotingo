@@ -6,10 +6,10 @@ import * as tmp from 'tmp';
 import { promisify } from 'util';
 
 interface EditVirtualFileOptions {
-  // Initial content of the file
-  initialContent?: string;
   // Extension the file should have
   extension: string;
+  // Initial content of the file
+  initialContent?: string;
   // Prefix to include in the file name
   prefix: string;
 }
@@ -31,12 +31,12 @@ const writeFile = promisify(fs.writeFile);
  * @param fileOptions File creation options
  */
 function createTmpFile(fileOptions: tmp.FileOptions): Promise<FileData> {
-  return new Promise((res, reject) => {
+  return new Promise((resolve, reject) => {
     tmp.file(fileOptions, (err, ...args) => {
       if (err) {
         return reject(err);
       }
-      res(zipObj(['path', 'fd', 'clean'], args) as any);
+      resolve((zipObj(['path', 'fd', 'clean'], args) as unknown) as FileData);
     });
   });
 }
@@ -88,7 +88,7 @@ export async function getFileContent(
   const data = await Promise.all(
     folders
       .map(folder => resolve(root, folder, name))
-      .map(p => readFile(p, 'utf-8').catch(_ => undefined)),
+      .map(p => readFile(p, 'utf-8').catch(() => undefined)),
   );
   return data.filter(e => e !== undefined)[0];
 }

@@ -1,4 +1,5 @@
 import { mergeDeepLeft } from 'ramda';
+
 import { Config } from './config';
 import { Git } from './git/Git';
 import { GitErrorType } from './git/GitError';

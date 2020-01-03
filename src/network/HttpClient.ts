@@ -9,37 +9,37 @@ import { HttpErrorImpl } from './HttpError';
 const requestAsPromise = promisify(request);
 
 interface HttpClientOptions {
-  root: string;
   allowConcurrentRequests?: boolean;
-  slowDownRequests?: boolean;
   auth?: HttpBasicAuth;
+  root: string;
+  slowDownRequests?: boolean;
 }
 
 interface HttpBasicAuth {
-  user: string;
   pass: string;
+  user: string;
 }
 
 interface GetOptions {
-  qs?: object;
   auth?: HttpBasicAuth;
+  qs?: object;
 }
 
 interface PostOptions extends GetOptions {
-  form?: object;
   body?: object;
+  form?: object;
 }
 
 export interface HttpResponse<T> {
-  response: object;
   body: T;
+  response: object;
 }
 
 enum HttpMethod {
-  GET = 'get',
-  PUT = 'put',
-  POST = 'post',
   DELETE = 'delete',
+  GET = 'get',
+  POST = 'post',
+  PUT = 'put',
 }
 
 const headers = { accept: 'application/json' };
@@ -61,6 +61,7 @@ export class HttpClient {
   ) => Observable<HttpResponse<T>> = this.serverCall(HttpMethod.PUT);
 
   private options: HttpClientOptions;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private networkQueue: Promise<any>;
   private debug: Debugger;
 
@@ -71,7 +72,7 @@ export class HttpClient {
   }
 
   private serverCall<T>(method: HttpMethod): HttpMethodCall<T> {
-    return (path: string, options: PostOptions = {}) => {
+    return <T>(path: string, options: PostOptions = {}): Observable<HttpResponse<T>> => {
       const createRequest = (): Promise<HttpResponse<T>> => {
         this.debug(`Making ${method} call to ${path}`);
         return new Promise((resolve, reject) =>
@@ -119,7 +120,8 @@ export class HttpClient {
       }
 
       let outerResolve: (value: HttpResponse<T>) => void;
-      let outerReject: (reason: any) => void;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let outerReject: (reason?: any) => void;
 
       const promiseToReturn = new Promise<HttpResponse<T>>((resolve, reject) => {
         outerReject = reject;

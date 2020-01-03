@@ -1,4 +1,5 @@
 import 'jest';
+
 import { JiraErrorImpl } from 'src/issue-tracker/jira/JiraError';
 
 describe('JiraError', () => {

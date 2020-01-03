@@ -6,7 +6,7 @@ import { Messages } from './Messages';
 import { FotingoProps } from './props';
 import { useCmd } from './useCmd';
 
-export function Fotingo({ cmd, isDebugging, messenger }: FotingoProps) {
+export function Fotingo({ cmd, isDebugging, messenger }: FotingoProps): JSX.Element {
   const { executionTime, isDone, isInThread, messages, request, sendRequestData } = useCmd(
     messenger,
     cmd,

@@ -6,7 +6,7 @@ interface FooterProps {
   executionTime: number;
 }
 
-export function Footer({ executionTime }: FooterProps) {
+export function Footer({ executionTime }: FooterProps): JSX.Element {
   return (
     <Box marginTop={1}>
       <Box marginRight={2}>✨</Box>

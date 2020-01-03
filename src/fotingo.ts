@@ -4,15 +4,13 @@
  * Parse and run the command
  */
 
-// tslint:disable-next-line no-var-requires no-require-imports
 require('module-alias/register');
 
 import { compose, prop } from 'ramda';
-import { commandDir } from 'yargs';
-
 import { run } from 'src/commands/run';
 import { Config, read } from 'src/config';
 import { enhanceConfig } from 'src/enhanceConfig';
+import { commandDir } from 'yargs';
 
 enhanceConfig(read()).then((config: Config) => {
   const program = commandDir('./cli')

@@ -2,6 +2,7 @@ import React = require('react');
 
 import { Box, Static } from 'ink';
 import { init, last } from 'ramda';
+
 import { Message } from './Message';
 import { MessagesProps } from './props';
 
@@ -11,7 +12,7 @@ export function Messages({
   isInThread,
   isRequesting,
   messages,
-}: MessagesProps) {
+}: MessagesProps): JSX.Element {
   const pastMessages = init(messages);
   const lastMessage = last(messages);
   const staticMessages =

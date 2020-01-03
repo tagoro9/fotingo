@@ -1,6 +1,6 @@
+import * as GithubApi from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
 import {
-  __,
   compose,
   concat as rConcat,
   flatten,
@@ -23,8 +23,6 @@ import { Issue, Release, ReleaseNotes } from 'src/types';
 import { parseTemplate } from 'src/util/template';
 import { findMatches } from 'src/util/text';
 
-import * as GithubApi from '@octokit/rest';
-
 import { GithubConfig } from './Config';
 import { BranchInfo, Git } from './Git';
 import { JointRelease, Label, PullRequest, PullRequestData, Remote, Reviewer } from './Remote';
@@ -33,9 +31,9 @@ enum PR_TEMPLATE_KEYS {
   // TODO Use better names
   BRANCH_NAME = 'branchName',
   CHANGES = 'changes',
-  FIXED_ISSUES = 'fixedIssues',
-  FIRST_ISSUE_SUMMARY = 'firstIssue.summary',
   FIRST_ISSUE_DESCRIPTION = 'firstIssue.description',
+  FIRST_ISSUE_SUMMARY = 'firstIssue.summary',
+  FIXED_ISSUES = 'fixedIssues',
   FOTINGO_BANNER = 'fotingo.banner',
 }
 
@@ -151,7 +149,13 @@ export class Github implements Remote {
         owner: this.config.owner,
         repo: this.config.repo,
       })
-      .then(compose(map(pick(['id', 'name']) as (label: any) => Label), prop('data')));
+      .then(
+        compose<
+          GithubApi.Response<GithubApi.IssuesListLabelsForRepoResponse>,
+          GithubApi.IssuesListLabelsForRepoResponse,
+          Label[]
+        >(map(pick(['id', 'name'])), prop('data')),
+      );
   }
 
   @boundMethod
@@ -161,6 +165,7 @@ export class Github implements Remote {
       name: notes.title,
       owner: this.config.owner,
       repo: this.config.repo,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       tag_name: release.name,
     });
     return { release, remoteRelease: { id: ghRelease.data.id, url: ghRelease.data.html_url } };
@@ -227,6 +232,7 @@ export class Github implements Remote {
     return this.api.pulls
       .createReviewRequest({
         owner: this.config.owner,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         pull_number: pullRequest.number,
         repo: this.config.repo,
         reviewers: map(prop('login'), reviewers),
@@ -239,8 +245,12 @@ export class Github implements Remote {
    * @param labels Labels
    * @param pullRequest Pull request
    */
-  private async addLabels(labels: Label[], pullRequest: PullRequest) {
+  private async addLabels(
+    labels: Label[],
+    pullRequest: PullRequest,
+  ): ReturnType<GithubApi['issues']['addLabels']> {
     return this.api.issues.addLabels({
+      // eslint-disable-next-line @typescript-eslint/camelcase
       issue_number: pullRequest.number,
       labels: labels.map(label => label.name),
       owner: this.config.owner,
@@ -256,11 +266,13 @@ export class Github implements Remote {
     const groups = await Promise.all([
       this.api.repos.listCollaborators({
         owner: this.config.owner,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         per_page: 100,
         repo: this.config.repo,
       }),
       this.api.repos.listContributors({
         owner: this.config.owner,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         per_page: 100,
         repo: this.config.repo,
       }),

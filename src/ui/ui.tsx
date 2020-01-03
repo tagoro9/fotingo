@@ -1,9 +1,10 @@
 import React = require('react');
 
 import { render } from 'ink';
+
 import { Fotingo } from './Fotingo';
 import { FotingoProps } from './props';
 
-export function renderUi(props: FotingoProps) {
+export function renderUi(props: FotingoProps): void {
   render(<Fotingo {...props} />);
 }

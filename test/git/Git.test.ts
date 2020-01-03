@@ -1,12 +1,13 @@
 jest.mock('simple-git/promise');
 import 'jest';
+
 import * as simpleGitMock from 'simple-git/promise';
 import { Git } from 'src/git/Git';
 import { GitErrorType } from 'src/git/GitError';
 import { Messenger } from 'src/io/messenger';
-import data from 'test/lib/data';
+import { data } from 'test/lib/data';
 
-const simpleGit = (simpleGitMock as any) as jest.Mock;
+const simpleGit = (simpleGitMock as unknown) as jest.Mock;
 
 let git: Git;
 const issue = data.createIssue();
@@ -97,6 +98,7 @@ describe('Git', () => {
       try {
         await git.createBranchAndStashChanges(branchName);
       } catch (e) {
+        // eslint-disable-next-line jest/no-try-expect
         expect(e.code).toBe(GitErrorType.BRANCH_ALREADY_EXISTS);
       }
     });

@@ -4,10 +4,11 @@ import { homedir } from 'os';
 const path = `sqlite://${homedir()}/.fotingo_config/cache.sqlite3`;
 const keyv = new Keyv(path);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PromiseFunction = (...args: any[]) => Promise<any>;
 
 type Cacheable = (
-  target: any,
+  target: object,
   propertyKey: string | symbol,
   descriptor: TypedPropertyDescriptor<PromiseFunction>,
 ) => TypedPropertyDescriptor<PromiseFunction>;
@@ -24,11 +25,11 @@ export function cacheable({
   getPrefix,
   minutes,
 }: {
-  minutes: number;
   getPrefix?: () => string;
+  minutes: number;
 }): Cacheable {
   return (
-    target: any,
+    target: object,
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<PromiseFunction>,
   ): TypedPropertyDescriptor<PromiseFunction> => {

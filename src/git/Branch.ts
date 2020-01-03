@@ -3,7 +3,6 @@
  */
 import * as escapeStringRegexp from 'escape-string-regexp';
 import {
-  __,
   compose,
   converge,
   curryN,
@@ -23,6 +22,7 @@ import {
   toUpper,
 } from 'ramda';
 import { Issue, IssueType } from 'src/types';
+
 import { GitConfig } from './Config';
 
 const ISSUE_TYPE_TO_BRANCH_PREFIX: { [S in IssueType]: string } = {
@@ -34,9 +34,9 @@ const ISSUE_TYPE_TO_BRANCH_PREFIX: { [S in IssueType]: string } = {
 };
 
 enum TemplateKey {
-  ISSUE_SHORT_NAME = 'issue.shortName',
   ISSUE_KEY = 'issue.key',
   ISSUE_SANITIZED_SUMMARY = 'issue.sanitizedSummary',
+  ISSUE_SHORT_NAME = 'issue.shortName',
 }
 
 const TEMPLATE_KEYS_TO_MATCHERS: { [S in TemplateKey]: string } = {
@@ -91,11 +91,12 @@ export const getName = curryN(
  * @param config Git configuration
  */
 const buildBranchTemplateRegex = compose(
-  reduce(
-    (msg: string, [k, v]: [TemplateKey, string]) => replace(`{${k}}`, `${v}`, msg),
-    __ as any,
-    toPairs(TEMPLATE_KEYS_TO_MATCHERS),
-  ),
+  (branchTemplate: string) =>
+    reduce(
+      (msg: string, [k, v]: [TemplateKey, string]) => replace(`{${k}}`, `${v}`, msg),
+      branchTemplate,
+      toPairs(TEMPLATE_KEYS_TO_MATCHERS),
+    ),
   prop('branchTemplate'),
 );
 

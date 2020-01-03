@@ -13,18 +13,18 @@ import { FotingoArguments } from './FotingoArguments';
 import { getLocalChangesInformation } from './util';
 
 interface ReviewData {
+  branch?: string;
   labels?: string[];
   reviewers?: string[];
-  branch?: string;
-  useDefaults: boolean;
   tracker: {
     enabled: boolean;
   };
+  useDefaults: boolean;
 }
 
 interface Review {
-  pullRequest: PullRequest;
   comments: Issue[];
+  pullRequest: PullRequest;
 }
 
 const getCommandData = (args: FotingoArguments): ReviewData => {
@@ -39,7 +39,9 @@ const getCommandData = (args: FotingoArguments): ReviewData => {
   };
 };
 
-const updateIssues = (jira: Tracker, messenger: Messenger) => (pullRequest: PullRequest) =>
+const updateIssues = (jira: Tracker, messenger: Messenger) => (
+  pullRequest: PullRequest,
+): Observable<Review> =>
   (zip(
     of(pullRequest).pipe(
       tap(pr => {

@@ -18,7 +18,7 @@ export interface LocalChanges {
  */
 export const getLocalChangesInformation = (issueTracker: Tracker, messenger: Messenger) => (
   data: [BranchInfo, { issues?: string[]; tracker: { enabled: boolean } }] | BranchInfo,
-) => {
+): ObservableInput<LocalChanges> => {
   const [branchInfo, { issues = [], tracker }] = Array.isArray(data)
     ? data
     : [data, { issues: [], tracker: { enabled: true } }];

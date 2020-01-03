@@ -1,10 +1,11 @@
 import { Issue, Release, ReleaseNotes } from 'src/types';
+
 import { BranchInfo } from './Git';
 
 export interface Remote {
   createPullRequest: (data: PullRequestData) => Promise<PullRequest>;
-  getLabels: () => Promise<Label[]>;
   createRelease: (release: Release, notes: ReleaseNotes) => Promise<JointRelease>;
+  getLabels: () => Promise<Label[]>;
   getPossibleReviewers: () => Promise<Reviewer[]>;
 }
 
@@ -19,8 +20,9 @@ export interface Label {
 }
 
 export interface Reviewer {
-  name?: string;
+  email?: string;
   login: string;
+  name?: string;
 }
 
 export interface RemoteRelease {
@@ -29,9 +31,8 @@ export interface RemoteRelease {
 }
 
 export interface GitRemote {
-  owner: string;
   name: string;
-  repo: string;
+  owner: string;
 }
 
 // TODO Rename to CreatePullRequest
@@ -44,7 +45,7 @@ export interface PullRequestData {
 }
 
 export interface PullRequest {
+  issues: Issue[];
   number: number;
   url: string;
-  issues: Issue[];
 }

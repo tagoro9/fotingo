@@ -4,25 +4,25 @@ declare module 'conventional-commits-parser' {
   export interface CommitReference {
     action: string;
     issue: string;
-    raw: string;
     prefix: string;
+    raw: string;
   }
 
   interface CommitNote {
-    title: string;
     text: string;
+    title: string;
   }
 
   export interface ParsedCommit {
-    type?: string;
-    scope?: string;
-    subject?: string;
-    header: string;
     body?: string;
     footer?: string;
+    header: string;
+    mentions: string[];
     notes: string[];
     references: CommitReference[];
-    mentions: string[];
+    scope?: string;
+    subject?: string;
+    type?: string;
   }
 
   export function sync(message: string): ParsedCommit;
