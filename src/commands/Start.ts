@@ -15,6 +15,11 @@ interface StartData {
   issue: CreateIssue | GetIssue;
 }
 
+interface IssueAndStartData {
+  commandData: StartData;
+  issue: Issue;
+}
+
 const getCommandData = (args: FotingoArguments): StartData => {
   return {
     git: {
@@ -61,18 +66,22 @@ const setIssueInProgress = (tracker: Tracker): ((data: Issue) => Observable<Issu
 
 const shouldCreateBranch = pathEq(['commandData', 'git', 'createBranch'], true);
 
-const createBranch = (git: Git, messenger: Messenger): ((issue: Issue) => Promise<void>) =>
+const createBranch = (
+  git: Git,
+  messenger: Messenger,
+): ((data: IssueAndStartData) => Promise<void>) =>
   compose(
     git.createBranchAndStashChanges,
     rTap(name => {
       messenger.emit(`Creating branch ${name}`, Emoji.TADA);
     }),
     git.getBranchNameForIssue,
+    prop('issue'),
   );
 
-const justReturnTheIssue: (issue: Issue) => Observable<Issue> = compose((issue: Issue) =>
-  of(issue),
-);
+const justReturnTheIssue: (
+  data: IssueAndStartData,
+) => Observable<Issue> = compose((data: IssueAndStartData) => of(prop('issue', data)));
 
 export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<void | Issue> => {
   const tracker: Tracker = new Jira(args.config.jira, messenger);
@@ -85,7 +94,7 @@ export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<vo
     }),
     switchMap(setIssueInProgress(tracker)),
     withLatestFrom(commandData$, unapply(zipObj(['issue', 'commandData']))),
-    switchMap<{ commandData: StartData; issue: Issue }, Observable<void | Issue>>(
+    switchMap<IssueAndStartData, Observable<void | Issue>>(
       ifElse(shouldCreateBranch, compose(createBranch(git, messenger)), justReturnTheIssue),
     ),
   );
