@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   lint:
@@ -12,6 +12,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           eslint_flags: ./src ./test ./types --ext .ts --ext .tsx
+          reporter: github-check
   test:
     runs-on: macos-latest
 
