@@ -106,7 +106,7 @@
     "faker": "^4.1.0",
     "husky": "^4.0.0",
     "jest": "^24.9.0",
-    "lint-staged": "^9.5.0",
+    "lint-staged": "^10.0.4",
     "madge": "^3.4.4",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
