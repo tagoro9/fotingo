@@ -67,7 +67,7 @@ If you just want to create a pull request without connecting to Jira at all, you
 
 ### release
 
-`fotingo release -i <issue-id> -i <another-issue-id> <release-name>` - Creates a Github and Jira release
+`fotingo release <release-name> -i <issue-id> -i <another-issue-id>` - Creates a Github and Jira release
 
 - Create a Jira version with the indicated name (e.g. `1.0.5`)
 - Set the issues fix version to the newly created version
