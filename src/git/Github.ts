@@ -43,6 +43,11 @@ export class Github implements Remote {
   private git: Git;
   private messenger: Messenger;
 
+  // Promise used to allow promise chaining and only run one
+  // Github API call at a time to avoid exceeding the quotas
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private apiCallsQueue: Promise<any> = Promise.resolve();
+
   constructor(config: GithubConfig, messenger: Messenger, git: Git) {
     this.messenger = messenger;
     this.api = new Octokit({
@@ -144,18 +149,20 @@ export class Github implements Remote {
     minutes: ONE_DAY,
   })
   public getLabels(): Promise<Label[]> {
-    return this.api.issues
-      .listLabelsForRepo({
-        owner: this.config.owner,
-        repo: this.config.repo,
-      })
-      .then(
-        compose<
-          Octokit.Response<Octokit.IssuesListLabelsForRepoResponse>,
-          Octokit.IssuesListLabelsForRepoResponse,
-          Label[]
-        >(map(pick(['id', 'name'])), prop('data')),
-      );
+    return this.queueCall(() =>
+      this.api.issues
+        .listLabelsForRepo({
+          owner: this.config.owner,
+          repo: this.config.repo,
+        })
+        .then(
+          compose<
+            Octokit.Response<Octokit.IssuesListLabelsForRepoResponse>,
+            Octokit.IssuesListLabelsForRepoResponse,
+            Label[]
+          >(map(pick(['id', 'name'])), prop('data')),
+        ),
+    );
   }
 
   @boundMethod
@@ -190,12 +197,35 @@ export class Github implements Remote {
   }
 
   /**
+   * Enqueue a call to the Github API (or literally any promise)
+   * so it is not executed until the previous call finished
+   * @param call Call to queue
+   */
+  private queueCall<T>(call: () => Promise<T>): Promise<T> {
+    let outerResolve: (value: T) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let outerReject: (reason?: any) => void;
+    const promiseToReturn = new Promise<T>((resolve, reject) => {
+      outerReject = reject;
+      outerResolve = resolve;
+    });
+
+    // TODO Test that errors don't break the queue
+    this.apiCallsQueue = this.apiCallsQueue.then(() => {
+      return call()
+        .then(outerResolve)
+        .catch(outerReject);
+    });
+    return promiseToReturn;
+  }
+
+  /**
    * Get the information for a user given their user name
    * @param username User name
    */
   @boundMethod
   private getUserInfo(username: string): Promise<Octokit.UsersGetByUsernameResponse> {
-    return this.api.users.getByUsername({ username }).then(prop('data'));
+    return this.queueCall(() => this.api.users.getByUsername({ username }).then(prop('data')));
   }
 
   /**
@@ -264,18 +294,22 @@ export class Github implements Remote {
    */
   private async listContributors(): Promise<Array<{ login: string }>> {
     const groups = await Promise.all([
-      this.api.repos.listCollaborators({
-        owner: this.config.owner,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        per_page: 100,
-        repo: this.config.repo,
-      }),
-      this.api.repos.listContributors({
-        owner: this.config.owner,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        per_page: 100,
-        repo: this.config.repo,
-      }),
+      this.queueCall(() =>
+        this.api.repos.listCollaborators({
+          owner: this.config.owner,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          per_page: 100,
+          repo: this.config.repo,
+        }),
+      ),
+      this.queueCall(() =>
+        this.api.repos.listContributors({
+          owner: this.config.owner,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          per_page: 100,
+          repo: this.config.repo,
+        }),
+      ),
     ]);
 
     return compose(
