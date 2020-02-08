@@ -1,8 +1,9 @@
 import { concat, prop, zipObj } from 'ramda';
-import { merge, ObservableInput, of, zip } from 'rxjs';
-import { map, reduce } from 'rxjs/operators';
+import { empty, merge, ObservableInput, of, zip } from 'rxjs';
+import { catchError, map, reduce } from 'rxjs/operators';
 import { BranchInfo } from 'src/git/Git';
 import { Emoji, Messenger } from 'src/io/messenger';
+import { JiraError } from 'src/issue-tracker/jira/JiraError';
 import { Tracker } from 'src/issue-tracker/Tracker';
 import { Issue } from 'src/types';
 
@@ -37,7 +38,16 @@ export const getLocalChangesInformation = (issueTracker: Tracker, messenger: Mes
     merge(
       ...allIssues
         .filter(issue => issueTracker.isValidIssueName(issue))
-        .map(issue => issueTracker.getIssue(issue)),
+        .map(issue =>
+          issueTracker.getIssue(issue).pipe(
+            catchError((e: JiraError) => {
+              if (e.code === 404) {
+                return empty();
+              }
+              throw e;
+            }),
+          ),
+        ),
     ).pipe(reduce<Issue, Issue[]>((acc, val) => acc.concat(val), [])),
   ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown) as ObservableInput<LocalChanges>;
 };
