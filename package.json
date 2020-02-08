@@ -105,14 +105,14 @@
     "eslint-plugin-typescript-sort-keys": "^0.5.0",
     "faker": "^4.1.0",
     "husky": "^4.0.0",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "lint-staged": "^10.0.7",
     "madge": "^3.4.4",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
     "serialize-error": "^5.0.0",
     "standard-version": "^7.0.0",
-    "ts-jest": "^24.2.0",
+    "ts-jest": "^25.2.0",
     "typescript": "^3.6.4"
   },
   "engines": {
