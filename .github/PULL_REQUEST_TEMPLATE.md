@@ -1,6 +1,8 @@
-{firstIssueSummary}
+{summary}
 
 **Description**
+
+{description}
 
 {fixedIssues}
 
