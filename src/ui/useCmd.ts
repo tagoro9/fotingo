@@ -55,22 +55,26 @@ function useMessenger(
 function useCmdRunner(
   cmd: () => Observable<unknown>,
   addMessage: Setter<Message>,
+  setInThread: Setter<boolean>,
 ): number | undefined {
   const [done, setDone] = useState<number>();
   const addMessageRef = useRef(addMessage);
+  const setInThreadRef = useRef(setInThread);
   useEffect(() => {
     const time = Date.now();
     cmd()
       .toPromise()
-      .catch(e =>
+      .catch(e => {
+        // Exit thread mode if there was an error so it shows up
+        setInThreadRef.current(false);
         addMessageRef.current({
           message: (e.code && ERROR_CODE_TO_MESSAGE[e.code]) || e.message,
           showSpinner: false,
           type: MessageType.ERROR,
-        }),
-      )
+        });
+      })
       .finally(() => setDone(Date.now() - time));
-  }, [addMessageRef, cmd]);
+  }, [addMessageRef, cmd, setInThreadRef]);
 
   return done;
 }
@@ -81,7 +85,7 @@ export function useCmd(messenger: Messenger, cmd: () => Observable<unknown>): Cm
   const [isInThread, setInThread] = useState<boolean>(false);
 
   useMessenger(messenger, addMessage, setRequest, setInThread);
-  const executionTime = useCmdRunner(cmd, addMessage);
+  const executionTime = useCmdRunner(cmd, addMessage, setInThread);
 
   const sendRequestData = (value: string): void => {
     if (request) {
