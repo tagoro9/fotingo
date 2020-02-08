@@ -28,13 +28,12 @@ import { BranchInfo, Git } from './Git';
 import { JointRelease, Label, PullRequest, PullRequestData, Remote, Reviewer } from './Remote';
 
 enum PR_TEMPLATE_KEYS {
-  // TODO Use better names
   BRANCH_NAME = 'branchName',
   CHANGES = 'changes',
-  FIRST_ISSUE_DESCRIPTION = 'firstIssue.description',
-  FIRST_ISSUE_SUMMARY = 'firstIssue.summary',
+  DESCRIPTION = 'summary',
   FIXED_ISSUES = 'fixedIssues',
   FOTINGO_BANNER = 'fotingo.banner',
+  SUMMARY = 'description',
 }
 
 export class Github implements Remote {
@@ -342,6 +341,7 @@ export class Github implements Remote {
    * @param issues List of issues
    */
   private getPullRequestContentFromTemplate(branchInfo: BranchInfo, issues: Issue[]): string {
+    const data = this.getPrSummaryAndDescription(branchInfo, issues);
     return parseTemplate<PR_TEMPLATE_KEYS>({
       data: {
         [PR_TEMPLATE_KEYS.CHANGES]: branchInfo.commits
@@ -353,14 +353,40 @@ export class Github implements Remote {
             ? rConcat('Fixes ', issues.map(issue => `[#${issue.key}](${issue.url})`).join(', '))
             : '',
         [PR_TEMPLATE_KEYS.BRANCH_NAME]: branchInfo.name,
-        [PR_TEMPLATE_KEYS.FIRST_ISSUE_SUMMARY]:
-          issues.length > 0 ? take(60, `${issues[0].key}: ${issues[0].summary}`) : branchInfo.name,
-        [PR_TEMPLATE_KEYS.FIRST_ISSUE_DESCRIPTION]:
-          issues.length > 0 ? replace(/\r\n/g, '\n', issues[0].description || '') : '',
+        [PR_TEMPLATE_KEYS.DESCRIPTION]: data.summary,
+        [PR_TEMPLATE_KEYS.SUMMARY]: data.description,
         [PR_TEMPLATE_KEYS.FOTINGO_BANNER]:
           '🚀 PR created with [fotingo](https://github.com/tagoro9/fotingo)',
       },
       template: this.config.pullRequestTemplate,
     });
+  }
+
+  /**
+   * Extract the summary and description for the pull request
+   * @param branchInfo Branch info
+   * @param issues List of issues
+   */
+  private getPrSummaryAndDescription(
+    branchInfo: BranchInfo,
+    issues: Issue[],
+  ): { description: string; summary: string } {
+    if (issues.length > 0) {
+      return {
+        description: take(60, `${issues[0].key}: ${issues[0].summary}`),
+        summary: replace(/\r\n/g, '\n', issues[0].description || ''),
+      };
+    }
+    if (branchInfo.commits.length > 0) {
+      const firstCommit = branchInfo.commits[branchInfo.commits.length - 1];
+      return {
+        description: firstCommit.body || '',
+        summary: firstCommit.header,
+      };
+    }
+    return {
+      description: '',
+      summary: branchInfo.name,
+    };
   }
 }
