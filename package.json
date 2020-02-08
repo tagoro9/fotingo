@@ -24,8 +24,7 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "author": "Victor Mora",
