@@ -45,6 +45,7 @@ export class Github implements Remote {
 
   // Promise used to allow promise chaining and only run one
   // Github API call at a time to avoid exceeding the quotas
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private apiCallsQueue: Promise<any> = Promise.resolve();
 
   constructor(config: GithubConfig, messenger: Messenger, git: Git) {
@@ -202,6 +203,7 @@ export class Github implements Remote {
    */
   private queueCall<T>(call: () => Promise<T>): Promise<T> {
     let outerResolve: (value: T) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let outerReject: (reason?: any) => void;
     const promiseToReturn = new Promise<T>((resolve, reject) => {
       outerReject = reject;
