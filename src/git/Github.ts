@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
+import * as escapeHtml from 'escape-html';
 import {
   compose,
   concat as rConcat,
@@ -7,6 +8,7 @@ import {
   head,
   join,
   map,
+  mapObjIndexed,
   pick,
   prop,
   replace,
@@ -343,7 +345,7 @@ export class Github implements Remote {
   private getPullRequestContentFromTemplate(branchInfo: BranchInfo, issues: Issue[]): string {
     const data = this.getPrSummaryAndDescription(branchInfo, issues);
     return parseTemplate<PR_TEMPLATE_KEYS>({
-      data: {
+      data: mapObjIndexed(escapeHtml, {
         [PR_TEMPLATE_KEYS.CHANGES]: branchInfo.commits
           .reverse()
           .map(c => `* ${c.header}`)
@@ -357,7 +359,7 @@ export class Github implements Remote {
         [PR_TEMPLATE_KEYS.SUMMARY]: data.description,
         [PR_TEMPLATE_KEYS.FOTINGO_BANNER]:
           '🚀 PR created with [fotingo](https://github.com/tagoro9/fotingo)',
-      },
+      }),
       template: this.config.pullRequestTemplate,
     });
   }
