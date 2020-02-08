@@ -137,8 +137,8 @@ You can use `{` and `}` to interpolate the desired data. This is the data that i
   - `branchName`. Name of the branch
   - `changes`. List of the commit messages in the PR
   - `fixedIssues`. Text with the comma separated list of the fixed issues
-  - `firstIssue.summary`. Summary of the first Jira issue in the PR
-  - `firstIssue.description`. Description of the first Jira issue in the PR
+  - `summary`. Pull request summary. Summary of the first Jira issue in the PR or first commit header if there are no fixed issues
+  - `description`. Description of the first Jira issue in the PR or first commit body if there are no fixed issues
   - `fotingo.banner`. Banner that indicates that the release was created with fotingo
 
 - `git.branchTemplate`
