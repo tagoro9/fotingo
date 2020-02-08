@@ -50,6 +50,7 @@
     "cosmiconfig": "^6.0.0",
     "debug": "^4.1.1",
     "editor": "^1.0.0",
+    "escape-html": "^1.0.3",
     "escape-string-regexp": "^2.0.0",
     "fuse.js": "^3.4.5",
     "git-url-parse": "^11.1.2",
@@ -75,6 +76,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.4",
+    "@types/escape-html": "^0.0.20",
     "@types/escape-string-regexp": "^2.0.1",
     "@types/faker": "^4.1.5",
     "@types/git-url-parse": "^9.0.0",
