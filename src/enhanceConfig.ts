@@ -29,7 +29,7 @@ const defaultConfig: DefaultConfig = {
   github: {
     baseBranch: 'master',
     pullRequestTemplate:
-      '{firstIssue.summary}\n\n**Description**\n\n{firstIssue.description}\n\n{fixedIssues}\n\n**Changes**\n\n{changes}\n\n{fotingo.banner}',
+      '{summary}\n\n**Description**\n\n{description}\n\n{fixedIssues}\n\n**Changes**\n\n{changes}\n\n{fotingo.banner}',
   },
   release: {
     template:
