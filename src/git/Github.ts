@@ -1,4 +1,4 @@
-import * as GithubApi from '@octokit/rest';
+import { Octokit } from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
 import {
   compose,
@@ -38,14 +38,14 @@ enum PR_TEMPLATE_KEYS {
 }
 
 export class Github implements Remote {
-  private api: GithubApi;
+  private api: Octokit;
   private config: GithubConfig;
   private git: Git;
   private messenger: Messenger;
 
   constructor(config: GithubConfig, messenger: Messenger, git: Git) {
     this.messenger = messenger;
-    this.api = new GithubApi({
+    this.api = new Octokit({
       auth: `token ${config.authToken}`,
     });
     this.git = git;
@@ -151,8 +151,8 @@ export class Github implements Remote {
       })
       .then(
         compose<
-          GithubApi.Response<GithubApi.IssuesListLabelsForRepoResponse>,
-          GithubApi.IssuesListLabelsForRepoResponse,
+          Octokit.Response<Octokit.IssuesListLabelsForRepoResponse>,
+          Octokit.IssuesListLabelsForRepoResponse,
           Label[]
         >(map(pick(['id', 'name'])), prop('data')),
       );
@@ -181,7 +181,7 @@ export class Github implements Remote {
     return this.listContributors()
       .then(
         compose(
-          (promises: Array<Promise<GithubApi.UsersGetByUsernameResponse>>) => Promise.all(promises),
+          (promises: Array<Promise<Octokit.UsersGetByUsernameResponse>>) => Promise.all(promises),
           map(this.getUserInfo),
           map<{ login: string }, string>(prop('login')),
         ),
@@ -194,7 +194,7 @@ export class Github implements Remote {
    * @param username User name
    */
   @boundMethod
-  private getUserInfo(username: string): Promise<GithubApi.UsersGetByUsernameResponse> {
+  private getUserInfo(username: string): Promise<Octokit.UsersGetByUsernameResponse> {
     return this.api.users.getByUsername({ username }).then(prop('data'));
   }
 
@@ -206,7 +206,7 @@ export class Github implements Remote {
   private async submitPullRequest(
     content: string,
     pullRequestHead: string,
-  ): Promise<GithubApi.PullsCreateResponse> {
+  ): Promise<Octokit.PullsCreateResponse> {
     const baseBranch = await this.git.findBaseBranch(true);
     return this.api.pulls
       .create({
@@ -228,7 +228,7 @@ export class Github implements Remote {
   private async addReviewers(
     reviewers: Reviewer[],
     pullRequest: PullRequest,
-  ): Promise<GithubApi.PullsCreateReviewRequestResponse> {
+  ): Promise<Octokit.PullsCreateReviewRequestResponse> {
     return this.api.pulls
       .createReviewRequest({
         owner: this.config.owner,
@@ -248,7 +248,7 @@ export class Github implements Remote {
   private async addLabels(
     labels: Label[],
     pullRequest: PullRequest,
-  ): ReturnType<GithubApi['issues']['addLabels']> {
+  ): ReturnType<Octokit['issues']['addLabels']> {
     return this.api.issues.addLabels({
       // eslint-disable-next-line @typescript-eslint/camelcase
       issue_number: pullRequest.number,
