@@ -355,8 +355,8 @@ export class Github implements Remote {
             ? rConcat('Fixes ', issues.map(issue => `[#${issue.key}](${issue.url})`).join(', '))
             : '',
         [PR_TEMPLATE_KEYS.BRANCH_NAME]: branchInfo.name,
-        [PR_TEMPLATE_KEYS.DESCRIPTION]: data.summary,
-        [PR_TEMPLATE_KEYS.SUMMARY]: data.description,
+        [PR_TEMPLATE_KEYS.DESCRIPTION]: data.description,
+        [PR_TEMPLATE_KEYS.SUMMARY]: data.summary,
         [PR_TEMPLATE_KEYS.FOTINGO_BANNER]:
           '🚀 PR created with [fotingo](https://github.com/tagoro9/fotingo)',
       }),
