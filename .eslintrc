@@ -11,7 +11,9 @@
     "simple-import-sort",
     "sonarjs",
     "sort-destructure-keys",
-    "typescript-sort-keys"
+    "typescript-sort-keys",
+    "unicorn",
+    "node"
   ],
   "extends": [
     "eslint:recommended",
@@ -23,8 +25,17 @@
     "plugin:import/warnings",
     "plugin:import/typescript",
     "plugin:jest/recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:unicorn/recommended",
+    "plugin:node/recommended"
   ],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "modules": true
+    }
+  },
   "rules": {
     "import/default": "off",
     "import/named": "off",
@@ -38,7 +49,16 @@
     "simple-import-sort/sort": "error",
     "sort-destructure-keys/sort-destructure-keys": "error",
     "typescript-sort-keys/interface": "error",
-    "typescript-sort-keys/string-enum": "error"
+    "typescript-sort-keys/string-enum": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "node/no-unsupported-features/es-syntax": "off",
+    "node/no-missing-import": "off",
+    "unicorn/filename-case": "off"
   },
   "settings": {
     "import/parsers": {
