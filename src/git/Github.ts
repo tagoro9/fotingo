@@ -32,10 +32,10 @@ import { JointRelease, Label, PullRequest, PullRequestData, Remote, Reviewer } f
 enum PR_TEMPLATE_KEYS {
   BRANCH_NAME = 'branchName',
   CHANGES = 'changes',
-  DESCRIPTION = 'summary',
+  DESCRIPTION = 'description',
   FIXED_ISSUES = 'fixedIssues',
   FOTINGO_BANNER = 'fotingo.banner',
-  SUMMARY = 'description',
+  SUMMARY = 'summary',
 }
 
 export class Github implements Remote {
