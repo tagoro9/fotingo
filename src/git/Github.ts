@@ -375,8 +375,8 @@ export class Github implements Remote {
   ): { description: string; summary: string } {
     if (issues.length > 0) {
       return {
-        description: take(60, `${issues[0].key}: ${issues[0].summary}`),
-        summary: replace(/\r\n/g, '\n', issues[0].description || ''),
+        description: replace(/\r\n/g, '\n', issues[0].description || ''),
+        summary: take(60, `${issues[0].key}: ${issues[0].summary}`),
       };
     }
     if (branchInfo.commits.length > 0) {
