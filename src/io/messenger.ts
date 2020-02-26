@@ -48,6 +48,7 @@ export interface Status extends Message {
 }
 
 export interface SelectRequest extends Request {
+  allowTextSearch?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: Array<{ label: string; value: any }>;
 }
@@ -87,7 +88,11 @@ export class Messenger {
 
   public request<T>(
     question: string,
-    options: { hint?: string; options?: Array<{ label: string; value: T }> } = {},
+    options: {
+      allowTextSearch?: boolean;
+      hint?: string;
+      options?: Array<{ label: string; value: T }>;
+    } = {},
   ): Observable<T> {
     const request$ = this.requestSubject.pipe(take(1));
     this.subject.next({
@@ -96,7 +101,9 @@ export class Messenger {
       requestType: options.options ? RequestType.SELECT : RequestType.TEXT,
       showSpinner: false,
       type: MessageType.REQUEST,
-      ...(options.options ? { options: options.options } : {}),
+      ...(options.options
+        ? { allowTextSearch: options.allowTextSearch, options: options.options }
+        : {}),
     });
     return request$;
   }
