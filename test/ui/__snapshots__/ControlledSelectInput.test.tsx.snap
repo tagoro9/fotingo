@@ -7,5 +7,5 @@ exports[`<ControlledSelectInput /> renders the list of items 1`] = `
 
 exports[`<ControlledSelectInput /> renders the selected item with a pointer 1`] = `
 "  Item 1
-[34m❯[39m [34mItem 2[39m"
+❯ Item 2"
 `;
