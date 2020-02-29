@@ -14,7 +14,7 @@
     "prepare": "yarn run build",
     "release": "yarn run build && standard-version",
     "watch": "tsc -w -p ./",
-    "test": "jest",
+    "test": "FORCE_COLOR=0 jest",
     "circular-dependencies": "madge --circular src"
   },
   "husky": {
