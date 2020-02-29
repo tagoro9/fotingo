@@ -26,7 +26,7 @@ export function cacheable({
   minutes,
 }: {
   getPrefix?: () => string;
-  minutes: number;
+  minutes?: number;
 }): Cacheable {
   return (
     target: object,
@@ -48,7 +48,7 @@ export function cacheable({
         return Promise.resolve(cachedValue);
       }
       const result = await method.call(this, ...args);
-      await keyv.set(key, result, minutes * 60 * 1000);
+      await keyv.set(key, result, minutes ? minutes * 60 * 1000 : undefined);
       return Promise.resolve(result);
     };
 
