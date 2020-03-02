@@ -13,6 +13,8 @@ type Cacheable = (
   descriptor: TypedPropertyDescriptor<PromiseFunction>,
 ) => TypedPropertyDescriptor<PromiseFunction>;
 
+const isCacheDisabled = process.env.FOTINGO_DISABLE_CACHE !== undefined;
+
 /**
  * Decorator that caches the output of the decorated function
  * in an external data source (SQLite DB) so it can be
@@ -41,6 +43,9 @@ export function cacheable({
     }
 
     const cachedFn: PromiseFunction = async function(...args) {
+      if (isCacheDisabled) {
+        return method.call(this, ...args);
+      }
       const prefix = getPrefix ? getPrefix.call(this) : '';
       const key = `${prefix}${target.constructor.name}_${String(propertyKey)}`;
       const cachedValue = await keyv.get(key);
