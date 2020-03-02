@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 import { Observable, Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { mapTo, take } from 'rxjs/operators';
 
 export enum MessageType {
   ERROR = 'error',
@@ -84,6 +84,13 @@ export class Messenger {
 
   public send(data: string): void {
     this.requestSubject.next(data);
+  }
+
+  /**
+   * Pause execution until the user hits enter
+   */
+  public pause(): Observable<void> {
+    return this.request('Press enter to continue', { options: [] }).pipe(mapTo(undefined));
   }
 
   public request<T>(
