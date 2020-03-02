@@ -18,7 +18,6 @@ export function SelectRequest({ onSubmit, request }: SelectRequestProps): JSX.El
   const [items, setItems] = useState(request.options);
   const [selectedIndex, setSelectedIndex] = useState(0);
   useInput((_, key) => {
-    console.error('There was an input');
     if (key.downArrow) {
       setSelectedIndex((selectedIndex + 1) % items.length);
     }
