@@ -22,7 +22,7 @@ export function SelectRequest({ onSubmit, request }: SelectRequestProps): JSX.El
       setSelectedIndex((selectedIndex + 1) % items.length);
     }
     if (key.return) {
-      onSubmit(items[selectedIndex].value);
+      onSubmit(items[selectedIndex]?.value);
     }
     if (key.upArrow) {
       setSelectedIndex((((selectedIndex - 1) % items.length) + items.length) % items.length);
