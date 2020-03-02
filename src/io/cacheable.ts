@@ -46,8 +46,9 @@ export function cacheable({
       if (isCacheDisabled) {
         return method.call(this, ...args);
       }
-      const prefix = getPrefix ? getPrefix.call(this) : '';
-      const key = `${prefix}${target.constructor.name}_${String(propertyKey)}`;
+      const prefix = getPrefix ? getPrefix.call(this, ...args) : '';
+      const keyArgs = args.length > 0 ? `_${args.map(val => JSON.stringify(val)).join('_')}` : '';
+      const key = `${prefix}${target.constructor.name}_${String(propertyKey)}${keyArgs}`;
       const cachedValue = await keyv.get(key);
       if (cachedValue) {
         return Promise.resolve(cachedValue);
