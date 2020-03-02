@@ -4,7 +4,6 @@ import * as escapeHtml from 'escape-html';
 import {
   compose,
   concat as rConcat,
-  flatten,
   head,
   join,
   map,
@@ -43,6 +42,13 @@ export class Github implements Remote {
   private config: GithubConfig;
   private git: Git;
   private messenger: Messenger;
+
+  /**
+   * Get the prefix to use in the methods that need to be cached at the repository level
+   */
+  static getCachePrefix(this: Github): string {
+    return `${this.config.owner}_${this.config.repo}`;
+  }
 
   // Promise used to allow promise chaining and only run one
   // Github API call at a time to avoid exceeding the quotas
@@ -144,9 +150,7 @@ export class Github implements Remote {
   }
 
   @cacheable({
-    getPrefix(this: Github) {
-      return `${this.config.owner}_${this.config.repo}`;
-    },
+    getPrefix: Github.getCachePrefix,
     minutes: ONE_DAY,
   })
   public getLabels(): Promise<Label[]> {
@@ -225,6 +229,9 @@ export class Github implements Remote {
    * @param username User name
    */
   @boundMethod
+  @cacheable({
+    minutes: 10 * ONE_DAY,
+  })
   private getUserInfo(username: string): Promise<Octokit.UsersGetByUsernameResponse> {
     return this.queueCall(() => this.api.users.getByUsername({ username }).then(prop('data')));
   }
@@ -290,35 +297,25 @@ export class Github implements Remote {
   }
 
   /**
-   * Get the list of contributors for the current repo. It includes the list of contributors
-   * and collaborators
+   * Get the list of collaborators for the current repo
    */
+  @cacheable({
+    getPrefix: Github.getCachePrefix,
+    minutes: 5 * ONE_DAY,
+  })
   private async listContributors(): Promise<Array<{ login: string }>> {
-    const groups = await Promise.all([
-      this.queueCall(() =>
-        this.api.repos.listCollaborators({
-          owner: this.config.owner,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          per_page: 100,
-          repo: this.config.repo,
-        }),
-      ),
-      this.queueCall(() =>
-        this.api.repos.listContributors({
-          owner: this.config.owner,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          per_page: 100,
-          repo: this.config.repo,
-        }),
-      ),
-    ]);
-
+    const collaborators = await this.queueCall(() =>
+      this.api.repos.listCollaborators({
+        owner: this.config.owner,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        per_page: 100,
+        repo: this.config.repo,
+      }),
+    );
     return compose(
-      data => flatten<Array<Array<{ readonly login: string }>>>(data),
-      map<{ data: Array<{ login: string }> }, Array<{ login: string }>>(
-        compose(map<{ login: string }, { login: string }>(pick(['login'])), prop('data')),
-      ),
-    )(groups);
+      map<{ login: string }, { login: string }>(pick(['login'])),
+      prop('data'),
+    )(collaborators);
   }
 
   /**
