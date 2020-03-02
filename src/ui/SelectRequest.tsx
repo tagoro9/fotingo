@@ -18,12 +18,11 @@ export function SelectRequest({ onSubmit, request }: SelectRequestProps): JSX.El
   const [items, setItems] = useState(request.options);
   const [selectedIndex, setSelectedIndex] = useState(0);
   useInput((_, key) => {
-    console.error('There was an input');
     if (key.downArrow) {
       setSelectedIndex((selectedIndex + 1) % items.length);
     }
     if (key.return) {
-      onSubmit(items[selectedIndex].value);
+      onSubmit(items[selectedIndex]?.value);
     }
     if (key.upArrow) {
       setSelectedIndex((((selectedIndex - 1) % items.length) + items.length) % items.length);
