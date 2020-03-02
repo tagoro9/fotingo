@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
+import { Debugger } from 'debug';
 import * as escapeHtml from 'escape-html';
 import {
   compose,
@@ -17,6 +18,7 @@ import {
   uniqBy,
 } from 'ramda';
 import { cacheable, ONE_DAY } from 'src/io/cacheable';
+import { debug } from 'src/io/debug';
 import { editVirtualFile } from 'src/io/file';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Messenger } from 'src/io/messenger';
@@ -38,10 +40,11 @@ enum PR_TEMPLATE_KEYS {
 }
 
 export class Github implements Remote {
-  private api: Octokit;
-  private config: GithubConfig;
-  private git: Git;
-  private messenger: Messenger;
+  private readonly api: Octokit;
+  private readonly config: GithubConfig;
+  private readonly git: Git;
+  private readonly messenger: Messenger;
+  private readonly debug: Debugger;
 
   /**
    * Get the prefix to use in the methods that need to be cached at the repository level
@@ -62,6 +65,7 @@ export class Github implements Remote {
     });
     this.git = git;
     this.config = config;
+    this.debug = debug.extend('github');
   }
 
   @boundMethod
@@ -72,6 +76,7 @@ export class Github implements Remote {
     issues,
     useDefaults,
   }: PullRequestData): Promise<PullRequest> {
+    this.debug(`Creating pull requests with args: %o`, { labels, reviewers, useDefaults });
     this.messenger.emit('Creating pull request');
     const prExists = await this.doesPullRequestExistForBranch(branchInfo.name);
     if (prExists) {
@@ -122,6 +127,7 @@ export class Github implements Remote {
 
     const initialPrContent = this.getPullRequestContentFromTemplate(branchInfo, issues);
     this.messenger.inThread(true);
+    await this.pause();
     const prContent = useDefaults
       ? initialPrContent
       : await editVirtualFile({
@@ -154,19 +160,21 @@ export class Github implements Remote {
     minutes: ONE_DAY,
   })
   public getLabels(): Promise<Label[]> {
-    return this.queueCall(() =>
-      this.api.issues
-        .listLabelsForRepo({
-          owner: this.config.owner,
-          repo: this.config.repo,
-        })
-        .then(
-          compose<
-            Octokit.Response<Octokit.IssuesListLabelsForRepoResponse>,
-            Octokit.IssuesListLabelsForRepoResponse,
-            Label[]
-          >(map(pick(['id', 'name'])), prop('data')),
-        ),
+    return this.queueCall(
+      () =>
+        this.api.issues
+          .listLabelsForRepo({
+            owner: this.config.owner,
+            repo: this.config.repo,
+          })
+          .then(
+            compose<
+              Octokit.Response<Octokit.IssuesListLabelsForRepoResponse>,
+              Octokit.IssuesListLabelsForRepoResponse,
+              Label[]
+            >(map(pick(['id', 'name'])), prop('data')),
+          ),
+      `Getting labels for ${this.config.owner}/${this.config.repo}`,
     );
   }
 
@@ -205,8 +213,11 @@ export class Github implements Remote {
    * Enqueue a call to the Github API (or literally any promise)
    * so it is not executed until the previous call finished
    * @param call Call to queue
+   * @param action Action that is being enqueued
+   * @param actionArgs Extra parameters to include in the debug message
    */
-  private queueCall<T>(call: () => Promise<T>): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private queueCall<T>(call: () => Promise<T>, action?: string, ...actionArgs: any[]): Promise<T> {
     let outerResolve: (value: T) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let outerReject: (reason?: any) => void;
@@ -217,8 +228,16 @@ export class Github implements Remote {
 
     // TODO Test that errors don't break the queue
     this.apiCallsQueue = this.apiCallsQueue.then(() => {
+      if (action) {
+        this.debug(action, ...actionArgs);
+      }
       return call()
-        .then(outerResolve)
+        .then((...resolvedValues) => {
+          if (action) {
+            this.debug(`Done with: ${action}`, ...actionArgs);
+          }
+          outerResolve(...resolvedValues);
+        })
         .catch(outerReject);
     });
     return promiseToReturn;
@@ -233,7 +252,11 @@ export class Github implements Remote {
     minutes: 10 * ONE_DAY,
   })
   private getUserInfo(username: string): Promise<Octokit.UsersGetByUsernameResponse> {
-    return this.queueCall(() => this.api.users.getByUsername({ username }).then(prop('data')));
+    return this.queueCall(
+      () => this.api.users.getByUsername({ username }).then(prop('data')),
+      `Getting user info for %s`,
+      username,
+    );
   }
 
   /**
@@ -304,13 +327,15 @@ export class Github implements Remote {
     minutes: 5 * ONE_DAY,
   })
   private async listContributors(): Promise<Array<{ login: string }>> {
-    const collaborators = await this.queueCall(() =>
-      this.api.repos.listCollaborators({
-        owner: this.config.owner,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        per_page: 100,
-        repo: this.config.repo,
-      }),
+    const collaborators = await this.queueCall(
+      () =>
+        this.api.repos.listCollaborators({
+          owner: this.config.owner,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          per_page: 100,
+          repo: this.config.repo,
+        }),
+      `Getting contributors for ${this.config.owner}/${this.config.repo}`,
     );
     return compose(
       map<{ login: string }, { login: string }>(pick(['login'])),
@@ -324,13 +349,18 @@ export class Github implements Remote {
    */
   private doesPullRequestExistForBranch(branchName: string): Promise<boolean> {
     // TODO check if this works with forks
-    return this.api.pulls
-      .list({
-        head: `${this.config.owner}:${branchName}`,
-        owner: this.config.owner,
-        repo: this.config.repo,
-      })
-      .then(response => response.data.length > 0);
+    return this.queueCall(
+      () =>
+        this.api.pulls
+          .list({
+            head: `${this.config.owner}:${branchName}`,
+            owner: this.config.owner,
+            repo: this.config.repo,
+          })
+          .then(response => response.data.length > 0),
+      'Checking if there is a PR for %s',
+      branchName,
+    );
   }
 
   /**
@@ -359,6 +389,15 @@ export class Github implements Remote {
       }),
       template: this.config.pullRequestTemplate,
     });
+  }
+
+  /**
+   * Pause the execution if we are debugging Github
+   */
+  private async pause(): Promise<void> {
+    if (this.debug.enabled) {
+      await this.messenger.pause().toPromise();
+    }
   }
 
   /**
