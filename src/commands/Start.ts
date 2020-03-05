@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { Git } from 'src/git/Git';
+import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
 import { Jira } from 'src/issue-tracker/jira/Jira';
 import { Tracker } from 'src/issue-tracker/Tracker';
@@ -12,7 +13,7 @@ interface StartData {
   git: {
     createBranch: boolean;
   };
-  issue: CreateIssue | GetIssue;
+  issue?: CreateIssue | GetIssue;
 }
 
 interface IssueAndStartData {
@@ -21,19 +22,23 @@ interface IssueAndStartData {
 }
 
 const getCommandData = (args: FotingoArguments): StartData => {
+  let issue = undefined;
+  if (args.create) {
+    issue = {
+      description: args.description as string,
+      labels: args.labels as string[],
+      project: args.project as string,
+      title: args.issueTitle as string,
+      type: args.type as IssueType,
+    };
+  } else if (args.issueId) {
+    issue = { id: args.issueId as string };
+  }
   return {
     git: {
       createBranch: !args.noBranchIssue,
     },
-    issue: args.create
-      ? {
-          description: args.description as string,
-          labels: args.labels as string[],
-          project: args.project as string,
-          title: args.issueTitle as string,
-          type: args.type as IssueType,
-        }
-      : { id: args.issueId as string },
+    issue,
   };
 };
 
@@ -58,7 +63,9 @@ const getOrCreateIssue = (
         }),
       ),
     ),
-    prop('issue'),
+    // TODO We know issue will be defined here, but probably there is a better way
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    (data: StartData) => data.issue!,
   );
 
 const setIssueInProgress = (tracker: Tracker): ((data: Issue) => Observable<Issue>) =>
@@ -79,6 +86,40 @@ const createBranch = (
     prop('issue'),
   );
 
+/**
+ * Create a closure to ask the user to select an issue to start working
+ * with (from the issues that are assigned to them). This only happens
+ * if no issue was provided in the CLI
+ * @param tracker Issue tracker
+ * @param messenger Messenger
+ */
+const maybeAskUserToSelectIssue = (tracker: Tracker, messenger: Messenger) => (
+  data: StartData,
+): Observable<StartData> => {
+  if (data.issue === undefined) {
+    return tracker.getCurrentUserOpenIssues().pipe(
+      switchMap((issues: Issue[]) =>
+        maybeAskUserToSelectMatches<Issue>(
+          {
+            allowTextSearch: true,
+            data: [issues],
+            getLabel: issue => `${issue.key} (${issue.type}) - ${issue.summary}`,
+            getQuestion: () => 'What ticket would you like to start working on?',
+            getValue: issue => issue.key,
+            limit: 15,
+            useDefaults: false,
+          },
+          messenger,
+        ),
+      ),
+      map(issues => issues[0]),
+      map(issue => ({ ...data, issue: { id: issue.key } })),
+    );
+  } else {
+    return of(data);
+  }
+};
+
 const justReturnTheIssue: (
   data: IssueAndStartData,
 ) => Observable<Issue> = compose((data: IssueAndStartData) => of(prop('issue', data)));
@@ -88,6 +129,8 @@ export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<vo
   const git: Git = new Git(args.config.git, messenger);
   const commandData$ = of(args).pipe(map(getCommandData));
   return commandData$.pipe(
+    // TODO We already have the issue here, it should not be fetched in the next cmd call again
+    switchMap(maybeAskUserToSelectIssue(tracker, messenger)),
     switchMap(getOrCreateIssue(tracker, messenger)),
     tap((issue: Issue) => {
       messenger.emit(`Setting ${issue.key} in progress`, Emoji.BOOKMARK);
