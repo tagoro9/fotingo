@@ -16,7 +16,7 @@ import {
   uniq,
   when,
 } from 'ramda';
-import { from, merge, Observable, of, throwError } from 'rxjs';
+import { from, merge, Observable, of, throwError, zip } from 'rxjs';
 import { catchError, map, mergeMap, reduce, switchMap } from 'rxjs/operators';
 import { Messenger } from 'src/io/messenger';
 import { Tracker } from 'src/issue-tracker/Tracker';
@@ -40,6 +40,7 @@ import {
   IssueTransition,
   IssueTypeData,
   JiraIssue,
+  JiraIssueStatus,
   JiraRelease,
   Project,
   RawProject,
@@ -160,7 +161,7 @@ export class Jira implements Tracker {
             body: {
               fields: {
                 assignee: {
-                  name: user.key,
+                  name: user.accountId,
                 },
                 description: data.description,
                 issuetype: {
@@ -267,6 +268,31 @@ export class Jira implements Tracker {
       );
   }
 
+  public getCurrentUserOpenIssues(): Observable<Issue[]> {
+    return zip(this.getCurrentUser(), this.getStatuses()).pipe(
+      switchMap(([user, status]: [User, Partial<Record<IssueStatus, JiraIssueStatus>>]) => {
+        return this.client.get<{ issues: JiraIssue[] }>(`/search`, {
+          qs: {
+            expand: 'transitions, renderedFields',
+            jql: `assignee=${user.accountId} AND status IN (${[
+              IssueStatus.BACKLOG,
+              IssueStatus.SELECTED_FOR_DEVELOPMENT,
+            ]
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              .map(s => (status[s] ? `'${status[s]!.name}'` : undefined))
+              .filter(s => s !== undefined)
+              .join(',')}) ORDER BY CREATED DESC`,
+          },
+        });
+      }),
+      map(prop('body')),
+      map(data => {
+        return rMap(this.convertIssue, data.issues).filter(i => i.type.toString() !== 'Epic');
+      }),
+      catchError(this.mapError),
+    );
+  }
+
   @boundMethod
   private getJiraIssue(id: string): Observable<JiraIssue> {
     return this.client
@@ -319,6 +345,22 @@ export class Jira implements Tracker {
           ),
         ),
       );
+  }
+
+  // TODO This should be cacheable, but cacheable does not understand observables yer
+  private getStatuses(): Observable<Partial<Record<IssueStatus, JiraIssueStatus>>> {
+    return this.client.get<JiraIssueStatus[]>('/status').pipe(
+      map(prop('body')),
+      map((status: JiraIssueStatus[]) => {
+        return Object.entries(IssueStatus).reduce(
+          (acc, [key, val]) => ({
+            ...acc,
+            [key]: status.find(t => statusRegex[val].test(t.name)),
+          }),
+          {},
+        );
+      }),
+    );
   }
 
   private getTransitionForStatus(
