@@ -4,7 +4,7 @@
 
 import { Argv } from 'yargs';
 
-export const command = 'start <issue-id|issue-title>';
+export const command = 'start [issue-id|issue-title]';
 export const describe = 'Start working in a new issue';
 export function builder(yargs: Argv): Argv {
   return yargs
