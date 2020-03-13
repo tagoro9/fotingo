@@ -73,7 +73,13 @@ export const run: (args: FotingoArguments) => void = R.ifElse(
         });
       },
       [
-        R.compose((path: string) => require(path).cmd, R.concat('./'), R.head, R.prop('_')),
+        R.compose(
+          (path: string) => require(path).cmd,
+          R.concat('./'),
+          R.replace(/^./, R.toUpper),
+          R.head,
+          R.prop('_'),
+        ),
         (a: FotingoArguments): FotingoArguments => ({
           ...a,
           config: enhanceConfigWithRuntimeArgs(a.config, a),
