@@ -112,7 +112,7 @@
     "jest": "^25.1.0",
     "lint-staged": "^10.0.7",
     "madge": "^3.4.4",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.1",
     "rimraf": "^3.0.0",
     "serialize-error": "^6.0.0",
     "standard-version": "^7.0.0",
