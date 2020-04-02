@@ -45,7 +45,7 @@
     "@keyv/sqlite": "^2.0.1",
     "@octokit/rest": "^16.25.1",
     "autobind-decorator": "^2.4.0",
-    "chalk": "^3.0.0",
+    "chalk": "^4.0.0",
     "conventional-commits-parser": "^3.0.1",
     "cosmiconfig": "^6.0.0",
     "debug": "^4.1.1",
