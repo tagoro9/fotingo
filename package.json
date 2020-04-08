@@ -51,7 +51,7 @@
     "debug": "^4.1.1",
     "editor": "^1.0.0",
     "escape-html": "^1.0.3",
-    "escape-string-regexp": "^2.0.0",
+    "escape-string-regexp": "^3.0.0",
     "figures": "^3.2.0",
     "fuse.js": "^3.4.5",
     "git-url-parse": "^11.1.2",
