@@ -2451,9 +2451,9 @@ eslint-plugin-sonarjs@^0.5.0:
   integrity sha512-XW5MnzlRjhXpIdbULC/qAdJYHWw3rRLws/DyawdlPU/IdVr9AmRK1r2LaCvabwKOAW2XYYSo3kDX58E4MrB7PQ==
 
 eslint-plugin-sort-destructure-keys@^1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-sort-destructure-keys/-/eslint-plugin-sort-destructure-keys-1.3.3.tgz#f8396d1665d1eb70b0ace4972a70dcabadc8d29e"
-  integrity sha512-+ZI4IsCQe1Xfdxo4kTEtXwfHoOOvhV1u6nG7s8Ot1s6KSYlAlx0bnwXSsLgqGzROYkpSAy/a5JI9pPN3pJQXpw==
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-sort-destructure-keys/-/eslint-plugin-sort-destructure-keys-1.3.4.tgz#0e564bec2bcada21a64f1be9eb243b80a880149b"
+  integrity sha512-isdXh0LxE6WEUkkmNtpXX0W95wqCyYI6PY3w9aEcrWQ2IqUzgHQpCfMcb8BD5Wlp2Y9i91kk2leDiII43C1kww==
   dependencies:
     natural-compare-lite "^1.4.0"
 
