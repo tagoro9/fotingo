@@ -86,7 +86,7 @@
     "@types/keyv": "^3.1.0",
     "@types/node": "^13.1.4",
     "@types/node-emoji": "^1.8.1",
-    "@types/ramda": "^0.26.33",
+    "@types/ramda": "^0.27.4",
     "@types/react": "^16.9.19",
     "@types/request": "^2.48.1",
     "@types/serialize-error": "^4.0.1",

@@ -816,12 +816,12 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/ramda@^0.26.33":
-  version "0.26.41"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.26.41.tgz#82161407b2ce9d17b0a19dba19fcaf00de4745a0"
-  integrity sha512-EROc+evnzHr4J/8nMBky98eP9eoWhaLtlig8JWJ12f/suvSplMH4jL6L/5X6z35PTjQRWUDf6kqI02x7bX4kHQ==
+"@types/ramda@^0.27.4":
+  version "0.27.4"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.27.4.tgz#816002c95e54cf3f3d5d7e8e014998450934d992"
+  integrity sha512-uE1OSffeRZoFjVah2RjR4pAyptzqN6T+fEsWr06biuUstR2IBIzKhSGwKxzISAoy4SC+JkJv8y99Hm3cJ/TDOQ==
   dependencies:
-    ts-toolbelt "^6.1.11"
+    ts-toolbelt "^6.3.3"
 
 "@types/react@^16.9.19":
   version "16.9.34"
@@ -6906,10 +6906,10 @@ ts-jest@^25.2.0:
     semver "6.x"
     yargs-parser "18.x"
 
-ts-toolbelt@^6.1.11:
-  version "6.1.13"
-  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.1.13.tgz#12935bc8b81052e5e21eaddd35372e71320d7ee3"
-  integrity sha512-xfhXvHNMg9i0+L9aALC5kU+/H1eaLl5yydMe6m+2Danmfw/sIX+ixF7JTP4XSQRaG+Xd1idoTmcCVI0QmqZllQ==
+ts-toolbelt@^6.3.3:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.5.1.tgz#1316b8c6522797c0bee289ca5deaa159af846231"
+  integrity sha512-zjnZ/vy1eUA0li3H0JXecl0R3jiP42snpLimsrppt9V3LLbM4NM4jMgjXQ4S67hvehq+r9CxpX4Wj6RnFRzReA==
 
 tsconfig-paths@^3.9.0:
   version "3.9.0"
