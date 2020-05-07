@@ -115,7 +115,7 @@
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
     "serialize-error": "^6.0.0",
-    "standard-version": "^7.0.0",
+    "standard-version": "^8.0.0",
     "ts-jest": "^25.2.0",
     "typescript": "^3.6.4"
   },
