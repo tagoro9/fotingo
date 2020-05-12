@@ -6179,9 +6179,9 @@ semver@7.1.1:
   integrity sha512-WfuG+fl6eh3eZ2qAf6goB7nhiCd7NPXhmyFxigB/TOkQyeLP8w8GsVehvtGNtnNmyboz4TgeK40B1Kbql/8c5A==
 
 serialize-error@*, serialize-error@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-7.0.0.tgz#10a00c5ad7806d7b84619a5599ea443bdf1bb0d8"
-  integrity sha512-xDtzsA4FzjMMfA6bhhbnkXPYS/CA34+TjO9YKf4nas10Akb3HWYfr6nKwHYxV0xO5Qr9dWb3OmohojEfWuhoUg==
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-7.0.1.tgz#f1360b0447f61ffb483ec4157c737fab7d778e18"
+  integrity sha512-8I8TjW5KMOKsZQTvoxjuSIa7foAwPWGOts+6o7sgjz41/qMD9VQHEDxi6PBvK2l0MXUmqZyNpUK+T2tQaaElvw==
   dependencies:
     type-fest "^0.13.1"
 
