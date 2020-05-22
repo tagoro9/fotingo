@@ -19,6 +19,7 @@
   },
   "husky": {
     "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
   },
@@ -75,6 +76,8 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@types/debug": "^4.1.4",
     "@types/escape-html": "^0.0.20",
     "@types/escape-string-regexp": "^2.0.1",
