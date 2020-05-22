@@ -9,7 +9,7 @@ A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on
 Run:
 
 ```bash
-npm install -g fotingo@next
+npm install -g fotingo
 ```
 
 ## Requirements
