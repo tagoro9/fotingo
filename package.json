@@ -6,13 +6,15 @@
   "bin": {
     "fotingo": "./lib/fotingo.js"
   },
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "clean": "rimraf lib",
     "coverage": "jest --coverage --silent",
     "build": "yarn run clean && tsc -p ./ && chmod 755 ./lib/fotingo.js",
     "lint": "eslint ./src ./test ./types --color --ext .ts --ext .tsx",
-    "prepare": "yarn run build",
-    "release": "yarn run build && standard-version",
+    "prepare": "yarn clean && yarn run build",
     "watch": "tsc -w -p ./",
     "test": "FORCE_COLOR=0 jest",
     "circular-dependencies": "madge --circular src"
@@ -78,6 +80,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "@semantic-release/git": "^9.0.0",
     "@types/debug": "^4.1.4",
     "@types/escape-html": "^0.0.20",
     "@types/escape-string-regexp": "^2.0.1",
@@ -117,14 +120,13 @@
     "madge": "^3.4.4",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
+    "semantic-release": "^17.0.7",
     "serialize-error": "^7.0.0",
-    "standard-version": "^8.0.0",
     "ts-jest": "^25.2.0",
     "typescript": "^3.6.4"
   },
   "engines": {
-    "node": ">=6.3.1",
-    "yarn": ">=0.19.1"
+    "node": ">=10.0.0"
   },
   "_moduleAliases": {
     "src": "./lib"
