@@ -85,3 +85,4 @@ jspm_packages
 .fotingo
 /lib/
 .vscode/
+pack/
