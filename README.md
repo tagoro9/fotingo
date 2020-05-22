@@ -33,7 +33,9 @@ The command line supports three main commands: `start`, `review` and `release`.
 
 ### start
 
-`fotingo start <issue-id>` - Start working on a new issue.
+`fotingo start [issue-id]` - Start working on a new issue.
+
+If no `issue-id` is specified, then fotingo will display a list with all the tickets assigned to you.
 
 - Assign the issue to current user
 - Clean current working directory (stash it)
