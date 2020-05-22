@@ -33,17 +33,3 @@ jobs:
         name: Run tests
         env:
           CI: true
-      - uses: coverallsapp/github-action@v1.0.1
-        name: Coverage
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          parallel: true
-  coverage:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: coverallsapp/github-action@v1.0.1
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          parallel-finished: true
