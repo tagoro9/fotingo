@@ -9,12 +9,6 @@ A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on
 Run:
 
 ```bash
-yarn global add fotingo@next
-```
-
-Or if you prefer npm:
-
-```bash
 npm install -g fotingo@next
 ```
 
@@ -33,7 +27,9 @@ The command line supports three main commands: `start`, `review` and `release`.
 
 ### start
 
-`fotingo start <issue-id>` - Start working on a new issue.
+`fotingo start [issue-id]` - Start working on a new issue.
+
+If no `issue-id` is specified, then fotingo will display a list with all the tickets assigned to you.
 
 - Assign the issue to current user
 - Clean current working directory (stash it)

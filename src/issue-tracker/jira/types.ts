@@ -26,6 +26,12 @@ export interface JiraIssue {
   url: string;
 }
 
+export interface JiraIssueStatus {
+  description: string;
+  id: string;
+  name: string;
+}
+
 export interface IssueTypeData {
   id: number;
   name: string;

@@ -67,12 +67,12 @@ export const data = {
   },
   createJiraUser(): User {
     return {
+      accountId: faker.internet.userName(),
       groups: {
         items: {
           name: 'asda',
         },
       },
-      key: faker.internet.userName(),
     };
   },
   createHttpResponse<T>(body: T): HttpResponse<T> {

@@ -76,12 +76,12 @@ export enum IssueStatus {
 
 // TODO This should be Jira only
 export interface User {
+  accountId: string;
   groups: {
     items: {
       name: string;
     };
   };
-  key: string;
 }
 
 export interface Issue {

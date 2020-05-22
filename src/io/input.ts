@@ -4,11 +4,13 @@ import { series } from 'src/util/promise';
 import { Messenger } from './messenger';
 
 interface AskToSelectMatchData<T> {
+  allowTextSearch?: boolean;
   data: T[][];
   getLabel: (item: T) => string;
   getQuestion: (item: string) => string;
   getValue: (item: T) => string;
-  options: string[];
+  limit?: number;
+  options?: string[];
   useDefaults: boolean;
 }
 
@@ -25,7 +27,16 @@ interface AskToSelectMatchData<T> {
  * @param options.useDefaults Flag indicating if the useDefaults options was set
  */
 export function maybeAskUserToSelectMatches<T>(
-  { data, getLabel, getQuestion, getValue, options, useDefaults }: AskToSelectMatchData<T>,
+  {
+    allowTextSearch = false,
+    data,
+    getLabel,
+    getQuestion,
+    getValue,
+    limit = 5,
+    options = [],
+    useDefaults,
+  }: AskToSelectMatchData<T>,
   messenger: Messenger,
 ): Promise<T[]> {
   return series(
@@ -39,10 +50,13 @@ export function maybeAskUserToSelectMatches<T>(
       return (
         messenger
           .request(getQuestion(options[i]), {
-            options: uniqBy<T, string>(getValue, take(5, matches)).map(r => ({
-              label: getLabel(r),
-              value: getValue(r),
-            })),
+            allowTextSearch,
+            options: uniqBy<T, string>(getValue, limit > 0 ? take(limit, matches) : matches).map(
+              r => ({
+                label: getLabel(r),
+                value: getValue(r),
+              }),
+            ),
           })
           .toPromise()
           // We know the user selected an option

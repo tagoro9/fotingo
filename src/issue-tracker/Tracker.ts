@@ -16,6 +16,7 @@ export interface Tracker {
   createIssueForCurrentUser: (data: CreateIssue) => Observable<Issue>;
   createRelease: (data: CreateRelease) => Observable<Release>;
   getCurrentUser: () => Observable<User>;
+  getCurrentUserOpenIssues: () => Observable<Issue[]>;
   getIssue: (issueId: string) => Observable<Issue>;
   isValidIssueName: (name: string) => boolean;
   setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
