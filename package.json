@@ -99,6 +99,7 @@
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@octokit/types": "^5.0.0",
+    "@jest/globals": "^26.0.1",
     "@semantic-release/git": "^9.0.0",
     "@types/debug": "^4.1.4",
     "@types/escape-html": "^1.0.0",
@@ -136,7 +137,7 @@
     "faker": "^4.1.0",
     "husky": "^4.0.0",
     "ink-testing-library": "^2.0.0",
-    "jest": "^25.1.0",
+    "jest": "^26.0.1",
     "lint-staged": "^10.0.7",
     "madge": "^3.4.4",
     "oclif": "^1.15.2",
@@ -144,10 +145,10 @@
     "rimraf": "^3.0.0",
     "semantic-release": "^17.0.7",
     "serialize-error": "^7.0.0",
-    "ts-jest": "^25.2.0",
+    "ts-jest": "^26.0.0",
     "tsc-watch": "^4.2.9",
     "tscpaths": "^0.0.9",
-    "typescript": "^3.6.4"
+    "typescript": "^3.9.3"
   },
   "engines": {
     "node": ">=10.0.0"
