@@ -32,7 +32,7 @@ import {
   Release,
   User,
 } from 'src/types';
-import * as Turndown from 'turndown';
+import Turndown from 'turndown';
 
 import { JiraConfig } from './Config';
 import { JiraErrorImpl } from './JiraError';

@@ -1,4 +1,4 @@
-import * as humanize from 'humanize-duration';
+import humanize from 'humanize-duration';
 import { Box } from 'ink';
 import React = require('react');
 
