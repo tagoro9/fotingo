@@ -1,6 +1,6 @@
 import debug, { Debugger } from 'debug';
 import * as R from 'ramda';
-import * as request from 'request';
+import request from 'request';
 import { from, Observable } from 'rxjs';
 import { promisify } from 'util';
 

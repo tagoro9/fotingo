@@ -1,4 +1,4 @@
-import * as Fuse from 'fuse.js';
+import Fuse from 'fuse.js';
 import { compose, converge, filter, flip, invoker, isEmpty, map, not, nthArg } from 'ramda';
 
 // Base types that we allow to search for

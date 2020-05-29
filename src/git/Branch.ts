@@ -1,7 +1,7 @@
 /**
  * Git branch handler
  */
-import * as escapeStringRegexp from 'escape-string-regexp';
+import escapeStringRegexp from 'escape-string-regexp';
 import {
   compose,
   converge,

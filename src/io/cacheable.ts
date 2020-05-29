@@ -1,4 +1,4 @@
-import * as Keyv from 'keyv';
+import Keyv from 'keyv';
 import { homedir } from 'os';
 
 const path = `sqlite://${homedir()}/.fotingo_config/cache.sqlite3`;

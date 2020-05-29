@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
 import { Debugger } from 'debug';
-import * as escapeHtml from 'escape-html';
+import escapeHtml from 'escape-html';
 import {
   compose,
   concat as rConcat,

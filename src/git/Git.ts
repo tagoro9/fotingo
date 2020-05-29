@@ -1,7 +1,7 @@
 import { boundMethod } from 'autobind-decorator';
 import { CommitReference, ParsedCommit, sync } from 'conventional-commits-parser';
 import createDebugger from 'debug';
-import * as gitUrlParse from 'git-url-parse';
+import gitUrlParse from 'git-url-parse';
 import {
   always,
   compose,
@@ -21,7 +21,7 @@ import {
   trim,
   uniqBy,
 } from 'ramda';
-import * as simpleGit from 'simple-git/promise';
+import simpleGit from 'simple-git/promise';
 import { BranchSummary, ListLogSummary, StatusResult } from 'simple-git/typings/response';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
