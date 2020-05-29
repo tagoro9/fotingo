@@ -13,11 +13,7 @@ import { enhanceConfig } from 'src/enhanceConfig';
 import { commandDir } from 'yargs';
 
 enhanceConfig(read()).then((config: Config) => {
-  const program = commandDir('./cli')
-    .demandCommand()
-    .config({ config })
-    .completion()
-    .help();
+  const program = commandDir('./cli').demandCommand().config({ config }).completion().help();
 
   compose(run, prop('argv'))(program);
 });

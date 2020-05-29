@@ -86,7 +86,7 @@ export class Jira implements Tracker {
 
   public setIssueStatus(status: IssueStatus, issueId: string): Observable<Issue> {
     return this.getJiraIssue(issueId).pipe(
-      switchMap(issue => {
+      switchMap((issue) => {
         const transition = this.getTransitionForStatus(issue, status);
         if (!transition) {
           throw new Error('Missing status');
@@ -149,13 +149,13 @@ export class Jira implements Tracker {
 
   @boundMethod
   public createIssueForCurrentUser(data: CreateIssue): Observable<Issue> {
-    return this.getCurrentUser().pipe(switchMap(user => this.createIssue(data, user)));
+    return this.getCurrentUser().pipe(switchMap((user) => this.createIssue(data, user)));
   }
 
   @boundMethod
   public createIssue(data: CreateIssue, user: User): Observable<Issue> {
     return this.getProject(data.project).pipe(
-      switchMap(project =>
+      switchMap((project) =>
         this.client
           .post<Issue>('/issue', {
             body: {
@@ -199,7 +199,7 @@ export class Jira implements Tracker {
 
   public addCommentToIssue(issueId: string, comment: string): Observable<IssueComment> {
     return this.getIssue(issueId).pipe(
-      switchMap(issue =>
+      switchMap((issue) =>
         this.client.post<IssueComment>(`/issue/${issue.key}/comment`, {
           body: { body: comment },
         }),
@@ -223,7 +223,7 @@ export class Jira implements Tracker {
       switchMap(() => {
         if (data.submitRelease) {
           return this.createVersion(data).pipe(
-            map(release => ({
+            map((release) => ({
               id: release.id,
               issues: data.issues,
               name: release.name,
@@ -244,7 +244,7 @@ export class Jira implements Tracker {
   public setIssuesFixVersion(release: Release): Observable<Release> {
     return from(release.issues)
       .pipe(
-        mergeMap(issue =>
+        mergeMap((issue) =>
           merge(
             this.setIssueStatus(IssueStatus.DONE, issue.key),
             this.client
@@ -258,7 +258,7 @@ export class Jira implements Tracker {
               .pipe(map(prop('body'))),
           ).pipe(
             reduce<Issue, Issue[]>((acc, val) => acc.concat(val), []),
-            map(issues => head(issues)),
+            map((issues) => head(issues)),
           ),
         ),
       )
@@ -279,15 +279,15 @@ export class Jira implements Tracker {
               IssueStatus.SELECTED_FOR_DEVELOPMENT,
             ]
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              .map(s => (status[s] ? `'${status[s]!.name}'` : undefined))
-              .filter(s => s !== undefined)
+              .map((s) => (status[s] ? `'${status[s]!.name}'` : undefined))
+              .filter((s) => s !== undefined)
               .join(',')}) ORDER BY CREATED DESC`,
           },
         });
       }),
       map(prop('body')),
-      map(data => {
-        return rMap(this.convertIssue, data.issues).filter(i => i.type.toString() !== 'Epic');
+      map((data) => {
+        return rMap(this.convertIssue, data.issues).filter((i) => i.type.toString() !== 'Epic');
       }),
       catchError(this.mapError),
     );
@@ -339,9 +339,9 @@ export class Jira implements Tracker {
       })
       .pipe(
         map(prop('body')),
-        switchMap(release =>
+        switchMap((release) =>
           this.getProject(String(release.projectId)).pipe(
-            map(project => ({ ...release, project })),
+            map((project) => ({ ...release, project })),
           ),
         ),
       );
@@ -355,7 +355,7 @@ export class Jira implements Tracker {
         return Object.entries(IssueStatus).reduce(
           (acc, [key, val]) => ({
             ...acc,
-            [key]: status.find(t => statusRegex[val].test(t.name)),
+            [key]: status.find((t) => statusRegex[val].test(t.name)),
           }),
           {},
         );
@@ -367,7 +367,7 @@ export class Jira implements Tracker {
     issue: JiraIssue,
     status: IssueStatus,
   ): IssueTransition | undefined {
-    return issue.transitions.find(transition => statusRegex[status].test(transition.name));
+    return issue.transitions.find((transition) => statusRegex[status].test(transition.name));
   }
 
   private mapError(e: NodeJS.ErrnoException | HttpError): Observable<never> {

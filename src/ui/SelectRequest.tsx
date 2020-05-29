@@ -34,7 +34,7 @@ export function SelectRequest({ onSubmit, request }: SelectRequestProps): JSX.El
     setSearchText(escapedText);
     if (escapedText && escapedText.trim() !== '') {
       setItems(
-        request.options.filter(option =>
+        request.options.filter((option) =>
           option.label.toLowerCase().includes(escapedText.toLowerCase()),
         ),
       );

@@ -87,8 +87,8 @@ export async function getFileContent(
 ): Promise<string | undefined> {
   const data = await Promise.all(
     folders
-      .map(folder => resolve(root, folder, name))
-      .map(p => readFile(p, 'utf-8').catch(() => undefined)),
+      .map((folder) => resolve(root, folder, name))
+      .map((p) => readFile(p, 'utf-8').catch(() => undefined)),
   );
-  return data.filter(e => e !== undefined)[0];
+  return data.filter((e) => e !== undefined)[0];
 }

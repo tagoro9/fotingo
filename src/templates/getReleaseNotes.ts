@@ -66,7 +66,9 @@ function getReleaseNotesFromTemplate(data: Release, releaseConfig: ReleaseConfig
             rMap((issue: Issue) => `* [#${issue.key}](${issue.url}): ${issue.summary}`),
           ),
         ),
-        groupBy(compose(lens => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION), lensProp, prop('type'))),
+        groupBy(
+          compose((lens) => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION), lensProp, prop('type')),
+        ),
       )(data.issues),
       [RELEASE_TEMPLATE_KEYS.VERSION]: data.name,
       [RELEASE_TEMPLATE_KEYS.FOTINGO_BANNER]:

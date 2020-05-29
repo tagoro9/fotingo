@@ -44,17 +44,17 @@ const updateIssues = (jira: Tracker, messenger: Messenger) => (
 ): Observable<Review> =>
   (zip(
     of(pullRequest).pipe(
-      tap(pr => {
+      tap((pr) => {
         if (pr.issues.length > 0) {
           messenger.emit(
-            `Updating ${pr.issues.map(issue => issue.key).join(', ')} on Jira`,
+            `Updating ${pr.issues.map((issue) => issue.key).join(', ')} on Jira`,
             Emoji.BOOKMARK,
           );
         }
       }),
     ),
     merge(
-      ...pullRequest.issues.map(issue =>
+      ...pullRequest.issues.map((issue) =>
         merge(
           jira.setIssueStatus(IssueStatus.IN_REVIEW, issue.key),
           jira.addCommentToIssue(issue.key, `PR: ${pullRequest.url}`),
@@ -77,6 +77,6 @@ export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<Re
     map(mergeAll),
     switchMap(github.createPullRequest),
     switchMap(updateIssues(jira, messenger)),
-    tap(data => messenger.emit(`Pull request created: ${data.pullRequest.url}`, Emoji.LINK)),
+    tap((data) => messenger.emit(`Pull request created: ${data.pullRequest.url}`, Emoji.LINK)),
   );
 };

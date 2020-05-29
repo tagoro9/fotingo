@@ -27,7 +27,7 @@ function useMessages(): [Message[], (m: Message) => void] {
   const [messages, setMessages] = useState<Message[]>([]);
   return [
     messages,
-    (message: Message): void => setMessages(currentMessages => [...currentMessages, message]),
+    (message: Message): void => setMessages((currentMessages) => [...currentMessages, message]),
   ];
 }
 
@@ -40,7 +40,7 @@ function useMessenger(
   const messengerRef = useRef(messenger);
   const addMessageRef = useRef(addMessage);
   useEffect(() => {
-    messengerRef.current.onMessage(message => {
+    messengerRef.current.onMessage((message) => {
       if (isRequest(message)) {
         setRequest(message);
       } else if (isStatus(message)) {
@@ -64,7 +64,7 @@ function useCmdRunner(
     const time = Date.now();
     cmd()
       .toPromise()
-      .catch(e => {
+      .catch((e) => {
         // Exit thread mode if there was an error so it shows up
         setInThreadRef.current(false);
         addMessageRef.current({

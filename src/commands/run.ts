@@ -32,16 +32,16 @@ const messenger = new Messenger();
  * @param args Args
  */
 const askForConfigs = (msg: Messenger, args: FotingoArguments): Observable<FotingoArguments> =>
-  from(requiredConfigs.filter(cfg => R.path(cfg.path, args.config) === undefined)).pipe(
-    concatMap(requiredConfig =>
-      msg.request(requiredConfig.request).pipe(map(value => [requiredConfig.path, value])),
+  from(requiredConfigs.filter((cfg) => R.path(cfg.path, args.config) === undefined)).pipe(
+    concatMap((requiredConfig) =>
+      msg.request(requiredConfig.request).pipe(map((value) => [requiredConfig.path, value])),
     ),
     reduce<[string[], string], Partial<Config>>((acc, val) => {
       return R.set(R.lensPath(val[0]), val[1], acc);
     }, {}),
     map(write),
-    map(data => ({ config: data })),
-    map(d => R.mergeDeepRight(args, d) as FotingoArguments),
+    map((data) => ({ config: data })),
+    map((d) => R.mergeDeepRight(args, d) as FotingoArguments),
   );
 
 /**
@@ -66,7 +66,7 @@ export const run: (args: FotingoArguments) => void = R.ifElse(
           args,
           cmd: () =>
             askForConfigs(messenger, args).pipe(
-              switchMap(augmentedArgs => cmd(augmentedArgs, messenger)),
+              switchMap((augmentedArgs) => cmd(augmentedArgs, messenger)),
             ),
           isDebugging: process.env.DEBUG !== undefined,
           messenger,

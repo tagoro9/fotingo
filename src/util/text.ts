@@ -42,8 +42,8 @@ const getSearcher = <T extends Searchable>(
   if (options.checkForExactMatchFirst) {
     return {
       search(s: string): T[] {
-        const exactMatch = options.data.find(item =>
-          options.fields.some(field => {
+        const exactMatch = options.data.find((item) =>
+          options.fields.some((field) => {
             const cleanedData = options.cleanData
               ? options.cleanData(String(item[field]))
               : item[field];

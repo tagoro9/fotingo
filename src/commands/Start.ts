@@ -51,7 +51,7 @@ const getOrCreateIssue = (
       has('id'),
       compose(
         tracker.getIssue,
-        rTap(id => {
+        rTap((id) => {
           messenger.emit(`Getting ${id} from Jira`, Emoji.BUG);
         }),
         prop('id'),
@@ -79,7 +79,7 @@ const createBranch = (
 ): ((data: IssueAndStartData) => Promise<void>) =>
   compose(
     git.createBranchAndStashChanges,
-    rTap(name => {
+    rTap((name) => {
       messenger.emit(`Creating branch ${name}`, Emoji.TADA);
     }),
     git.getBranchNameForIssue,
@@ -103,17 +103,17 @@ const maybeAskUserToSelectIssue = (tracker: Tracker, messenger: Messenger) => (
           {
             allowTextSearch: true,
             data: [issues],
-            getLabel: issue => `${issue.key} (${issue.type}) - ${issue.summary}`,
+            getLabel: (issue) => `${issue.key} (${issue.type}) - ${issue.summary}`,
             getQuestion: () => 'What ticket would you like to start working on?',
-            getValue: issue => issue.key,
+            getValue: (issue) => issue.key,
             limit: 15,
             useDefaults: false,
           },
           messenger,
         ),
       ),
-      map(issues => issues[0]),
-      map(issue => ({ ...data, issue: { id: issue.key } })),
+      map((issues) => issues[0]),
+      map((issue) => ({ ...data, issue: { id: issue.key } })),
     );
   } else {
     return of(data);

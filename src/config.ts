@@ -48,7 +48,7 @@ export const read: () => Config = () =>
  * Write some partial configuration into the closest found config file
  * @param config Partial configuration
  */
-export const write: (data: Partial<Config>) => Partial<Config> = data => {
+export const write: (data: Partial<Config>) => Partial<Config> = (data) => {
   const search = cosmiconfig('fotingo').search() || { filepath: undefined, config: {} };
   const mergedConfigs = R.mergeDeepLeft(data, search.config);
   writeFileSync(

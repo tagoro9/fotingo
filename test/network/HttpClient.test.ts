@@ -27,7 +27,7 @@ describe('HttpClient', () => {
       return client
         .get('/')
         .toPromise()
-        .then(value => {
+        .then((value) => {
           expect(value).toEqual({
             body,
             response: { statusCode: 200, body },
@@ -66,7 +66,7 @@ describe('HttpClient', () => {
       return client
         .get('/')
         .toPromise()
-        .catch(err => {
+        .catch((err) => {
           expect(err.body).toBe(body);
         });
     });
