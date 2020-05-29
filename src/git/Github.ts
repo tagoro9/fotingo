@@ -90,22 +90,22 @@ export class Github implements Remote {
     const foundLabels = findMatches({ fields: ['name'], data: ghLabels }, labels);
 
     const foundReviewers = reviewers.map(
-      reviewer =>
+      (reviewer) =>
         findMatches({ fields: ['login', 'name', 'email'], data: ghReviewers }, [reviewer])[0],
     );
 
     const selectedReviewers = await maybeAskUserToSelectMatches(
       {
         data: foundReviewers,
-        getLabel: r => {
+        getLabel: (r) => {
           if (r.name) {
             return `${r.name} (${r.login})`;
           }
           return r.login;
         },
-        getQuestion: match =>
+        getQuestion: (match) =>
           `We couldn't find a unique match for reviewer "${match}", which one best matches?`,
-        getValue: r => r.login,
+        getValue: (r) => r.login,
         options: reviewers,
         useDefaults,
       },
@@ -115,10 +115,10 @@ export class Github implements Remote {
     const selectedLabels = await maybeAskUserToSelectMatches(
       {
         data: foundLabels,
-        getLabel: l => `${l.name}`,
-        getQuestion: match =>
+        getLabel: (l) => `${l.name}`,
+        getQuestion: (match) =>
           `We couldn't find a unique match for labels "${match}", which one best matches?`,
-        getValue: l => String(l.id),
+        getValue: (l) => String(l.id),
         options: labels,
         useDefaults,
       },
@@ -278,7 +278,7 @@ export class Github implements Remote {
         repo: this.config.repo,
         title: compose<string, string[], string>(head, split('\n'))(content),
       })
-      .then(response => response.data);
+      .then((response) => response.data);
   }
 
   /**
@@ -298,7 +298,7 @@ export class Github implements Remote {
         repo: this.config.repo,
         reviewers: map(prop('login'), reviewers),
       })
-      .then(response => response.data);
+      .then((response) => response.data);
   }
 
   /**
@@ -313,7 +313,7 @@ export class Github implements Remote {
     return this.api.issues.addLabels({
       // eslint-disable-next-line @typescript-eslint/camelcase
       issue_number: pullRequest.number,
-      labels: labels.map(label => label.name),
+      labels: labels.map((label) => label.name),
       owner: this.config.owner,
       repo: this.config.repo,
     });
@@ -357,7 +357,7 @@ export class Github implements Remote {
             owner: this.config.owner,
             repo: this.config.repo,
           })
-          .then(response => response.data.length > 0),
+          .then((response) => response.data.length > 0),
       'Checking if there is a PR for %s',
       branchName,
     );
@@ -375,11 +375,11 @@ export class Github implements Remote {
       data: mapObjIndexed(escapeHtml, {
         [PR_TEMPLATE_KEYS.CHANGES]: branchInfo.commits
           .reverse()
-          .map(c => `* ${c.header}`)
+          .map((c) => `* ${c.header}`)
           .join('\n'),
         [PR_TEMPLATE_KEYS.FIXED_ISSUES]:
           issues.length > 0
-            ? rConcat('Fixes ', issues.map(issue => `[#${issue.key}](${issue.url})`).join(', '))
+            ? rConcat('Fixes ', issues.map((issue) => `[#${issue.key}](${issue.url})`).join(', '))
             : '',
         [PR_TEMPLATE_KEYS.BRANCH_NAME]: branchInfo.name,
         [PR_TEMPLATE_KEYS.DESCRIPTION]: data.description,

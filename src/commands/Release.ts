@@ -56,13 +56,13 @@ export const cmd = (args: FotingoArguments, messenger: Messenger): Observable<Jo
   );
 
   return releaseInformation$.pipe(
-    tap(data => messenger.emit(`Creating release ${data.name}`, Emoji.SHIP)),
+    tap((data) => messenger.emit(`Creating release ${data.name}`, Emoji.SHIP)),
     switchMap(jira.createRelease),
     switchMap(jira.setIssuesFixVersion),
     withLatestFrom(commandData$),
     switchMap(([release, { useDefaults }]) =>
       getReleaseNotes(args.config.release, messenger, release, useDefaults).pipe(
-        map(notes => ({
+        map((notes) => ({
           notes,
           release,
         })),

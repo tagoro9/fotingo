@@ -70,7 +70,7 @@ export async function enhanceConfig(config: Config): Promise<Config> {
     const rootDir = await git.getRootDir();
     const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDir, ['.', '.github']);
     return git.getRemote(configWithDefaults.git.remote).then(
-      remote =>
+      (remote) =>
         mergeDeepLeft(
           {
             github: {

@@ -10,7 +10,7 @@ export function series<T>(providers: Array<() => Promise<T>>): Promise<T[]> {
   return providers
     .reduce((result, provider, index) => {
       return result.then(() => {
-        return provider().then(val => {
+        return provider().then((val) => {
           results[index] = val;
         });
       });

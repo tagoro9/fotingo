@@ -117,10 +117,8 @@ const getTemplateKeysMatchIndexMap = (regex: string): { [S in TemplateKey]: numb
     }),
     {},
   );
-  const orderedValues = Object.values(indexMap)
-    .sort(subtract)
-    .filter(lt(-1));
-  return mapObjIndexed(i => 1 + orderedValues.indexOf(i), indexMap) as {
+  const orderedValues = Object.values(indexMap).sort(subtract).filter(lt(-1));
+  return mapObjIndexed((i) => 1 + orderedValues.indexOf(i), indexMap) as {
     [S in TemplateKey]: number;
   };
 };

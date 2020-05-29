@@ -37,8 +37,8 @@ export const getLocalChangesInformation = (issueTracker: Tracker, messenger: Mes
     of(branchInfo),
     merge(
       ...allIssues
-        .filter(issue => issueTracker.isValidIssueName(issue))
-        .map(issue =>
+        .filter((issue) => issueTracker.isValidIssueName(issue))
+        .map((issue) =>
           issueTracker.getIssue(issue).pipe(
             catchError((e: JiraError) => {
               if (e.code === 404) {

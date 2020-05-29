@@ -52,7 +52,7 @@ export function maybeAskUserToSelectMatches<T>(
           .request(getQuestion(options[i]), {
             allowTextSearch,
             options: uniqBy<T, string>(getValue, limit > 0 ? take(limit, matches) : matches).map(
-              r => ({
+              (r) => ({
                 label: getLabel(r),
                 value: getValue(r),
               }),
@@ -61,7 +61,7 @@ export function maybeAskUserToSelectMatches<T>(
           .toPromise()
           // We know the user selected an option
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          .then((option: string) => matches.find(r => String(getValue(r)) === String(option))!)
+          .then((option: string) => matches.find((r) => String(getValue(r)) === String(option))!)
       );
     }),
   );

@@ -92,7 +92,7 @@ export class HttpClient {
                 R.tap(() => {
                   this.debug(`Finished ${method} call to ${path}`);
                 }),
-                R.unapply(args => ({ response: args[0], body: args[0].body })),
+                R.unapply((args) => ({ response: args[0], body: args[0].body })),
               ),
               R.compose((response: request.Response) => {
                 throw new HttpErrorImpl(response.statusMessage, response.statusCode, response.body);
@@ -129,9 +129,7 @@ export class HttpClient {
       });
 
       this.networkQueue = this.networkQueue.then(() => {
-        return createRequest()
-          .then(outerResolve)
-          .catch(outerReject);
+        return createRequest().then(outerResolve).catch(outerReject);
       });
       return from(promiseToReturn);
     };
