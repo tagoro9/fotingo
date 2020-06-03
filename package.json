@@ -56,7 +56,7 @@
     "escape-html": "^1.0.3",
     "escape-string-regexp": "^4.0.0",
     "figures": "^3.2.0",
-    "fuse.js": "^3.4.5",
+    "fuse.js": "^6.0.1",
     "git-url-parse": "^11.1.2",
     "humanize-duration": "^3.18.0",
     "ink": "^2.3.0",
