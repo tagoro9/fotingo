@@ -2,7 +2,7 @@ import Fuse from 'fuse.js';
 import { compose, converge, filter, flip, invoker, isEmpty, map, not, nthArg, prop } from 'ramda';
 
 // Base types that we allow to search for
-type Searchable = object | string | number;
+type Searchable = Record<string, unknown> | string | number;
 
 interface SearchOptions<T extends Searchable> {
   // Allow to search for exact matches before using fuzzy search

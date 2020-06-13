@@ -8,7 +8,7 @@ const keyv = new Keyv(path);
 type PromiseFunction = (...args: any[]) => Promise<any>;
 
 type Cacheable = (
-  target: object,
+  target: any,
   propertyKey: string | symbol,
   descriptor: TypedPropertyDescriptor<PromiseFunction>,
 ) => TypedPropertyDescriptor<PromiseFunction>;
@@ -31,7 +31,7 @@ export function cacheable({
   minutes?: number;
 }): Cacheable {
   return (
-    target: object,
+    target: any,
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<PromiseFunction>,
   ): TypedPropertyDescriptor<PromiseFunction> => {
