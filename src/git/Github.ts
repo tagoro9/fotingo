@@ -1,4 +1,11 @@
 import { Octokit } from '@octokit/rest';
+import {
+  IssuesListLabelsForRepoResponseData,
+  OctokitResponse,
+  PullsCreateResponseData,
+  PullsRequestReviewersResponseData,
+  UsersGetByUsernameResponseData,
+} from '@octokit/types';
 import { boundMethod } from 'autobind-decorator';
 import { Debugger } from 'debug';
 import escapeHtml from 'escape-html';
@@ -169,8 +176,8 @@ export class Github implements Remote {
           })
           .then(
             compose<
-              Octokit.Response<Octokit.IssuesListLabelsForRepoResponse>,
-              Octokit.IssuesListLabelsForRepoResponse,
+              OctokitResponse<IssuesListLabelsForRepoResponseData>,
+              IssuesListLabelsForRepoResponseData,
               Label[]
             >(map(pick(['id', 'name'])), prop('data')),
           ),
@@ -200,7 +207,7 @@ export class Github implements Remote {
     return this.listContributors()
       .then(
         compose(
-          (promises: Array<Promise<Octokit.UsersGetByUsernameResponse>>) => Promise.all(promises),
+          (promises: Array<Promise<UsersGetByUsernameResponseData>>) => Promise.all(promises),
           map(this.getUserInfo),
           map<{ login: string }, string>(prop('login')),
         ),
@@ -250,7 +257,7 @@ export class Github implements Remote {
   @cacheable({
     minutes: 10 * ONE_DAY,
   })
-  private getUserInfo(username: string): Promise<Octokit.UsersGetByUsernameResponse> {
+  private getUserInfo(username: string): Promise<UsersGetByUsernameResponseData> {
     return this.queueCall(
       () => this.api.users.getByUsername({ username }).then(prop('data')),
       `Getting user info for %s`,
@@ -266,7 +273,7 @@ export class Github implements Remote {
   private async submitPullRequest(
     content: string,
     pullRequestHead: string,
-  ): Promise<Octokit.PullsCreateResponse> {
+  ): Promise<PullsCreateResponseData> {
     const baseBranch = await this.git.findBaseBranch(true);
     return this.api.pulls
       .create({
@@ -288,9 +295,9 @@ export class Github implements Remote {
   private async addReviewers(
     reviewers: Reviewer[],
     pullRequest: PullRequest,
-  ): Promise<Octokit.PullsCreateReviewRequestResponse> {
+  ): Promise<PullsRequestReviewersResponseData> {
     return this.api.pulls
-      .createReviewRequest({
+      .requestReviewers({
         owner: this.config.owner,
         pull_number: pullRequest.number,
         repo: this.config.repo,
