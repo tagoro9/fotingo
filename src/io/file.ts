@@ -1,4 +1,4 @@
-import * as editor from 'editor';
+import editor from 'editor';
 import * as fs from 'fs';
 import { resolve } from 'path';
 import { zipObj } from 'ramda';
