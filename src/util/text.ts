@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js';
-import { compose, converge, filter, flip, invoker, isEmpty, map, not, nthArg } from 'ramda';
+import { compose, converge, filter, flip, invoker, isEmpty, map, not, nthArg, prop } from 'ramda';
 
 // Base types that we allow to search for
 type Searchable = object | string | number;
@@ -30,18 +30,18 @@ const search: (searcher: (t: string) => Searchable[], data: string[]) => Searcha
  */
 const getSearcher = <T extends Searchable>(
   options: SearchOptions<T>,
-): { search: (s: string) => T[] } => {
-  const fuse = new Fuse<T, Fuse.FuseOptions<T>>(options.data, {
-    caseSensitive: false,
-    keys: options.fields,
+): { search: (s: string) => Fuse.FuseResult<T>[] } => {
+  const fuse = new Fuse<T, Fuse.IFuseOptions<T>>(options.data, {
+    keys: options.fields as string[],
     includeMatches: false,
     includeScore: false,
+    isCaseSensitive: false,
     shouldSort: true,
     threshold: 0.3,
   });
   if (options.checkForExactMatchFirst) {
     return {
-      search(s: string): T[] {
+      search(s: string): Fuse.FuseResult<T>[] {
         const exactMatch = options.data.find((item) =>
           options.fields.some((field) => {
             const cleanedData = options.cleanData
@@ -51,13 +51,13 @@ const getSearcher = <T extends Searchable>(
           }),
         );
         if (exactMatch) {
-          return [exactMatch];
+          return [{ item: exactMatch, refIndex: 0 }];
         }
-        return fuse.search<T, false, false>(s);
+        return fuse.search(s);
       },
     };
   }
-  return fuse as { search: (s: string) => T[] };
+  return fuse as { search: (s: string) => Fuse.FuseResult<T>[] };
 };
 
 /**
@@ -67,4 +67,7 @@ const getSearcher = <T extends Searchable>(
 export const findMatches: <T extends Searchable>(
   options: SearchOptions<T>,
   search: string[],
-) => T[][] = converge(search, [compose(flip(invoker(1, 'search')), getSearcher), nthArg(1)]);
+) => T[][] = converge(search, [
+  compose(map(map(prop('item'))), flip(invoker(1, 'search')), getSearcher),
+  nthArg(1),
+]);
