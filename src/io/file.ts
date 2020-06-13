@@ -68,7 +68,7 @@ export async function editVirtualFile(options: EditVirtualFileOptions): Promise<
     postfix: `.${options.extension}`,
     prefix: options.prefix,
   });
-  await writeFile(fileData.fd, options.initialContent);
+  await writeFile(fileData.fd, options.initialContent || '');
   const fileContent = await editFile(fileData.path);
   fileData.clean();
   return fileContent;
