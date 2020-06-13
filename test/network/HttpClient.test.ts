@@ -6,7 +6,7 @@ import { HttpClient } from 'src/network/HttpClient';
 
 const request = (req as unknown) as jest.Mock;
 
-const mockRequestWithSuccess = (body: object, statusCode = 200): void =>
+const mockRequestWithSuccess = (body: Record<string, unknown>, statusCode = 200): void =>
   void request.mockImplementation((_, cb) => {
     cb(null, { statusCode, body }, body);
   });

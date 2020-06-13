@@ -7,9 +7,9 @@ export interface HttpError {
 
 export class HttpErrorImpl extends Error implements HttpError {
   public readonly status: number;
-  public readonly body: object;
+  public readonly body: Record<string, unknown>;
 
-  constructor(message: string, status: number, body: object) {
+  constructor(message: string, status: number, body: Record<string, unknown>) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
     this.status = status;

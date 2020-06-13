@@ -74,6 +74,7 @@ export const run: (args: FotingoArguments) => void = R.ifElse(
       },
       [
         R.compose(
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           (path: string) => require(path).cmd,
           R.concat('./'),
           R.replace(/^./, R.toUpper),

@@ -21,9 +21,9 @@ jest.mock('keyv', () => {
 
 class CacheableClass {
   private value = 'prefix';
-  private innerMock: () => {};
+  private innerMock: () => void;
 
-  constructor(innerMock: () => {}) {
+  constructor(innerMock: () => void) {
     this.innerMock = innerMock;
   }
 

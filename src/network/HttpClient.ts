@@ -22,17 +22,17 @@ interface HttpBasicAuth {
 
 interface GetOptions {
   auth?: HttpBasicAuth;
-  qs?: object;
+  qs?: Record<string, unknown>;
 }
 
 interface PostOptions extends GetOptions {
-  body?: object;
-  form?: object;
+  body?: Record<string, unknown>;
+  form?: Record<string, unknown>;
 }
 
 export interface HttpResponse<T> {
   body: T;
-  response: object;
+  response: Record<string, unknown>;
 }
 
 enum HttpMethod {
