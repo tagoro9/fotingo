@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getReleaseNotes generates the release notes from the template 1`] = `
+Object {
+  "body": "
+# Bug fixes:
+
+* [#FOTINGO-3854](https://julianne.biz): Corporate
+
+# Features:
+
+* [#FOTINGO-107](http://morris.com): Legacy
+
+See [Jira release](http://benjamin.info)
+
+🚀 Release created with [fotingo](https://github.com/tagoro9/fotingo)",
+  "title": "Soft",
+}
+`;
