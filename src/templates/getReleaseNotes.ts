@@ -57,7 +57,7 @@ function getReleaseNotesFromTemplate(data: Release, releaseConfig: ReleaseConfig
   return parseTemplate<RELEASE_TEMPLATE_KEYS>({
     data: {
       [RELEASE_TEMPLATE_KEYS.FIXED_ISSUES_BY_CATEGORY]: compose(
-        join('\n'),
+        join('\n\n'),
         rMap(([title, list]) => `# ${title}:\n\n${list}`),
         toPairs,
         mapObjIndexed(
