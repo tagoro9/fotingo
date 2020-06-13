@@ -6,7 +6,7 @@ module.exports = {
   preset: 'ts-jest',
   testRegex: '(/test/.*(test|spec))\\.(tsx?)$',
   moduleNameMapper: {
-    'src/(.*)': '<rootDir>/src/$1',
-    'test/(.*)': '<rootDir>/test/$1',
+    '^src/(.*)': '<rootDir>/src/$1',
+    '^test/(.*)': '<rootDir>/test/$1',
   },
 };
