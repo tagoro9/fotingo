@@ -8,7 +8,8 @@ const keyv = new Keyv(path);
 type PromiseFunction = (...args: any[]) => Promise<any>;
 
 type Cacheable = (
-  target: any,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  target: Object,
   propertyKey: string | symbol,
   descriptor: TypedPropertyDescriptor<PromiseFunction>,
 ) => TypedPropertyDescriptor<PromiseFunction>;
@@ -31,7 +32,8 @@ export function cacheable({
   minutes?: number;
 }): Cacheable {
   return (
-    target: any,
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: Object,
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<PromiseFunction>,
   ): TypedPropertyDescriptor<PromiseFunction> => {
