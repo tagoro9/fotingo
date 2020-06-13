@@ -2,7 +2,8 @@ import Fuse from 'fuse.js';
 import { compose, converge, filter, flip, invoker, isEmpty, map, not, nthArg, prop } from 'ramda';
 
 // Base types that we allow to search for
-type Searchable = Record<string, unknown> | string | number;
+// eslint-disable-next-line @typescript-eslint/ban-types
+type Searchable = Object | string | number;
 
 interface SearchOptions<T extends Searchable> {
   // Allow to search for exact matches before using fuzzy search
