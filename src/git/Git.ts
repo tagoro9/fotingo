@@ -21,8 +21,8 @@ import {
   trim,
   uniqBy,
 } from 'ramda';
+import { BranchSummary, ListLogSummary, SimpleGit, StatusResult } from 'simple-git';
 import simpleGit from 'simple-git/promise';
-import { BranchSummary, ListLogSummary, StatusResult } from 'simple-git/typings/response';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
 import { Issue } from 'src/types';
@@ -68,7 +68,7 @@ interface CommitIssue {
 }
 
 export class Git {
-  private git: simpleGit.SimpleGit;
+  private git: SimpleGit;
   private config: GitConfig;
   private messenger: Messenger;
 
