@@ -116,7 +116,7 @@
     "faker": "^4.1.0",
     "husky": "^4.0.0",
     "ink-testing-library": "^1.0.3",
-    "jest": "^25.1.0",
+    "jest": "^26.0.1",
     "lint-staged": "^10.0.7",
     "madge": "^3.4.4",
     "prettier": "^2.0.5",
