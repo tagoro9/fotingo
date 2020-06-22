@@ -1123,10 +1123,10 @@
   dependencies:
     ts-toolbelt "^6.3.3"
 
-"@types/react@^16.9.19":
-  version "16.9.36"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.36.tgz#ade589ff51e2a903e34ee4669e05dbfa0c1ce849"
-  integrity sha512-mGgUb/Rk/vGx4NCvquRuSH0GHBQKb1OqpGS9cT9lFxlTLHZgkksgI60TuIxubmn7JuCb+sENHhQciqa0npm0AQ==
+"@types/react@^16.9.19", "@types/react@^16.9.38":
+  version "16.9.38"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.38.tgz#868405dace93a4095d3e054f4c4a1de7a1ac0680"
+  integrity sha512-pHAeZbjjNRa/hxyNuLrvbxhhnKyKNiLC6I5fRF2Zr/t/S6zS41MiyzH4+c+1I9vVfvuRt1VS2Lodjr4ZWnxrdA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -4381,10 +4381,13 @@ ink-spinner@^3.0.1:
     cli-spinners "^1.0.0"
     prop-types "^15.5.10"
 
-ink-testing-library@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/ink-testing-library/-/ink-testing-library-1.0.3.tgz#4afddc0ff2c39d810ce24ea2d034ef64aec9a39e"
-  integrity sha512-FKq3urZvJ5aWqhXaf7OeHkXw7LsZu/m0H4an0RlUim3Ar97W1bbRUPY4K/C57/0YkFAOa6RtIbZ/EDiMJSYxXQ==
+ink-testing-library@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ink-testing-library/-/ink-testing-library-2.0.0.tgz#e02e2fa9e4cd213fb3de065fcac22e4a2e8b7da9"
+  integrity sha512-BwOqxXedU7nuJekcSoA6HZrzQK/cOk8Uz+ciyV+UDVDrwdsLasAFxpfAXMfoVJV8rDgVmvTAowUE+xl0AbYyug==
+  dependencies:
+    "@types/node" "^14.0.13"
+    "@types/react" "^16.9.38"
 
 ink-text-input@^3.2.0:
   version "3.2.2"
