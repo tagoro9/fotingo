@@ -115,7 +115,7 @@
     "eslint-plugin-typescript-sort-keys": "^1.2.0",
     "faker": "^4.1.0",
     "husky": "^4.0.0",
-    "ink-testing-library": "^1.0.3",
+    "ink-testing-library": "^2.0.0",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.7",
     "madge": "^3.4.4",
