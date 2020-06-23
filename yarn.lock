@@ -8300,9 +8300,9 @@ signale@^1.2.1:
     pkg-conf "^2.1.0"
 
 simple-git@^2.1.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-2.7.0.tgz#b555392021f5553c14530c917eae1d6f914b1672"
-  integrity sha512-NpNNe0hOz3DMRWB9ewK83p/nMAkGrNO/VlWhMDaI3OdUO3UNoMv5+XlMOzO52jCyl+RZbVrIuNMpxtR4C1TQXw==
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-2.10.0.tgz#9b9b6af5c7660b8ede5636296cc78774f85ac636"
+  integrity sha512-/lqaK+C7FwGe3du9E9gIIMjpRSPif71Ct80cYqpevdLGSU9LJXL+CBf2tT6bxXgmp/i3NsOj37jP43KjhlEZIA==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
     debug "^4.1.1"
