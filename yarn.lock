@@ -677,6 +677,11 @@
   dependencies:
     debug "^4.1.1"
 
+"@kwsites/promise-deferred@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@kwsites/promise-deferred/-/promise-deferred-1.0.1.tgz#63b170e0d02b85a1fa6ad6bdea1f2f14f6f6adc2"
+  integrity sha512-+D6vnc8qMjU2s8DP7khMWA3/+ONsGYu8bTqRhC2mhYdG3mUEC7OGHX7x71V7VPADDcoR6/hMbuafdoGOthekMw==
+
 "@marionebl/sander@^0.6.0":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@marionebl/sander/-/sander-0.6.1.tgz#1958965874f24bc51be48875feb50d642fc41f7b"
@@ -8300,11 +8305,12 @@ signale@^1.2.1:
     pkg-conf "^2.1.0"
 
 simple-git@^2.1.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-2.7.0.tgz#b555392021f5553c14530c917eae1d6f914b1672"
-  integrity sha512-NpNNe0hOz3DMRWB9ewK83p/nMAkGrNO/VlWhMDaI3OdUO3UNoMv5+XlMOzO52jCyl+RZbVrIuNMpxtR4C1TQXw==
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-2.11.0.tgz#5bd99fe3465dcbcb82f0eb23ab3c1615cb947374"
+  integrity sha512-wFePCEQYY6BzVOg/BuUVEhr3jZPF/cPG/BN2UXgax6NHc3bJ9UrDc5AME281gs2C7J1UZ6BGRJYT64khx9T+ng==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
+    "@kwsites/promise-deferred" "^1.0.1"
     debug "^4.1.1"
 
 sisteransi@^1.0.3:
