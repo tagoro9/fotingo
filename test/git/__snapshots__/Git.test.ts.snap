@@ -1,5 +1,97 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Git getBranchInfo should return the parsed commit history 1`] = `
+Object {
+  "commits": Array [
+    Object {
+      "body": null,
+      "footer": "Fixes #FOTINGO-123",
+      "header": "fix(something): fix this",
+      "mentions": Array [],
+      "merge": null,
+      "notes": Array [],
+      "references": Array [
+        Object {
+          "action": "Fixes",
+          "issue": "FOTINGO-123",
+          "owner": null,
+          "prefix": "#",
+          "raw": "#FOTINGO-123",
+          "repository": null,
+        },
+      ],
+      "revert": null,
+      "scope": "something",
+      "subject": "fix this",
+      "type": "fix",
+    },
+    Object {
+      "body": null,
+      "footer": "fixes #FOTINGO-12",
+      "header": "feat(that): implement that",
+      "mentions": Array [],
+      "merge": null,
+      "notes": Array [],
+      "references": Array [
+        Object {
+          "action": "fixes",
+          "issue": "FOTINGO-12",
+          "owner": null,
+          "prefix": "#",
+          "raw": "#FOTINGO-12",
+          "repository": null,
+        },
+      ],
+      "revert": null,
+      "scope": "that",
+      "subject": "implement that",
+      "type": "feat",
+    },
+    Object {
+      "body": null,
+      "footer": "Fixes #FOTINGO-1",
+      "header": "chore: improve this",
+      "mentions": Array [],
+      "merge": null,
+      "notes": Array [],
+      "references": Array [
+        Object {
+          "action": "Fixes",
+          "issue": "FOTINGO-1",
+          "owner": null,
+          "prefix": "#",
+          "raw": "#FOTINGO-1",
+          "repository": null,
+        },
+      ],
+      "revert": null,
+      "scope": null,
+      "subject": "improve this",
+      "type": "chore",
+    },
+  ],
+  "issues": Array [
+    Object {
+      "issue": "FOTINGO-493",
+      "raw": "#FOTINGO-493",
+    },
+    Object {
+      "issue": "FOTINGO-123",
+      "raw": "#FOTINGO-123",
+    },
+    Object {
+      "issue": "FOTINGO-12",
+      "raw": "#FOTINGO-12",
+    },
+    Object {
+      "issue": "FOTINGO-1",
+      "raw": "#FOTINGO-1",
+    },
+  ],
+  "name": "FOTINGO-493",
+}
+`;
+
 exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-2484"`;
 
 exports[`Git getRemote should fall back to the first remote if it cannot find the specified one 1`] = `
