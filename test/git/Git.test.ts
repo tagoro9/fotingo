@@ -10,11 +10,9 @@ import { data } from 'test/lib/data';
 const simpleGit = (simpleGitMock as unknown) as jest.Mock;
 
 let git: Git;
-const issue = data.createIssue();
-const gitConfig = data.createGitConfig();
-const branchName = issue.key;
+let branchName: string;
+let remoteBranch: string;
 const latestCommitHash = '547433c';
-const remoteBranch = `remotes/${gitConfig.remote}/${gitConfig.baseBranch}`;
 const remote = 'git@github.com:tagoro9/fotingo-rewrite.git';
 
 const gitMocks = {
@@ -31,14 +29,10 @@ const gitMocks = {
       },
     },
   ]),
-  log: jest.fn().mockResolvedValue({
-    latest: {
-      hash: latestCommitHash,
-    },
-  }),
+  log: jest.fn().mockResolvedValue(undefined),
   push: jest.fn().mockResolvedValue(undefined),
   raw: jest.fn().mockResolvedValue(undefined),
-  revparse: jest.fn().mockResolvedValue(branchName),
+  revparse: jest.fn().mockResolvedValue(undefined),
   stash: jest.fn().mockResolvedValue(undefined),
   status: jest.fn().mockResolvedValue({
     files: [],
@@ -47,6 +41,16 @@ const gitMocks = {
 
 describe('Git', () => {
   beforeEach(() => {
+    const issue = data.createIssue();
+    const gitConfig = data.createGitConfig();
+    branchName = issue.key;
+    remoteBranch = `remotes/${gitConfig.remote}/${gitConfig.baseBranch}`;
+    gitMocks.revparse.mockResolvedValue(branchName);
+    gitMocks.log.mockResolvedValue({
+      latest: {
+        hash: latestCommitHash,
+      },
+    });
     simpleGit.mockReturnValue({ silent: () => gitMocks });
     git = new Git(gitConfig, new Messenger());
   });
