@@ -37,6 +37,7 @@ const gitMocks = {
     },
   }),
   push: jest.fn().mockResolvedValue(undefined),
+  raw: jest.fn().mockResolvedValue(undefined),
   revparse: jest.fn().mockResolvedValue(branchName),
   stash: jest.fn().mockResolvedValue(undefined),
   status: jest.fn().mockResolvedValue({
@@ -118,6 +119,36 @@ describe('Git', () => {
     it('should throw an error if there are no remotes', async () => {
       gitMocks.getRemotes.mockResolvedValue([]);
       await expect(git.getRemote('origin')).rejects.toBeUndefined();
+    });
+  });
+
+  describe('getBranchInfo', () => {
+    it('should return the parsed commit history', async () => {
+      const baseCommit = {
+        author_email: 'test@fotingo.com',
+        author_name: 'Fotingo',
+        date: 'Fri Jun 26 08:09:23 2020 -0700',
+      };
+      const commits = [
+        {
+          ...baseCommit,
+          hash: '570768fc6dee7d8983d323555146eb9529f0b701',
+          message: 'fix(something): fix this\n\nFixes #FOTINGO-123',
+        },
+        {
+          ...baseCommit,
+          hash: 'bf4cf25bdfa6f9c9fffd6226a55071620b1e83a2',
+          message: 'feat(that): implement that\n\nfixes #FOTINGO-12',
+        },
+        {
+          ...baseCommit,
+          hash: '3955a5ec9ed98ae53ebd49a70bed0a0523a08d61',
+          message: 'chore: improve this\n\nFixes #FOTINGO-1',
+        },
+      ];
+      gitMocks.raw.mockResolvedValue(commits[0].hash);
+      gitMocks.log.mockResolvedValue({ all: commits });
+      await expect(git.getBranchInfo()).resolves.toMatchSnapshot();
     });
   });
 });
