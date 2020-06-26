@@ -72,8 +72,8 @@ Object {
   ],
   "issues": Array [
     Object {
-      "issue": "FOTINGO-493",
-      "raw": "#FOTINGO-493",
+      "issue": "FOTINGO-2484",
+      "raw": "#FOTINGO-2484",
     },
     Object {
       "issue": "FOTINGO-123",
@@ -88,11 +88,11 @@ Object {
       "raw": "#FOTINGO-1",
     },
   ],
-  "name": "FOTINGO-493",
+  "name": "FOTINGO-2484",
 }
 `;
 
-exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-2484"`;
+exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-107"`;
 
 exports[`Git getRemote should fall back to the first remote if it cannot find the specified one 1`] = `
 Object {

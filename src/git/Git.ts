@@ -18,7 +18,6 @@ import {
   props,
   propSatisfies,
   replace,
-  test,
   trim,
   uniqBy,
 } from 'ramda';
@@ -266,7 +265,7 @@ export class Git {
                 issue: ref.issue,
                 raw: `${ref.prefix}${ref.issue}`,
               })),
-              filter(propSatisfies<string, CommitReference>(test(/fixes/i), 'action')),
+              filter(propSatisfies<string, CommitReference>((str) => /fixes/i.test(str), 'action')),
               prop('references') as (c: ParsedCommit) => CommitReference[],
             ),
           ),
