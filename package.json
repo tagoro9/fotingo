@@ -2,22 +2,29 @@
   "name": "fotingo",
   "version": "2.0.2",
   "description": "A CLI to ease the interaction between git, github and jira.",
-  "main": "lib/fotingo.js",
+  "main": "lib/index.js",
   "bin": {
-    "fotingo": "./lib/fotingo.js"
+    "fotingo": "./bin/run"
   },
   "files": [
-    "/lib"
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
   ],
   "scripts": {
+    "build": "yarn run clean && tsc -p ./ && chmod 755 ./lib/fotingo.js",
+    "circular-dependencies": "madge --circular src",
     "clean": "rimraf lib",
     "coverage": "jest --coverage --silent",
-    "build": "yarn run clean && tsc -p ./ && chmod 755 ./lib/fotingo.js",
     "lint": "eslint ./src ./test ./types --color --ext .ts --ext .tsx",
-    "prepare": "yarn clean && yarn run build",
-    "watch": "tsc -w -p ./",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "yarn clean && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepare": "yarn run build",
+    "release": "yarn run build && standard-version",
     "test": "FORCE_COLOR=0 jest",
-    "circular-dependencies": "madge --circular src"
+    "version": "oclif-dev readme && git add README.md",
+    "watch": "tsc -w -p ./"
   },
   "husky": {
     "hooks": {
@@ -28,6 +35,13 @@
   "lint-staged": {
     "src/**/*.ts": [
       "prettier --write"
+    ]
+  },
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "fotingo",
+    "plugins": [
+      "@oclif/plugin-help"
     ]
   },
   "author": "Victor Mora",
