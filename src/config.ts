@@ -29,7 +29,7 @@ export const requiredConfigs = [
  * Read the configuration file in the specified folder. Go up until the user home
  * directory
  */
-const readConfig: (path?: string) => string = R.compose(
+const readConfigFile: (path?: string) => string = R.compose(
   R.ifElse(R.either(R.isNil, R.propEq('isEmpty', true)), R.always({}), R.prop('config')),
   (p?: string) => cosmiconfig('fotingo').search(p),
 );
@@ -38,17 +38,17 @@ const readConfig: (path?: string) => string = R.compose(
  * Read the fotingo configuration file. Find it up from the execution directory
  * and merge it with the file in the home directory
  */
-export const read: () => Config = () =>
+export const readConfig: () => Config = () =>
   R.converge(R.mergeWith(R.ifElse(R.is(Object), R.flip(R.merge), R.nthArg(0))), [
-    readConfig,
-    R.partial(readConfig, [process.env.HOME]),
+    readConfigFile,
+    R.partial(readConfigFile, [process.env.HOME]),
   ])(undefined) as Config;
 
 /**
  * Write some partial configuration into the closest found config file
  * @param config Partial configuration
  */
-export const write: (data: Partial<Config>) => Partial<Config> = (data) => {
+export const writeConfig: (data: Partial<Config>) => Partial<Config> = (data) => {
   const search = cosmiconfig('fotingo').search() || { filepath: undefined, config: {} };
   const mergedConfigs = R.mergeDeepLeft(data, search.config);
   writeFileSync(
