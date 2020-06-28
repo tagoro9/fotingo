@@ -66,6 +66,7 @@ export function enhanceConfigWithRuntimeArgs(config: Config, data: { branch?: st
 export async function enhanceConfig(config: Config): Promise<Config> {
   const configWithDefaults = mergeDeepLeft(config, defaultConfig) as Config;
   try {
+    // TODO I don't like this instantiation of Git here
     const git = new Git(configWithDefaults.git);
     const rootDir = await git.getRootDir();
     const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDir, ['.', '.github']);
