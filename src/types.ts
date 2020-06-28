@@ -20,7 +20,6 @@ interface RemoteConfig {
 }
 
 interface TrackerConfig {
-  releaseTemplate: string;
   root: string;
   user: {
     login: string;
