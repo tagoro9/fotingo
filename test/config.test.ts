@@ -5,7 +5,7 @@
 import 'jest';
 
 import * as cosmiconfig from 'cosmiconfig';
-import { read } from 'src/config';
+import { readConfig } from 'src/config';
 
 jest.mock('cosmiconfig', () => ({
   cosmiconfigSync: jest.fn().mockReturnValue(jest.fn()),
@@ -19,7 +19,7 @@ describe('config', () => {
     (cosmiconfig.cosmiconfigSync as jest.Mock).mockImplementation(() => ({
       search,
     }));
-    expect(read()).toEqual({});
+    expect(readConfig()).toEqual({});
     expect(search).toHaveBeenCalledTimes(2);
     expect(search).toBeCalledWith(process.env.HOME);
   });
@@ -44,7 +44,7 @@ describe('config', () => {
     (cosmiconfig.cosmiconfigSync as jest.Mock).mockImplementation(() => ({
       search,
     }));
-    expect(read()).toEqual({
+    expect(readConfig()).toEqual({
       anotherValue: 'anotherValue',
       someDeepKey: {
         key1: 'value',
