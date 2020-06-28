@@ -1,5 +1,5 @@
+// eslint-disable-next-line unicorn/prevent-abbreviations
 import { Observable } from 'rxjs';
-import { FotingoArguments } from 'src/commands/FotingoArguments';
 import { Message, Messenger, Request, SelectRequest } from 'src/io/messenger';
 
 export interface RequestProps {
@@ -26,7 +26,6 @@ export interface MessagesProps {
 }
 
 export interface FotingoProps {
-  args: FotingoArguments;
   cmd: () => Observable<unknown>;
   isDebugging: boolean;
   messenger: Messenger;
