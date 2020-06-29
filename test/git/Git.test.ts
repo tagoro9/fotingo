@@ -102,9 +102,9 @@ describe('Git', () => {
       );
       try {
         await git.createBranchAndStashChanges(branchName);
-      } catch (e) {
+      } catch (error) {
         // eslint-disable-next-line jest/no-try-expect
-        expect(e.code).toBe(GitErrorType.BRANCH_ALREADY_EXISTS);
+        expect(error.code).toBe(GitErrorType.BRANCH_ALREADY_EXISTS);
       }
     });
   });

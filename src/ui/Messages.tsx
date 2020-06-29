@@ -20,8 +20,8 @@ export function Messages({
   return (
     <Box flexDirection="column">
       <Static>
-        {staticMessages.map((msg, id) => (
-          <Message key={id} message={msg} />
+        {staticMessages.map((message, id) => (
+          <Message key={id} message={message} />
         ))}
       </Static>
       {lastMessage && !isDebugging && !isRequesting && !isInThread && (

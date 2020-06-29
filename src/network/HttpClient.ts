@@ -92,7 +92,10 @@ export class HttpClient {
                 R.tap(() => {
                   this.debug(`Finished ${method} call to ${path}`);
                 }),
-                R.unapply((args) => ({ response: args[0], body: args[0].body })),
+                R.unapply((functionArguments) => ({
+                  response: functionArguments[0],
+                  body: functionArguments[0].body,
+                })),
               ),
               R.compose((response: request.Response) => {
                 throw new HttpErrorImpl(response.statusMessage, response.statusCode, response.body);
@@ -108,10 +111,10 @@ export class HttpClient {
             method,
             qs: options.qs,
             url: `${this.options.root}${path}`,
-          }).catch((e: NodeJS.ErrnoException) => {
+          }).catch((error: NodeJS.ErrnoException) => {
             this.debug(`Failed ${method} call to ${path}`);
             // TODO Transform error
-            reject(e);
+            reject(error);
           }),
         );
       };

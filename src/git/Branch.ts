@@ -79,7 +79,7 @@ export const getName = curryN(
   2,
   compose(
     converge(
-      reduce((msg: string, [k, v]: string[]) => replace(`{${k}}`, v, msg)),
+      reduce((message: string, [k, v]: string[]) => replace(`{${k}}`, v, message)),
       [prop('template'), compose(toPairs, prop('data'))],
     ),
     getTemplateData,
@@ -93,7 +93,7 @@ export const getName = curryN(
 const buildBranchTemplateRegex = compose(
   (branchTemplate: string) =>
     reduce(
-      (msg: string, [k, v]: [TemplateKey, string]) => replace(`{${k}}`, `${v}`, msg),
+      (message: string, [k, v]: [TemplateKey, string]) => replace(`{${k}}`, `${v}`, message),
       branchTemplate,
       toPairs(TEMPLATE_KEYS_TO_MATCHERS),
     ),
@@ -107,10 +107,10 @@ const buildBranchTemplateRegex = compose(
  */
 const getTemplateKeysMatchIndexMap = (regex: string): { [S in TemplateKey]: number } => {
   const indexMap = Object.values(TemplateKey).reduce(
-    (acc, val: TemplateKey) => ({
-      ...acc,
-      [val]: (
-        regex.match(escapeStringRegexp(TEMPLATE_KEYS_TO_MATCHERS[val])) || {
+    (accumulator, value: TemplateKey) => ({
+      ...accumulator,
+      [value]: (
+        regex.match(escapeStringRegexp(TEMPLATE_KEYS_TO_MATCHERS[value])) || {
           index: -1,
         }
       ).index,

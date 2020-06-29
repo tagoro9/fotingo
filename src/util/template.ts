@@ -8,6 +8,6 @@ export const parseTemplate: <T extends string>(options: {
   data: Record<T, string>;
   template: string;
 }) => string = converge(
-  reduce((msg: string, [k, v]: string[]) => replace(`{${k}}`, v, msg)),
+  reduce((message: string, [k, v]: string[]) => replace(`{${k}}`, v, message)),
   [prop('template'), compose(toPairs, prop('data'))],
 );

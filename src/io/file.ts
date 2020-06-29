@@ -30,13 +30,13 @@ const writeFile = promisify(fs.writeFile);
  * Promisified version of tmp.file
  * @param fileOptions File creation options
  */
-function createTmpFile(fileOptions: tmp.FileOptions): Promise<FileData> {
+function createTemporaryFile(fileOptions: tmp.FileOptions): Promise<FileData> {
   return new Promise((resolve, reject) => {
-    tmp.file(fileOptions, (err, ...args) => {
-      if (err) {
-        return reject(err);
+    tmp.file(fileOptions, (error, ...temporaryFileArguments) => {
+      if (error) {
+        return reject(error);
       }
-      resolve((zipObj(['path', 'fd', 'clean'], args) as unknown) as FileData);
+      resolve((zipObj(['path', 'fd', 'clean'], temporaryFileArguments) as unknown) as FileData);
     });
   });
 }
@@ -48,12 +48,12 @@ function createTmpFile(fileOptions: tmp.FileOptions): Promise<FileData> {
  * @param path Path fo the file to edit
  */
 async function editFile(path: string): Promise<string> {
-  return new Promise((res, reject) => {
+  return new Promise((resolve, reject) => {
     editor(path, (code?: number, signal?: string) => {
       if (code !== 0 || signal !== null) {
         return reject(new Error('The editor exited with an error code'));
       }
-      res(readFile(path, 'utf-8'));
+      resolve(readFile(path, 'utf-8'));
     });
   });
 }
@@ -64,7 +64,7 @@ async function editFile(path: string): Promise<string> {
  * @param options Editing options
  */
 export async function editVirtualFile(options: EditVirtualFileOptions): Promise<string> {
-  const fileData = await createTmpFile({
+  const fileData = await createTemporaryFile({
     postfix: `.${options.extension}`,
     prefix: options.prefix,
   });
@@ -90,5 +90,5 @@ export async function getFileContent(
       .map((folder) => resolve(root, folder, name))
       .map((p) => readFile(p, 'utf-8').catch(() => undefined)),
   );
-  return data.filter((e) => e !== undefined)[0];
+  return data.filter((error) => error !== undefined)[0];
 }

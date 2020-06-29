@@ -5,7 +5,7 @@ import { concat, prop, zipObj } from 'ramda';
 import { empty, merge, Observable, ObservableInput, of, zip } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';
 import { readConfig } from 'src/config';
-import { enhanceConfig, enhanceConfigWithRuntimeArgs } from 'src/enhanceConfig';
+import { enhanceConfig, enhanceConfigWithRuntimeArguments } from 'src/enhanceConfig';
 import { BranchInfo, Git } from 'src/git/Git';
 import { Github } from 'src/git/Github';
 import { Emoji, Messenger } from 'src/io/messenger';
@@ -41,7 +41,7 @@ export abstract class FotingoCommand<T, R> extends Command {
   private async initializeFotingoConfig(): Promise<void> {
     this.fotingo = readConfig();
     const enhancedConfig = await enhanceConfig(this.fotingo);
-    this.fotingo = await enhanceConfigWithRuntimeArgs(enhancedConfig, {
+    this.fotingo = await enhanceConfigWithRuntimeArguments(enhancedConfig, {
       // TODO We need the flags to do this, but the flags require calling parse
       // branch: this.flags.branch,
       branch: 'master',

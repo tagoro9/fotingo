@@ -37,19 +37,19 @@ function useMessenger(
   setRequest: Setter<Request>,
   setInThread: Setter<boolean>,
 ): void {
-  const messengerRef = useRef(messenger);
-  const addMessageRef = useRef(addMessage);
+  const messengerReference = useRef(messenger);
+  const addMessageReference = useRef(addMessage);
   useEffect(() => {
-    messengerRef.current.onMessage((message) => {
+    messengerReference.current.onMessage((message) => {
       if (isRequest(message)) {
         setRequest(message);
       } else if (isStatus(message)) {
         setInThread(message.inThread);
       } else {
-        addMessageRef.current(message);
+        addMessageReference.current(message);
       }
     });
-  }, [addMessageRef, messenger, setRequest, setInThread]);
+  }, [addMessageReference, messenger, setRequest, setInThread]);
 }
 
 function useCmdRunner(
@@ -58,23 +58,23 @@ function useCmdRunner(
   setInThread: Setter<boolean>,
 ): number | undefined {
   const [done, setDone] = useState<number>();
-  const addMessageRef = useRef(addMessage);
-  const setInThreadRef = useRef(setInThread);
+  const addMessageReference = useRef(addMessage);
+  const setInThreadReference = useRef(setInThread);
   useEffect(() => {
     const time = Date.now();
     cmd()
       .toPromise()
-      .catch((e) => {
+      .catch((error) => {
         // Exit thread mode if there was an error so it shows up
-        setInThreadRef.current(false);
-        addMessageRef.current({
-          message: (e.code && ERROR_CODE_TO_MESSAGE[e.code]) || e.message,
+        setInThreadReference.current(false);
+        addMessageReference.current({
+          message: (error.code && ERROR_CODE_TO_MESSAGE[error.code]) || error.message,
           showSpinner: false,
           type: MessageType.ERROR,
         });
       })
       .finally(() => setDone(Date.now() - time));
-  }, [addMessageRef, cmd, setInThreadRef]);
+  }, [addMessageReference, cmd, setInThreadReference]);
 
   return done;
 }

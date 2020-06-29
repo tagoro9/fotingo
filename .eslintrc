@@ -58,7 +58,20 @@
     ],
     "node/no-unsupported-features/es-syntax": "off",
     "node/no-missing-import": "off",
-    "unicorn/filename-case": "off"
+    "unicorn/filename-case": "off",
+    "unicorn/prevent-abbreviations": [
+      "error",
+      {
+        "whitelist": {
+          "FotingoProps": true,
+          "MessageProps": true,
+          "MessagesProps": true,
+          "props": true,
+          "RequestProps": true,
+          "SelectRequestProps": true
+        }
+      }
+    ]
   },
   "settings": {
     "import/parsers": {

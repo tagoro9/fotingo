@@ -44,18 +44,21 @@ export function cacheable({
       );
     }
 
-    const cachedFn: PromiseFunction = async function (...args) {
+    const cachedFn: PromiseFunction = async function (...functionArguments) {
       if (isCacheDisabled) {
-        return method.call(this, ...args);
+        return method.call(this, ...functionArguments);
       }
-      const prefix = getPrefix ? getPrefix.call(this, ...args) : '';
-      const keyArgs = args.length > 0 ? `_${args.map((val) => JSON.stringify(val)).join('_')}` : '';
-      const key = `${prefix}${target.constructor.name}_${String(propertyKey)}${keyArgs}`;
+      const prefix = getPrefix ? getPrefix.call(this, ...functionArguments) : '';
+      const keyArguments =
+        functionArguments.length > 0
+          ? `_${functionArguments.map((value) => JSON.stringify(value)).join('_')}`
+          : '';
+      const key = `${prefix}${target.constructor.name}_${String(propertyKey)}${keyArguments}`;
       const cachedValue = await keyv.get(key);
       if (cachedValue) {
         return Promise.resolve(cachedValue);
       }
-      const result = await method.call(this, ...args);
+      const result = await method.call(this, ...functionArguments);
       await keyv.set(key, result, minutes ? minutes * 60 * 1000 : undefined);
       return Promise.resolve(result);
     };

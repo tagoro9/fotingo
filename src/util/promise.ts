@@ -4,17 +4,17 @@
  * @param providers Promise providers
  */
 export function series<T>(providers: Array<() => Promise<T>>): Promise<T[]> {
-  const ret = Promise.resolve(null);
+  const returnPromise = Promise.resolve(null);
   const results: T[] = [];
 
   return providers
     .reduce((result, provider, index) => {
       return result.then(() => {
-        return provider().then((val) => {
-          results[index] = val;
+        return provider().then((value) => {
+          results[index] = value;
         });
       });
-    }, ret)
+    }, returnPromise)
     .then(() => {
       return results;
     });
