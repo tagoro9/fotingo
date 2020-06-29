@@ -42,7 +42,10 @@ const defaultConfig: DefaultConfig = {
  * @param config Current config
  * @param data Program data (yargs)
  */
-export function enhanceConfigWithRuntimeArgs(config: Config, data: { branch?: string }): Config {
+export function enhanceConfigWithRuntimeArguments(
+  config: Config,
+  data: { branch?: string },
+): Config {
   return mergeDeepLeft(
     data.branch !== undefined
       ? {
@@ -68,8 +71,11 @@ export async function enhanceConfig(config: Config): Promise<Config> {
   try {
     // TODO I don't like this instantiation of Git here
     const git = new Git(configWithDefaults.git);
-    const rootDir = await git.getRootDir();
-    const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDir, ['.', '.github']);
+    const rootDirectory = await git.getRootDir();
+    const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDirectory, [
+      '.',
+      '.github',
+    ]);
     return git.getRemote(configWithDefaults.git.remote).then(
       (remote) =>
         mergeDeepLeft(
@@ -89,11 +95,11 @@ export async function enhanceConfig(config: Config): Promise<Config> {
           },
         ) as Config,
     );
-  } catch (e) {
-    if (e.code && e.code === GitErrorType.NOT_A_GIT_REPO) {
+  } catch (error) {
+    if (error.code && error.code === GitErrorType.NOT_A_GIT_REPO) {
       // Ignore the error, as it means we are running fotingo outside a repo
       return configWithDefaults;
     }
-    throw e;
+    throw error;
   }
 }

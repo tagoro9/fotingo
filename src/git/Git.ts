@@ -188,11 +188,11 @@ export class Git {
     return this.git
       .revparse(['--abbrev-ref', '--symbolic-full-name', '@{u}'])
       .then(() => true)
-      .catch((e: Error) => {
-        if (/no upstream configured for branch/.test(e.message)) {
+      .catch((error: Error) => {
+        if (/no upstream configured for branch/.test(error.message)) {
           return false;
         }
-        return this.mapAndThrowError(e);
+        return this.mapAndThrowError(error);
       });
   }
 
@@ -261,11 +261,13 @@ export class Git {
           flatten,
           map(
             compose(
-              map((ref: CommitReference) => ({
-                issue: ref.issue,
-                raw: `${ref.prefix}${ref.issue}`,
+              map((reference: CommitReference) => ({
+                issue: reference.issue,
+                raw: `${reference.prefix}${reference.issue}`,
               })),
-              filter(propSatisfies<string, CommitReference>((str) => /fixes/i.test(str), 'action')),
+              filter(
+                propSatisfies<string, CommitReference>((string) => /fixes/i.test(string), 'action'),
+              ),
               prop('references') as (c: ParsedCommit) => CommitReference[],
             ),
           ),
@@ -329,16 +331,16 @@ export class Git {
   /**
    * Transform errors coming from simple-git into
    * known errors
-   * @param e Error
+   * @param error Error
    */
-  private mapAndThrowError(e: Error): never {
-    if (e.message.match(/A branch named .* already exists/)) {
-      throw new GitErrorImpl(e.message, GitErrorType.BRANCH_ALREADY_EXISTS);
+  private mapAndThrowError(error: Error): never {
+    if (error.message.match(/A branch named .* already exists/)) {
+      throw new GitErrorImpl(error.message, GitErrorType.BRANCH_ALREADY_EXISTS);
     }
-    if (e.message.match(/not a git repository/)) {
-      throw new GitErrorImpl(e.message, GitErrorType.NOT_A_GIT_REPO);
+    if (error.message.match(/not a git repository/)) {
+      throw new GitErrorImpl(error.message, GitErrorType.NOT_A_GIT_REPO);
     }
-    throw e;
+    throw error;
   }
 
   /**
@@ -347,11 +349,11 @@ export class Git {
    */
   private async getBranchCommitsFromMergeBase(): Promise<ReadonlyArray<GitLogLine>> {
     const baseBranch = await this.findBaseBranch();
-    const ref = await this.git.raw(['merge-base', 'HEAD', baseBranch]);
+    const reference = await this.git.raw(['merge-base', 'HEAD', baseBranch]);
     return this.git
       .log({
         from: 'HEAD',
-        to: compose(trim, replace('\n', ''))(ref),
+        to: compose(trim, replace('\n', ''))(reference),
       })
       .then((data: ListLogSummary) => data.all);
   }

@@ -220,10 +220,14 @@ export class Github implements Remote {
    * so it is not executed until the previous call finished
    * @param call Call to queue
    * @param action Action that is being enqueued
-   * @param actionArgs Extra parameters to include in the debug message
+   * @param actionArguments Extra parameters to include in the debug message
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private queueCall<T>(call: () => Promise<T>, action?: string, ...actionArgs: any[]): Promise<T> {
+  private queueCall<T>(
+    call: () => Promise<T>,
+    action?: string,
+    ...actionArguments: any[]
+  ): Promise<T> {
     let outerResolve: (value: T) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let outerReject: (reason?: any) => void;
@@ -235,12 +239,12 @@ export class Github implements Remote {
     // TODO Test that errors don't break the queue
     this.apiCallsQueue = this.apiCallsQueue.then(() => {
       if (action) {
-        this.debug(action, ...actionArgs);
+        this.debug(action, ...actionArguments);
       }
       return call()
         .then((...resolvedValues) => {
           if (action) {
-            this.debug(`Done with: ${action}`, ...actionArgs);
+            this.debug(`Done with: ${action}`, ...actionArguments);
           }
           outerResolve(...resolvedValues);
         })

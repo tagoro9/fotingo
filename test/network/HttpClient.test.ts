@@ -7,8 +7,8 @@ import { HttpClient } from 'src/network/HttpClient';
 const request = (req as unknown) as jest.Mock;
 
 const mockRequestWithSuccess = (body: Record<string, unknown>, statusCode = 200): void =>
-  void request.mockImplementation((_, cb) => {
-    cb(null, { statusCode, body }, body);
+  void request.mockImplementation((_, callback) => {
+    callback(null, { statusCode, body }, body);
   });
 
 describe('HttpClient', () => {
@@ -66,8 +66,8 @@ describe('HttpClient', () => {
       return client
         .get('/')
         .toPromise()
-        .catch((err) => {
-          expect(err.body).toBe(body);
+        .catch((error) => {
+          expect(error.body).toBe(body);
         });
     });
   });

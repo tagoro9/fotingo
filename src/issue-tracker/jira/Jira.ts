@@ -258,13 +258,13 @@ export class Jira implements Tracker {
               })
               .pipe(map(prop('body'))),
           ).pipe(
-            reduce<Issue, Issue[]>((acc, val) => acc.concat(val), []),
+            reduce<Issue, Issue[]>((accumulator, value) => accumulator.concat(value), []),
             map((issues) => head(issues)),
           ),
         ),
       )
       .pipe(
-        reduce<Issue, Issue[]>((acc, val) => acc.concat(val), []),
+        reduce<Issue, Issue[]>((accumulator, value) => accumulator.concat(value), []),
         map(always(release)),
       );
   }
@@ -314,10 +314,10 @@ export class Jira implements Tracker {
       project: issue.fields.project.id,
       sanitizedSummary: compose<string, string, string, string, string, string, string>(
         take(72),
-        replace(/(_|-)$/, ''),
+        replace(/([_-])$/, ''),
         replace(/\s|\(|\)|__+/g, '_'),
         replace(/\/|\.|--=/g, '-'),
-        replace(/,|\[|]|"|'|”|“|@|’|`|:|\$|\?|\*|<|>|&|~|‘/g, ''),
+        replace(/["$&'*,:<>?@[]`~‘’“”]/g, ''),
         toLower,
       )(issue.fields.summary),
       summary: issue.fields.summary,
@@ -334,7 +334,7 @@ export class Jira implements Tracker {
           description: data.name,
           name: data.name,
           projectId: head(data.issues.map(path(['project']))),
-          releaseDate: new Date().toISOString().substring(0, 10),
+          releaseDate: new Date().toISOString().slice(0, 10),
           released: true,
         },
       })
@@ -354,9 +354,9 @@ export class Jira implements Tracker {
       map(prop('body')),
       map((status: JiraIssueStatus[]) => {
         return Object.entries(IssueStatus).reduce(
-          (acc, [key, val]) => ({
-            ...acc,
-            [key]: status.find((t) => statusRegex[val].test(t.name)),
+          (accumulator, [key, value]) => ({
+            ...accumulator,
+            [key]: status.find((t) => statusRegex[value].test(t.name)),
           }),
           {},
         );
@@ -371,15 +371,15 @@ export class Jira implements Tracker {
     return issue.transitions.find((transition) => statusRegex[status].test(transition.name));
   }
 
-  private mapError(e: NodeJS.ErrnoException | HttpError): Observable<never> {
-    if ('status' in e) {
-      const code = e.status;
+  private mapError(error: NodeJS.ErrnoException | HttpError): Observable<never> {
+    if ('status' in error) {
+      const code = error.status;
       const message =
-        (e.body.errorMessages && e.body.errorMessages[0]) ||
+        (error.body.errorMessages && error.body.errorMessages[0]) ||
         'Something went wrong when connecting with jira';
       return throwError(new JiraErrorImpl(message, code));
     } else {
-      return throwError(e);
+      return throwError(error);
     }
   }
 }
