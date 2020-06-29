@@ -274,6 +274,7 @@ export class Github implements Remote {
     content: string,
     pullRequestHead: string,
   ): Promise<PullsCreateResponseData> {
+    // TODO This should not here and baseBranch should just be an argument to the constructor
     const baseBranch = await this.git.findBaseBranch(true);
     return this.api.pulls
       .create({
