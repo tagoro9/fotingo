@@ -243,12 +243,6 @@ export interface FotingoArguments<T> extends Arguments {
   data: { [P in keyof T]?: T[P] };
 }
 
-export interface ReleaseData {
-  issues: string[];
-  name: string;
-  useDefaults: boolean;
-}
-
 export interface ReviewData {
   branch?: string;
   labels?: string[];
@@ -257,4 +251,31 @@ export interface ReviewData {
     enabled: boolean;
   };
   useDefaults: boolean;
+}
+
+export interface Review {
+  // TODO Rename comments. Its weird
+  comments: Issue[];
+  pullRequest: PullRequest;
+}
+
+export interface StartData {
+  git: {
+    createBranch: boolean;
+  };
+  issue: CreateIssue | GetIssue;
+}
+
+export interface ReleaseData {
+  issues: string[];
+  name: string;
+  tracker: {
+    enabled: boolean;
+  };
+  useDefaults: boolean;
+}
+
+export interface LocalChanges {
+  branchInfo: BranchInfo;
+  issues: Issue[];
 }
