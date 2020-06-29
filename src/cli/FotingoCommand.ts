@@ -1,5 +1,6 @@
 import { Command } from '@oclif/command';
 import { IConfig } from '@oclif/config';
+import { boundMethod } from 'autobind-decorator';
 import { existsSync, mkdirSync } from 'fs';
 import { concat, prop, zipObj } from 'ramda';
 import { empty, merge, Observable, ObservableInput, of, zip } from 'rxjs';
@@ -80,6 +81,7 @@ export abstract class FotingoCommand<T, R> extends Command {
    * all the fixed issues
    * @param data
    */
+  @boundMethod
   protected getLocalChangesInformation(
     data: [BranchInfo, { issues?: string[]; tracker: { enabled: boolean } }] | BranchInfo,
   ): ObservableInput<LocalChanges> {

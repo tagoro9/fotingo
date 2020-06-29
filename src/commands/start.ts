@@ -1,4 +1,5 @@
 import { flags } from '@oclif/command';
+import { boundMethod } from 'autobind-decorator';
 import { compose, has, ifElse, pathEq, prop, tap as rTap, unapply, zipObj } from 'ramda';
 import { Observable, of } from 'rxjs';
 import { switchMap, tap, withLatestFrom } from 'rxjs/operators';
@@ -19,7 +20,7 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
     {
       name: 'issue',
       required: true,
-      description: 'Id / Title of the issue to start working with',
+      description: 'Id of the issue to start working with',
     },
   ];
 
@@ -33,7 +34,6 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
     }),
     create: flags.boolean({
       char: 'c',
-      default: false,
       description: 'Create a new issue instead of searching for it',
       required: false,
       dependsOn: ['project', 'type'],
@@ -87,45 +87,54 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
   /**
    * Get or create an issue in the tracker based on the passed arguments
    */
-  getOrCreateIssue = compose(
-    ifElse(
-      has('id'),
-      compose(
-        this.tracker.getIssue,
-        rTap((id) => {
-          this.messenger.emit(`Getting ${id} from ${this.tracker.name}`, Emoji.BUG);
-        }),
-        prop('id'),
+  @boundMethod
+  private getOrCreateIssue(data: StartData): Observable<Issue> {
+    return compose(
+      ifElse(
+        has('id'),
+        compose(
+          this.tracker.getIssue,
+          rTap((id) => {
+            this.messenger.emit(`Getting ${id} from ${this.tracker.name}`, Emoji.BUG);
+          }),
+          prop('id'),
+        ),
+        compose(
+          this.tracker.createIssueForCurrentUser,
+          rTap(() => {
+            this.messenger.emit(`Creating issue in ${this.tracker.name}`, Emoji.BUG);
+          }),
+        ),
       ),
-      compose(
-        this.tracker.createIssueForCurrentUser,
-        rTap(() => {
-          this.messenger.emit(`Creating issue in ${this.tracker.name}`, Emoji.BUG);
-        }),
-      ),
-    ),
-    prop('issue'),
-  );
+      prop('issue'),
+    )(data);
+  }
 
   /**
    * Set an issue in progress
    */
-  setIssueInProgress = compose(
-    (id: string) => this.tracker.setIssueStatus(IssueStatus.IN_PROGRESS, id),
-    prop('key'),
-  );
+  @boundMethod
+  private setIssueInProgress(issue: Issue): Observable<Issue> {
+    return compose(
+      (id: string) => this.tracker.setIssueStatus(IssueStatus.IN_PROGRESS, id),
+      prop('key'),
+    )(issue);
+  }
 
   /**
    * Create a branch for the specified issue stashing all the changes
    */
-  createBranch = compose(
-    this.git.createBranchAndStashChanges,
-    rTap((name) => {
-      this.messenger.emit(`Creating branch ${name}`, Emoji.TADA);
-    }),
-    this.git.getBranchNameForIssue,
-    prop('issue'),
-  );
+  @boundMethod
+  private createBranch(issueAndData: IssueAndStartData): Promise<void> {
+    return compose(
+      this.git.createBranchAndStashChanges,
+      rTap((name) => {
+        this.messenger.emit(`Creating branch ${name}`, Emoji.TADA);
+      }),
+      this.git.getBranchNameForIssue,
+      prop('issue'),
+    )(issueAndData);
+  }
 
   shouldCreateBranch = pathEq(['commandData', 'git', 'createBranch'], true);
 
