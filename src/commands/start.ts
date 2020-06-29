@@ -75,6 +75,7 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
         ? {
             description: flags.description,
             labels: flags.labels,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             project: flags.project!,
             title: args.issue,
             type: flags.type as IssueType,

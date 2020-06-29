@@ -1,5 +1,4 @@
 import { ParsedCommit } from 'conventional-commits-parser';
-import { Arguments } from 'yargs';
 
 /**
  * Config
@@ -237,11 +236,6 @@ export interface Remote {
 /**
  * CLI types
  */
-
-export interface FotingoArguments<T> extends Arguments {
-  config: Config;
-  data: { [P in keyof T]?: T[P] };
-}
 
 export interface ReviewData {
   branch?: string;

@@ -222,10 +222,10 @@ export class Github implements Remote {
    * @param action Action that is being enqueued
    * @param actionArguments Extra parameters to include in the debug message
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private queueCall<T>(
     call: () => Promise<T>,
     action?: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...actionArguments: any[]
   ): Promise<T> {
     let outerResolve: (value: T) => void;

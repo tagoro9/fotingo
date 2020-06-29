@@ -58,6 +58,7 @@ export abstract class FotingoCommand<T, R> extends Command {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async init(): Promise<any> {
     await this.initializeFotingoConfig();
     this.tracker = new Jira(this.fotingo.jira, this.messenger);
