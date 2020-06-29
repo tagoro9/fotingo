@@ -72,6 +72,7 @@ export class Jira implements Tracker {
   private client: HttpClient;
   private config: JiraConfig;
   private messenger: Messenger;
+  public readonly name = 'Jira';
 
   constructor(config: JiraConfig, messenger: Messenger) {
     this.config = config;

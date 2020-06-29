@@ -19,6 +19,7 @@ export interface Tracker {
   getCurrentUserOpenIssues: () => Observable<Issue[]>;
   getIssue: (issueId: string) => Observable<Issue>;
   isValidIssueName: (name: string) => boolean;
+  readonly name: string;
   setIssueStatus: (status: IssueStatus, issueId: string) => Observable<Issue>;
   setIssuesFixVersion(release: Release): Observable<Release>;
 }
