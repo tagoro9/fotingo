@@ -13,15 +13,15 @@
     "/oclif.manifest.json"
   ],
   "scripts": {
-    "build": "yarn run clean && tsc -p ./ && chmod 755 ./lib/fotingo.js",
+    "build": "yarn run clean && tsc -p ./",
     "circular-dependencies": "madge --circular src",
     "clean": "rimraf lib",
     "coverage": "jest --coverage --silent",
     "lint": "eslint ./src ./test ./types --color --ext .ts --ext .tsx",
     "postpack": "rm -f oclif.manifest.json",
-    "prepack": "yarn clean && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "prepare": "yarn run build",
-    "release": "yarn run build && standard-version",
+    "prepack": "yarn clean && yarn build && oclif-dev manifest && oclif-dev readme",
+    "prepare": "yarn build",
+    "release": "yarn build && standard-version",
     "test": "FORCE_COLOR=0 jest",
     "version": "oclif-dev readme && git add README.md",
     "watch": "tsc -w -p ./"
