@@ -7,6 +7,7 @@ import { FotingoCommand } from 'src/cli/FotingoCommand';
 import { PullRequest } from 'src/git/Remote';
 import { Emoji } from 'src/io/messenger';
 import { Issue, IssueStatus, Review as FotingoReview, ReviewData } from 'src/types';
+import { boundMethod } from 'autobind-decorator';
 
 export class Review extends FotingoCommand<FotingoReview, ReviewData> {
   static description = 'Submit current issue for review';
@@ -28,6 +29,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
     simple: flags.boolean({
       char: 's',
       description: 'Do not use any issue tracker',
+      default: false,
       name: 'simple',
     }),
     yes,
@@ -40,7 +42,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
       labels: flags.labels,
       reviewers: flags.reviewers,
       tracker: {
-        enabled: flags.simple,
+        enabled: !flags.simple,
       },
       useDefaults: flags.yes,
     };
@@ -50,8 +52,9 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
    * Given a pull request, update all the fixed issues in the issue tracker
    * @param pullRequest Pull request
    */
-  updateIssues = (pullRequest: PullRequest): Observable<FotingoReview> =>
-    (zip(
+  @boundMethod
+  updateIssues(pullRequest: PullRequest): Observable<FotingoReview> {
+    return (zip(
       of(pullRequest).pipe(
         tap((pr) => {
           if (pr.issues.length > 0) {
@@ -71,6 +74,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
         ),
       ).pipe(reduce<Issue, Issue[]>((accumulator, value) => accumulator.concat(value), [])),
     ).pipe(map(zipObj(['pullRequest', 'comments']))) as unknown) as Observable<FotingoReview>;
+  }
 
   protected runCmd(commandData$: Observable<ReviewData>): Observable<FotingoReview> {
     return commandData$.pipe(
