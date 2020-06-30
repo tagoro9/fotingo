@@ -21,7 +21,6 @@
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "yarn clean && yarn build && oclif-dev manifest && oclif-dev readme",
     "prepare": "yarn build",
-    "release": "yarn build && standard-version",
     "test": "FORCE_COLOR=0 jest",
     "version": "oclif-dev readme && git add README.md",
     "watch": "tsc -w -p ./"
