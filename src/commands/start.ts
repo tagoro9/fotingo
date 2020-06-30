@@ -5,9 +5,9 @@ import { Observable, of } from 'rxjs';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { branch } from 'src/cli/flags';
 import { FotingoCommand } from 'src/cli/FotingoCommand';
+import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji } from 'src/io/messenger';
 import { Issue, IssueStatus, IssueType, StartData } from 'src/types';
-import { maybeAskUserToSelectMatches } from 'src/io/input';
 
 interface IssueAndStartData {
   commandData: StartData;
