@@ -1,4 +1,5 @@
 import { flags } from '@oclif/command';
+import { boundMethod } from 'autobind-decorator';
 import { mergeAll, zipObj } from 'ramda';
 import { merge, Observable, of, zip } from 'rxjs';
 import { map, reduce, switchMap, tap, withLatestFrom } from 'rxjs/operators';
@@ -7,7 +8,6 @@ import { FotingoCommand } from 'src/cli/FotingoCommand';
 import { PullRequest } from 'src/git/Remote';
 import { Emoji } from 'src/io/messenger';
 import { Issue, IssueStatus, Review as FotingoReview, ReviewData } from 'src/types';
-import { boundMethod } from 'autobind-decorator';
 
 export class Review extends FotingoCommand<FotingoReview, ReviewData> {
   static description = 'Submit current issue for review';
