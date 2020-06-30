@@ -257,7 +257,7 @@ export interface StartData {
   git: {
     createBranch: boolean;
   };
-  issue: CreateIssue | GetIssue;
+  issue: CreateIssue | GetIssue | undefined;
 }
 
 export interface ReleaseData {
