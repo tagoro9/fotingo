@@ -13,13 +13,13 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
   static args = [
     {
       description: 'Name of the release to be created',
-      name: 'release-name',
+      name: 'release',
       required: true,
     },
   ];
 
   static flags = {
-    issue: flags.string({
+    issues: flags.string({
       char: 'i',
       description: 'Specify more issues to include in the release',
       multiple: true,
@@ -51,8 +51,8 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
   protected getCommandData(): ReleaseData {
     const { args, flags } = this.parse(Release);
     return {
-      issues: (flags.issue || []) as string[],
-      name: args.releaseName as string,
+      issues: (flags.issues || []) as string[],
+      name: args.release as string,
       tracker: {
         enabled: !flags.simple,
       },
