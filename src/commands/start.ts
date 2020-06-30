@@ -2,11 +2,12 @@ import { flags } from '@oclif/command';
 import { boundMethod } from 'autobind-decorator';
 import { compose, has, ifElse, pathEq, prop, tap as rTap, unapply, zipObj } from 'ramda';
 import { Observable, of } from 'rxjs';
-import { switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { branch } from 'src/cli/flags';
 import { FotingoCommand } from 'src/cli/FotingoCommand';
 import { Emoji } from 'src/io/messenger';
 import { Issue, IssueStatus, IssueType, StartData } from 'src/types';
+import { maybeAskUserToSelectMatches } from 'src/io/input';
 
 interface IssueAndStartData {
   commandData: StartData;
@@ -19,7 +20,7 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
   static args = [
     {
       name: 'issue',
-      required: true,
+      required: false,
       description: 'Id of the issue to start working with',
     },
   ];
@@ -32,55 +33,58 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
       description: 'Do not create a branch with the issue name',
       name: 'no-branch-issue',
     }),
-    create: flags.boolean({
-      char: 'c',
-      description: 'Create a new issue instead of searching for it',
+    title: flags.string({
+      char: 't',
+      description: 'Title of issue to create',
       required: false,
-      dependsOn: ['project', 'type'],
+      dependsOn: ['project', 'kind'],
     }),
     project: flags.string({
       char: 'p',
       description: 'Name of the project where to create the issue',
       required: false,
-      dependsOn: ['type', 'create'],
+      dependsOn: ['kind', 'title'],
     }),
-    type: flags.string({
-      char: 't',
-      description: 'Type of issue to be created',
+    kind: flags.string({
+      char: 'k',
+      description: 'Kind of issue to be created',
       required: false,
-      dependsOn: ['create', 'project'],
+      dependsOn: ['title', 'project'],
     }),
     description: flags.string({
       char: 'd',
       description: 'Description of the issue to be created',
       required: false,
-      dependsOn: ['create', 'project', 'type'],
+      dependsOn: ['title', 'project', 'kind'],
     }),
     labels: flags.string({
       description: 'Labels to add to the issue',
       char: 'l',
       multiple: true,
       required: false,
-      dependsOn: ['create', 'project', 'type'],
+      dependsOn: ['title', 'project', 'kind'],
     }),
   };
 
   getCommandData(): StartData {
     const { args, flags } = this.parse(Start);
+    let issue = undefined;
+    if (flags.title) {
+      issue = {
+        description: flags.description as string,
+        labels: flags.labels as string[],
+        project: flags.project as string,
+        title: flags.title as string,
+        type: flags.kind as IssueType,
+      };
+    } else if (args.issue) {
+      issue = { id: args.issue as string };
+    }
     return {
       git: {
         createBranch: !flags['no-branch-issue'],
       },
-      issue: args.create
-        ? {
-            description: flags.description,
-            labels: flags.labels,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            project: flags.project!,
-            title: args.issue,
-            type: flags.type as IssueType,
-          }
-        : { id: args.issue },
+      issue,
     };
   }
 
@@ -136,12 +140,45 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
     )(issueAndData);
   }
 
+  /**
+   * Create a closure to ask the user to select an issue to start working
+   * with (from the issues that are assigned to them). This only happens
+   * if no issue was provided in the CLI
+   */
+  @boundMethod
+  private maybeAskUserToSelectIssue(data: StartData): Observable<StartData> {
+    if (data.issue === undefined) {
+      return this.tracker.getCurrentUserOpenIssues().pipe(
+        switchMap((issues: Issue[]) =>
+          maybeAskUserToSelectMatches<Issue>(
+            {
+              allowTextSearch: true,
+              data: [issues],
+              getLabel: (issue) => `${issue.key} (${issue.type}) - ${issue.summary}`,
+              getQuestion: () => 'What ticket would you like to start working on?',
+              getValue: (issue) => issue.key,
+              limit: 15,
+              useDefaults: false,
+            },
+            this.messenger,
+          ),
+        ),
+        map((issues) => issues[0]),
+        map((issue) => ({ ...data, issue: { id: issue.key } })),
+      );
+    } else {
+      return of(data);
+    }
+  }
+
   shouldCreateBranch = pathEq(['commandData', 'git', 'createBranch'], true);
 
   justReturnTheIssue = compose((data: IssueAndStartData) => of(prop('issue', data)));
 
   runCmd(commandData$: Observable<StartData>): Observable<Issue | void> {
     return commandData$.pipe(
+      // TODO We already have the issue here, it should not be fetched in the next cmd call again
+      switchMap(this.maybeAskUserToSelectIssue),
       switchMap(this.getOrCreateIssue),
       tap((issue: Issue) => {
         this.messenger.emit(`Setting ${issue.key} in progress`, Emoji.BOOKMARK);
