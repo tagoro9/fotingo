@@ -5467,9 +5467,9 @@ ink-testing-library@^2.0.0:
     "@types/react" "^16.9.38"
 
 ink-text-input@^3.2.0:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/ink-text-input/-/ink-text-input-3.2.2.tgz#1b61239d3307bc3fdd47917baa4d2cdd661b45da"
-  integrity sha512-h4EEJYOO88uK16U1mhgmJBMYeEy8ZmkrdV6gybyluCbAOQtAyND/WuRQVIKhe7D2dtYd2wwYTC648nuAxwltPQ==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/ink-text-input/-/ink-text-input-3.3.0.tgz#ab1f5e668321b3df7e26be64c327e49ff476f3ce"
+  integrity sha512-gO4wrOf2ie3YuEARTIwGlw37lMjFn3Gk6CKIDrMlHb46WFMagZU7DplohjM24zynlqfnXA5UDEIfC2NBcvD8kg==
   dependencies:
     chalk "^3.0.0"
     prop-types "^15.5.10"
