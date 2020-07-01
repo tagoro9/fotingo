@@ -86,3 +86,6 @@ jspm_packages
 /lib/
 .vscode/
 pack/
+
+# oclif builds
+fotingo-*.tgz
