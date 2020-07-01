@@ -13,7 +13,8 @@
     "/oclif.manifest.json"
   ],
   "scripts": {
-    "build": "yarn run clean && tsc -p ./",
+    "build": "yarn clean && tsc -p ./ && yarn build:fix-paths",
+    "build:fix-paths": "tscpaths -p ./tsconfig.json -s ./src -o ./lib",
     "circular-dependencies": "madge --circular src",
     "clean": "rimraf lib",
     "coverage": "jest --coverage --silent",
@@ -143,6 +144,7 @@
     "semantic-release": "^17.0.7",
     "serialize-error": "^7.0.0",
     "ts-jest": "^25.2.0",
+    "tscpaths": "^0.0.9",
     "typescript": "^3.6.4"
   },
   "engines": {

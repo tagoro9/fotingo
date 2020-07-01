@@ -2748,7 +2748,7 @@ commander@2.6.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.6.0.tgz#9df7e52fb2a0cb0fb89058ee80c3104225f37e1d"
   integrity sha1-nfflL7Kgyw+4kFjugMMQQiXzfh0=
 
-commander@^2.13.0, commander@^2.16.0, commander@^2.19.0, commander@^2.20.3, commander@^2.8.1, commander@~2.20.3:
+commander@^2.13.0, commander@^2.16.0, commander@^2.19.0, commander@^2.20.0, commander@^2.20.3, commander@^2.8.1, commander@~2.20.3:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -10980,6 +10980,14 @@ tsconfig-paths@^3.9.0:
     json5 "^1.0.1"
     minimist "^1.2.0"
     strip-bom "^3.0.0"
+
+tscpaths@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/tscpaths/-/tscpaths-0.0.9.tgz#c77abfde6820920f10c64f83c27753b9505814ab"
+  integrity sha512-tz4qimSJTCjYtHVsoY7pvxLcxhmhgmwzm7fyMEiL3/kPFFVyUuZOwuwcWwjkAsIrSUKJK22A7fNuJUwxzQ+H+w==
+  dependencies:
+    commander "^2.20.0"
+    globby "^9.2.0"
 
 tslib@^1, tslib@^1.9.3:
   version "1.13.0"
