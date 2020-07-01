@@ -1,4 +1,4 @@
-# Fotingo (beta)
+# Fotingo
 
 A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on tasks.
 
