@@ -94,7 +94,7 @@
     "turndown": "^6.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
+    "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^8.3.4",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
