@@ -62,7 +62,7 @@
     "@keyv/sqlite": "^2.0.1",
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.14.0",
-    "@oclif/plugin-help": "^2.2.3",
+    "@oclif/plugin-help": "^3.1.0",
     "@octokit/rest": "^18.0.0",
     "@scarf/scarf": "^1.0.6",
     "autobind-decorator": "^2.4.0",
