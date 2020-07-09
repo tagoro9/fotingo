@@ -21,7 +21,6 @@ export interface JiraIssue {
   renderedFields: {
     description?: string;
   };
-  sanitizedSummary: string;
   transitions: IssueTransition[];
   url: string;
 }
