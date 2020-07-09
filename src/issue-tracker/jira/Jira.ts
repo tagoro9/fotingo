@@ -317,7 +317,7 @@ export class Jira implements Tracker {
         replace(/([_-])$/, ''),
         replace(/\s|\(|\)|__+/g, '_'),
         replace(/\/|\.|--=/g, '-'),
-        replace(/["$&'*,:<>?@[]`~‘’“”]/g, ''),
+        replace(/["$&'*,:;<>?@[\]`~‘’“”]/g, ''),
         toLower,
       )(issue.fields.summary),
       summary: issue.fields.summary,
