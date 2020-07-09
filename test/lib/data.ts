@@ -9,9 +9,8 @@ import { Issue, IssueType, Release, ReleaseConfig, User } from 'src/types';
  * Data factory used to generate mock data for the tests
  */
 export const data = {
-  createJiraIssue(): JiraIssue {
-    const summary = faker.name.jobDescriptor();
-    const sanitizedSummary = faker.helpers.slugify(summary);
+  createJiraIssue(overrides: { summary?: string } = {}): JiraIssue {
+    const defaultSummary = faker.name.jobDescriptor();
     const issueType = faker.random.arrayElement(Object.values(IssueType));
     return {
       fields: {
@@ -22,14 +21,13 @@ export const data = {
         project: {
           id: faker.lorem.word(),
         },
-        summary,
+        summary: overrides.summary || defaultSummary,
       },
       id: faker.random.number(5000),
       key: `FOTINGO-${faker.random.number(5000)}`,
       renderedFields: {
         description: undefined,
       },
-      sanitizedSummary,
       transitions: [],
       url: faker.internet.url(),
     };
