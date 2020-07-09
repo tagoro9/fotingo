@@ -30,3 +30,16 @@ Object {
   "message": "There was an error",
 }
 `;
+
+exports[`jira getIssue gets and transforms the issue from Jira 1`] = `
+Object {
+  "description": undefined,
+  "id": 2928,
+  "key": "FOTINGO-4266",
+  "project": "soluta",
+  "sanitizedSummary": "issue_with_a_lot_of_characters",
+  "summary": "Issue with a lot of characters \\"$&'*,:;<>?@[]\`~‘’“”",
+  "type": "Story",
+  "url": "https://vallie.biz/browse/FOTINGO-4266",
+}
+`;
