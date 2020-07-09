@@ -80,4 +80,19 @@ describe('jira', () => {
       }
     });
   });
+
+  describe('getIssue', () => {
+    test('gets and transforms the issue from Jira', async () => {
+      const jiraIssue = data.createJiraIssue({
+        summary: `Issue with a lot of characters "$&'*,:;<>?@[]\`~‘’“”`,
+      });
+      httpClientMocks.get.mockReturnValue(of(data.createHttpResponse(jiraIssue)));
+      const issue = await jira.getIssue(jiraIssue.key).toPromise();
+      expect(issue.sanitizedSummary).not.toContain(':');
+      expect(issue).toMatchSnapshot();
+      expect(httpClientMocks.get).toHaveBeenCalledWith(`/issue/${jiraIssue.key}`, {
+        qs: { expand: 'transitions, renderedFields' },
+      });
+    });
+  });
 });
