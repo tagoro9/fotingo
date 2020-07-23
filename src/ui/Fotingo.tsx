@@ -6,7 +6,12 @@ import { Messages } from './Messages';
 import { FotingoProps } from './props';
 import { useCmd } from './useCmd';
 
-export function Fotingo({ cmd, isDebugging, messenger }: FotingoProps): JSX.Element {
+export function Fotingo({
+  cmd,
+  isDebugging,
+  messenger,
+  showFooter = true,
+}: FotingoProps): JSX.Element {
   const { executionTime, isDone, isInThread, messages, request, sendRequestData } = useCmd(
     messenger,
     cmd,
@@ -22,7 +27,7 @@ export function Fotingo({ cmd, isDebugging, messenger }: FotingoProps): JSX.Elem
         messages={messages}
       />
       {request && <InputRequest request={request} onSubmit={sendRequestData} />}
-      {!request && executionTime && <Footer executionTime={executionTime} />}
+      {!request && executionTime && showFooter && <Footer executionTime={executionTime} />}
     </>
   );
 }
