@@ -40,7 +40,7 @@ function useMessenger(
   const messengerReference = useRef(messenger);
   const addMessageReference = useRef(addMessage);
   useEffect(() => {
-    messengerReference.current.onMessage((message) => {
+    const subscription = messengerReference.current.onMessage((message) => {
       if (isRequest(message)) {
         setRequest(message);
       } else if (isStatus(message)) {
@@ -49,6 +49,9 @@ function useMessenger(
         addMessageReference.current(message);
       }
     });
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [addMessageReference, messenger, setRequest, setInThread]);
 }
 
