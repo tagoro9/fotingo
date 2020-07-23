@@ -2,10 +2,10 @@ import { Command } from '@oclif/command';
 import { IConfig } from '@oclif/config';
 import { boundMethod } from 'autobind-decorator';
 import { existsSync, mkdirSync } from 'fs';
-import { concat, prop, zipObj } from 'ramda';
-import { empty, merge, Observable, ObservableInput, of, zip } from 'rxjs';
-import { catchError, map, reduce } from 'rxjs/operators';
-import { readConfig } from 'src/config';
+import { concat, lensPath, mergeDeepRight, path, prop, set, zipObj } from 'ramda';
+import { empty, from, merge, Observable, ObservableInput, of, zip } from 'rxjs';
+import { catchError, concatMap, map, reduce, tap } from 'rxjs/operators';
+import { readConfig, requiredConfigs, writeConfig } from 'src/config';
 import { enhanceConfig, enhanceConfigWithRuntimeArguments } from 'src/enhanceConfig';
 import { BranchInfo, Git } from 'src/git/Git';
 import { Github } from 'src/git/Github';
@@ -40,7 +40,7 @@ export abstract class FotingoCommand<T, R> extends Command {
    * from the environment
    */
   private async initializeFotingoConfig(): Promise<void> {
-    this.fotingo = readConfig();
+    this.fotingo = await this.readConfig();
     const enhancedConfig = await enhanceConfig(this.fotingo);
     this.fotingo = await enhanceConfigWithRuntimeArguments(enhancedConfig, {
       // TODO We need the flags to do this, but the flags require calling parse
@@ -57,6 +57,50 @@ export abstract class FotingoCommand<T, R> extends Command {
     if (!existsSync(path)) {
       mkdirSync(path);
     }
+  }
+
+  /**
+   * Read the configuration and ask the user to provide anny missing configuration
+   */
+  private async readConfig(): Promise<Config> {
+    const initialConfig = readConfig();
+    return new Promise((resolve) => {
+      const ui = renderUi({
+        cmd: () =>
+          this.askForRequiredConfig(initialConfig).pipe(
+            map((d) => mergeDeepRight(initialConfig, d) as Config),
+            tap((config: Config) => {
+              // TODO This is ugly but makes it that react state updates before unmounting
+              setTimeout(() => {
+                ui.unmount();
+                resolve(config);
+              }, 300);
+            }),
+          ),
+        isDebugging: process.env.DEBUG !== undefined,
+        messenger: this.messenger,
+        showFooter: false,
+      });
+    });
+  }
+
+  /**
+   * Ask the user for the required configurations that are currently missing and write them to the closest config
+   * file
+   */
+  private askForRequiredConfig(config: Config): Observable<Partial<Config>> {
+    // TODO requiredConfig should be configurable by each command
+    return from(requiredConfigs.filter((cfg) => path(cfg.path, config) === undefined)).pipe(
+      concatMap((requiredConfig) =>
+        this.messenger
+          .request(requiredConfig.request)
+          .pipe(map((value) => [requiredConfig.path, value])),
+      ),
+      reduce<[string[], string], Partial<Config>>((accumulator, value) => {
+        return set(lensPath(value[0]), value[1], accumulator);
+      }, {}),
+      map(writeConfig),
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
