@@ -148,6 +148,7 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
   @boundMethod
   private maybeAskUserToSelectIssue(data: StartData): Observable<StartData> {
     if (data.issue === undefined) {
+      this.messenger.emit(`Getting open tickets from ${this.tracker.name}`, Emoji.BUG);
       return this.tracker.getCurrentUserOpenIssues().pipe(
         switchMap((issues: Issue[]) =>
           maybeAskUserToSelectMatches<Issue>(
