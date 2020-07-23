@@ -1,5 +1,5 @@
 import { boundMethod } from 'autobind-decorator';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { mapTo, take } from 'rxjs/operators';
 
 export enum MessageType {
@@ -120,8 +120,8 @@ export class Messenger {
     this.subject.error(error);
   }
 
-  public onMessage(fn: (msg: Message) => void): void {
-    this.subject.subscribe({
+  public onMessage(fn: (msg: Message) => void): Subscription {
+    return this.subject.subscribe({
       next: fn,
     });
   }
