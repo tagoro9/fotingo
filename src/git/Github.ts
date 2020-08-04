@@ -420,7 +420,7 @@ export class Github implements Remote {
     if (issues.length > 0) {
       return {
         description: replace(/\r\n/g, '\n', issues[0].description || ''),
-        summary: take(60, `${issues[0].key}: ${issues[0].summary}`),
+        summary: take(100, `${issues[0].key}: ${issues[0].summary}`),
       };
     }
     if (branchInfo.commits.length > 0) {
