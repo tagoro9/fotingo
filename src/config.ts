@@ -7,16 +7,7 @@ import { writeFileSync } from 'fs';
 import * as path from 'path';
 import * as R from 'ramda';
 
-import { GitConfig, GithubConfig } from './git/Config';
-import { JiraConfig } from './issue-tracker/jira/Config';
-import { ReleaseConfig } from './types';
-
-export interface Config {
-  git: GitConfig;
-  github: GithubConfig;
-  jira: JiraConfig;
-  release: ReleaseConfig;
-}
+import { Config } from './types';
 
 export const requiredConfigs = [
   { path: ['jira', 'user', 'login'], request: "What's your Jira user?" },
