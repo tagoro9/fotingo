@@ -1,9 +1,16 @@
 import * as faker from 'faker';
 import { GitConfig } from 'src/git/Config';
-import { JiraConfig } from 'src/issue-tracker/jira/Config';
 import { JiraIssue } from 'src/issue-tracker/jira/types';
 import { HttpResponse } from 'src/network/HttpClient';
-import { Issue, IssueType, Release, ReleaseConfig, User } from 'src/types';
+import {
+  Issue,
+  IssueStatus,
+  IssueType,
+  Release,
+  ReleaseConfig,
+  TrackerConfig,
+  User,
+} from 'src/types';
 
 /**
  * Data factory used to generate mock data for the tests
@@ -54,9 +61,16 @@ export const data = {
       remote: 'origin',
     };
   },
-  createJiraConfig(): JiraConfig {
+  createTrackerConfig(): TrackerConfig {
     return {
       root: faker.internet.url(),
+      status: {
+        [IssueStatus.BACKLOG]: /backlog/i,
+        [IssueStatus.DONE]: /done/i,
+        [IssueStatus.IN_PROGRESS]: /progress/i,
+        [IssueStatus.SELECTED_FOR_DEVELOPMENT]: /to do/i,
+        [IssueStatus.IN_REVIEW]: /review/i,
+      },
       user: {
         login: faker.internet.email(),
         token: faker.internet.password(),

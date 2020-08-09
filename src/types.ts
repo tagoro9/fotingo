@@ -18,8 +18,9 @@ interface RemoteConfig {
   repo: string;
 }
 
-interface TrackerConfig {
+export interface TrackerConfig {
   root: string;
+  status: Record<IssueStatus, RegExp>;
   user: {
     login: string;
     token: string;

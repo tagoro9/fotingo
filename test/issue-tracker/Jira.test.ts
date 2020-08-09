@@ -21,7 +21,7 @@ let jira: Jira;
 describe('jira', () => {
   beforeEach(() => {
     httpClientMock.mockImplementation(() => httpClientMocks);
-    jira = new Jira(data.createJiraConfig(), new Messenger());
+    jira = new Jira(data.createTrackerConfig(), new Messenger());
   });
 
   afterEach(() => {
