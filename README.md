@@ -89,7 +89,7 @@ Fotingo will try to guess most of the information based on the user environment,
 You can create project-specific configuration files. Just create a `.fotingorc` file inside your project root folder.
 This file, needs to be in JSON format as well. You can also overwrite global configuration in this file. An example config file may just be:
 
-```js
+```json
 {
   "github": {
     "baseBranch": "develop"
@@ -101,20 +101,21 @@ This file, needs to be in JSON format as well. You can also overwrite global con
 
 Fotingo will use as many defaults as possible to make it easier to use, but maybe you want to change some of the defaults. In that case, you can update any of the next properties in a fotingo configuration file
 
-| Path                       | Description                                       | default                     |
-| -------------------------- | ------------------------------------------------- | --------------------------- |
-| git.remote                 | Git remote to use                                 | origin                      |
-| git.baseBranch             | Git base branch to use when creating new branches | master                      |
-| git.branchTemplate         | Template used when creating a new branch          | See [templates](#templates) |
-| github.authToken           | Auth token to connect to Github                   | -                           |
-| github.baseBranch          | Base branch to use to create PRs                  | master                      |
-| github.owner               | Owner of the repository when creating a PR        | Extracted from remote       |
-| github.repo                | Name of the repository when creating a PR         | Extracted from remote       |
-| github.pullRequestTemplate | Template to use when creating a PR                | See [templates](#templates) |
-| jira.user.login            | User login to connect to Jira                     | -                           |
-| jira.user.token            | User token to connect to Jira                     | -                           |
-| jira.releaseTemplate       | Template to use when creating a release           | See [templates](#templates) |
-| jira.root                  | URL root to the Jira server                       | -                           |
+| Path                       | Description                                       | default                          |
+| -------------------------- | ------------------------------------------------- | -------------------------------- |
+| git.baseBranch             | Git base branch to use when creating new branches | master                           |
+| git.branchTemplate         | Template used when creating a new branch          | See [templates](#templates)      |
+| git.remote                 | Git remote to use                                 | origin                           |
+| github.authToken           | Auth token to connect to Github                   | -                                |
+| github.baseBranch          | Base branch to use to create PRs                  | master                           |
+| github.owner               | Owner of the repository when creating a PR        | Extracted from remote            |
+| github.pullRequestTemplate | Template to use when creating a PR                | See [templates](#templates)      |
+| github.repo                | Name of the repository when creating a PR         | Extracted from remote            |
+| jira.releaseTemplate       | Template to use when creating a release           | See [templates](#templates)      |
+| jira.root                  | URL root to the Jira server                       | -                                |
+| jira.status                | Regexes to identify workflow statuses             | See [jira status](#jira-status) |
+| jira.user.login            | User login to connect to Jira                     | -                                |
+| jira.user.token            | User token to connect to Jira                     | -                                |
 
 ### Templates
 
@@ -142,6 +143,29 @@ You can use `{` and `}` to interpolate the desired data. This is the data that i
   - `issue.shortName`. A short name that represents a Jira issue type (e.g. _f_ for features).
   - `issue.key`. The key of the issue.
   - `issue.sanitizedSummary`. This is the summary of the issue, sanitized for use as a branch name.
+
+### Jira status
+
+Fotingo internally uses 5 status for an issue: `Backlog`, `Selected for Development`, `In progress`, `In review`, `Done`.
+It automatically tries to map these statuses to Jira statuses, but sometimes projects may have simplified statuses in
+Jira and fotingo won't be able to do the mapping automatically. If that is the case, the `jira.status` config can be
+used to help fotingo do the mapping. Each entry should be a regex to map to that status:
+
+```json
+{
+  "jira": {
+    "status": {
+      "BACKLOG": "backlog",
+      "IN_PROGRESS": "in progress",
+      "IN_REVIEW": "review",
+      "DONE": "done",
+      "SELECTED_FOR_DEVELOPMENT": "(todo)|(to do)|(selected for development)"
+    }
+  }
+}
+```
+
+Multiple fotingo status can point to the same Jira status.
 
 ## Why fotingo?
 
