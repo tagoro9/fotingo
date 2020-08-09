@@ -1,6 +1,6 @@
-import { mergeDeepLeft } from 'ramda';
+import { ifElse, isNil, mergeDeepLeft, mergeDeepWith, nthArg } from 'ramda';
+import { Config, IssueStatus } from 'src/types';
 
-import { Config } from './config';
 import { Git } from './git/Git';
 import { GitErrorType } from './git/GitError';
 import { getFileContent } from './io/file';
@@ -14,6 +14,9 @@ interface DefaultConfig {
   github: {
     baseBranch: string;
     pullRequestTemplate: string;
+  };
+  jira: {
+    status: Record<IssueStatus, RegExp>;
   };
   release: {
     template: string;
@@ -30,6 +33,15 @@ const defaultConfig: DefaultConfig = {
     baseBranch: 'master',
     pullRequestTemplate:
       '{summary}\n\n**Description**\n\n{description}\n\n{fixedIssues}\n\n**Changes**\n\n{changes}\n\n{fotingo.banner}',
+  },
+  jira: {
+    status: {
+      [IssueStatus.BACKLOG]: /backlog/i,
+      [IssueStatus.IN_PROGRESS]: /in progress/i,
+      [IssueStatus.IN_REVIEW]: /review/i,
+      [IssueStatus.DONE]: /done/i,
+      [IssueStatus.SELECTED_FOR_DEVELOPMENT]: /(todo)|(to do)|(selected for development)/i,
+    },
   },
   release: {
     template:
@@ -67,7 +79,11 @@ export function enhanceConfigWithRuntimeArguments(
  * @param config Current config
  */
 export async function enhanceConfig(config: Config): Promise<Config> {
-  const configWithDefaults = mergeDeepLeft(config, defaultConfig) as Config;
+  const configWithDefaults = mergeDeepWith(
+    ifElse(isNil, nthArg(1), nthArg(0)),
+    config,
+    defaultConfig,
+  ) as Config;
   try {
     // TODO I don't like this instantiation of Git here
     const git = new Git(configWithDefaults.git);
@@ -78,21 +94,16 @@ export async function enhanceConfig(config: Config): Promise<Config> {
     ]);
     return git.getRemote(configWithDefaults.git.remote).then(
       (remote) =>
-        mergeDeepLeft(
+        mergeDeepWith(
+          ifElse(isNil, nthArg(1), nthArg(0)),
           {
             github: {
-              // TODO Fix this
-              pullRequestTemplate: prTemplate || configWithDefaults.github.pullRequestTemplate,
-            },
-          },
-          {
-            ...configWithDefaults,
-            github: {
-              ...configWithDefaults.github,
+              pullRequestTemplate: prTemplate,
               owner: remote.owner,
               repo: remote.name,
             },
           },
+          configWithDefaults,
         ) as Config,
     );
   } catch (error) {
