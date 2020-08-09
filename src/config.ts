@@ -16,6 +16,18 @@ export const requiredConfigs = [
   { path: ['github', 'authToken'], request: "What's your Github token?" },
 ];
 
+// Object with the logic to deserialize config values such a regexes
+const configDeserializer = [
+  {
+    path: ['jira', 'status'],
+    deserialize: R.ifElse(
+      R.isNil,
+      R.identity,
+      R.mapObjIndexed((statusRegex: string) => new RegExp(statusRegex, 'i')),
+    ),
+  },
+];
+
 /**
  * Read the configuration file in the specified folder. Go up until the user home
  * directory
@@ -29,11 +41,28 @@ const readConfigFile: (path?: string) => string = R.compose(
  * Read the fotingo configuration file. Find it up from the execution directory
  * and merge it with the file in the home directory
  */
-export const readConfig: () => Config = () =>
-  R.converge(R.mergeWith(R.ifElse(R.is(Object), R.flip(R.merge), R.nthArg(0))), [
-    readConfigFile,
-    R.partial(readConfigFile, [process.env.HOME]),
-  ])(undefined) as Config;
+export const readConfig: () => Config = R.compose(
+  (config) =>
+    R.reduce(
+      (newConfig, deserializer) => {
+        return R.ifElse(
+          R.pathSatisfies(R.isNil, deserializer.path),
+          R.identity,
+          R.set(
+            R.lensPath(deserializer.path),
+            deserializer.deserialize(R.path(deserializer.path, newConfig)),
+          ),
+        )(newConfig) as Config;
+      },
+      config,
+      configDeserializer,
+    ),
+  () =>
+    R.converge(R.mergeWith(R.ifElse(R.is(Object), R.flip(R.merge), R.nthArg(0))), [
+      readConfigFile,
+      R.partial(readConfigFile, [process.env.HOME]),
+    ])(undefined),
+);
 
 /**
  * Write some partial configuration into the closest found config file
