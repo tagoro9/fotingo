@@ -30,11 +30,11 @@ import {
   IssueStatus,
   IssueType,
   Release,
+  TrackerConfig,
   User,
 } from 'src/types';
 import Turndown from 'turndown';
 
-import { JiraConfig } from './Config';
 import { JiraErrorImpl } from './JiraError';
 import {
   IssueTransition,
@@ -58,23 +58,14 @@ const getShortName = (name: string): string => {
   return name[0].toLowerCase();
 };
 
-// TODO Make this part of config
-const statusRegex = {
-  [IssueStatus.BACKLOG]: /backlog/i,
-  [IssueStatus.IN_PROGRESS]: /in progress/i,
-  [IssueStatus.IN_REVIEW]: /review/i,
-  [IssueStatus.DONE]: /done/i,
-  [IssueStatus.SELECTED_FOR_DEVELOPMENT]: /(todo)|(to do)|(selected for development)/i,
-};
-
 // Using Jira REST API v2 (https://developer.atlassian.com/cloud/jira/platform/rest/v2)
 export class Jira implements Tracker {
   private client: HttpClient;
-  private config: JiraConfig;
+  private config: TrackerConfig;
   private messenger: Messenger;
   public readonly name = 'Jira';
 
-  constructor(config: JiraConfig, messenger: Messenger) {
+  constructor(config: TrackerConfig, messenger: Messenger) {
     this.config = config;
     this.messenger = messenger;
     // TODO Add a new client for agile API https://developer.atlassian.com/cloud/jira/software/rest/
@@ -356,7 +347,7 @@ export class Jira implements Tracker {
         return Object.entries(IssueStatus).reduce(
           (accumulator, [key, value]) => ({
             ...accumulator,
-            [key]: status.find((t) => statusRegex[value].test(t.name)),
+            [key]: status.find((t) => this.config.status[value].test(t.name)),
           }),
           {},
         );
@@ -368,7 +359,7 @@ export class Jira implements Tracker {
     issue: JiraIssue,
     status: IssueStatus,
   ): IssueTransition | undefined {
-    return issue.transitions.find((transition) => statusRegex[status].test(transition.name));
+    return issue.transitions.find((transition) => this.config.status[status].test(transition.name));
   }
 
   private mapError(error: NodeJS.ErrnoException | HttpError): Observable<never> {
