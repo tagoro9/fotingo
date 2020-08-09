@@ -50,7 +50,7 @@ export function SelectRequest({ onSubmit, request }: SelectRequestProps): JSX.El
         <Question {...request} />
         {useTextSearch ? (
           <InkTextInput showCursor={true} value={searchText} onChange={onInputChange} />
-        ) : null}
+        ) : undefined}
       </Box>
       <Box marginBottom={1} marginLeft={1} marginTop={1}>
         <ControlledSelectInput items={items} selectedIndex={selectedIndex} />

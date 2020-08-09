@@ -71,7 +71,8 @@
           "SelectRequestProps": true
         }
       }
-    ]
+    ],
+    "unicorn/no-fn-reference-in-iterator": "off"
   },
   "settings": {
     "import/parsers": {

@@ -54,7 +54,7 @@ export const writeConfig: (data: Partial<Config>) => Partial<Config> = (data) =>
   writeFileSync(
     // TODO Use homedir() instead of env variable
     search.filepath || path.join(process.env.HOME as string, '.fotingorc'),
-    JSON.stringify(mergedConfigs, null, 2),
+    JSON.stringify(mergedConfigs, undefined, 2),
     'utf-8',
   );
   return data;

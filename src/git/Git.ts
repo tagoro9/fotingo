@@ -243,6 +243,7 @@ export class Git {
 
   private async publish(): Promise<void> {
     const branchName = await this.getCurrentBranchName();
+    // eslint-disable-next-line unicorn/no-null
     return this.git.push(this.config.remote, branchName, { '-u': null });
   }
 
