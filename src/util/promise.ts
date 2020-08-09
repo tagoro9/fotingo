@@ -4,7 +4,7 @@
  * @param providers Promise providers
  */
 export function series<T>(providers: Array<() => Promise<T>>): Promise<T[]> {
-  const returnPromise = Promise.resolve(null);
+  const returnPromise = Promise.resolve(undefined);
   const results: T[] = [];
 
   return providers

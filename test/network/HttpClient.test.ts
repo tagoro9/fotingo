@@ -8,7 +8,7 @@ const request = (req as unknown) as jest.Mock;
 
 const mockRequestWithSuccess = (body: Record<string, unknown>, statusCode = 200): void =>
   void request.mockImplementation((_, callback) => {
-    callback(null, { statusCode, body }, body);
+    callback(undefined, { statusCode, body }, body);
   });
 
 describe('HttpClient', () => {
