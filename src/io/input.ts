@@ -1,5 +1,5 @@
+import { series } from '@tagoro9/promise-utils';
 import { take, uniqBy } from 'ramda';
-import { series } from 'src/util/promise';
 
 import { Messenger } from './messenger';
 
