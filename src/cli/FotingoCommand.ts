@@ -42,9 +42,11 @@ export abstract class FotingoCommand<T, R> extends Command {
   private async initializeFotingoConfig(): Promise<void> {
     this.fotingo = await this.readConfig();
     const enhancedConfig = await enhanceConfig(this.fotingo);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { flags } = this.parse(this.constructor as any);
     this.fotingo = await enhanceConfigWithRuntimeArguments(
       enhancedConfig,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       flags as { [k: string]: any },
     );
   }
