@@ -42,11 +42,11 @@ export abstract class FotingoCommand<T, R> extends Command {
   private async initializeFotingoConfig(): Promise<void> {
     this.fotingo = await this.readConfig();
     const enhancedConfig = await enhanceConfig(this.fotingo);
-    this.fotingo = await enhanceConfigWithRuntimeArguments(enhancedConfig, {
-      // TODO We need the flags to do this, but the flags require calling parse
-      // branch: this.flags.branch,
-      branch: 'master',
-    });
+    const { flags } = this.parse(this.constructor as any);
+    this.fotingo = await enhanceConfigWithRuntimeArguments(
+      enhancedConfig,
+      flags as { [k: string]: any },
+    );
   }
 
   /**
