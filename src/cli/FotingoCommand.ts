@@ -71,12 +71,11 @@ export abstract class FotingoCommand<T, R> extends Command {
         cmd: () =>
           this.askForRequiredConfig(initialConfig).pipe(
             map((d) => mergeDeepRight(initialConfig, d) as Config),
-            tap((config: Config) => {
-              // TODO This is ugly but makes it that react state updates before unmounting
-              setTimeout(() => {
-                ui.unmount();
-                resolve(config);
-              }, 300);
+            tap(async (config: Config) => {
+              // Give the UI some time to render
+              await new Promise((resolve) => setTimeout(resolve, 300));
+              await ui.waitUntilExit();
+              resolve(config);
             }),
           ),
         isDebugging: process.env.DEBUG !== undefined,
@@ -115,11 +114,17 @@ export abstract class FotingoCommand<T, R> extends Command {
   }
 
   async run(): Promise<void> {
-    renderUi({
+    const { waitUntilExit } = renderUi({
       cmd: () => this.runCmd(of(this.getCommandData())),
       isDebugging: process.env.DEBUG !== undefined,
       messenger: this.messenger,
     });
+    try {
+      await waitUntilExit();
+    } catch (_) {
+      // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
+      process.exit(1);
+    }
   }
 
   /**
