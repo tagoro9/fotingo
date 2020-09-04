@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Message, MessageType, Messenger, Request, Status } from 'src/io/messenger';
 
 import { ERROR_CODE_TO_MESSAGE } from './errorCodeToMessage';
+import { useApp } from 'ink';
 
 type Setter<T> = (data: T) => void;
 
@@ -60,6 +61,8 @@ function useCmdRunner(
   addMessage: Setter<Message>,
   setInThread: Setter<boolean>,
 ): number | undefined {
+  const app = useApp();
+  const errorReference = useRef<Error>();
   const [done, setDone] = useState<number>();
   const addMessageReference = useRef(addMessage);
   const setInThreadReference = useRef(setInThread);
@@ -68,6 +71,7 @@ function useCmdRunner(
     cmd()
       .toPromise()
       .catch((error) => {
+        errorReference.current = error;
         // Exit thread mode if there was an error so it shows up
         setInThreadReference.current(false);
         addMessageReference.current({
@@ -76,8 +80,11 @@ function useCmdRunner(
           type: MessageType.ERROR,
         });
       })
-      .finally(() => setDone(Date.now() - time));
-  }, [addMessageReference, cmd, setInThreadReference]);
+      .finally(() => {
+        setDone(Date.now() - time);
+        app.exit(errorReference.current);
+      });
+  }, [addMessageReference, cmd, setInThreadReference, errorReference]);
 
   return done;
 }
