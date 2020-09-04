@@ -1,9 +1,9 @@
+import { useApp } from 'ink';
 import { useEffect, useRef, useState } from 'react';
 import { Observable } from 'rxjs';
 import { Message, MessageType, Messenger, Request, Status } from 'src/io/messenger';
 
 import { ERROR_CODE_TO_MESSAGE } from './errorCodeToMessage';
-import { useApp } from 'ink';
 
 type Setter<T> = (data: T) => void;
 
@@ -84,7 +84,7 @@ function useCmdRunner(
         setDone(Date.now() - time);
         app.exit(errorReference.current);
       });
-  }, [addMessageReference, cmd, setInThreadReference, errorReference]);
+  }, [app, addMessageReference, cmd, setInThreadReference, errorReference]);
 
   return done;
 }
