@@ -14,6 +14,12 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
 
   static flags = {
     branch,
+    draft: flags.boolean({
+      char: 'd',
+      default: false,
+      description: 'Create a draft pull request',
+      name: 'draft',
+    }),
     labels: flags.string({
       description: 'Labels to add to the pull request',
       char: 'l',
@@ -40,6 +46,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
     return {
       branch: flags.branch,
       labels: flags.labels,
+      isDraft: flags.draft,
       reviewers: flags.reviewers,
       tracker: {
         enabled: !flags.simple,

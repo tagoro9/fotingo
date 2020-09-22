@@ -46,6 +46,12 @@ enum PR_TEMPLATE_KEYS {
   SUMMARY = 'summary',
 }
 
+interface SubmitPullRequestOptions {
+  content: string;
+  isDraft: boolean;
+  pullRequestHead: string;
+}
+
 export class Github implements Remote {
   private readonly api: Octokit;
   private readonly config: GithubConfig;
@@ -77,10 +83,11 @@ export class Github implements Remote {
 
   @boundMethod
   public async createPullRequest({
+    branchInfo,
+    isDraft,
+    issues,
     labels = [],
     reviewers = [],
-    branchInfo,
-    issues,
     useDefaults,
   }: PullRequestData): Promise<PullRequest> {
     this.debug(`Creating pull requests with args: %o`, { labels, reviewers, useDefaults });
@@ -144,7 +151,11 @@ export class Github implements Remote {
         });
     this.messenger.inThread(false);
 
-    const githubPr = await this.submitPullRequest(prContent, branchInfo.name);
+    const githubPr = await this.submitPullRequest({
+      content: prContent,
+      isDraft,
+      pullRequestHead: branchInfo.name,
+    });
     const pullRequest = {
       issues,
       number: githubPr.number,
@@ -274,16 +285,18 @@ export class Github implements Remote {
    * @param content Content of the pull request
    * @param pullRequestHead Name of the branch to use as head of the pull request
    */
-  private async submitPullRequest(
-    content: string,
-    pullRequestHead: string,
-  ): Promise<PullsCreateResponseData> {
+  private async submitPullRequest({
+    content,
+    isDraft,
+    pullRequestHead,
+  }: SubmitPullRequestOptions): Promise<PullsCreateResponseData> {
     // TODO This should not here and baseBranch should just be an argument to the constructor
     const baseBranch = await this.git.findBaseBranch(true);
     return this.api.pulls
       .create({
         base: baseBranch,
         body: compose<string, string[], string[], string>(join('\n'), tail, split('\n'))(content),
+        draft: isDraft,
         head: pullRequestHead,
         owner: this.config.owner,
         repo: this.config.repo,
