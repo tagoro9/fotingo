@@ -23,62 +23,110 @@ The first time that you run fotingo, it will ask you for some information:
 
 ## Usage
 
-The command line supports three main commands: `start`, `review` and `release`.
+<!-- prettier-ignore-start -->
+<!-- usage -->
+```sh-session
+$ npm install -g fotingo
+$ fotingo COMMAND
+running command...
+$ fotingo (-v|--version|version)
+fotingo/2.2.3 darwin-x64 node-v12.15.0
+$ fotingo --help [COMMAND]
+USAGE
+  $ fotingo COMMAND
+...
+```
+<!-- usagestop -->
+<!-- prettier-ignore-end -->
 
-### start
+## Commands
 
-`fotingo start [issue-id]` - Start working on a new issue.
+<!-- prettier-ignore-start -->
+<!-- commands -->
+* [`fotingo help [COMMAND]`](#fotingo-help-command)
+* [`fotingo release RELEASE`](#fotingo-release-release)
+* [`fotingo review`](#fotingo-review)
+* [`fotingo start [ISSUE]`](#fotingo-start-issue)
 
-If no `issue-id` is specified, then fotingo will display a list with all the tickets assigned to you.
+## `fotingo help [COMMAND]`
 
-- Assign the issue to current user
-- Clean current working directory (stash it)
-- Checkout latest master
-- Create a new branch that follows a naming convention
-- Set the issue to _In Progress_
+display help for fotingo
 
-If you want to set an issue in progress in Jira without creating a new branch, you can use the `-n` (`--no-branch-issue`) option.
+```
+USAGE
+  $ fotingo help [COMMAND]
 
-If you want to create a new issue you can use the `-c` (`--create`) option. You will also have to specify the type (`-t` or `--type`) and project (`-p` or `--project`) where the issue is going to be created. Optionally you can also specify labels (`-l` or `--label`) and a description for the created issue (`-d` or `--description`).
+ARGUMENTS
+  COMMAND  command to show help for
 
-The next command creates a bug in the `Test` project with the label `team-test`:
-
-```bash
-fotingo start -t But -p Test -l team-test -d "This is the description" -c "This is the title"
+OPTIONS
+  --all  see all commands in CLI
 ```
 
-### review
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
 
-`fotingo review -l mylabel -l "Another Label" -r github_user` - Submit a pull request for review.
+## `fotingo release RELEASE`
 
-- _Halt if you are not in the correct branch or if the pull request already exists_
-- Push the current branch to _GitHub_
-- Create a new pull request against master with the commit messages and a link to the issue. _Default editor will open so user can edit message_
-- Add labels and review requests, if any, to the pull request
-- Set issue to _In Review_ and add comment with a link to the pull request
+Create a release with your changes
 
-Labels and reviews lookup is done using fuzzy search, meaning that if you want to add the `Needs tests` label to a PR you can just use `-l "tests"` and the correct label will be applied or you will be prompted to select the correct if multiple options match the search.
+```
+USAGE
+  $ fotingo release RELEASE
 
-If you just want to create a pull request without connecting to Jira at all, you can use the option `-s` (`--simple`).
+ARGUMENTS
+  RELEASE  Name of the release to be created
 
-### release
+OPTIONS
+  -i, --issues=issues  Specify more issues to include in the release
+  -s, --simple         Do not use any issue tracker
+  -y, --yes            Do not prompt for any input but accept all the defaults
+```
 
-`fotingo release <release-name> -i <issue-id> -i <another-issue-id>` - Creates a Github and Jira release
+_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v2.2.3/src/commands/release.ts)_
 
-- Create a Jira version with the indicated name (e.g. `1.0.5`)
-- Set the issues fix version to the newly created version
-- Update the issues' status to _Done_
-- Create a GitHub release pointing to the Jira release. _Default editor will open so user can edit the release notes_
+## `fotingo review`
 
-If you just want to create a release in Github without connecting to Jira at all, you can use the `-s` (`--simple`) option.
+Submit current issue for review
 
-### Using the defaults
+```
+USAGE
+  $ fotingo review
 
-By default fotingo will ask the user to edit the contents of pull requests and releases as well as to select the correct reviewer / label when there are multiple matches for the search. Using the `-y` (`--yes`) option you can skip these questions and tell fotingo to use the defaults / first matches.
+OPTIONS
+  -b, --branch=branch        Name of the base branch of the pull request
+  -d, --draft                Create a draft pull request
+  -l, --labels=labels        Labels to add to the pull request
+  -r, --reviewers=reviewers  Request some people to review your pull request
+  -s, --simple               Do not use any issue tracker
+  -y, --yes                  Do not prompt for any input but accept all the defaults
+```
 
-### A different base branch
+_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v2.2.3/src/commands/review.ts)_
 
-The default base branch for any fotingo command is `master`, but sometimes this is not true for some people. In that case, the option `-b` (`--branch`) allows to specify the base branch in every command. This config can also be made permanent via the configuration file. The branch lookup is also done via a fuzzy search like it is done for labels and reviewers
+## `fotingo start [ISSUE]`
+
+Start working on an issue
+
+```
+USAGE
+  $ fotingo start [ISSUE]
+
+ARGUMENTS
+  ISSUE  Id of the issue to start working with
+
+OPTIONS
+  -a, --no-branch-issue          Do not create a branch with the issue name
+  -b, --branch=branch            Name of the base branch of the pull request
+  -d, --description=description  Description of the issue to be created
+  -k, --kind=kind                Kind of issue to be created
+  -l, --labels=labels            Labels to add to the issue
+  -p, --project=project          Name of the project where to create the issue
+  -t, --title=title              Title of issue to create
+```
+
+_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v2.2.3/src/commands/start.ts)_
+<!-- commandsstop -->
+<!-- prettier-ignore-end -->
 
 ## Configuration
 
