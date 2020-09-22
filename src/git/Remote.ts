@@ -38,6 +38,7 @@ export interface GitRemote {
 // TODO Rename to CreatePullRequest
 export interface PullRequestData {
   branchInfo: BranchInfo;
+  isDraft: boolean;
   issues: Issue[];
   labels?: string[];
   reviewers?: string[];

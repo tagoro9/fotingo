@@ -240,6 +240,7 @@ export interface Remote {
 
 export interface ReviewData {
   branch?: string;
+  isDraft: boolean;
   labels?: string[];
   reviewers?: string[];
   tracker: {
