@@ -5464,9 +5464,9 @@ ink-spinner@^3.1.0:
     prop-types "^15.5.10"
 
 ink-testing-library@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ink-testing-library/-/ink-testing-library-2.0.0.tgz#e02e2fa9e4cd213fb3de065fcac22e4a2e8b7da9"
-  integrity sha512-BwOqxXedU7nuJekcSoA6HZrzQK/cOk8Uz+ciyV+UDVDrwdsLasAFxpfAXMfoVJV8rDgVmvTAowUE+xl0AbYyug==
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/ink-testing-library/-/ink-testing-library-2.0.1.tgz#abea05c1402be64a5dcac9288e1518733859a614"
+  integrity sha512-cwk6+z3zJJDjNwc7YoESqYuVNQlWnT0BXD37FSNgeZcxfPzzGtYu+RLVEriF3bP8BafxS7ny7xpkXLJ4PaWYAA==
   dependencies:
     "@types/node" "^14.0.13"
     "@types/react" "^16.9.38"
