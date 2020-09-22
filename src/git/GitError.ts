@@ -1,6 +1,7 @@
 export enum GitErrorType {
   BRANCH_ALREADY_EXISTS,
   NOT_A_GIT_REPO,
+  NO_REMOTE,
 }
 
 export interface GitError {

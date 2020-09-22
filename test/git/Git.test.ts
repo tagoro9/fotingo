@@ -122,7 +122,9 @@ describe('Git', () => {
 
     it('should throw an error if there are no remotes', async () => {
       gitMocks.getRemotes.mockResolvedValue([]);
-      await expect(git.getRemote('origin')).rejects.toBeUndefined();
+      await expect(git.getRemote('origin')).rejects.toMatchInlineSnapshot(
+        `[Error: The repository does not have a remote]`,
+      );
     });
   });
 
