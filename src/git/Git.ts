@@ -123,7 +123,11 @@ export class Git {
     if (remoteExists) {
       this.messenger.emit('Pushing branch', Emoji.ARROW_UP);
       this.messenger.inThread(true);
-      await this.git.push(this.config.remote);
+      try {
+        await this.git.push(this.config.remote);
+      } catch (error) {
+        this.mapAndThrowError(error);
+      }
       this.messenger.inThread(false);
       return;
     }
@@ -343,6 +347,11 @@ export class Git {
     }
     if (error.message.match(/not a git repository/)) {
       throw new GitErrorImpl(error.message, GitErrorType.NOT_A_GIT_REPO);
+    }
+    if (
+      error.message.match(/Updates were rejected because the tip of your current branch is behind/)
+    ) {
+      throw new GitErrorImpl(error.message, GitErrorType.FORCE_PUSH);
     }
     throw error;
   }
