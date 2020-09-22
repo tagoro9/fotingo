@@ -50,6 +50,7 @@ interface GitLogLine {
   hash: string;
   message: string;
 }
+
 interface GitLog {
   all: ReadonlyArray<GitLogLine>;
   latest: GitLogLine;
@@ -158,7 +159,9 @@ export class Git {
       const firstRemote = remotes[0];
 
       if (!origin && !firstRemote) {
-        return Promise.reject();
+        return Promise.reject(
+          new GitErrorImpl('The repository does not have a remote', GitErrorType.NO_REMOTE),
+        );
       }
 
       return gitUrlParse((origin || firstRemote).refs.fetch);
