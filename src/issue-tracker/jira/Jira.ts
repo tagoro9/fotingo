@@ -365,6 +365,14 @@ export class Jira implements Tracker {
   private mapError(error: NodeJS.ErrnoException | HttpError): Observable<never> {
     if ('status' in error) {
       const code = error.status;
+      if (code === 401) {
+        return throwError(
+          new JiraErrorImpl(
+            'Could not authenticate with Jira. Double check that your credentials are correct',
+            code,
+          ),
+        );
+      }
       const message =
         (error.body.errorMessages && error.body.errorMessages[0]) ||
         'Something went wrong when connecting with jira';
