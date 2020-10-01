@@ -41,7 +41,7 @@ export function maybeAskUserToSelectMatches<T>(
 ): Promise<T[]> {
   return series(
     data.map((matches, i) => (): Promise<T> => {
-      if (!matches || matches.length === 0) {
+      if (!useDefaults && (!matches || matches.length === 0)) {
         throw new Error(`No match found for ${options[i]}`);
       }
       if (useDefaults || matches.length === 1) {
