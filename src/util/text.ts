@@ -32,7 +32,7 @@ const search: (searcher: (t: string) => Searchable[], data: string[]) => Searcha
 const getSearcher = <T extends Searchable>(
   options: SearchOptions<T>,
 ): { search: (s: string) => Fuse.FuseResult<T>[] } => {
-  const fuse = new Fuse<T, Fuse.IFuseOptions<T>>(options.data, {
+  const fuse = new Fuse<T>(options.data, {
     keys: options.fields as string[],
     includeMatches: false,
     includeScore: false,
