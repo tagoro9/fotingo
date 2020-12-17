@@ -21,7 +21,14 @@ import {
   trim,
   uniqBy,
 } from 'ramda';
-import { BranchSummary, ListLogSummary, SimpleGit, StatusResult } from 'simple-git';
+import {
+  BranchSummary,
+  DefaultLogFields,
+  LogResult,
+  PushResult,
+  SimpleGit,
+  StatusResult,
+} from 'simple-git';
 import simpleGit from 'simple-git/promise';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
@@ -43,20 +50,6 @@ interface Remote {
   };
 }
 
-interface GitLogLine {
-  author_email: string;
-  author_name: string;
-  date: string;
-  hash: string;
-  message: string;
-}
-
-interface GitLog {
-  all: ReadonlyArray<GitLogLine>;
-  latest: GitLogLine;
-  total: number;
-}
-
 export interface BranchInfo {
   commits: ParsedCommit[];
   issues: CommitIssue[];
@@ -69,9 +62,9 @@ interface CommitIssue {
 }
 
 export class Git {
-  private git: SimpleGit;
-  private config: GitConfig;
-  private messenger: Messenger;
+  private readonly git: SimpleGit;
+  private readonly config: GitConfig;
+  private readonly messenger: Messenger;
 
   constructor(config: GitConfig, messenger?: Messenger) {
     this.git = simpleGit().silent(true);
@@ -103,14 +96,16 @@ export class Git {
       .then(() => this.doesBranchExist(branchName))
       .then((exists) => {
         if (exists) {
-          // TODO Imrpove this error
+          // TODO Improve this error
           throw new Error('There is already a branch for the issue');
         }
       })
       .then(() => this.maybeStashChanges())
       .then(() => this.findBaseBranch())
-      .then((baseBranch) => this.getLatestCommit(baseBranch).then((log) => log.latest.hash))
-      .then((lastCommitHash) => this.git.checkoutBranch(branchName, lastCommitHash))
+      .then((baseBranch) => this.getLatestCommit(baseBranch).then((log) => log.latest?.hash))
+      .then((lastCommitHash) =>
+        this.git.checkoutBranch(branchName, lastCommitHash || this.config.baseBranch),
+      )
       .catch(this.mapAndThrowError);
   }
 
@@ -248,7 +243,7 @@ export class Git {
     return removePrefix ? name.replace(`${branchPrefix}/`, '') : name;
   }
 
-  private async publish(): Promise<void> {
+  private async publish(): Promise<PushResult> {
     const branchName = await this.getCurrentBranchName();
     // eslint-disable-next-line unicorn/no-null
     return this.git.push(this.config.remote, branchName, { '-u': null });
@@ -286,7 +281,7 @@ export class Git {
   }
 
   @boundMethod
-  private transformCommits(commits: GitLogLine[]): ParsedCommit[] {
+  private transformCommits(commits: DefaultLogFields[]): ParsedCommit[] {
     return map(compose(sync, compose(join('\n'), props(['message', 'body']))))(commits);
   }
 
@@ -301,7 +296,7 @@ export class Git {
    * Get the latest commit for the specified git reference
    * @param what Git reference
    */
-  private getLatestCommit(what: string): Promise<GitLog> {
+  private getLatestCommit(what: string): Promise<LogResult> {
     return this.git.log(['-n1', what]);
   }
 
@@ -360,7 +355,7 @@ export class Git {
    * Get the list of commits between the current branch HEAD
    * and the fotingo configured remote
    */
-  private async getBranchCommitsFromMergeBase(): Promise<ReadonlyArray<GitLogLine>> {
+  private async getBranchCommitsFromMergeBase(): Promise<ReadonlyArray<DefaultLogFields>> {
     const baseBranch = await this.findBaseBranch();
     const reference = await this.git.raw(['merge-base', 'HEAD', baseBranch]);
     return this.git
@@ -368,6 +363,6 @@ export class Git {
         from: 'HEAD',
         to: compose(trim, replace('\n', ''))(reference),
       })
-      .then((data: ListLogSummary) => data.all);
+      .then((data: LogResult) => data.all);
   }
 }
