@@ -1,8 +1,7 @@
 /**
  * Branch tests
  */
-import 'jest';
-
+import { describe, expect, test } from '@jest/globals';
 import { getIssueId, getName } from 'src/git/Branch';
 import { GitConfig } from 'src/git/Config';
 import { data } from 'test/lib/data';

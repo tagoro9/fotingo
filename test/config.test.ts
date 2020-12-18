@@ -1,24 +1,32 @@
 /**
  * Config testsC
  */
-
-import 'jest';
-
+import { describe, expect, jest, test } from '@jest/globals';
 import * as cosmiconfig from 'cosmiconfig';
 import { readConfig } from 'src/config';
+import { mocked } from 'ts-jest/utils';
 
 jest.mock('cosmiconfig', () => ({
   cosmiconfigSync: jest.fn().mockReturnValue(jest.fn()),
 }));
 
+const mockCosmiconfig = mocked(cosmiconfig);
+
 // TODO Use real Config instances for tests
+
+const mockSearch = (search: () => unknown) => {
+  mockCosmiconfig.cosmiconfigSync.mockImplementation(
+    () =>
+      (({
+        search,
+      } as unknown) as ReturnType<typeof mockCosmiconfig.cosmiconfigSync>),
+  );
+};
 
 describe('config', () => {
   test('reads config from current path and home path', () => {
     const search = jest.fn().mockReturnValue({ isEmpty: true });
-    (cosmiconfig.cosmiconfigSync as jest.Mock).mockImplementation(() => ({
-      search,
-    }));
+    mockSearch(search);
     expect(readConfig()).toEqual({});
     expect(search).toHaveBeenCalledTimes(2);
     expect(search).toBeCalledWith(process.env.HOME);
@@ -41,9 +49,7 @@ describe('config', () => {
       },
       isEmpty: false,
     });
-    (cosmiconfig.cosmiconfigSync as jest.Mock).mockImplementation(() => ({
-      search,
-    }));
+    mockSearch(search);
     expect(readConfig()).toEqual({
       anotherValue: 'anotherValue',
       someDeepKey: {

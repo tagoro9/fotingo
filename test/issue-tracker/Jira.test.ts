@@ -1,5 +1,4 @@
-import 'jest';
-
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { pick } from 'ramda';
 import { of, throwError } from 'rxjs';
 import { serializeError } from 'serialize-error';
@@ -7,10 +6,11 @@ import { Messenger } from 'src/io/messenger';
 import { Jira } from 'src/issue-tracker/jira/Jira';
 import * as httpClient from 'src/network/HttpClient';
 import { data } from 'test/lib/data';
+import { mocked } from 'ts-jest';
 
 jest.mock('src/network/HttpClient');
 
-const httpClientMock = ((httpClient as unknown) as { HttpClient: jest.Mock }).HttpClient;
+const httpClientMock = mocked(httpClient.HttpClient);
 
 const httpClientMocks = {
   get: jest.fn(),
@@ -20,7 +20,7 @@ let jira: Jira;
 
 describe('jira', () => {
   beforeEach(() => {
-    httpClientMock.mockImplementation(() => httpClientMocks);
+    httpClientMock.mockImplementation(() => (httpClientMocks as unknown) as httpClient.HttpClient);
     jira = new Jira(data.createTrackerConfig(), new Messenger());
   });
 

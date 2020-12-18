@@ -1,5 +1,4 @@
-import 'jest';
-
+import { describe, expect, jest, test } from '@jest/globals';
 import { render } from 'ink-testing-library';
 import { MessageType, RequestType, SelectRequest as SelectRequestType } from 'src/io/messenger';
 import { SelectRequest } from 'src/ui/SelectRequest';

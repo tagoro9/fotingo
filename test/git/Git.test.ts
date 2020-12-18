@@ -1,13 +1,13 @@
-jest.mock('simple-git/promise');
-import 'jest';
-
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import * as simpleGitMock from 'simple-git/promise';
 import { Git } from 'src/git/Git';
 import { GitErrorType } from 'src/git/GitError';
 import { Messenger } from 'src/io/messenger';
 import { data } from 'test/lib/data';
 
-const simpleGit = (simpleGitMock as unknown) as jest.Mock;
+jest.mock('simple-git/promise');
+
+const simpleGit = (simpleGitMock as unknown) as ReturnType<typeof jest.fn>;
 
 let git: Git;
 let branchName: string;
@@ -16,11 +16,11 @@ const latestCommitHash = '547433c';
 const remote = 'git@github.com:tagoro9/fotingo-rewrite.git';
 
 const gitMocks = {
-  branch: jest.fn().mockResolvedValue({ all: ['remotes/origin/master'] }),
-  branchLocal: jest.fn().mockResolvedValue({ all: [] }),
-  checkoutBranch: jest.fn().mockResolvedValue(undefined),
-  fetch: jest.fn().mockResolvedValue(undefined),
-  getRemotes: jest.fn().mockResolvedValue([
+  branch: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: ['remotes/origin/master'] }),
+  branchLocal: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: [] }),
+  checkoutBranch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  fetch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  getRemotes: jest.fn<Promise<unknown>, []>().mockResolvedValue([
     {
       name: 'origin',
       refs: {
@@ -29,12 +29,12 @@ const gitMocks = {
       },
     },
   ]),
-  log: jest.fn().mockResolvedValue(undefined),
-  push: jest.fn().mockResolvedValue(undefined),
-  raw: jest.fn().mockResolvedValue(undefined),
-  revparse: jest.fn().mockResolvedValue(undefined),
-  stash: jest.fn().mockResolvedValue(undefined),
-  status: jest.fn().mockResolvedValue({
+  log: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  push: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  raw: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  revparse: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  stash: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  status: jest.fn<Promise<unknown>, []>().mockResolvedValue({
     files: [],
   }),
 };

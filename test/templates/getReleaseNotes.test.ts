@@ -1,5 +1,4 @@
-import 'jest';
-
+import { describe, expect, jest, test } from '@jest/globals';
 import { Messenger } from 'src/io/messenger';
 import { getReleaseNotes } from 'src/templates/getReleaseNotes';
 import { data } from 'test/lib/data';

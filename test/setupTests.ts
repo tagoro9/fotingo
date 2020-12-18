@@ -1,5 +1,4 @@
-import 'jest';
-
+import { beforeEach } from '@jest/globals';
 import faker from 'faker';
 
 beforeEach(() => {
