@@ -1,15 +1,16 @@
-jest.mock('request');
-import 'jest';
-
+import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import * as req from 'request';
 import { HttpClient } from 'src/network/HttpClient';
 
-const request = (req as unknown) as jest.Mock;
+jest.mock('request');
+const mockRequest = (req as unknown) as ReturnType<typeof jest.fn>;
 
-const mockRequestWithSuccess = (body: Record<string, unknown>, statusCode = 200): void =>
-  void request.mockImplementation((_, callback) => {
-    callback(undefined, { statusCode, body }, body);
-  });
+const mockRequestWithSuccess = (body: unknown, statusCode = 200): void =>
+  void mockRequest.mockImplementation(
+    (_: unknown, callback: (a: unknown, b: unknown, c: unknown) => void) => {
+      callback(undefined, { statusCode, body }, body);
+    },
+  );
 
 describe('HttpClient', () => {
   let client: HttpClient;
@@ -17,7 +18,7 @@ describe('HttpClient', () => {
     client = new HttpClient({ root: 'https://fotin.go' });
   });
   afterEach(() => {
-    request.mockReset();
+    mockRequest.mockReset();
   });
 
   describe('get', () => {
@@ -32,8 +33,8 @@ describe('HttpClient', () => {
             body,
             response: { statusCode: 200, body },
           });
-          expect(request).toHaveBeenCalledTimes(1);
-          expect(request).toHaveBeenCalledWith(
+          expect(mockRequest).toHaveBeenCalledTimes(1);
+          expect(mockRequest).toHaveBeenCalledWith(
             {
               headers: { accept: 'application/json' },
               json: true,
@@ -51,7 +52,7 @@ describe('HttpClient', () => {
         .get('/', { qs: { val: true } })
         .toPromise()
         .then(() => {
-          expect(request).toHaveBeenCalledWith(
+          expect(mockRequest).toHaveBeenCalledWith(
             expect.objectContaining({
               qs: { val: true },
             }),

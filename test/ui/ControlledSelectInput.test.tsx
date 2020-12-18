@@ -1,4 +1,4 @@
-import 'jest';
+import { describe, expect, test } from '@jest/globals';
 import React = require('react');
 
 import { render } from 'ink-testing-library';

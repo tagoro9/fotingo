@@ -1,5 +1,4 @@
-import 'jest';
-
+import { describe, expect, it } from '@jest/globals';
 import { JiraErrorImpl } from 'src/issue-tracker/jira/JiraError';
 
 describe('JiraError', () => {
