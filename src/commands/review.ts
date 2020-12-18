@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command';
 import { boundMethod } from 'autobind-decorator';
-import { mergeAll, zipObj } from 'ramda';
+import { compose, filter, isEmpty, mergeAll, not, trim, zipObj } from 'ramda';
 import { merge, Observable, of, zip } from 'rxjs';
 import { map, reduce, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { branch, yes } from 'src/cli/flags';
@@ -8,6 +8,8 @@ import { FotingoCommand } from 'src/cli/FotingoCommand';
 import { PullRequest } from 'src/git/Remote';
 import { Emoji } from 'src/io/messenger';
 import { Issue, IssueStatus, Review as FotingoReview, ReviewData } from 'src/types';
+
+const getNotEmptyValues = filter(compose(not, isEmpty, trim));
 
 export class Review extends FotingoCommand<FotingoReview, ReviewData> {
   static description = 'Submit current issue for review';
@@ -45,9 +47,9 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
     const { flags } = this.parse(Review);
     return {
       branch: flags.branch,
-      labels: flags.labels,
+      labels: getNotEmptyValues(flags.labels || []),
       isDraft: flags.draft,
-      reviewers: flags.reviewers,
+      reviewers: getNotEmptyValues(flags.reviewers || []),
       tracker: {
         enabled: !flags.simple,
       },
