@@ -8,9 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: linter
-        uses: tagoro9/action-eslint@fix_eslint_args
+        uses: reviewdog/action-eslint@v1
         with:
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint_flags: ./src ./test ./types --ext .ts --ext .tsx
           reporter: github-check
   test:
