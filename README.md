@@ -3,7 +3,7 @@
 A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on tasks.
 
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
-
+![Scarf](https://static.scarf.sh/a.png?x-pxid=31890a02-9148-498c-8158-3e3db7f11422)
 ## Installation
 
 Run:
