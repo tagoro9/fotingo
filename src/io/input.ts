@@ -1,5 +1,5 @@
+import pLimit from 'p-limit';
 import { take, uniqBy } from 'ramda';
-import { series } from 'src/util/promise';
 
 import { Messenger } from './messenger';
 
@@ -39,30 +39,38 @@ export function maybeAskUserToSelectMatches<T>(
   }: AskToSelectMatchData<T>,
   messenger: Messenger,
 ): Promise<T[]> {
-  return series(
-    data.map((matches, i) => (): Promise<T> => {
-      if (!useDefaults && (!matches || matches.length === 0)) {
-        throw new Error(`No match found for ${options[i]}`);
-      }
-      if (useDefaults || matches.length === 1) {
-        return Promise.resolve(matches[0]);
-      }
-      return (
-        messenger
-          .request(getQuestion(options[i]), {
-            allowTextSearch,
-            options: uniqBy<T, string>(getValue, limit > 0 ? take(limit, matches) : matches).map(
-              (r) => ({
-                label: getLabel(r),
-                value: getValue(r),
-              }),
-            ),
-          })
-          .toPromise()
-          // We know the user selected an option
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          .then((option: string) => matches.find((r) => String(getValue(r)) === String(option))!)
-      );
-    }),
+  const series = pLimit(1);
+  return Promise.all(
+    data.map((matches, i) =>
+      series(
+        (): Promise<T> => {
+          if (!useDefaults && (!matches || matches.length === 0)) {
+            throw new Error(`No match found for ${options[i]}`);
+          }
+          if (useDefaults || matches.length === 1) {
+            return Promise.resolve(matches[0]);
+          }
+          return (
+            messenger
+              .request(getQuestion(options[i]), {
+                allowTextSearch,
+                options: uniqBy<T, string>(
+                  getValue,
+                  limit > 0 ? take(limit, matches) : matches,
+                ).map((r) => ({
+                  label: getLabel(r),
+                  value: getValue(r),
+                })),
+              })
+              .toPromise()
+              // We know the user selected an option
+              .then(
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                (option: string) => matches.find((r) => String(getValue(r)) === String(option))!,
+              )
+          );
+        },
+      ),
+    ),
   );
 }
