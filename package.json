@@ -92,7 +92,7 @@
     "simple-git": "^2.1.0",
     "sqlite3": "^4.0.8",
     "tmp": "^0.2.0",
-    "turndown": "^6.0.0"
+    "turndown": "^7.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.0.1",
