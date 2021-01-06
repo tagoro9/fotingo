@@ -99,7 +99,7 @@
     "@commitlint/config-conventional": "^9.1.1",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@octokit/types": "^5.0.0",
+    "@octokit/types": "^6.2.1",
     "@jest/globals": "^26.0.1",
     "@semantic-release/git": "^9.0.0",
     "@types/debug": "^4.1.4",
