@@ -16,6 +16,14 @@ export const requiredConfigs = [
   { path: ['github', 'authToken'], request: "What's your Github token?" },
 ];
 
+// Map between environment variable names and configuration paths
+const environmentVarsToConfigPath = {
+  FOTINGO_JIRA_ROOT: ['jira', 'root'],
+  FOTINGO_JIRA_USER_LOGIN: ['jira', 'user', 'login'],
+  FOTINGO_JIRA_USER_TOKEN: ['jira', 'user', 'token'],
+  GITHUB_TOKEN: ['github', 'authToken'],
+};
+
 // Object with the logic to deserialize config values such a regexes
 const configDeserializer = [
   {
@@ -38,10 +46,32 @@ const readConfigFile: (path?: string) => string = R.compose(
 );
 
 /**
+ * Read the fotingo configuration defined as environment variables
+ */
+const readEnvironment = () => {
+  return R.compose(
+    R.reduce(
+      (config, [environmentVar, value]) =>
+        R.set(
+          R.lensPath(
+            environmentVarsToConfigPath[environmentVar as keyof typeof environmentVarsToConfigPath],
+          ),
+          value,
+          config,
+        ),
+      {},
+    ),
+    R.filter(R.compose(R.contains(R.__, R.keys(environmentVarsToConfigPath)), R.head)),
+    R.toPairs,
+  )(process.env as { [k: string]: string });
+};
+
+/**
  * Read the fotingo configuration file. Find it up from the execution directory
  * and merge it with the file in the home directory
  */
 export const readConfig: () => Config = R.compose(
+  (config: Config) => R.mergeDeepRight(config, readEnvironment()) as Config,
   (config) =>
     R.reduce(
       (newConfig, deserializer) => {
