@@ -4,6 +4,7 @@
 import { describe, expect, jest, test } from '@jest/globals';
 import * as cosmiconfig from 'cosmiconfig';
 import { readConfig } from 'src/config';
+import { data } from 'test/lib/data';
 import { mocked } from 'ts-jest/utils';
 
 jest.mock('cosmiconfig', () => ({
@@ -60,5 +61,45 @@ describe('config', () => {
       someKey: 'value',
       test: 'value',
     });
+  });
+
+  test('reads config from env variables', () => {
+    const search = jest.fn().mockReturnValueOnce({
+      config: {
+        jira: data.createTrackerConfig(),
+        github: data.createRemoteConfig(),
+      },
+      isEmpty: false,
+    });
+    mockSearch(search);
+    process.env.GITHUB_TOKEN = 'github-token';
+    process.env.FOTINGO_JIRA_ROOT = 'https://test.com';
+    process.env.FOTINGO_JIRA_USER_LOGIN = 'test@test.com';
+    process.env.FOTINGO_JIRA_USER_TOKEN = 'jira-token';
+    expect(readConfig()).toMatchInlineSnapshot(`
+      Object {
+        "github": Object {
+          "authToken": "github-token",
+          "baseBranch": "main",
+          "owner": "tagoro9",
+          "pullRequestTemplate": "{summary}",
+          "repo": "tagoro9/fotingo",
+        },
+        "jira": Object {
+          "root": "https://test.com",
+          "status": Object {
+            "BACKLOG": /backlog/i,
+            "DONE": /done/i,
+            "IN_PROGRESS": /progress/i,
+            "IN_REVIEW": /review/i,
+            "SELECTED_FOR_DEVELOPMENT": /to do/i,
+          },
+          "user": Object {
+            "login": "test@test.com",
+            "token": "jira-token",
+          },
+        },
+      }
+    `);
   });
 });

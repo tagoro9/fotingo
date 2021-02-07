@@ -3,6 +3,7 @@ import { GitConfig } from 'src/git/Config';
 import { JiraIssue } from 'src/issue-tracker/jira/types';
 import { HttpResponse } from 'src/network/HttpClient';
 import {
+  Config,
   Issue,
   IssueStatus,
   IssueType,
@@ -59,6 +60,15 @@ export const data = {
       baseBranch: 'master',
       branchTemplate: '{issue.key}',
       remote: 'origin',
+    };
+  },
+  createRemoteConfig(): Config['github'] {
+    return {
+      authToken: faker.random.alphaNumeric(10),
+      baseBranch: 'main',
+      owner: 'tagoro9',
+      pullRequestTemplate: '{summary}',
+      repo: 'tagoro9/fotingo',
     };
   },
   createTrackerConfig(): TrackerConfig {
