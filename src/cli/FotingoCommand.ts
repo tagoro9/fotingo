@@ -115,7 +115,10 @@ export abstract class FotingoCommand<T, R> extends Command {
 
   async run(): Promise<void> {
     const { waitUntilExit } = renderUi({
-      cmd: () => this.runCmd(of(this.getCommandData())),
+      cmd: () => {
+        const commandData = this.getCommandData();
+        return this.runCmd(commandData instanceof Observable ? commandData : of(commandData));
+      },
       isDebugging: process.env.DEBUG !== undefined,
       messenger: this.messenger,
     });
@@ -169,7 +172,7 @@ export abstract class FotingoCommand<T, R> extends Command {
     ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown) as ObservableInput<LocalChanges>;
   }
 
-  protected abstract getCommandData(): R;
+  protected abstract getCommandData(): Observable<R> | R;
 
   protected abstract runCmd(commandData$: Observable<R>): Observable<T>;
 }
