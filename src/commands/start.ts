@@ -1,13 +1,28 @@
 import { flags } from '@oclif/command';
 import { boundMethod } from 'autobind-decorator';
-import { compose, has, ifElse, pathEq, prop, tap as rTap, unapply, zipObj } from 'ramda';
-import { Observable, of } from 'rxjs';
+import {
+  compose,
+  equals,
+  filter,
+  has,
+  identity,
+  ifElse,
+  not,
+  pathEq,
+  prop,
+  tap as rTap,
+  unapply,
+  values,
+  zipObj,
+} from 'ramda';
+import { from, Observable, of } from 'rxjs';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { branch } from 'src/cli/flags';
 import { FotingoCommand } from 'src/cli/FotingoCommand';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji } from 'src/io/messenger';
 import { Issue, IssueStatus, IssueType, StartData } from 'src/types';
+import { findMatches } from 'src/util/text';
 
 interface IssueAndStartData {
   commandData: StartData;
@@ -66,25 +81,45 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
     }),
   };
 
-  getCommandData(): StartData {
+  getCommandData(): StartData | Observable<StartData> {
     const { args, flags } = this.parse(Start);
-    let issue = undefined;
+    const git = {
+      createBranch: !flags['no-branch-issue'],
+    };
     if (flags.title) {
-      issue = {
-        description: flags.description as string,
-        labels: flags.labels as string[],
-        project: flags.project as string,
-        title: flags.title as string,
-        type: flags.kind as IssueType,
-      };
-    } else if (args.issue) {
-      issue = { id: args.issue as string };
+      return from(
+        maybeAskUserToSelectMatches(
+          {
+            data: findMatches(
+              {
+                data: filter(compose(not, equals(IssueType.SUB_TASK)), values(IssueType)),
+              },
+              [flags.kind as string],
+            ),
+            getLabel: identity,
+            getValue: identity,
+            getQuestion: () => `What type of issue do you want to create?`,
+            options: [flags.kind as string],
+            useDefaults: false,
+          },
+          this.messenger,
+        ),
+      ).pipe(
+        map((kind) => ({
+          git,
+          issue: {
+            description: flags.description as string,
+            labels: flags.labels as string[],
+            project: flags.project as string,
+            title: flags.title as string,
+            type: kind[0],
+          },
+        })),
+      );
     }
     return {
-      git: {
-        createBranch: !flags['no-branch-issue'],
-      },
-      issue,
+      git,
+      issue: { id: args.issue as string },
     };
   }
 
