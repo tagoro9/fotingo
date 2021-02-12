@@ -1,6 +1,6 @@
 {
   "name": "fotingo",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "A CLI to ease the interaction between git, github and jira.",
   "main": "lib/index.js",
   "bin": {
