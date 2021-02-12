@@ -95,7 +95,7 @@
     "turndown": "^7.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^9.0.1",
+    "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^9.1.1",
     "@jest/globals": "^26.0.1",
     "@oclif/dev-cli": "^1.22.2",
