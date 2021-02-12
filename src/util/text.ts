@@ -12,7 +12,7 @@ interface SearchOptions<T extends Searchable> {
   // before searching for the exact match
   cleanData?: (item: string) => string;
   data: T[];
-  fields: (keyof T)[];
+  fields?: (keyof T)[];
 }
 /**
  * Given a search function and the data where to search, return a list of items matching any of the strings to match
@@ -33,7 +33,7 @@ const getSearcher = <T extends Searchable>(
   options: SearchOptions<T>,
 ): { search: (s: string) => Fuse.FuseResult<T>[] } => {
   const fuse = new Fuse<T>(options.data, {
-    keys: options.fields as string[],
+    keys: (options.fields || []) as string[],
     includeMatches: false,
     includeScore: false,
     isCaseSensitive: false,
@@ -44,7 +44,7 @@ const getSearcher = <T extends Searchable>(
     return {
       search(s: string): Fuse.FuseResult<T>[] {
         const exactMatch = options.data.find((item) =>
-          options.fields.some((field) => {
+          (options.fields || []).some((field) => {
             const cleanedData = options.cleanData
               ? options.cleanData(String(item[field]))
               : item[field];
