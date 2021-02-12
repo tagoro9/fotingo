@@ -68,22 +68,27 @@ function useCmdRunner(
   const setInThreadReference = useRef(setInThread);
   useEffect(() => {
     const time = Date.now();
-    cmd()
-      .toPromise()
-      .catch((error) => {
-        errorReference.current = error;
-        // Exit thread mode if there was an error so it shows up
-        setInThreadReference.current(false);
-        addMessageReference.current({
-          message: (error.code && ERROR_CODE_TO_MESSAGE[error.code]) || error.message,
-          showSpinner: false,
-          type: MessageType.ERROR,
-        });
-      })
-      .finally(() => {
-        setDone(Date.now() - time);
-        app.exit(errorReference.current);
+    const handleError = (error: Error & { code?: number }) => {
+      errorReference.current = error;
+      // Exit thread mode if there was an error so it shows up
+      setInThreadReference.current(false);
+      addMessageReference.current({
+        message: (error.code && ERROR_CODE_TO_MESSAGE[error.code]) || error.message,
+        showSpinner: false,
+        type: MessageType.ERROR,
       });
+    };
+    try {
+      cmd()
+        .toPromise()
+        .catch(handleError)
+        .finally(() => {
+          setDone(Date.now() - time);
+          app.exit(errorReference.current);
+        });
+    } catch (error) {
+      handleError(error);
+    }
   }, [app, addMessageReference, cmd, setInThreadReference, errorReference]);
 
   return done;
