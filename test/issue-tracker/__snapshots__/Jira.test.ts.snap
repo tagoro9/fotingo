@@ -8,7 +8,7 @@ Object {
 
 exports[`jira getCurrentUser should get the current user 1`] = `
 Object {
-  "accountId": "Olaf_Kunze19",
+  "accountId": "Olaf_Kuphal19",
   "groups": Object {
     "items": Object {
       "name": "asda",
