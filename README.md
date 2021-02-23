@@ -30,7 +30,7 @@ $ npm install -g fotingo
 $ fotingo COMMAND
 running command...
 $ fotingo (-v|--version|version)
-fotingo/3.2.0 linux-x64 node-v12.20.1
+fotingo/3.3.0 linux-x64 node-v12.20.2
 $ fotingo --help [COMMAND]
 USAGE
   $ fotingo COMMAND
@@ -78,11 +78,12 @@ ARGUMENTS
 
 OPTIONS
   -i, --issues=issues  Specify more issues to include in the release
+  -n, --noVcsRelease   Do not create a release in the remote VCS
   -s, --simple         Do not use any issue tracker
   -y, --yes            Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v3.2.0/src/commands/release.ts)_
+_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v3.3.0/src/commands/release.ts)_
 
 ## `fotingo review`
 
@@ -101,7 +102,7 @@ OPTIONS
   -y, --yes                  Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v3.2.0/src/commands/review.ts)_
+_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v3.3.0/src/commands/review.ts)_
 
 ## `fotingo start [ISSUE]`
 
@@ -124,7 +125,7 @@ OPTIONS
   -t, --title=title              Title of issue to create
 ```
 
-_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v3.2.0/src/commands/start.ts)_
+_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v3.3.0/src/commands/start.ts)_
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
 
