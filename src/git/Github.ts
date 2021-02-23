@@ -1,11 +1,4 @@
-import { Octokit } from '@octokit/rest';
-import {
-  IssuesListLabelsForRepoResponseData,
-  OctokitResponse,
-  PullsCreateResponseData,
-  PullsRequestReviewersResponseData,
-  UsersGetByUsernameResponseData,
-} from '@octokit/types';
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
 import { Debugger } from 'debug';
 import escapeHtml from 'escape-html';
@@ -187,8 +180,8 @@ export class Github implements Remote {
           })
           .then(
             compose<
-              OctokitResponse<IssuesListLabelsForRepoResponseData>,
-              IssuesListLabelsForRepoResponseData,
+              RestEndpointMethodTypes['issues']['listLabelsForRepo']['response'],
+              RestEndpointMethodTypes['issues']['listLabelsForRepo']['response']['data'],
               Label[]
             >(map(pick(['id', 'name'])), prop('data')),
           ),
@@ -218,7 +211,11 @@ export class Github implements Remote {
     return this.listContributors()
       .then(
         compose(
-          (promises: Array<Promise<UsersGetByUsernameResponseData>>) => Promise.all(promises),
+          (
+            promises: Array<
+              Promise<RestEndpointMethodTypes['users']['getByUsername']['response']['data']>
+            >,
+          ) => Promise.all(promises),
           map(this.getUserInfo),
           map<{ login: string }, string>(prop('login')),
         ),
@@ -272,7 +269,9 @@ export class Github implements Remote {
   @cacheable({
     minutes: 10 * ONE_DAY,
   })
-  private getUserInfo(username: string): Promise<UsersGetByUsernameResponseData> {
+  private getUserInfo(
+    username: string,
+  ): Promise<RestEndpointMethodTypes['users']['getByUsername']['response']['data']> {
     return this.queueCall(
       () => this.api.users.getByUsername({ username }).then(prop('data')),
       `Getting user info for %s`,
@@ -289,7 +288,9 @@ export class Github implements Remote {
     content,
     isDraft,
     pullRequestHead,
-  }: SubmitPullRequestOptions): Promise<PullsCreateResponseData> {
+  }: SubmitPullRequestOptions): Promise<
+    RestEndpointMethodTypes['pulls']['create']['response']['data']
+  > {
     // TODO This should not here and baseBranch should just be an argument to the constructor
     const baseBranch = await this.git.findBaseBranch(true);
     return this.api.pulls
@@ -313,7 +314,7 @@ export class Github implements Remote {
   private async addReviewers(
     reviewers: Reviewer[],
     pullRequest: PullRequest,
-  ): Promise<PullsRequestReviewersResponseData> {
+  ): Promise<RestEndpointMethodTypes['pulls']['requestReviewers']['response']['data']> {
     return this.api.pulls
       .requestReviewers({
         owner: this.config.owner,
