@@ -50,7 +50,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (error) {
-        // eslint-disable-next-line jest/no-try-expect
+        // eslint-disable-next-line jest/no-try-expect, jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
       }
     });
@@ -65,7 +65,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (error) {
-        // eslint-disable-next-line jest/no-try-expect
+        // eslint-disable-next-line jest/no-try-expect, jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
       }
     });
@@ -75,7 +75,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (error) {
-        // eslint-disable-next-line jest/no-try-expect
+        // eslint-disable-next-line jest/no-try-expect, jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
       }
     });
