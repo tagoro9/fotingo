@@ -224,7 +224,7 @@ export interface RemoteRelease {
 
 export interface JointRelease {
   release: Release;
-  remoteRelease: RemoteRelease;
+  remoteRelease?: RemoteRelease;
 }
 
 export interface Remote {
@@ -269,6 +269,9 @@ export interface ReleaseData {
     enabled: boolean;
   };
   useDefaults: boolean;
+  vcs: {
+    enabled: boolean;
+  };
 }
 
 export interface LocalChanges {
