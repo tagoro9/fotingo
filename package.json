@@ -144,7 +144,7 @@
     "prettier": "^2.0.5",
     "rimraf": "^3.0.0",
     "semantic-release": "^17.0.7",
-    "serialize-error": "^7.0.0",
+    "serialize-error": "^8.0.1",
     "ts-jest": "^26.0.0",
     "tsc-watch": "^4.2.9",
     "tscpaths": "^0.0.9",
