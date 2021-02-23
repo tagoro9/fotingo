@@ -18,6 +18,10 @@ interface RemoteConfig {
   repo: string;
 }
 
+export interface RemoteUser {
+  login: string;
+}
+
 export interface TrackerConfig {
   root: string;
   status: Record<IssueStatus, RegExp>;
@@ -76,6 +80,7 @@ export enum IssueStatus {
 // TODO This should be Jira only
 export interface User {
   accountId: string;
+  displayName: string;
   groups: {
     items: {
       name: string;

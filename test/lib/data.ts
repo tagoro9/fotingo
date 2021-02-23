@@ -96,6 +96,7 @@ export const data = {
   createJiraUser(): User {
     return {
       accountId: faker.internet.userName(),
+      displayName: faker.name.firstName(),
       groups: {
         items: {
           name: 'asda',

@@ -22,7 +22,7 @@ import { debug } from 'src/io/debug';
 import { editVirtualFile } from 'src/io/file';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Messenger } from 'src/io/messenger';
-import { Issue, Release, ReleaseNotes } from 'src/types';
+import { Issue, Release, ReleaseNotes, RemoteUser } from 'src/types';
 import { parseTemplate } from 'src/util/template';
 import { findMatches } from 'src/util/text';
 
@@ -276,6 +276,13 @@ export class Github implements Remote {
       () => this.api.users.getByUsername({ username }).then(prop('data')),
       `Getting user info for %s`,
       username,
+    );
+  }
+
+  public getAuthenticatedUser(): Promise<RemoteUser> {
+    return this.queueCall(
+      () => this.api.users.getAuthenticated().then(prop('data')),
+      `Getting authenticated user info`,
     );
   }
 
