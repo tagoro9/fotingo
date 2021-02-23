@@ -1,11 +1,18 @@
 import { flags } from '@oclif/command';
-import { Observable } from 'rxjs';
+import { compose, filter, isNil, join, not } from 'ramda';
+import { Observable, of } from 'rxjs';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { yes } from 'src/cli/flags';
 import { FotingoCommand } from 'src/cli/FotingoCommand';
 import { Emoji } from 'src/io/messenger';
 import { getReleaseNotes } from 'src/templates/getReleaseNotes';
-import { CreateRelease, JointRelease, LocalChanges, ReleaseData } from 'src/types';
+import {
+  CreateRelease,
+  JointRelease,
+  LocalChanges,
+  Release as JiraRelease,
+  ReleaseData,
+} from 'src/types';
 
 export class Release extends FotingoCommand<JointRelease, ReleaseData> {
   static description = 'Create a release with your changes';
@@ -29,6 +36,11 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
       char: 's',
       description: 'Do not use any issue tracker',
       name: 'simple',
+    }),
+    noVcsRelease: flags.boolean({
+      char: 'n',
+      description: 'Do not create a release in the remote VCS',
+      name: 'no-vcs-release',
     }),
     yes,
   };
@@ -57,6 +69,9 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
         enabled: !flags.simple,
       },
       useDefaults: flags.yes as boolean,
+      vcs: {
+        enabled: !flags.noVcsRelease,
+      },
     };
   }
 
@@ -69,23 +84,41 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
       map(Release.buildReleaseData),
     );
 
+    const maybeCreateGithubRelease = (
+      source: Observable<[JiraRelease, ReleaseData]>,
+    ): Observable<JointRelease> => {
+      return source.pipe(
+        switchMap(([release, releaseData]) =>
+          !releaseData.vcs.enabled
+            ? of({ release })
+            : getReleaseNotes(
+                this.fotingo.release,
+                this.messenger,
+                release,
+                releaseData.useDefaults,
+              ).pipe(
+                map((notes) => ({
+                  notes,
+                  release,
+                })),
+                switchMap(({ notes, release }) => this.github.createRelease(release, notes)),
+              ),
+        ),
+      );
+    };
+
     return releaseInformation$.pipe(
       tap((data) => this.messenger.emit(`Creating release ${data.name}`, Emoji.SHIP)),
       switchMap(this.tracker.createRelease),
       switchMap(this.tracker.setIssuesFixVersion),
       withLatestFrom(commandData$),
-      switchMap(([release, { useDefaults }]) =>
-        getReleaseNotes(this.fotingo.release, this.messenger, release, useDefaults).pipe(
-          map((notes) => ({
-            notes,
-            release,
-          })),
-        ),
-      ),
-      switchMap(({ notes, release }) => this.github.createRelease(release, notes)),
+      maybeCreateGithubRelease,
       tap((data: JointRelease) =>
         this.messenger.emit(
-          `Release created: ${data.release.url} | ${data.remoteRelease.url}`,
+          `Release created: ${compose(
+            join('|'),
+            filter(compose(not, isNil)),
+          )([data.release.url, data.remoteRelease?.url])}`,
           Emoji.LINK,
         ),
       ),
