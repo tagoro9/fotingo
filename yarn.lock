@@ -1306,9 +1306,9 @@
   integrity sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag==
 
 "@types/faker@^5.1.5":
-  version "5.1.5"
-  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-5.1.5.tgz#f14b015e0100232bb00c6dd7611505efb08709a0"
-  integrity sha512-2uEQFb7bsx68rqD4F8q95wZq6LTLOyexjv6BnvJogCO4jStkyc6IDEkODPQcWfovI6g6M3uPQ2/uD/oedJKkNw==
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-5.1.7.tgz#1c3f0655f6e912f5578ce40baa941ab8705fc0ef"
+  integrity sha512-ByseCEyhb+64fapaFR/yASUfAU+Ia4LpCnHhoNMQJFSIBvbtFoEZQB0elwrSF/idpKL5OZvmZhCCukGV8Zi22w==
 
 "@types/figures@^3.0.1":
   version "3.0.1"
