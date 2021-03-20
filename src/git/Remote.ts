@@ -20,9 +20,9 @@ export interface Label {
 }
 
 export interface Reviewer {
-  email?: string;
+  email: string | null;
   login: string;
-  name?: string;
+  name?: string | null;
 }
 
 export interface RemoteRelease {
