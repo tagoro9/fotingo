@@ -139,7 +139,7 @@
     "ink-testing-library": "^2.0.0",
     "jest": "^26.0.1",
     "lint-staged": "^10.0.7",
-    "madge": "^3.4.4",
+    "madge": "^4.0.1",
     "oclif": "^1.15.2",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.0",
