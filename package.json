@@ -21,16 +21,10 @@
     "lint": "eslint ./src ./test ./types --color --ext .ts --ext .tsx",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "yarn clean && yarn build && oclif-dev manifest && oclif-dev readme",
-    "prepare": "yarn build",
+    "prepare": "husky install",
     "test": "FORCE_COLOR=0 jest",
     "version": "oclif-dev readme && git add README.md",
     "watch": "tsc-watch -p ./ --onSuccess 'yarn build:fix-paths'"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "src/**/*.ts": [
