@@ -130,13 +130,11 @@ const getTemplateKeysMatchIndexMap = (regex: string): { [S in TemplateKey]: numb
  */
 export const getIssueId = curryN(
   2,
-  compose(
-    converge(
-      compose(
-        ifElse(isNil, identity, toUpper),
-        converge(nth, [compose(prop(TemplateKey.ISSUE_KEY), getTemplateKeysMatchIndexMap), match]),
-      ),
-      [buildBranchTemplateRegex, nthArg(1)],
+  converge(
+    compose(
+      ifElse(isNil, identity, toUpper),
+      converge(nth, [compose(prop(TemplateKey.ISSUE_KEY), getTemplateKeysMatchIndexMap), match]),
     ),
+    [buildBranchTemplateRegex, nthArg(1)],
   ),
 );

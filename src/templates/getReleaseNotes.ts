@@ -4,6 +4,7 @@ import {
   groupBy,
   head,
   join,
+  Lens,
   lensProp,
   map as rMap,
   mapObjIndexed,
@@ -67,7 +68,12 @@ function getReleaseNotesFromTemplate(data: Release, releaseConfig: ReleaseConfig
           ),
         ),
         groupBy(
-          compose((lens) => view(lens, ISSUE_TYPE_TO_RELEASE_SECTION), lensProp, prop('type')),
+          compose(
+            (lens: Lens<typeof ISSUE_TYPE_TO_RELEASE_SECTION, string>) =>
+              view(lens, ISSUE_TYPE_TO_RELEASE_SECTION),
+            lensProp,
+            prop('type'),
+          ),
         ),
       )(data.issues),
       [RELEASE_TEMPLATE_KEYS.VERSION]: data.name,
