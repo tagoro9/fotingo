@@ -67,7 +67,7 @@ export class Git {
   private readonly messenger: Messenger;
 
   constructor(config: GitConfig, messenger?: Messenger) {
-    this.git = simpleGit().silent(true);
+    this.git = simpleGit();
     this.config = config;
     // TODO This is error prone
     if (messenger) {
