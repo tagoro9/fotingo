@@ -51,7 +51,7 @@ describe('Git', () => {
         hash: latestCommitHash,
       },
     });
-    simpleGit.mockReturnValue({ silent: () => gitMocks });
+    simpleGit.mockReturnValue({ ...gitMocks });
     git = new Git(gitConfig, new Messenger());
   });
 
