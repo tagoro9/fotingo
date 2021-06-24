@@ -1,6 +1,7 @@
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
 import { Debugger } from 'debug';
+import envCi from 'env-ci';
 import escapeHtml from 'escape-html';
 import {
   compose,
@@ -51,6 +52,7 @@ export class Github implements Remote {
   private readonly git: Git;
   private readonly messenger: Messenger;
   private readonly debug: Debugger;
+  private readonly isCi: boolean;
 
   /**
    * Get the prefix to use in the methods that need to be cached at the repository level
@@ -65,6 +67,7 @@ export class Github implements Remote {
   private apiCallsQueue: Promise<any> = Promise.resolve();
 
   constructor(config: GithubConfig, messenger: Messenger, git: Git) {
+    this.isCi = envCi().isCi;
     this.messenger = messenger;
     this.api = new Octokit({
       auth: `token ${config.authToken}`,
@@ -89,10 +92,9 @@ export class Github implements Remote {
     if (prExists) {
       throw new Error('A PR already exists for this branch');
     }
-    const [ghLabels, ghReviewers] = await Promise.all([
-      this.getLabels(),
-      this.getPossibleReviewers(),
-    ]);
+    const [ghLabels, ghReviewers] = this.isCi
+      ? [[], []]
+      : await Promise.all([this.getLabels(), this.getPossibleReviewers()]);
 
     const foundLabels = findMatches({ fields: ['name'], data: ghLabels }, labels);
 
@@ -101,36 +103,40 @@ export class Github implements Remote {
         findMatches({ fields: ['login', 'name', 'email'], data: ghReviewers }, [reviewer])[0],
     );
 
-    const selectedReviewers = await maybeAskUserToSelectMatches(
-      {
-        data: foundReviewers,
-        getLabel: (r) => {
-          if (r.name) {
-            return `${r.name} (${r.login})`;
-          }
-          return r.login;
-        },
-        getQuestion: (match) =>
-          `We couldn't find a unique match for reviewer "${match}", which one best matches?`,
-        getValue: (r) => r.login,
-        options: reviewers,
-        useDefaults,
-      },
-      this.messenger,
-    );
+    const selectedReviewers = this.isCi
+      ? reviewers
+      : await maybeAskUserToSelectMatches(
+          {
+            data: foundReviewers,
+            getLabel: (r) => {
+              if (r.name) {
+                return `${r.name} (${r.login})`;
+              }
+              return r.login;
+            },
+            getQuestion: (match) =>
+              `We couldn't find a unique match for reviewer "${match}", which one best matches?`,
+            getValue: (r) => r.login,
+            options: reviewers,
+            useDefaults,
+          },
+          this.messenger,
+        );
 
-    const selectedLabels = await maybeAskUserToSelectMatches(
-      {
-        data: foundLabels,
-        getLabel: (l) => `${l.name}`,
-        getQuestion: (match) =>
-          `We couldn't find a unique match for labels "${match}", which one best matches?`,
-        getValue: (l) => String(l.id),
-        options: labels,
-        useDefaults,
-      },
-      this.messenger,
-    );
+    const selectedLabels = this.isCi
+      ? labels
+      : await maybeAskUserToSelectMatches(
+          {
+            data: foundLabels,
+            getLabel: (l) => `${l.name}`,
+            getQuestion: (match) =>
+              `We couldn't find a unique match for labels "${match}", which one best matches?`,
+            getValue: (l) => String(l.id),
+            options: labels,
+            useDefaults,
+          },
+          this.messenger,
+        );
 
     const initialPrContent = this.getPullRequestContentFromTemplate(branchInfo, issues);
     this.messenger.inThread(true);
@@ -319,7 +325,7 @@ export class Github implements Remote {
    * @param pullRequest Pull request
    */
   private async addReviewers(
-    reviewers: Reviewer[],
+    reviewers: Reviewer[] | string[],
     pullRequest: PullRequest,
   ): Promise<RestEndpointMethodTypes['pulls']['requestReviewers']['response']['data']> {
     return this.api.pulls
@@ -327,7 +333,9 @@ export class Github implements Remote {
         owner: this.config.owner,
         pull_number: pullRequest.number,
         repo: this.config.repo,
-        reviewers: map(prop('login'), reviewers),
+        reviewers: reviewers.map((reviewer: Reviewer | string) =>
+          typeof reviewer === 'string' ? reviewer : reviewer.name,
+        ),
       })
       .then((response) => response.data);
   }
@@ -338,12 +346,14 @@ export class Github implements Remote {
    * @param pullRequest Pull request
    */
   private async addLabels(
-    labels: Label[],
+    labels: Label[] | string[],
     pullRequest: PullRequest,
   ): ReturnType<Octokit['issues']['addLabels']> {
     return this.api.issues.addLabels({
       issue_number: pullRequest.number,
-      labels: labels.map((label) => label.name),
+      labels: labels.map((label: Label | string) =>
+        typeof label === 'string' ? label : label.name,
+      ),
       owner: this.config.owner,
       repo: this.config.repo,
     });
