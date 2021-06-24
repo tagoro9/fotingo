@@ -1,6 +1,8 @@
 import { Command } from '@oclif/command';
 import { IConfig } from '@oclif/config';
 import { boundMethod } from 'autobind-decorator';
+import { Debugger } from 'debug';
+import envCi from 'env-ci';
 import { existsSync, mkdirSync } from 'fs';
 import { concat, lensPath, mergeDeepRight, path, prop, set, zipObj } from 'ramda';
 import { empty, from, merge, Observable, ObservableInput, of, zip } from 'rxjs';
@@ -9,6 +11,7 @@ import { readConfig, requiredConfigs, writeConfig } from 'src/config';
 import { enhanceConfig, enhanceConfigWithRuntimeArguments } from 'src/enhanceConfig';
 import { BranchInfo, Git } from 'src/git/Git';
 import { Github } from 'src/git/Github';
+import { debug } from 'src/io/debug';
 import { Emoji, Messenger } from 'src/io/messenger';
 import { Jira } from 'src/issue-tracker/jira/Jira';
 import { JiraError } from 'src/issue-tracker/jira/JiraError';
@@ -27,11 +30,16 @@ export abstract class FotingoCommand<T, R> extends Command {
   protected tracker: Tracker;
   protected github: Github;
   protected git: Git;
+  protected readonly isCi: boolean;
+  protected readonly debug: Debugger;
 
   constructor(argv: string[], config: IConfig) {
     super(argv, config);
     this.createConfigFolder();
+    this.isCi = envCi().isCi;
+    this.debug = debug.extend(this.constructor.name.toLowerCase());
     this.messenger = new Messenger();
+    this.debug(`Running fotingo in CI: ${this.isCi}`);
   }
 
   /**
