@@ -334,7 +334,7 @@ export class Github implements Remote {
         pull_number: pullRequest.number,
         repo: this.config.repo,
         reviewers: reviewers.map((reviewer: Reviewer | string) =>
-          typeof reviewer === 'string' ? reviewer : reviewer.name,
+          typeof reviewer === 'string' ? reviewer : reviewer.login,
         ),
       })
       .then((response) => response.data);
