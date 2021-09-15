@@ -369,7 +369,7 @@ export class Github implements Remote {
   private async listContributors(): Promise<Array<{ login: string }>> {
     const collaborators = await this.queueCall(
       () =>
-        this.api.repos.listCollaborators({
+        this.api.repos.listContributors({
           owner: this.config.owner,
           per_page: 100,
           repo: this.config.repo,
