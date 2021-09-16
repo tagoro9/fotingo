@@ -132,7 +132,7 @@ export abstract class FotingoCommand<T, R> extends Command {
     });
     try {
       await waitUntilExit();
-    } catch (_) {
+    } catch {
       // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
       process.exit(1);
     }
@@ -176,7 +176,7 @@ export abstract class FotingoCommand<T, R> extends Command {
               }),
             ),
           ),
-      ).pipe(reduce<Issue, Issue[]>((accumulator, value) => accumulator.concat(value), [])),
+      ).pipe(reduce<Issue, Issue[]>((accumulator, value) => [...accumulator, value], [])),
     ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown) as ObservableInput<LocalChanges>;
   }
 

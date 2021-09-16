@@ -106,19 +106,18 @@ const buildBranchTemplateRegex = compose(
  * @param regex Regex to match a branch name
  */
 const getTemplateKeysMatchIndexMap = (regex: string): { [S in TemplateKey]: number } => {
-  const indexMap = Object.values(TemplateKey).reduce(
-    (accumulator, value: TemplateKey) => ({
-      ...accumulator,
-      [value]: (
+  const indexMap = Object.fromEntries(
+    Object.values(TemplateKey).map((value: TemplateKey) => [
+      value,
+      (
         regex.match(escapeStringRegexp(TEMPLATE_KEYS_TO_MATCHERS[value])) || {
           index: -1,
         }
       ).index,
-    }),
-    {},
+    ]),
   );
   const orderedValues = Object.values(indexMap).sort(subtract).filter(lt(-1));
-  return mapObjIndexed((i) => 1 + orderedValues.indexOf(i), indexMap) as {
+  return mapObjIndexed((index) => 1 + orderedValues.indexOf(index), indexMap) as {
     [S in TemplateKey]: number;
   };
 };

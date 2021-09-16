@@ -110,7 +110,7 @@ export function useCmd(messenger: Messenger, cmd: () => Observable<unknown>): Cm
         showSpinner: false,
         type: MessageType.REQUEST,
       });
-      setRequest(undefined);
+      setRequest();
     }
     messenger.send(value);
   };

@@ -44,7 +44,7 @@ export function cacheable({
       );
     }
 
-    const cachedFn: PromiseFunction = async function (...functionArguments) {
+    const cachedFunction: PromiseFunction = async function (...functionArguments) {
       if (isCacheDisabled) {
         return method.call(this, ...functionArguments);
       }
@@ -63,7 +63,7 @@ export function cacheable({
       return Promise.resolve(result);
     };
 
-    descriptor.value = cachedFn;
+    descriptor.value = cachedFunction;
     return descriptor;
   };
 }

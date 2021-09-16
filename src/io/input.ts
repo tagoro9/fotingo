@@ -41,18 +41,18 @@ export function maybeAskUserToSelectMatches<T>(
 ): Promise<T[]> {
   const series = pLimit(1);
   return Promise.all(
-    data.map((matches, i) =>
+    data.map((matches, index) =>
       series(
         (): Promise<T> => {
           if (!useDefaults && (!matches || matches.length === 0)) {
-            throw new Error(`No match found for ${options[i]}`);
+            throw new Error(`No match found for ${options[index]}`);
           }
           if (useDefaults || matches.length === 1) {
             return Promise.resolve(matches[0]);
           }
           return (
             messenger
-              .request(getQuestion(options[i]), {
+              .request(getQuestion(options[index]), {
                 allowTextSearch,
                 options: uniqBy<T, string>(
                   getValue,

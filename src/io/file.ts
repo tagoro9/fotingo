@@ -1,6 +1,6 @@
 import editor from 'editor';
 import * as fs from 'fs';
-import { resolve } from 'path';
+import path from 'path';
 import { zipObj } from 'ramda';
 import * as tmp from 'tmp';
 import { promisify } from 'util';
@@ -84,11 +84,12 @@ export async function getFileContent(
   name: string,
   root: string,
   folders: string[],
-): Promise<string | undefined> {
+): Promise<string | void> {
   const data = await Promise.all(
     folders
-      .map((folder) => resolve(root, folder, name))
+      .map((folder) => path.resolve(root, folder, name))
+      // eslint-disable-next-line unicorn/no-useless-undefined
       .map((p) => readFile(p, 'utf-8').catch(() => undefined)),
   );
-  return data.filter((error) => error !== undefined)[0];
+  return data.find((error) => error !== undefined);
 }

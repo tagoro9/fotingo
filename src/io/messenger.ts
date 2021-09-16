@@ -90,7 +90,7 @@ export class Messenger {
    * Pause execution until the user hits enter
    */
   public pause(): Observable<void> {
-    return this.request('Press enter to continue', { options: [] }).pipe(mapTo(undefined));
+    return this.request('Press enter to continue', { options: [] }).pipe(mapTo());
   }
 
   public request<T>(
@@ -120,9 +120,9 @@ export class Messenger {
     this.subject.error(error);
   }
 
-  public onMessage(fn: (msg: Message) => void): Subscription {
+  public onMessage(function_: (msg: Message) => void): Subscription {
     return this.subject.subscribe({
-      next: fn,
+      next: function_,
     });
   }
 

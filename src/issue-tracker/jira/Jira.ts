@@ -49,10 +49,10 @@ import {
 const turnDownService = new Turndown();
 
 const getShortName = (name: string): string => {
-  if (name.match(/feature|story/i)) {
+  if (/feature|story/i.test(name)) {
     return 'f';
   }
-  if (name.match(/task/i)) {
+  if (/task/i.test(name)) {
     return 'c';
   }
   return name[0].toLowerCase();
@@ -249,13 +249,13 @@ export class Jira implements Tracker {
               })
               .pipe(map(prop('body'))),
           ).pipe(
-            reduce<Issue, Issue[]>((accumulator, value) => accumulator.concat(value), []),
+            reduce<Issue, Issue[]>((accumulator, value) => [...accumulator, value], []),
             map((issues) => head(issues)),
           ),
         ),
       )
       .pipe(
-        reduce<Issue, Issue[]>((accumulator, value) => accumulator.concat(value), []),
+        reduce<Issue, Issue[]>((accumulator, value) => [...accumulator, value], []),
         map(always(release)),
       );
   }
@@ -279,7 +279,9 @@ export class Jira implements Tracker {
       }),
       map(prop('body')),
       map((data) => {
-        return rMap(this.convertIssue, data.issues).filter((i) => i.type.toString() !== 'Epic');
+        return rMap(this.convertIssue, data.issues).filter(
+          (index) => index.type.toString() !== 'Epic',
+        );
       }),
       catchError(this.mapError),
     );
@@ -344,12 +346,11 @@ export class Jira implements Tracker {
     return this.client.get<JiraIssueStatus[]>('/status').pipe(
       map(prop('body')),
       map((status: JiraIssueStatus[]) => {
-        return Object.entries(IssueStatus).reduce(
-          (accumulator, [key, value]) => ({
-            ...accumulator,
-            [key]: status.find((t) => this.config.status[value].test(t.name)),
-          }),
-          {},
+        return Object.fromEntries(
+          Object.entries(IssueStatus).map(([key, value]) => [
+            key,
+            status.find((t) => this.config.status[value].test(t.name)),
+          ]),
         );
       }),
     );

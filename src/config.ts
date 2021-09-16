@@ -4,7 +4,7 @@
 
 import { cosmiconfigSync as cosmiconfig } from 'cosmiconfig';
 import { writeFileSync } from 'fs';
-import * as path from 'path';
+import path from 'path';
 import * as R from 'ramda';
 
 import { Config } from './types';
@@ -17,7 +17,7 @@ export const requiredConfigs = [
 ];
 
 // Map between environment variable names and configuration paths
-const environmentVarsToConfigPath = {
+const environmentVariablesToConfigPath = {
   FOTINGO_JIRA_ROOT: ['jira', 'root'],
   FOTINGO_JIRA_USER_LOGIN: ['jira', 'user', 'login'],
   FOTINGO_JIRA_USER_TOKEN: ['jira', 'user', 'token'],
@@ -50,18 +50,21 @@ const readConfigFile: (path?: string) => string = R.compose(
  */
 const readEnvironment = () => {
   return R.compose(
+    // eslint-disable-next-line unicorn/prefer-object-from-entries, unicorn/no-array-reduce
     R.reduce(
-      (config, [environmentVar, value]) =>
+      (config, [environmentVariable, value]) =>
         R.set(
           R.lensPath(
-            environmentVarsToConfigPath[environmentVar as keyof typeof environmentVarsToConfigPath],
+            environmentVariablesToConfigPath[
+              environmentVariable as keyof typeof environmentVariablesToConfigPath
+            ],
           ),
           value,
           config,
         ),
       {},
     ),
-    R.filter(R.compose(R.contains(R.__, R.keys(environmentVarsToConfigPath)), R.head)),
+    R.filter(R.compose(R.contains(R.__, R.keys(environmentVariablesToConfigPath)), R.head)),
     R.toPairs,
   )(process.env as { [k: string]: string });
 };
@@ -91,7 +94,7 @@ export const readConfig: () => Config = R.compose(
     R.converge(R.mergeWith(R.ifElse(R.is(Object), R.flip(R.merge), R.nthArg(0))), [
       readConfigFile,
       R.partial(readConfigFile, [process.env.HOME]),
-    ])(undefined),
+    ])(),
 );
 
 /**

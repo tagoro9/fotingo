@@ -163,10 +163,8 @@ export class Github implements Remote {
     await Promise.all([
       selectedReviewers.length > 0
         ? this.addReviewers(selectedReviewers, pullRequest)
-        : Promise.resolve(undefined),
-      selectedLabels.length > 0
-        ? this.addLabels(selectedLabels, pullRequest)
-        : Promise.resolve(undefined),
+        : Promise.resolve(),
+      selectedLabels.length > 0 ? this.addLabels(selectedLabels, pullRequest) : Promise.resolve(),
     ]);
 
     return Promise.resolve(pullRequest);

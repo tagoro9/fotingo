@@ -81,7 +81,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
             this.tracker.addCommentToIssue(issue.key, `PR: ${pullRequest.url}`),
           ),
         ),
-      ).pipe(reduce<Issue, Issue[]>((accumulator, value) => accumulator.concat(value), [])),
+      ).pipe(reduce<Issue, Issue[]>((accumulator, value) => [...accumulator, value], [])),
     ).pipe(map(zipObj(['pullRequest', 'comments']))) as unknown) as Observable<FotingoReview>;
   }
 
