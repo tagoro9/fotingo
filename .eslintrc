@@ -62,7 +62,7 @@
     "unicorn/prevent-abbreviations": [
       "error",
       {
-        "whitelist": {
+        "allowList": {
           "FotingoProps": true,
           "MessageProps": true,
           "MessagesProps": true,
