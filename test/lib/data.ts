@@ -31,8 +31,8 @@ export const data = {
         },
         summary: overrides.summary || defaultSummary,
       },
-      id: faker.random.number(5000),
-      key: `FOTINGO-${faker.random.number(5000)}`,
+      id: faker.datatype.number(5000),
+      key: `FOTINGO-${faker.datatype.number(5000)}`,
       renderedFields: {
         description: undefined,
       },
@@ -46,8 +46,8 @@ export const data = {
     const issueType = type || faker.random.arrayElement(Object.values(IssueType));
     return {
       description: faker.lorem.paragraph(),
-      id: faker.random.number(5000),
-      key: `FOTINGO-${faker.random.number(5000)}`,
+      id: faker.datatype.number(5000),
+      key: `FOTINGO-${faker.datatype.number(5000)}`,
       project: faker.lorem.word(),
       sanitizedSummary,
       summary,

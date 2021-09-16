@@ -88,7 +88,6 @@ export async function getFileContent(
   const data = await Promise.all(
     folders
       .map((folder) => path.resolve(root, folder, name))
-      // eslint-disable-next-line unicorn/no-useless-undefined
       .map((p) => readFile(p, 'utf-8').catch(() => undefined)),
   );
   return data.find((error) => error !== undefined);

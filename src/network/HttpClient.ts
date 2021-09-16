@@ -2,6 +2,7 @@ import debug, { Debugger } from 'debug';
 import * as R from 'ramda';
 import request from 'request';
 import { from, Observable } from 'rxjs';
+import { promisify } from 'util';
 
 import { HttpErrorImpl } from './HttpError';
 

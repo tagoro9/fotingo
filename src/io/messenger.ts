@@ -90,7 +90,7 @@ export class Messenger {
    * Pause execution until the user hits enter
    */
   public pause(): Observable<void> {
-    return this.request('Press enter to continue', { options: [] }).pipe(mapTo());
+    return this.request('Press enter to continue', { options: [] }).pipe(mapTo(undefined));
   }
 
   public request<T>(

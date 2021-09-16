@@ -18,8 +18,8 @@ const remote = 'git@github.com:tagoro9/fotingo-rewrite.git';
 const gitMocks = {
   branch: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: ['remotes/origin/master'] }),
   branchLocal: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: [] }),
-  checkoutBranch: jest.fn<Promise<unknown>, []>().mockResolvedValue(),
-  fetch: jest.fn<Promise<unknown>, []>().mockResolvedValue(),
+  checkoutBranch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  fetch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
   getRemotes: jest.fn<Promise<unknown>, []>().mockResolvedValue([
     {
       name: 'origin',
@@ -29,11 +29,11 @@ const gitMocks = {
       },
     },
   ]),
-  log: jest.fn<Promise<unknown>, []>().mockResolvedValue(),
-  push: jest.fn<Promise<unknown>, []>().mockResolvedValue(),
-  raw: jest.fn<Promise<unknown>, []>().mockResolvedValue(),
-  revparse: jest.fn<Promise<unknown>, []>().mockResolvedValue(),
-  stash: jest.fn<Promise<unknown>, []>().mockResolvedValue(),
+  log: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  push: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  raw: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  revparse: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  stash: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
   status: jest.fn<Promise<unknown>, []>().mockResolvedValue({
     files: [],
   }),

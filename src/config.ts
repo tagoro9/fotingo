@@ -94,7 +94,7 @@ export const readConfig: () => Config = R.compose(
     R.converge(R.mergeWith(R.ifElse(R.is(Object), R.flip(R.merge), R.nthArg(0))), [
       readConfigFile,
       R.partial(readConfigFile, [process.env.HOME]),
-    ])(),
+    ])(undefined),
 );
 
 /**
