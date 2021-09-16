@@ -5,7 +5,7 @@ const path = `sqlite://${homedir()}/.fotingo_config/cache.sqlite3`;
 const keyv = new Keyv(path);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type PromiseFunction = (...args: any[]) => Promise<any>;
+type PromiseFunction = (...arguments_: any[]) => Promise<any>;
 
 type Cacheable = (
   // eslint-disable-next-line @typescript-eslint/ban-types

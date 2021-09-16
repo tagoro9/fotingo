@@ -3,7 +3,7 @@ import React = require('react');
 import { pointer } from 'figures';
 import { Box, Color } from 'ink';
 
-interface ControlledSelectInputProps {
+interface ControlledSelectInputProperties {
   items: Array<{
     key?: React.Key;
     label: string;
@@ -12,27 +12,27 @@ interface ControlledSelectInputProps {
   selectedIndex?: number;
 }
 
-interface IndicatorProps {
+interface IndicatorProperties {
   isSelected: boolean;
 }
 
-interface ItemProps {
+interface ItemProperties {
   isSelected: boolean;
   label: string;
 }
 
-function Indicator({ isSelected }: IndicatorProps): JSX.Element {
+function Indicator({ isSelected }: IndicatorProperties): JSX.Element {
   return <Box marginRight={1}>{isSelected ? <Color blue>{pointer}</Color> : ' '}</Box>;
 }
 
-function Item({ isSelected, label }: ItemProps): JSX.Element {
+function Item({ isSelected, label }: ItemProperties): JSX.Element {
   return <Color blue={isSelected}>{label}</Color>;
 }
 
 export function ControlledSelectInput({
   items,
   selectedIndex,
-}: ControlledSelectInputProps): JSX.Element {
+}: ControlledSelectInputProperties): JSX.Element {
   return (
     <Box flexDirection="column">
       {items.map((item, index) => {

@@ -120,7 +120,7 @@ export class Messenger {
     this.subject.error(error);
   }
 
-  public onMessage(function_: (msg: Message) => void): Subscription {
+  public onMessage(function_: (message: Message) => void): Subscription {
     return this.subject.subscribe({
       next: function_,
     });

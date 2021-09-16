@@ -2,11 +2,11 @@ import humanize from 'humanize-duration';
 import { Box } from 'ink';
 import React = require('react');
 
-interface FooterProps {
+interface FooterProperties {
   executionTime: number;
 }
 
-export function Footer({ executionTime }: FooterProps): JSX.Element {
+export function Footer({ executionTime }: FooterProperties): JSX.Element {
   return (
     <Box marginTop={1}>
       <Box marginRight={2}>✨</Box>

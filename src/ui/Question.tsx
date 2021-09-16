@@ -2,12 +2,12 @@ import React = require('react');
 
 import { Box, Color } from 'ink';
 
-interface QuestionProps {
+interface QuestionProperties {
   hint?: string;
   message: string;
 }
 
-export function Question({ hint, message }: QuestionProps): JSX.Element {
+export function Question({ hint, message }: QuestionProperties): JSX.Element {
   return (
     <Box marginRight={1}>
       <Box marginRight={2}>❔</Box>

@@ -1,6 +1,4 @@
 declare module 'conventional-commits-parser' {
-  import { Stream } from 'stream';
-
   export interface CommitReference {
     action: string;
     issue: string;
