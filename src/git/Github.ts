@@ -96,7 +96,10 @@ export class Github implements Remote {
     }
     const [ghLabels, ghReviewers] = this.isCi
       ? [[], []]
-      : await Promise.all([this.getLabels(), this.getPossibleReviewers()]);
+      : await Promise.all([
+          labels?.length > 0 ? this.getLabels() : [],
+          reviewers?.length > 0 ? this.getPossibleReviewers() : [],
+        ]);
 
     const foundLabels = findMatches({ fields: ['name'], data: ghLabels }, labels);
 
