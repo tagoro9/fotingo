@@ -30,7 +30,7 @@ $ npm install -g fotingo
 $ fotingo COMMAND
 running command...
 $ fotingo (-v|--version|version)
-fotingo/3.4.4 linux-x64 node-v12.22.6
+fotingo/3.4.5 linux-x64 node-v14.18.3
 $ fotingo --help [COMMAND]
 USAGE
   $ fotingo COMMAND
@@ -51,20 +51,20 @@ USAGE
 
 ## `fotingo help [COMMAND]`
 
-display help for fotingo
+Display help for fotingo.
 
 ```
 USAGE
   $ fotingo help [COMMAND]
 
 ARGUMENTS
-  COMMAND  command to show help for
+  COMMAND  Command to show help for.
 
 OPTIONS
-  --all  see all commands in CLI
+  -n, --nested-commands  Include all nested commands in the output.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.10/src/commands/help.ts)_
 
 ## `fotingo release RELEASE`
 
@@ -84,7 +84,7 @@ OPTIONS
   -y, --yes            Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v3.4.4/src/commands/release.ts)_
+_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v3.4.5/src/commands/release.ts)_
 
 ## `fotingo review`
 
@@ -103,7 +103,7 @@ OPTIONS
   -y, --yes                  Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v3.4.4/src/commands/review.ts)_
+_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v3.4.5/src/commands/review.ts)_
 
 ## `fotingo start [ISSUE]`
 
@@ -126,7 +126,7 @@ OPTIONS
   -t, --title=title              Title of issue to create
 ```
 
-_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v3.4.4/src/commands/start.ts)_
+_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v3.4.5/src/commands/start.ts)_
 
 ## `fotingo verify`
 
@@ -137,7 +137,7 @@ USAGE
   $ fotingo verify
 ```
 
-_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v3.4.4/src/commands/verify.ts)_
+_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v3.4.5/src/commands/verify.ts)_
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
 
