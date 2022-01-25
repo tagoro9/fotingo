@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
-import * as simpleGitMock from 'simple-git/promise';
+import * as simpleGitMock from 'simple-git';
 import { Git } from 'src/git/Git';
 import { GitErrorType } from 'src/git/GitError';
 import { Messenger } from 'src/io/messenger';
 import { data } from 'test/lib/data';
 
-jest.mock('simple-git/promise');
+jest.mock('simple-git');
 
 const simpleGit = simpleGitMock as unknown as ReturnType<typeof jest.fn>;
 

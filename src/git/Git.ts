@@ -29,7 +29,7 @@ import {
   SimpleGit,
   StatusResult,
 } from 'simple-git';
-import simpleGit from 'simple-git/promise';
+import simpleGit from 'simple-git';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
 import { Issue } from 'src/types';
