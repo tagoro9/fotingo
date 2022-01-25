@@ -7,7 +7,7 @@ describe('getReleaseNotes', () => {
   test('generates the release notes from the template', async () => {
     const notes = await getReleaseNotes(
       data.createReleaseConfig(),
-      (jest.fn() as unknown) as Messenger,
+      jest.fn() as unknown as Messenger,
       data.createRelease(),
       true,
     ).toPromise();

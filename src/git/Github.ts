@@ -174,7 +174,7 @@ export class Github implements Remote {
         : Promise.resolve(undefined),
     ]);
 
-    return Promise.resolve(pullRequest);
+    return pullRequest;
   }
 
   @cacheable({

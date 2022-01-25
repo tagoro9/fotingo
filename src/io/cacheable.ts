@@ -56,11 +56,11 @@ export function cacheable({
       const key = `${prefix}${target.constructor.name}_${String(propertyKey)}${keyArguments}`;
       const cachedValue = await keyv.get(key);
       if (cachedValue) {
-        return Promise.resolve(cachedValue);
+        return cachedValue;
       }
       const result = await method.call(this, ...functionArguments);
       await keyv.set(key, result, minutes ? minutes * 60 * 1000 : undefined);
-      return Promise.resolve(result);
+      return result;
     };
 
     descriptor.value = cachedFunction;

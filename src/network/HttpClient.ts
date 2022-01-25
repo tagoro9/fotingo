@@ -47,18 +47,12 @@ const headers = { accept: 'application/json' };
 type HttpMethodCall<T> = (path: string, options?: PostOptions) => Observable<HttpResponse<T>>;
 
 export class HttpClient {
-  public get: <T>(
-    url: string,
-    options?: GetOptions,
-  ) => Observable<HttpResponse<T>> = this.serverCall(HttpMethod.GET);
-  public post: <T>(
-    url: string,
-    options?: PostOptions,
-  ) => Observable<HttpResponse<T>> = this.serverCall(HttpMethod.POST);
-  public put: <T>(
-    url: string,
-    options?: PostOptions,
-  ) => Observable<HttpResponse<T>> = this.serverCall(HttpMethod.PUT);
+  public get: <T>(url: string, options?: GetOptions) => Observable<HttpResponse<T>> =
+    this.serverCall(HttpMethod.GET);
+  public post: <T>(url: string, options?: PostOptions) => Observable<HttpResponse<T>> =
+    this.serverCall(HttpMethod.POST);
+  public put: <T>(url: string, options?: PostOptions) => Observable<HttpResponse<T>> =
+    this.serverCall(HttpMethod.PUT);
 
   private options: HttpClientOptions;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

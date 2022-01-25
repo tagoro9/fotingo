@@ -209,6 +209,7 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
 
   shouldCreateBranch = pathEq(['commandData', 'git', 'createBranch'], true);
 
+  // eslint-disable-next-line unicorn/consistent-function-scoping
   justReturnTheIssue = compose((data: IssueAndStartData) => of(prop('issue', data)));
 
   runCmd(commandData$: Observable<StartData>): Observable<Issue | void> {

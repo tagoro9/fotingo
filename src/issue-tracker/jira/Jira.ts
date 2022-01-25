@@ -271,7 +271,7 @@ export class Jira implements Tracker {
               IssueStatus.SELECTED_FOR_DEVELOPMENT,
             ]
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              .map((s) => (status[s] ? `'${status[s]!.name}'` : undefined))
+              .map((s) => (status[s] ? status[s]!.name : undefined))
               .filter((s) => s !== undefined)
               .join(',')}) ORDER BY CREATED DESC`,
           },

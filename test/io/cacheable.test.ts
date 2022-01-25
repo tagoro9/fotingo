@@ -48,8 +48,8 @@ describe('@cacheable', () => {
     await cacheable.cached('test');
     await cacheable.cached('test');
     expect(mock).toHaveBeenCalledTimes(1);
-    const getMock = ((mockKeyv as unknown) as { get: jest.Mock }).get;
-    const setMock = ((mockKeyv as unknown) as { set: jest.Mock }).set;
+    const getMock = (mockKeyv as unknown as { get: jest.Mock }).get;
+    const setMock = (mockKeyv as unknown as { set: jest.Mock }).set;
     expect(getMock).toHaveBeenCalledTimes(2);
     expect(getMock.mock.calls[0]).toMatchSnapshot();
     expect(getMock.mock.calls[1]).toMatchSnapshot();

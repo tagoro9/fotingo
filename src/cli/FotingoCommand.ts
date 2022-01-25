@@ -160,7 +160,7 @@ export abstract class FotingoCommand<T, R> extends Command {
       this.messenger.emit(`Getting information for ${allIssues.join(', ')}`, Emoji.BUG);
     }
     // TODO Use forkJoin
-    return (zip(
+    return zip(
       of(branchInfo),
       merge(
         ...allIssues
@@ -177,7 +177,7 @@ export abstract class FotingoCommand<T, R> extends Command {
             ),
           ),
       ).pipe(reduce<Issue, Issue[]>((accumulator, value) => [...accumulator, value], [])),
-    ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown) as ObservableInput<LocalChanges>;
+    ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown as ObservableInput<LocalChanges>;
   }
 
   protected abstract getCommandData(): Observable<R> | R;

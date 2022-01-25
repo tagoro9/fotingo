@@ -3,7 +3,7 @@ import * as req from 'request';
 import { HttpClient } from 'src/network/HttpClient';
 
 jest.mock('request');
-const mockRequest = (req as unknown) as ReturnType<typeof jest.fn>;
+const mockRequest = req as unknown as ReturnType<typeof jest.fn>;
 
 const mockRequestWithSuccess = (body: unknown, statusCode = 200): void =>
   void mockRequest.mockImplementation(
@@ -68,6 +68,7 @@ describe('HttpClient', () => {
         .get('/')
         .toPromise()
         .catch((error) => {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(error.body).toBe(body);
         });
     });

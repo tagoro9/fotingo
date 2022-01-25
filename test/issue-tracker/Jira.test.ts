@@ -20,7 +20,7 @@ let jira: Jira;
 
 describe('jira', () => {
   beforeEach(() => {
-    httpClientMock.mockImplementation(() => (httpClientMocks as unknown) as httpClient.HttpClient);
+    httpClientMock.mockImplementation(() => httpClientMocks as unknown as httpClient.HttpClient);
     jira = new Jira(data.createTrackerConfig(), new Messenger());
   });
 
@@ -50,7 +50,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (error) {
-        // eslint-disable-next-line jest/no-try-expect, jest/no-conditional-expect
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
       }
     });
@@ -65,7 +65,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (error) {
-        // eslint-disable-next-line jest/no-try-expect, jest/no-conditional-expect
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
       }
     });
@@ -75,7 +75,7 @@ describe('jira', () => {
       try {
         await jira.getCurrentUser().toPromise();
       } catch (error) {
-        // eslint-disable-next-line jest/no-try-expect, jest/no-conditional-expect
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
       }
     });

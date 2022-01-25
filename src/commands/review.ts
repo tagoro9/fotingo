@@ -63,7 +63,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
    */
   @boundMethod
   updateIssues(pullRequest: PullRequest): Observable<FotingoReview> {
-    return (zip(
+    return zip(
       of(pullRequest).pipe(
         tap((pr) => {
           if (pr.issues.length > 0) {
@@ -82,7 +82,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
           ),
         ),
       ).pipe(reduce<Issue, Issue[]>((accumulator, value) => [...accumulator, value], [])),
-    ).pipe(map(zipObj(['pullRequest', 'comments']))) as unknown) as Observable<FotingoReview>;
+    ).pipe(map(zipObj(['pullRequest', 'comments']))) as unknown as Observable<FotingoReview>;
   }
 
   protected runCmd(commandData$: Observable<ReviewData>): Observable<FotingoReview> {

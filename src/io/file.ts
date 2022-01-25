@@ -36,7 +36,7 @@ function createTemporaryFile(fileOptions: tmp.FileOptions): Promise<FileData> {
       if (error) {
         return reject(error);
       }
-      resolve((zipObj(['path', 'fd', 'clean'], temporaryFileArguments) as unknown) as FileData);
+      resolve(zipObj(['path', 'fd', 'clean'], temporaryFileArguments) as unknown as FileData);
     });
   });
 }

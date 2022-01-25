@@ -7,7 +7,7 @@ import { data } from 'test/lib/data';
 
 jest.mock('simple-git/promise');
 
-const simpleGit = (simpleGitMock as unknown) as ReturnType<typeof jest.fn>;
+const simpleGit = simpleGitMock as unknown as ReturnType<typeof jest.fn>;
 
 let git: Git;
 let branchName: string;

@@ -18,9 +18,9 @@ const mockCosmiconfig = mocked(cosmiconfig);
 const mockSearch = (search: () => unknown) => {
   mockCosmiconfig.cosmiconfigSync.mockImplementation(
     () =>
-      (({
+      ({
         search,
-      } as unknown) as ReturnType<typeof mockCosmiconfig.cosmiconfigSync>),
+      } as unknown as ReturnType<typeof mockCosmiconfig.cosmiconfigSync>),
   );
 };
 
