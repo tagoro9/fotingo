@@ -6,11 +6,10 @@ import { Messenger } from 'src/io/messenger';
 import { Jira } from 'src/issue-tracker/jira/Jira';
 import * as httpClient from 'src/network/HttpClient';
 import { data } from 'test/lib/data';
-import { mocked } from 'ts-jest';
 
 jest.mock('src/network/HttpClient');
 
-const httpClientMock = mocked(httpClient.HttpClient);
+const httpClientMock = jest.mocked(httpClient.HttpClient);
 
 const httpClientMocks = {
   get: jest.fn(),
@@ -82,7 +81,7 @@ describe('jira', () => {
   });
 
   describe('getIssue', () => {
-    test('gets and transforms the issue from Jira', async () => {
+    it('gets and transforms the issue from Jira', async () => {
       const jiraIssue = data.createJiraIssue({
         summary: `Issue with a lot of characters "$&'*,:;<>?@[]\`~‘’“”`,
       });

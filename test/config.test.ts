@@ -5,13 +5,12 @@ import { describe, expect, jest, test } from '@jest/globals';
 import * as cosmiconfig from 'cosmiconfig';
 import { readConfig } from 'src/config';
 import { data } from 'test/lib/data';
-import { mocked } from 'ts-jest/utils';
 
 jest.mock('cosmiconfig', () => ({
   cosmiconfigSync: jest.fn().mockReturnValue(jest.fn()),
 }));
 
-const mockCosmiconfig = mocked(cosmiconfig);
+const mockCosmiconfig = jest.mocked(cosmiconfig);
 
 // TODO Use real Config instances for tests
 

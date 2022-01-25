@@ -100,7 +100,7 @@ describe('Git', () => {
       gitMocks.checkoutBranch.mockRejectedValue(
         new Error(`A branch named ${branchName} already exists`),
       );
-      await expect(git.createBranchAndStashChanges(branchName)).rejects.toMatchObject(
+      await expect(git.createBranchAndStashChanges(branchName)).rejects.toEqual(
         expect.objectContaining({ code: GitErrorType.BRANCH_ALREADY_EXISTS }),
       );
     });

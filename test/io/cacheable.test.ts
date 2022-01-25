@@ -1,7 +1,6 @@
 import { describe, expect, jest, test } from '@jest/globals';
 import * as Keyv from 'keyv';
 import { cacheable } from 'src/io/cacheable';
-import { mocked } from 'ts-jest/utils';
 
 jest.mock('keyv', () => {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -19,7 +18,7 @@ jest.mock('keyv', () => {
   };
 });
 
-const mockKeyv = mocked(Keyv, true);
+const mockKeyv = jest.mocked(Keyv, true);
 
 class CacheableClass {
   private value = 'prefix';
@@ -48,8 +47,8 @@ describe('@cacheable', () => {
     await cacheable.cached('test');
     await cacheable.cached('test');
     expect(mock).toHaveBeenCalledTimes(1);
-    const getMock = (mockKeyv as unknown as { get: jest.Mock }).get;
-    const setMock = (mockKeyv as unknown as { set: jest.Mock }).set;
+    const getMock = (mockKeyv as unknown as { get: ReturnType<typeof jest.fn> }).get;
+    const setMock = (mockKeyv as unknown as { set: ReturnType<typeof jest.fn> }).set;
     expect(getMock).toHaveBeenCalledTimes(2);
     expect(getMock.mock.calls[0]).toMatchSnapshot();
     expect(getMock.mock.calls[1]).toMatchSnapshot();
