@@ -21,7 +21,7 @@ import {
   trim,
   uniqBy,
 } from 'ramda';
-import {
+import simpleGit, {
   BranchSummary,
   DefaultLogFields,
   LogResult,
@@ -29,7 +29,6 @@ import {
   SimpleGit,
   StatusResult,
 } from 'simple-git';
-import simpleGit from 'simple-git';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
 import { Issue } from 'src/types';
