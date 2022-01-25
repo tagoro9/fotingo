@@ -1,7 +1,13 @@
+import { existsSync, mkdirSync } from 'fs';
 import Keyv from 'keyv';
 import { homedir } from 'os';
 
-const path = `sqlite://${homedir()}/.fotingo_config/cache.sqlite3`;
+const fotingoHome = `${homedir()}/.fotingo_config`;
+
+if (!existsSync(fotingoHome)) {
+  mkdirSync(fotingoHome);
+}
+const path = `sqlite://${fotingoHome}/cache.sqlite3`;
 const keyv = new Keyv(path);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
