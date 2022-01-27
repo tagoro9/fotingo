@@ -4,6 +4,7 @@
 
 import { cosmiconfigSync as cosmiconfig } from 'cosmiconfig';
 import { writeFileSync } from 'fs';
+import * as os from 'os';
 import path from 'path';
 import * as R from 'ramda';
 
@@ -107,7 +108,7 @@ export const writeConfig: (data: Partial<Config>) => Partial<Config> = (data) =>
   writeFileSync(
     // TODO Use homedir() instead of env variable
     search.filepath || path.join(process.env.HOME as string, '.fotingorc'),
-    JSON.stringify(mergedConfigs, undefined, 2),
+    JSON.stringify(mergedConfigs, undefined, 2) + os.EOL,
     'utf-8',
   );
   return data;
