@@ -79,7 +79,6 @@ describe('config', () => {
       Object {
         "github": Object {
           "authToken": "github-token",
-          "baseBranch": "main",
           "owner": "tagoro9",
           "pullRequestTemplate": "{summary}",
           "repo": "tagoro9/fotingo",

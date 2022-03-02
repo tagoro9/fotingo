@@ -12,7 +12,6 @@ interface GitConfig {
 
 interface RemoteConfig {
   authToken: string;
-  baseBranch: string;
   owner: string;
   pullRequestTemplate: string;
   repo: string;
@@ -49,7 +48,6 @@ export interface DefaultConfig {
     remote: string;
   };
   github: {
-    baseBranch: string;
     pullRequestTemplate: string;
   };
   jira: {

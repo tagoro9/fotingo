@@ -65,7 +65,6 @@ export const data = {
   createRemoteConfig(): Config['github'] {
     return {
       authToken: faker.random.alphaNumeric(10),
-      baseBranch: 'main',
       owner: 'tagoro9',
       pullRequestTemplate: '{summary}',
       repo: 'tagoro9/fotingo',

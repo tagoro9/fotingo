@@ -12,7 +12,6 @@ interface DefaultConfig {
     remote: string;
   };
   github: {
-    baseBranch: string;
     pullRequestTemplate: string;
   };
   jira: {
@@ -30,7 +29,6 @@ const defaultConfig: DefaultConfig = {
     remote: 'origin',
   },
   github: {
-    baseBranch: 'master',
     pullRequestTemplate:
       '{summary}\n\n**Description**\n\n{description}\n\n{fixedIssues}\n\n**Changes**\n\n{changes}\n\n{fotingo.banner}',
   },
@@ -62,9 +60,6 @@ export function enhanceConfigWithRuntimeArguments(
     data.branch !== undefined
       ? {
           git: {
-            baseBranch: data.branch,
-          },
-          github: {
             baseBranch: data.branch,
           },
         }

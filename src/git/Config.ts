@@ -19,7 +19,6 @@ export interface GitConfig {
 
 export interface GithubConfig {
   authToken: string;
-  baseBranch: string;
   owner: string;
   pullRequestTemplate: string;
   repo: string;
