@@ -30,7 +30,7 @@ $ npm install -g fotingo
 $ fotingo COMMAND
 running command...
 $ fotingo (-v|--version|version)
-fotingo/3.4.6 linux-x64 node-v14.18.3
+fotingo/3.5.0 linux-x64 node-v14.19.0
 $ fotingo --help [COMMAND]
 USAGE
   $ fotingo COMMAND
@@ -84,7 +84,7 @@ OPTIONS
   -y, --yes            Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v3.4.6/src/commands/release.ts)_
+_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v3.5.0/src/commands/release.ts)_
 
 ## `fotingo review`
 
@@ -103,7 +103,7 @@ OPTIONS
   -y, --yes                  Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v3.4.6/src/commands/review.ts)_
+_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v3.5.0/src/commands/review.ts)_
 
 ## `fotingo start [ISSUE]`
 
@@ -126,7 +126,7 @@ OPTIONS
   -t, --title=title              Title of issue to create
 ```
 
-_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v3.4.6/src/commands/start.ts)_
+_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v3.5.0/src/commands/start.ts)_
 
 ## `fotingo verify`
 
@@ -137,7 +137,7 @@ USAGE
   $ fotingo verify
 ```
 
-_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v3.4.6/src/commands/verify.ts)_
+_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v3.5.0/src/commands/verify.ts)_
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
 
