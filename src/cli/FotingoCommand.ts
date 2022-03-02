@@ -6,11 +6,9 @@ import envCi from 'env-ci';
 import { existsSync, mkdirSync } from 'fs';
 import {
   always,
-  complement,
   concat,
   equals,
   ifElse,
-  isNil,
   lensPath,
   mergeDeepRight,
   path,
@@ -19,7 +17,7 @@ import {
   zipObj,
 } from 'ramda';
 import { EMPTY, from, merge, Observable, ObservableInput, of, throwError, zip } from 'rxjs';
-import { catchError, concatMap, filter, map, reduce, switchMap, tap } from 'rxjs/operators';
+import { catchError, concatMap, map, reduce, switchMap, tap } from 'rxjs/operators';
 import { readConfig, requiredConfigs, writeConfig } from 'src/config';
 import { enhanceConfig, enhanceConfigWithRuntimeArguments } from 'src/enhanceConfig';
 import { BranchInfo, Git } from 'src/git/Git';
@@ -225,8 +223,9 @@ export abstract class FotingoCommand<T, R> extends Command {
         ),
       ),
     ).pipe(
-      filter(complement(isNil)),
-      switchMap((message) => throwError(new Error(message))),
+      switchMap((message) =>
+        message === undefined ? of(undefined) : throwError(new Error(message)),
+      ),
     );
   }
 
