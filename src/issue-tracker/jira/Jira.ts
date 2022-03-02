@@ -48,6 +48,8 @@ import {
 
 const turnDownService = new Turndown();
 
+type LightIssue = Pick<Issue, 'id' | 'key'>;
+
 const getShortName = (name: string): string => {
   if (/feature|story/i.test(name)) {
     return 'f';
@@ -141,15 +143,18 @@ export class Jira implements Tracker {
 
   @boundMethod
   public createIssueForCurrentUser(data: CreateIssue): Observable<Issue> {
-    return this.getCurrentUser().pipe(switchMap((user) => this.createIssue(data, user)));
+    return this.getCurrentUser().pipe(
+      switchMap((user) => this.createIssue(data, user)),
+      switchMap((issue) => this.getIssue(issue.key)),
+    );
   }
 
   @boundMethod
-  public createIssue(data: CreateIssue, user: User): Observable<Issue> {
+  private createIssue(data: CreateIssue, user: User): Observable<LightIssue> {
     return this.getProject(data.project).pipe(
       switchMap((project) =>
         this.client
-          .post<Issue>('/issue', {
+          .post<LightIssue>('/issue', {
             body: {
               fields: {
                 assignee: {

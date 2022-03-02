@@ -21,7 +21,7 @@ import { branch } from 'src/cli/flags';
 import { FotingoCommand } from 'src/cli/FotingoCommand';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji } from 'src/io/messenger';
-import { Issue, IssueStatus, IssueType, StartData } from 'src/types';
+import { CreateIssue, Issue, IssueStatus, IssueType, StartData } from 'src/types';
 import { findMatches } from 'src/util/text';
 
 interface IssueAndStartData {
@@ -139,7 +139,13 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
           prop('id'),
         ),
         compose(
-          this.tracker.createIssueForCurrentUser,
+          (data: CreateIssue) =>
+            this.tracker.createIssueForCurrentUser(data).pipe(
+              tap((issue) => {
+                this.messenger.emit(`Created ${issue.key}: ${issue.url}`, Emoji.LINK);
+              }),
+            ),
+          // this.tracker.createIssueForCurrentUser,
           rTap(() => {
             this.messenger.emit(`Creating issue in ${this.tracker.name}`, Emoji.BUG);
           }),

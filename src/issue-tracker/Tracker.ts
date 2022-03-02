@@ -12,7 +12,6 @@ import {
 export interface Tracker {
   addCommentToIssue: (issueId: string, comment: string) => Observable<IssueComment>;
   addLabelToIssue: (issueId: string, label: string) => Observable<Issue>;
-  createIssue: (data: CreateIssue, user: User) => Observable<Issue>;
   createIssueForCurrentUser: (data: CreateIssue) => Observable<Issue>;
   createRelease: (data: CreateRelease) => Observable<Release>;
   getCurrentUser: () => Observable<User>;
