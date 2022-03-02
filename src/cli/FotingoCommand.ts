@@ -4,12 +4,26 @@ import { boundMethod } from 'autobind-decorator';
 import { Debugger } from 'debug';
 import envCi from 'env-ci';
 import { existsSync, mkdirSync } from 'fs';
-import { concat, lensPath, mergeDeepRight, path, prop, set, zipObj } from 'ramda';
-import { empty, from, merge, Observable, ObservableInput, of, zip } from 'rxjs';
-import { catchError, concatMap, map, reduce, tap } from 'rxjs/operators';
+import {
+  always,
+  complement,
+  concat,
+  equals,
+  ifElse,
+  isNil,
+  lensPath,
+  mergeDeepRight,
+  path,
+  prop,
+  set,
+  zipObj,
+} from 'ramda';
+import { EMPTY, from, merge, Observable, ObservableInput, of, throwError, zip } from 'rxjs';
+import { catchError, concatMap, filter, map, reduce, switchMap, tap } from 'rxjs/operators';
 import { readConfig, requiredConfigs, writeConfig } from 'src/config';
 import { enhanceConfig, enhanceConfigWithRuntimeArguments } from 'src/enhanceConfig';
 import { BranchInfo, Git } from 'src/git/Git';
+import { GitErrorType } from 'src/git/GitError';
 import { Github } from 'src/git/Github';
 import { debug } from 'src/io/debug';
 import { Emoji, Messenger } from 'src/io/messenger';
@@ -18,6 +32,8 @@ import { JiraError } from 'src/issue-tracker/jira/JiraError';
 import { Tracker } from 'src/issue-tracker/Tracker';
 import { Config, Issue, LocalChanges } from 'src/types';
 import { renderUi } from 'src/ui/ui';
+
+const returnIfFalse = (message: string) => ifElse(equals(true), always(undefined), () => message);
 
 /**
  * Abstract class every fotingo command must extend. It provides
@@ -125,7 +141,8 @@ export abstract class FotingoCommand<T, R> extends Command {
     const { waitUntilExit } = renderUi({
       cmd: () => {
         const commandData = this.getCommandData();
-        return this.runCmd(commandData instanceof Observable ? commandData : of(commandData));
+        const commandData$ = commandData instanceof Observable ? commandData : of(commandData);
+        return this.validate(commandData$).pipe(switchMap(() => this.runCmd(commandData$)));
       },
       isDebugging: process.env.DEBUG !== undefined,
       messenger: this.messenger,
@@ -136,6 +153,17 @@ export abstract class FotingoCommand<T, R> extends Command {
       // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
       process.exit(1);
     }
+  }
+
+  /**
+   * Return if the current working directory is a git repo
+   * @protected
+   */
+  protected isGitRepo(): Observable<boolean> {
+    return from(this.git.getRootDir()).pipe(
+      map(() => true),
+      catchError((error) => of(error.code && error.code !== GitErrorType.NOT_A_GIT_REPO)),
+    );
   }
 
   /**
@@ -170,7 +198,7 @@ export abstract class FotingoCommand<T, R> extends Command {
               // TODO Rename JiraError
               catchError((error: JiraError) => {
                 if (error.code === 404) {
-                  return empty();
+                  return EMPTY;
                 }
                 throw error;
               }),
@@ -178,6 +206,28 @@ export abstract class FotingoCommand<T, R> extends Command {
           ),
       ).pipe(reduce<Issue, Issue[]>((accumulator, value) => [...accumulator, value], [])),
     ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown as ObservableInput<LocalChanges>;
+  }
+
+  /**
+   * Validate the execution context before taking any action. The command will not run
+   * if any error is thrown in this function
+   * @param _ The command data
+   * @protected
+   */
+  private validate(_: Observable<R>): Observable<void> {
+    return merge(
+      this.isGitRepo().pipe(map(returnIfFalse('Fotingo needs to run inside a git repository'))),
+      from(this.git.doesBranchExist(this.fotingo.git.baseBranch)).pipe(
+        map(
+          returnIfFalse(
+            `Couldn't find any branch that matched ${this.fotingo.git.baseBranch} to use as base branch`,
+          ),
+        ),
+      ),
+    ).pipe(
+      filter(complement(isNil)),
+      switchMap((message) => throwError(new Error(message))),
+    );
   }
 
   protected abstract getCommandData(): Observable<R> | R;
