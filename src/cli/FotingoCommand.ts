@@ -17,7 +17,7 @@ import {
   zipObj,
 } from 'ramda';
 import { EMPTY, from, merge, Observable, ObservableInput, of, throwError, zip } from 'rxjs';
-import { catchError, concatMap, map, reduce, switchMap, tap } from 'rxjs/operators';
+import { catchError, concatMap, last, map, reduce, switchMap, tap } from 'rxjs/operators';
 import { readConfig, requiredConfigs, writeConfig } from 'src/config';
 import { enhanceConfig, enhanceConfigWithRuntimeArguments } from 'src/enhanceConfig';
 import { BranchInfo, Git } from 'src/git/Git';
@@ -226,6 +226,7 @@ export abstract class FotingoCommand<T, R> extends Command {
       switchMap((message) =>
         message === undefined ? of(undefined) : throwError(new Error(message)),
       ),
+      last(),
     );
   }
 
