@@ -87,11 +87,14 @@ export async function enhanceConfig(config: Config): Promise<Config> {
       '.',
       '.github',
     ]);
-    return git.getRemote(configWithDefaults.git.remote).then(
-      (remote) =>
+    return Promise.all([git.getRemote(configWithDefaults.git.remote), git.getDefaultBranch()]).then(
+      ([remote, defaultBranch]) =>
         mergeDeepWith(
           ifElse(isNil, nthArg(1), nthArg(0)),
           {
+            git: {
+              baseBranch: defaultBranch,
+            },
             github: {
               pullRequestTemplate: prTemplate,
               owner: remote.owner,
