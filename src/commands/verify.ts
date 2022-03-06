@@ -11,6 +11,10 @@ export class Verify extends FotingoCommand<[RemoteUser, User], void> {
     return undefined;
   }
 
+  protected getValidations(_: Observable<void>): [() => Observable<boolean>, string][] {
+    return [];
+  }
+
   protected runCmd(_: Observable<void>): Observable<[RemoteUser, User]> {
     return zip(from(this.github.getAuthenticatedUser()), this.tracker.getCurrentUser()).pipe(
       tap(([remoteUser, trackerUser]) => {
