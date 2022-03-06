@@ -46,6 +46,10 @@ export abstract class FotingoCommand<T, R> extends Command {
   protected git: Git;
   protected readonly isCi: boolean;
   protected readonly debug: Debugger;
+  protected readonly validations: {
+    defaultBranchExist: (commandData$: Observable<R>) => [() => Observable<boolean>, string];
+    isGitRepo: (commandData$: Observable<R>) => [() => Observable<boolean>, string];
+  };
 
   constructor(argv: string[], config: IConfig) {
     super(argv, config);
@@ -53,6 +57,13 @@ export abstract class FotingoCommand<T, R> extends Command {
     this.isCi = envCi().isCi;
     this.debug = debug.extend(this.constructor.name.toLowerCase());
     this.messenger = new Messenger();
+    this.validations = {
+      defaultBranchExist: () => [
+        () => from(this.git.doesBranchExist(this.fotingo.git.baseBranch)),
+        `Couldn't find any branch that matched ${this.fotingo.git.baseBranch} to use as base branch`,
+      ],
+      isGitRepo: () => [this.isGitRepo, 'Fotingo needs to run inside a git repository'],
+    };
     this.debug(`Running fotingo in CI: ${this.isCi}`);
   }
 
@@ -207,13 +218,10 @@ export abstract class FotingoCommand<T, R> extends Command {
     ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown as ObservableInput<LocalChanges>;
   }
 
-  protected getValidations(_: Observable<R>): [() => Observable<boolean>, string][] {
+  protected getValidations(commandData$: Observable<R>): [() => Observable<boolean>, string][] {
     return [
-      [this.isGitRepo, 'Fotingo needs to run inside a git repository'],
-      [
-        () => from(this.git.doesBranchExist(this.fotingo.git.baseBranch)),
-        `Couldn't find any branch that matched ${this.fotingo.git.baseBranch} to use as base branch`,
-      ],
+      this.validations.isGitRepo(commandData$),
+      this.validations.defaultBranchExist(commandData$),
     ];
   }
 

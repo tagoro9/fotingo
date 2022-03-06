@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command';
 import { boundMethod } from 'autobind-decorator';
 import { compose, filter, isEmpty, mergeAll, not, trim, zipObj } from 'ramda';
-import { merge, Observable, of, zip } from 'rxjs';
+import { from, merge, Observable, of, zip } from 'rxjs';
 import { map, reduce, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { branch, yes } from 'src/cli/flags';
 import { FotingoCommand } from 'src/cli/FotingoCommand';
@@ -42,6 +42,22 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
     }),
     yes,
   };
+
+  protected getValidations(
+    commandData$: Observable<ReviewData>,
+  ): [() => Observable<boolean>, string][] {
+    return [
+      ...super.getValidations(commandData$),
+      [
+        () =>
+          from(this.git.getDefaultBranch()).pipe(
+            withLatestFrom(commandData$),
+            map(([defaultBranch, data]) => defaultBranch === data.branch),
+          ),
+        'You are trying to create a pull request on the default branch',
+      ],
+    ];
+  }
 
   getCommandData(): ReviewData {
     const { flags } = this.parse(Review);
