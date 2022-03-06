@@ -157,6 +157,7 @@ export abstract class FotingoCommand<T, R> extends Command {
    * Return if the current working directory is a git repo
    * @protected
    */
+  @boundMethod
   protected isGitRepo(): Observable<boolean> {
     return from(this.git.getRootDir()).pipe(
       map(() => true),
@@ -206,22 +207,30 @@ export abstract class FotingoCommand<T, R> extends Command {
     ).pipe(map(zipObj(['branchInfo', 'issues']))) as unknown as ObservableInput<LocalChanges>;
   }
 
+  protected getValidations(_: Observable<R>): [() => Observable<boolean>, string][] {
+    return [
+      [this.isGitRepo, 'Fotingo needs to run inside a git repository'],
+      [
+        () => from(this.git.doesBranchExist(this.fotingo.git.baseBranch)),
+        `Couldn't find any branch that matched ${this.fotingo.git.baseBranch} to use as base branch`,
+      ],
+    ];
+  }
+
   /**
    * Validate the execution context before taking any action. The command will not run
    * if any error is thrown in this function
-   * @param _ The command data
+   * @param commandData$ The command data
    * @protected
    */
-  private validate(_: Observable<R>): Observable<void> {
+  private validate(commandData$: Observable<R>): Observable<void> {
     return merge(
-      this.isGitRepo().pipe(map(returnIfFalse('Fotingo needs to run inside a git repository'))),
-      from(this.git.doesBranchExist(this.fotingo.git.baseBranch)).pipe(
-        map(
-          returnIfFalse(
-            `Couldn't find any branch that matched ${this.fotingo.git.baseBranch} to use as base branch`,
-          ),
-        ),
+      ...this.getValidations(commandData$).map(([validation, message]) =>
+        validation().pipe(map(returnIfFalse(message))),
       ),
+      // Add extra element so that if a command overrides getValidations to return an empty list
+      // this still works
+      of(undefined),
     ).pipe(
       switchMap((message) =>
         message === undefined ? of(undefined) : throwError(new Error(message)),
