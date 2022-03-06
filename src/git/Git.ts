@@ -301,7 +301,7 @@ export class Git {
   /**
    * Get the name for the current branch
    */
-  private getCurrentBranchName(): Promise<string> {
+  public getCurrentBranchName(): Promise<string> {
     return this.git.revparse(['--abbrev-ref', 'HEAD']).catch(this.mapAndThrowError);
   }
 

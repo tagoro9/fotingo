@@ -50,9 +50,8 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
       ...super.getValidations(commandData$),
       [
         () =>
-          from(this.git.getDefaultBranch()).pipe(
-            withLatestFrom(commandData$),
-            map(([defaultBranch, data]) => defaultBranch === data.branch),
+          from(this.git.getCurrentBranchName()).pipe(
+            map((defaultBranch) => defaultBranch !== this.fotingo.git.baseBranch),
           ),
         'You are trying to create a pull request on the default branch',
       ],
