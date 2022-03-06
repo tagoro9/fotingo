@@ -2,7 +2,6 @@ import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { boundMethod } from 'autobind-decorator';
 import { Debugger } from 'debug';
 import envCi from 'env-ci';
-import escapeHtml from 'escape-html';
 import {
   compose,
   concat as rConcat,
@@ -20,6 +19,7 @@ import {
   take,
   uniqBy,
 } from 'ramda';
+import sanitizeHtml from 'sanitize-html';
 import { cacheable, ONE_DAY } from 'src/io/cacheable';
 import { debug } from 'src/io/debug';
 import { editVirtualFile } from 'src/io/file';
@@ -32,6 +32,13 @@ import { findMatches } from 'src/util/text';
 import { GithubConfig } from './Config';
 import { BranchInfo, Git } from './Git';
 import { JointRelease, Label, PullRequest, PullRequestData, Remote, Reviewer } from './Remote';
+
+// Sanitize all the HTML tags in the passed string
+const escapeHtml = (dirty: string) =>
+  sanitizeHtml(dirty, {
+    allowedAttributes: {},
+    allowedTags: [],
+  });
 
 enum PR_TEMPLATE_KEYS {
   BRANCH_NAME = 'branchName',
