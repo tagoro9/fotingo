@@ -196,6 +196,22 @@ export class Git {
   }
 
   /**
+   * Get the default branch name in the configured remote
+   */
+  public async getDefaultBranch(): Promise<string> {
+    return this.git
+      .remote(['show', this.config.remote])
+      .then((remoteInfo: string) => {
+        const headBranch = /.*HEAD branch: (.+)\n/g.exec(remoteInfo);
+        if (headBranch && headBranch[1]) {
+          return headBranch[1];
+        }
+        throw new Error(`Could not find the default branch for ${this.config.remote}`);
+      })
+      .catch(this.mapAndThrowError);
+  }
+
+  /**
    * Find the base branch based on the remote config and baseBranch prefix.
    * If none can be found, then throw an error
    */

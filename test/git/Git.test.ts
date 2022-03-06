@@ -32,6 +32,7 @@ const gitMocks = {
   log: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
   push: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
   raw: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
+  remote: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
   revparse: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
   stash: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
   status: jest.fn<Promise<unknown>, []>().mockResolvedValue({
@@ -152,6 +153,29 @@ describe('Git', () => {
       gitMocks.raw.mockResolvedValue(commits[0].hash);
       gitMocks.log.mockResolvedValue({ all: commits });
       await expect(git.getBranchInfo()).resolves.toMatchSnapshot();
+    });
+  });
+
+  describe('getDefaultBranch', () => {
+    it('returns the base branch on the configured remote', async () => {
+      gitMocks.remote.mockResolvedValue(`
+* remote origin
+  Fetch URL: https://github.com/tagoro9/fotingo.git
+  Push  URL: https://github.com/tagoro9/fotingo.git
+  HEAD branch: main
+  Remote branches:
+    dependabot/npm_and_yarn/node-fetch-2.6.7    tracked
+    dependabot/npm_and_yarn/postcss-8.4.7       tracked
+    dependabot/npm_and_yarn/rxjs-7.5.4          tracked
+    dependabot/npm_and_yarn/types/react-17.0.39 tracked
+    dependabot/npm_and_yarn/typescript-4.6.2    tracked
+    main                                        tracked
+  Local branch configured for 'git pull':
+    main merges with remote main
+  Local ref configured for 'git push':
+    main pushes to main (fast-forwardable)
+      `);
+      await expect(git.getDefaultBranch()).resolves.toEqual('main');
     });
   });
 });
