@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { pick } from 'ramda';
-import { of, throwError } from 'rxjs';
+import { lastValueFrom, of, throwError } from 'rxjs';
 import { serializeError } from 'serialize-error';
 import { Messenger } from 'src/io/messenger';
 import { Jira } from 'src/issue-tracker/jira/Jira';
@@ -30,7 +30,7 @@ describe('jira', () => {
   describe('getCurrentUser', () => {
     it('should get the current user', async () => {
       httpClientMocks.get.mockReturnValue(of(data.createHttpResponse(data.createJiraUser())));
-      const user = await jira.getCurrentUser().toPromise();
+      const user = await lastValueFrom(jira.getCurrentUser());
       expect(user).toMatchSnapshot();
       expect(httpClientMocks.get).toHaveBeenCalledWith('/myself', {
         qs: { expand: 'groups' },
@@ -47,7 +47,7 @@ describe('jira', () => {
         }),
       );
       try {
-        await jira.getCurrentUser().toPromise();
+        await lastValueFrom(jira.getCurrentUser());
       } catch (error) {
         // eslint-disable-next-line jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
@@ -62,7 +62,7 @@ describe('jira', () => {
         }),
       );
       try {
-        await jira.getCurrentUser().toPromise();
+        await lastValueFrom(jira.getCurrentUser());
       } catch (error) {
         // eslint-disable-next-line jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
@@ -72,7 +72,7 @@ describe('jira', () => {
     it('should forward any unknown error', async () => {
       httpClientMocks.get.mockReturnValue(throwError(new Error('Some error message')));
       try {
-        await jira.getCurrentUser().toPromise();
+        await lastValueFrom(jira.getCurrentUser());
       } catch (error) {
         // eslint-disable-next-line jest/no-conditional-expect
         expect(pick(['message', 'code'], serializeError(error))).toMatchSnapshot();
@@ -86,7 +86,8 @@ describe('jira', () => {
         summary: `Issue with a lot of characters "$&'*,:;<>?@[]\`~‘’“”`,
       });
       httpClientMocks.get.mockReturnValue(of(data.createHttpResponse(jiraIssue)));
-      const issue = await jira.getIssue(jiraIssue.key).toPromise();
+      const issue = await lastValueFrom(jira.getIssue(jiraIssue.key));
+      expect(issue).not.toBeUndefined();
       expect(issue.sanitizedSummary).not.toContain(':');
       expect(issue).toMatchSnapshot();
       expect(httpClientMocks.get).toHaveBeenCalledWith(`/issue/${jiraIssue.key}`, {

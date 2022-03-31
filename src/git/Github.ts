@@ -19,6 +19,7 @@ import {
   take,
   uniqBy,
 } from 'ramda';
+import { lastValueFrom } from 'rxjs';
 import sanitizeHtml from 'sanitize-html';
 import { cacheable, ONE_DAY } from 'src/io/cacheable';
 import { debug } from 'src/io/debug';
@@ -474,7 +475,7 @@ export class Github implements Remote {
    */
   private async pause(): Promise<void> {
     if (this.debug.enabled) {
-      await this.messenger.pause().toPromise();
+      await lastValueFrom(this.messenger.pause());
     }
   }
 

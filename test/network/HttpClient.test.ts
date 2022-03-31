@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import * as req from 'request';
+import { lastValueFrom } from 'rxjs';
 import { HttpClient } from 'src/network/HttpClient';
 
 jest.mock('request');
@@ -25,52 +26,43 @@ describe('HttpClient', () => {
     test('fetches JSON from the server', () => {
       const body = { key: 'value' };
       mockRequestWithSuccess(body);
-      return client
-        .get('/')
-        .toPromise()
-        .then((value) => {
-          expect(value).toEqual({
-            body,
-            response: { statusCode: 200, body },
-          });
-          expect(mockRequest).toHaveBeenCalledTimes(1);
-          expect(mockRequest).toHaveBeenCalledWith(
-            {
-              headers: { accept: 'application/json' },
-              json: true,
-              method: 'get',
-              url: 'https://fotin.go/',
-            },
-            expect.any(Function),
-          );
+      return lastValueFrom(client.get('/')).then((value) => {
+        expect(value).toEqual({
+          body,
+          response: { statusCode: 200, body },
         });
+        expect(mockRequest).toHaveBeenCalledTimes(1);
+        expect(mockRequest).toHaveBeenCalledWith(
+          {
+            headers: { accept: 'application/json' },
+            json: true,
+            method: 'get',
+            url: 'https://fotin.go/',
+          },
+          expect.any(Function),
+        );
+      });
     });
 
     test('passes the query string to the server', () => {
       mockRequestWithSuccess({});
-      return client
-        .get('/', { qs: { val: true } })
-        .toPromise()
-        .then(() => {
-          expect(mockRequest).toHaveBeenCalledWith(
-            expect.objectContaining({
-              qs: { val: true },
-            }),
-            expect.any(Function),
-          );
-        });
+      return lastValueFrom(client.get('/', { qs: { val: true } })).then(() => {
+        expect(mockRequest).toHaveBeenCalledWith(
+          expect.objectContaining({
+            qs: { val: true },
+          }),
+          expect.any(Function),
+        );
+      });
     });
 
     test('throws an error when the call fails', () => {
       const body = { error: 'message' };
       mockRequestWithSuccess(body, 400);
-      return client
-        .get('/')
-        .toPromise()
-        .catch((error) => {
-          // eslint-disable-next-line jest/no-conditional-expect
-          expect(error.body).toBe(body);
-        });
+      return lastValueFrom(client.get('/')).catch((error) => {
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(error.body).toBe(body);
+      });
     });
   });
 });
