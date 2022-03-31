@@ -1,6 +1,6 @@
 import { useApp } from 'ink';
 import { useEffect, useRef, useState } from 'react';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { Message, MessageType, Messenger, Request, Status } from 'src/io/messenger';
 
 import { ERROR_CODE_TO_MESSAGE } from './errorCodeToMessage';
@@ -79,8 +79,7 @@ function useCmdRunner(
       });
     };
     try {
-      cmd()
-        .toPromise()
+      lastValueFrom(cmd())
         .catch(handleError)
         .finally(() => {
           setDone(Date.now() - time);

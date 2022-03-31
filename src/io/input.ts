@@ -1,5 +1,6 @@
 import pAll from 'p-all';
 import { take, uniqBy } from 'ramda';
+import { lastValueFrom } from 'rxjs';
 
 import { Messenger } from './messenger';
 
@@ -48,8 +49,8 @@ export function maybeAskUserToSelectMatches<T>(
         return Promise.resolve(matches[0]);
       }
       return (
-        messenger
-          .request(getQuestion(options[index]), {
+        lastValueFrom(
+          messenger.request(getQuestion(options[index]), {
             allowTextSearch,
             options: uniqBy<T, string>(getValue, limit > 0 ? take(limit, matches) : matches).map(
               (r) => ({
@@ -57,8 +58,8 @@ export function maybeAskUserToSelectMatches<T>(
                 value: getValue(r),
               }),
             ),
-          })
-          .toPromise()
+          }),
+        )
           // We know the user selected an option
           .then(
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
