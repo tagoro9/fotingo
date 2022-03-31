@@ -226,7 +226,7 @@ export class Github implements Remote {
     minutes: ONE_DAY,
   })
   public getPossibleReviewers(): Promise<Reviewer[]> {
-    return this.listContributors()
+    return this.listCollaborators()
       .then(
         compose(
           (
@@ -386,20 +386,39 @@ export class Github implements Remote {
     getPrefix: Github.getCachePrefix,
     minutes: 5 * ONE_DAY,
   })
-  private async listContributors(): Promise<Array<{ login: string }>> {
-    const collaborators = await this.queueCall(
-      () =>
-        this.api.repos.listCollaborators({
-          owner: this.config.owner,
-          per_page: 100,
-          repo: this.config.repo,
-        }),
-      `Getting contributors for ${this.config.owner}/${this.config.repo}`,
-    );
-    return compose(
-      map<{ login: string }, { login: string }>(pick(['login'])),
-      prop('data'),
-    )(collaborators);
+  private async listCollaborators(): Promise<Array<{ login: string }>> {
+    let contributors: Array<{ login: string }> = [];
+    for await (const page of this.listAllCollaboratorPages()) {
+      contributors = [...contributors, ...page];
+    }
+    return contributors;
+  }
+
+  /**
+   * Expose all the pages for collaborators in the repo as a generator so we can consume them all
+   * @private
+   */
+  private async *listAllCollaboratorPages(): AsyncGenerator<Array<{ login: string }>, void, void> {
+    let page = 1;
+    let hasNextPage = true;
+    while (hasNextPage) {
+      const contributors = await this.queueCall(
+        () =>
+          this.api.repos.listCollaborators({
+            owner: this.config.owner,
+            per_page: 100,
+            page,
+            repo: this.config.repo,
+          }),
+        `Getting page ${page} of contributors for ${this.config.owner}/${this.config.repo}`,
+      );
+      hasNextPage = contributors.headers?.link?.includes('rel="next"') || false;
+      page += 1;
+      yield compose(
+        map<{ login: string }, { login: string }>(pick(['login'])),
+        prop('data'),
+      )(contributors);
+    }
   }
 
   /**
