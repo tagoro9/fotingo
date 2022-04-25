@@ -134,7 +134,7 @@
     "husky": "^7.0.4",
     "ink-testing-library": "^2.0.0",
     "jest": "^27.4.7",
-    "lint-staged": "^10.0.7",
+    "lint-staged": "^12.4.0",
     "madge": "^4.0.1",
     "mem-fs": "^2.2.1",
     "mem-fs-editor": "^9.4.0",
