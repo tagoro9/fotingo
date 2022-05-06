@@ -86,7 +86,7 @@
     "rxjs": "^7.5.5",
     "sanitize-html": "^2.7.0",
     "simple-git": "^3.1.0",
-    "sqlite3": "^5.0.2",
+    "sqlite3": "^5.0.3",
     "tmp": "^0.2.0",
     "turndown": "^7.1.1"
   },
