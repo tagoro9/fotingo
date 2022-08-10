@@ -17,7 +17,7 @@ import {
   when,
 } from 'ramda';
 import { from, merge, Observable, of, throwError, zip } from 'rxjs';
-import { catchError, map, mergeMap, reduce, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, reduce, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Messenger } from 'src/io/messenger';
 import { Tracker } from 'src/issue-tracker/Tracker';
 import { HttpClient } from 'src/network/HttpClient';
@@ -25,6 +25,8 @@ import { HttpError } from 'src/network/HttpError';
 import {
   CreateIssue,
   CreateRelease,
+  CreateStandaloneIssue,
+  CreateSubTask,
   Issue,
   IssueComment,
   IssueStatus,
@@ -58,6 +60,12 @@ const getShortName = (name: string): string => {
     return 'c';
   }
   return name[0].toLowerCase();
+};
+
+const isCreateSubTask = (
+  createIssue: CreateSubTask | CreateStandaloneIssue,
+): createIssue is CreateSubTask => {
+  return 'parent' in createIssue;
 };
 
 // Using Jira REST API v2 (https://developer.atlassian.com/cloud/jira/platform/rest/v2)
@@ -115,6 +123,7 @@ export class Jira implements Tracker {
     return /\w+-\d+/i.test(name);
   }
 
+  @boundMethod
   public getProject(id: string): Observable<Project> {
     return this.client.get<RawProject>(`/project/${id}`).pipe(
       map(
@@ -151,9 +160,16 @@ export class Jira implements Tracker {
 
   @boundMethod
   private createIssue(data: CreateIssue, user: User): Observable<LightIssue> {
-    return this.getProject(data.project).pipe(
-      switchMap((project) =>
-        this.client
+    const project$ = (
+      isCreateSubTask(data)
+        ? this.getIssue(data.parent).pipe(map((parent) => parent.project.key))
+        : of(data.project)
+    ).pipe(switchMap(this.getProject));
+    const parent$ = isCreateSubTask(data) ? this.getIssue(data.parent) : of(undefined);
+    return project$.pipe(
+      withLatestFrom(parent$),
+      switchMap(([project, parent]: [Project, Issue | undefined]) => {
+        return this.client
           .post<LightIssue>('/issue', {
             body: {
               fields: {
@@ -166,6 +182,11 @@ export class Jira implements Tracker {
                 },
                 // TODO Make sure labels exist
                 labels: data.labels,
+                ...(parent && {
+                  parent: {
+                    key: parent.key,
+                  },
+                }),
                 project: {
                   id: project.id,
                 },
@@ -173,8 +194,8 @@ export class Jira implements Tracker {
               },
             },
           })
-          .pipe(map(prop('body')), catchError(this.mapError)),
-      ),
+          .pipe(map(prop('body')), catchError(this.mapError));
+      }),
     );
   }
 
@@ -309,7 +330,10 @@ export class Jira implements Tracker {
         : undefined,
       id: issue.id,
       key: issue.key,
-      project: issue.fields.project.id,
+      project: {
+        id: issue.fields.project.id,
+        key: issue.fields.project.key,
+      },
       sanitizedSummary: compose<string, string, string, string, string, string, string>(
         take(72),
         replace(/([_-])$/, ''),
