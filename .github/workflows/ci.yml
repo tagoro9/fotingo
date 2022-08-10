@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 16.x
       - run: yarn --pure-lockfile
       - name: linter
         uses: reviewdog/action-eslint@v1
@@ -19,19 +19,13 @@ jobs:
           eslint_flags: ./src ./test ./types --ext .ts --ext .tsx
           reporter: github-check
   test:
-    runs-on: macos-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-      fail-fast: true
-
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16.x
       - run: yarn --pure-lockfile
         name: Install dependencies
       - run: yarn test --coverage
