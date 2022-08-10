@@ -90,7 +90,10 @@ export interface Issue {
   description: string;
   id: number;
   key: string;
-  project: string;
+  project: {
+    id: string;
+    key: string;
+  };
   sanitizedSummary: string;
   summary: string;
   type: IssueType;
@@ -112,13 +115,22 @@ export interface IssueComment {
   updated: string;
 }
 
-export interface CreateIssue {
+interface CreateIssueCommon {
   description?: string;
   labels?: string[];
-  project: string;
   title: string;
   type: IssueType;
 }
+
+export interface CreateStandaloneIssue extends CreateIssueCommon {
+  project: string;
+}
+
+export interface CreateSubTask extends CreateIssueCommon {
+  parent: string;
+}
+
+export type CreateIssue = CreateStandaloneIssue | CreateSubTask;
 
 export interface CreateRelease {
   issues: Issue[];
@@ -262,7 +274,7 @@ export interface StartData {
   git: {
     createBranch: boolean;
   };
-  issue: CreateIssue | GetIssue | undefined;
+  issue: CreateStandaloneIssue | CreateSubTask | GetIssue | undefined;
 }
 
 export interface ReleaseData {

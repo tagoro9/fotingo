@@ -52,7 +52,6 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
       char: 't',
       description: 'Title of issue to create',
       required: false,
-      dependsOn: ['project', 'kind'],
     }),
     project: flags.string({
       char: 'p',
@@ -72,12 +71,19 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
       required: false,
       dependsOn: ['title', 'project', 'kind'],
     }),
+    parent: flags.string({
+      char: 'a',
+      dependsOn: ['title'],
+      description: 'Parent of the issue to be created',
+      exclusive: ['kind', 'project'],
+      required: false,
+    }),
     labels: flags.string({
       description: 'Labels to add to the issue',
       char: 'l',
       multiple: true,
       required: false,
-      dependsOn: ['title', 'project', 'kind'],
+      dependsOn: ['title'],
     }),
   };
 
@@ -87,32 +93,37 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
       createBranch: !flags['no-branch-issue'],
     };
     if (flags.title) {
-      return from(
-        maybeAskUserToSelectMatches(
-          {
-            data: findMatches(
-              {
-                data: filter(compose(not, equals(IssueType.SUB_TASK)), values(IssueType)),
-              },
-              [flags.kind as string],
-            ),
-            getLabel: identity,
-            getValue: identity,
-            getQuestion: () => `What type of issue do you want to create?`,
-            options: [flags.kind as string],
-            useDefaults: false,
-          },
-          this.messenger,
-        ),
+      return (
+        flags.kind
+          ? from(
+              maybeAskUserToSelectMatches(
+                {
+                  data: findMatches(
+                    {
+                      data: filter(compose(not, equals(IssueType.SUB_TASK)), values(IssueType)),
+                    },
+                    [flags.kind as string],
+                  ),
+                  getLabel: identity,
+                  getValue: identity,
+                  getQuestion: () => `What type of issue do you want to create?`,
+                  options: [flags.kind as string],
+                  useDefaults: false,
+                },
+                this.messenger,
+              ),
+            )
+          : of([])
       ).pipe(
         map((kind) => ({
           git,
           issue: {
             description: flags.description as string,
             labels: flags.labels as string[],
-            project: flags.project as string,
             title: flags.title as string,
-            type: kind[0],
+            ...(flags.parent
+              ? { parent: flags.parent, type: IssueType.SUB_TASK }
+              : { project: flags.project as string, type: kind[0] }),
           },
         })),
       );
