@@ -28,6 +28,7 @@ export const data = {
         },
         project: {
           id: faker.lorem.word(),
+          key: faker.lorem.word(),
         },
         summary: overrides.summary || defaultSummary,
       },
@@ -48,7 +49,10 @@ export const data = {
       description: faker.lorem.paragraph(),
       id: faker.datatype.number(5000),
       key: `FOTINGO-${faker.datatype.number(5000)}`,
-      project: faker.lorem.word(),
+      project: {
+        id: faker.lorem.word(),
+        key: faker.lorem.word(),
+      },
       sanitizedSummary,
       summary,
       type: issueType,
