@@ -13,6 +13,7 @@ export interface JiraIssue {
     };
     project: {
       id: string;
+      key: string;
     };
     summary: string;
   };
