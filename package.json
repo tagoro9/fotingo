@@ -22,7 +22,7 @@
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "yarn clean && yarn build && oclif-dev manifest && oclif-dev readme",
     "prepare": "husky install",
-    "test": "FORCE_COLOR=0 jest",
+    "test": "FORCE_COLOR=0 jest --coverage",
     "version": "oclif-dev readme && git add README.md",
     "watch": "tsc-watch -p ./ --onSuccess 'yarn build:fix-paths'"
   },
