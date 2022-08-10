@@ -43,7 +43,7 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
   static flags = {
     branch,
     'no-branch-issue': flags.boolean({
-      char: 'a',
+      char: 'n',
       default: false,
       description: 'Do not create a branch with the issue name',
       name: 'no-branch-issue',
