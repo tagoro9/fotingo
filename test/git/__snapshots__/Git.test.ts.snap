@@ -92,7 +92,7 @@ Object {
 }
 `;
 
-exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-107"`;
+exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-2928"`;
 
 exports[`Git getRemote should fall back to the first remote if it cannot find the specified one 1`] = `
 Object {
