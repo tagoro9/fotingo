@@ -30,7 +30,7 @@ $ npm install -g fotingo
 $ fotingo COMMAND
 running command...
 $ fotingo (-v|--version|version)
-fotingo/3.6.3 linux-x64 node-v14.19.2
+fotingo/4.0.0 linux-x64 node-v16.16.0
 $ fotingo --help [COMMAND]
 USAGE
   $ fotingo COMMAND
@@ -84,7 +84,7 @@ OPTIONS
   -y, --yes            Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v3.6.3/src/commands/release.ts)_
+_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v4.0.0/src/commands/release.ts)_
 
 ## `fotingo review`
 
@@ -103,7 +103,7 @@ OPTIONS
   -y, --yes                  Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v3.6.3/src/commands/review.ts)_
+_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v4.0.0/src/commands/review.ts)_
 
 ## `fotingo start [ISSUE]`
 
@@ -117,16 +117,17 @@ ARGUMENTS
   ISSUE  Id of the issue to start working with
 
 OPTIONS
-  -a, --no-branch-issue          Do not create a branch with the issue name
+  -a, --parent=parent            Parent of the issue to be created
   -b, --branch=branch            Name of the base branch of the pull request
   -d, --description=description  Description of the issue to be created
   -k, --kind=kind                Kind of issue to be created
   -l, --labels=labels            Labels to add to the issue
+  -n, --no-branch-issue          Do not create a branch with the issue name
   -p, --project=project          Name of the project where to create the issue
   -t, --title=title              Title of issue to create
 ```
 
-_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v3.6.3/src/commands/start.ts)_
+_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v4.0.0/src/commands/start.ts)_
 
 ## `fotingo verify`
 
@@ -137,7 +138,7 @@ USAGE
   $ fotingo verify
 ```
 
-_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v3.6.3/src/commands/verify.ts)_
+_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v4.0.0/src/commands/verify.ts)_
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
 
