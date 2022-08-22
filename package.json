@@ -58,7 +58,7 @@
     "@oclif/config": "^1.18.3",
     "@oclif/core": "^1.8.1",
     "@oclif/plugin-help": "^5.1.12",
-    "@octokit/rest": "^18.10.0",
+    "@octokit/rest": "^19.0.4",
     "@scarf/scarf": "^1.0.6",
     "@types/env-ci": "^3.1.0",
     "autobind-decorator": "^2.4.0",
