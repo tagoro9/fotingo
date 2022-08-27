@@ -1,16 +1,16 @@
 /**
  * Config testsC
  */
-import { describe, expect, jest, test } from '@jest/globals';
 import * as cosmiconfig from 'cosmiconfig';
 import { readConfig } from 'src/config';
 import { data } from 'test/lib/data';
+import { describe, expect, test, vi } from 'vitest';
 
-jest.mock('cosmiconfig', () => ({
-  cosmiconfigSync: jest.fn().mockReturnValue(jest.fn()),
+vi.mock('cosmiconfig', () => ({
+  cosmiconfigSync: vi.fn().mockReturnValue(vi.fn()),
 }));
 
-const mockCosmiconfig = jest.mocked(cosmiconfig);
+const mockCosmiconfig = vi.mocked(cosmiconfig);
 
 // TODO Use real Config instances for tests
 
@@ -25,7 +25,7 @@ const mockSearch = (search: () => unknown) => {
 
 describe('config', () => {
   test('reads config from current path and home path', () => {
-    const search = jest.fn().mockReturnValue({ isEmpty: true });
+    const search = vi.fn().mockReturnValue({ isEmpty: true });
     mockSearch(search);
     expect(readConfig()).toEqual({});
     expect(search).toHaveBeenCalledTimes(2);
@@ -33,7 +33,7 @@ describe('config', () => {
   });
 
   test('merges configuration objects', () => {
-    const search = jest.fn().mockReturnValueOnce({
+    const search = vi.fn().mockReturnValueOnce({
       config: {
         someDeepKey: { key1: 'value', keyShared: 'first' },
         someKey: 'value',
@@ -63,7 +63,7 @@ describe('config', () => {
   });
 
   test('reads config from env variables', () => {
-    const search = jest.fn().mockReturnValueOnce({
+    const search = vi.fn().mockReturnValueOnce({
       config: {
         jira: data.createTrackerConfig(),
         github: data.createRemoteConfig(),
@@ -76,23 +76,23 @@ describe('config', () => {
     process.env.FOTINGO_JIRA_USER_LOGIN = 'test@test.com';
     process.env.FOTINGO_JIRA_USER_TOKEN = 'jira-token';
     expect(readConfig()).toMatchInlineSnapshot(`
-      Object {
-        "github": Object {
+      {
+        "github": {
           "authToken": "github-token",
           "owner": "tagoro9",
           "pullRequestTemplate": "{summary}",
           "repo": "tagoro9/fotingo",
         },
-        "jira": Object {
+        "jira": {
           "root": "https://test.com",
-          "status": Object {
+          "status": {
             "BACKLOG": /backlog/i,
             "DONE": /done/i,
             "IN_PROGRESS": /progress/i,
             "IN_REVIEW": /review/i,
             "SELECTED_FOR_DEVELOPMENT": /to do/i,
           },
-          "user": Object {
+          "user": {
             "login": "test@test.com",
             "token": "jira-token",
           },

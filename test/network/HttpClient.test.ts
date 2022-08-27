@@ -1,10 +1,10 @@
-import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import * as req from 'request';
+import req from 'request';
 import { lastValueFrom } from 'rxjs';
 import { HttpClient } from 'src/network/HttpClient';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('request');
-const mockRequest = req as unknown as ReturnType<typeof jest.fn>;
+vi.mock('request');
+const mockRequest = req as unknown as ReturnType<typeof vi.fn>;
 
 const mockRequestWithSuccess = (body: unknown, statusCode = 200): void =>
   void mockRequest.mockImplementation(
@@ -19,7 +19,7 @@ describe('HttpClient', () => {
     client = new HttpClient({ root: 'https://fotin.go' });
   });
   afterEach(() => {
-    mockRequest.mockReset();
+    vi.resetAllMocks();
   });
 
   describe('get', () => {

@@ -1,5 +1,5 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`JiraError should store the message and the code 1`] = `"Test message"`;
+exports[`JiraError > should store the message and the code 1`] = `"Test message"`;
 
-exports[`JiraError should store the message and the code 2`] = `"ERR_CODE"`;
+exports[`JiraError > should store the message and the code 2`] = `"ERR_CODE"`;

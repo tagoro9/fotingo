@@ -1,21 +1,21 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`@cacheable caches values returned from the function 1`] = `
-Array [
+exports[`@cacheable > caches values returned from the function 1`] = `
+[
   "prefixCacheableClass_cached_\\"test\\"",
 ]
 `;
 
-exports[`@cacheable caches values returned from the function 2`] = `
-Array [
+exports[`@cacheable > caches values returned from the function 2`] = `
+[
   "prefixCacheableClass_cached_\\"test\\"",
 ]
 `;
 
-exports[`@cacheable caches values returned from the function 3`] = `
-Array [
+exports[`@cacheable > caches values returned from the function 3`] = `
+[
   "prefixCacheableClass_cached_\\"test\\"",
-  Array [
+  [
     "test",
     "test",
   ],

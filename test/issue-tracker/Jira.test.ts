@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { pick } from 'ramda';
 import { lastValueFrom, of, throwError } from 'rxjs';
 import { serializeError } from 'serialize-error';
@@ -7,12 +7,12 @@ import { Jira } from 'src/issue-tracker/jira/Jira';
 import * as httpClient from 'src/network/HttpClient';
 import { data } from 'test/lib/data';
 
-jest.mock('src/network/HttpClient');
+vi.mock('src/network/HttpClient');
 
-const httpClientMock = jest.mocked(httpClient.HttpClient);
+const httpClientMock = vi.mocked(httpClient.HttpClient);
 
 const httpClientMocks = {
-  get: jest.fn(),
+  get: vi.fn(),
 };
 
 let jira: Jira;
@@ -24,7 +24,7 @@ describe('jira', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getCurrentUser', () => {

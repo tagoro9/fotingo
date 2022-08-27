@@ -1,7 +1,7 @@
-import { describe, expect, jest, test } from '@jest/globals';
 import { render } from 'ink-testing-library';
 import { MessageType, RequestType, SelectRequest as SelectRequestType } from 'src/io/messenger';
 import { SelectRequest } from 'src/ui/SelectRequest';
+import { describe, expect, test, vi } from 'vitest';
 
 import React = require('react');
 
@@ -20,7 +20,7 @@ describe('<SelectRequest />', () => {
   };
 
   test('displays the list of options filtering by the text input', async () => {
-    const actual = render(<SelectRequest onSubmit={jest.fn()} request={request} />);
+    const actual = render(<SelectRequest onSubmit={vi.fn()} request={request} />);
     expect(actual.lastFrame()).toMatchSnapshot();
     actual.stdin.write('1');
     expect(actual.lastFrame()).toMatchSnapshot();
@@ -32,7 +32,7 @@ describe('<SelectRequest />', () => {
 
     const actual = render(
       <SelectRequest
-        onSubmit={jest.fn()}
+        onSubmit={vi.fn()}
         request={{
           ...request,
           allowTextSearch: false,

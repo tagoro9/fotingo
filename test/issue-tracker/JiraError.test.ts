@@ -1,5 +1,5 @@
-import { describe, expect, it } from '@jest/globals';
 import { JiraErrorImpl } from 'src/issue-tracker/jira/JiraError';
+import { describe, expect, it } from 'vitest';
 
 describe('JiraError', () => {
   it('should store the message and the code', () => {

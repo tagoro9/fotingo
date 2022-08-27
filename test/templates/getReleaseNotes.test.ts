@@ -1,4 +1,4 @@
-import { describe, expect, jest, test } from '@jest/globals';
+import { describe, expect, vi, test } from 'vitest';
 import { lastValueFrom } from 'rxjs';
 import { Messenger } from 'src/io/messenger';
 import { getReleaseNotes } from 'src/templates/getReleaseNotes';
@@ -9,7 +9,7 @@ describe('getReleaseNotes', () => {
     const notes = await lastValueFrom(
       getReleaseNotes(
         data.createReleaseConfig(),
-        jest.fn() as unknown as Messenger,
+        vi.fn() as unknown as Messenger,
         data.createRelease(),
         true,
       ),

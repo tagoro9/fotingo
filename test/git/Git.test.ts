@@ -1,13 +1,13 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
-import * as simpleGitMock from 'simple-git';
+import simpleGitMock from 'simple-git';
 import { Git } from 'src/git/Git';
 import { GitErrorType } from 'src/git/GitError';
 import { Messenger } from 'src/io/messenger';
 import { data } from 'test/lib/data';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-jest.mock('simple-git');
+vi.mock('simple-git');
 
-const simpleGit = simpleGitMock as unknown as ReturnType<typeof jest.fn>;
+const simpleGit = simpleGitMock as unknown as ReturnType<typeof vi.fn>;
 
 let git: Git;
 let branchName: string;
@@ -16,11 +16,11 @@ const latestCommitHash = '547433c';
 const remote = 'git@github.com:tagoro9/fotingo-rewrite.git';
 
 const gitMocks = {
-  branch: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: ['remotes/origin/master'] }),
-  branchLocal: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: [] }),
-  checkoutBranch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  fetch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  getRemotes: jest.fn<Promise<unknown>, []>().mockResolvedValue([
+  branch: vi.fn().mockResolvedValue({ all: ['remotes/origin/master'] }),
+  branchLocal: vi.fn().mockResolvedValue({ all: [] }),
+  checkoutBranch: vi.fn().mockResolvedValue(undefined),
+  fetch: vi.fn().mockResolvedValue(undefined),
+  getRemotes: vi.fn().mockResolvedValue([
     {
       name: 'origin',
       refs: {
@@ -29,13 +29,13 @@ const gitMocks = {
       },
     },
   ]),
-  log: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  push: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  raw: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  remote: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  revparse: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  stash: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  status: jest.fn<Promise<unknown>, []>().mockResolvedValue({
+  log: vi.fn().mockResolvedValue(undefined),
+  push: vi.fn().mockResolvedValue(undefined),
+  raw: vi.fn().mockResolvedValue(undefined),
+  remote: vi.fn().mockResolvedValue(undefined),
+  revparse: vi.fn().mockResolvedValue(undefined),
+  stash: vi.fn().mockResolvedValue(undefined),
+  status: vi.fn().mockResolvedValue({
     files: [],
   }),
 };
@@ -57,7 +57,7 @@ describe('Git', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getBranchNameForIssue', () => {

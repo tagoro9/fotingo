@@ -1,39 +1,39 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`jira getCurrentUser should forward any unknown error 1`] = `
-Object {
+exports[`jira > getCurrentUser > should forward any unknown error 1`] = `
+{
   "message": "Some error message",
 }
 `;
 
-exports[`jira getCurrentUser should get the current user 1`] = `
-Object {
+exports[`jira > getCurrentUser > should get the current user 1`] = `
+{
   "accountId": "Olaf_Kuphal19",
   "displayName": "Nikko",
-  "groups": Object {
-    "items": Object {
+  "groups": {
+    "items": {
       "name": "asda",
     },
   },
 }
 `;
 
-exports[`jira getCurrentUser should have a default message if there is none 1`] = `
-Object {
+exports[`jira > getCurrentUser > should have a default message if there is none 1`] = `
+{
   "code": 404,
   "message": "Something went wrong when connecting with jira",
 }
 `;
 
-exports[`jira getCurrentUser should map the jira errors 1`] = `
-Object {
+exports[`jira > getCurrentUser > should map the jira errors 1`] = `
+{
   "code": 404,
   "message": "There was an error",
 }
 `;
 
-exports[`jira getIssue gets and transforms the issue from Jira 1`] = `
-Object {
+exports[`jira > getIssue > gets and transforms the issue from Jira 1`] = `
+{
   "description": undefined,
   "id": 2928,
   "key": "FOTINGO-4266",
