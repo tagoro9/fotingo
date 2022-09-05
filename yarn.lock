@@ -9802,13 +9802,13 @@ simple-get@^4.0.0:
     simple-concat "^1.0.0"
 
 simple-git@^3.1.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.5.0.tgz#3c3538f4d7a1b3c8f3904412b12740bdcad9c8b1"
-  integrity sha512-fZsaq5nzdxQRhMNs6ESGLpMUHoL5GRP+boWPhq9pMYMKwOGZV2jHOxi8AbFFA2Y/6u4kR99HoULizSbpzaODkA==
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-3.14.0.tgz#6b98b445635ea778e8af9baa299dca71ede896ec"
+  integrity sha512-Paad1BkrI7vWhImLybDRYOHnh3WPsHSKXJpmKM+iGjjKNV91XaOdd+yIdZ/gqdzncHDEKYff4k+74oNo1R+U8Q==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
     "@kwsites/promise-deferred" "^1.1.1"
-    debug "^4.3.3"
+    debug "^4.3.4"
 
 sisteransi@^1.0.3:
   version "1.0.3"
