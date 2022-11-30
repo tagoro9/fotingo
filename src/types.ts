@@ -293,3 +293,7 @@ export interface LocalChanges {
   branchInfo: BranchInfo;
   issues: Issue[];
 }
+
+export interface OpenData {
+  source: 'pr' | 'jira';
+}
