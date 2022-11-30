@@ -21,6 +21,7 @@ export enum Emoji {
   BOOKS = 'books',
   BOOM = 'boom',
   BUG = 'bug',
+  EARTH_AFRICA = 'earth_africa',
   LINK = 'link',
   MAG_RIGHT = 'mag_right',
   OK = 'ok_hand',
