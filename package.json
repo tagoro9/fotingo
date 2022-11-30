@@ -71,7 +71,7 @@
     "escape-string-regexp": "^4.0.0",
     "figures": "^3.2.0",
     "fuse.js": "^6.5.3",
-    "git-url-parse": "^11.6.0",
+    "git-url-parse": "^13.1.0",
     "humanize-duration": "^3.18.0",
     "ink": "^2.3.0",
     "ink-spinner": "^3.1.0",
