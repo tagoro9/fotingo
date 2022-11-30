@@ -7,6 +7,7 @@ export interface Remote {
   createRelease: (release: Release, notes: ReleaseNotes) => Promise<JointRelease>;
   getLabels: () => Promise<Label[]>;
   getPossibleReviewers: () => Promise<Reviewer[]>;
+  getPullRequest: (branchInfo: BranchInfo) => Promise<PullRequest | undefined>;
 }
 
 export interface JointRelease {

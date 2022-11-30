@@ -98,7 +98,7 @@ export class Github implements Remote {
   }: PullRequestData): Promise<PullRequest> {
     this.debug(`Creating pull requests with args: %o`, { labels, reviewers, useDefaults });
     this.messenger.emit('Creating pull request');
-    const prExists = await this.doesPullRequestExistForBranch(branchInfo.name);
+    const prExists = await this.doesPullRequestExistForBranch(branchInfo);
     if (prExists) {
       throw new Error('A PR already exists for this branch');
     }
@@ -316,6 +316,7 @@ export class Github implements Remote {
   /**
    * Submit a pull request for review
    * @param content Content of the pull request
+   * @param isDraft Whether the pull request should be a draft
    * @param pullRequestHead Name of the branch to use as head of the pull request
    */
   private async submitPullRequest({
@@ -424,22 +425,11 @@ export class Github implements Remote {
 
   /**
    * Check if a PR already exists for the specified branch
-   * @param branchName Branch name
+   * @param branchInfo Branch information
    */
-  private doesPullRequestExistForBranch(branchName: string): Promise<boolean> {
-    // TODO check if this works with forks
-    return this.queueCall(
-      () =>
-        this.api.pulls
-          .list({
-            head: `${this.config.owner}:${branchName}`,
-            owner: this.config.owner,
-            repo: this.config.repo,
-          })
-          .then((response) => response.data.length > 0),
-      'Checking if there is a PR for %s',
-      branchName,
-    );
+  private async doesPullRequestExistForBranch(branchInfo: BranchInfo): Promise<boolean> {
+    const pullRequest = await this.getPullRequest(branchInfo);
+    return pullRequest !== undefined;
   }
 
   /**
@@ -505,5 +495,23 @@ export class Github implements Remote {
       description: '',
       summary: branchInfo.name,
     };
+  }
+
+  async getPullRequest(branchInfo: BranchInfo): Promise<PullRequest | undefined> {
+    const pullRequests = await this.queueCall(
+      () =>
+        this.api.pulls
+          .list({
+            head: `${this.config.owner}:${branchInfo.name}`,
+            owner: this.config.owner,
+            repo: this.config.repo,
+          })
+          .then((response) => response.data),
+      'Checking if there is a PR for %s',
+      branchInfo.name,
+    );
+    return pullRequests.length > 0
+      ? { issues: [], number: pullRequests[0].number, url: pullRequests[0].html_url }
+      : undefined;
   }
 }
