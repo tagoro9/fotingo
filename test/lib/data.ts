@@ -1,4 +1,4 @@
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { GitConfig } from 'src/git/Config';
 import { JiraIssue } from 'src/issue-tracker/jira/types';
 import { HttpResponse } from 'src/network/HttpClient';
@@ -19,7 +19,7 @@ import {
 export const data = {
   createJiraIssue(overrides: { summary?: string } = {}): JiraIssue {
     const defaultSummary = faker.name.jobDescriptor();
-    const issueType = faker.random.arrayElement(Object.values(IssueType));
+    const issueType = faker.helpers.arrayElement(Object.values(IssueType));
     return {
       fields: {
         description: faker.lorem.paragraph(),
@@ -44,7 +44,7 @@ export const data = {
   createIssue(type?: IssueType): Issue {
     const summary = faker.name.jobDescriptor();
     const sanitizedSummary = faker.helpers.slugify(summary);
-    const issueType = type || faker.random.arrayElement(Object.values(IssueType));
+    const issueType = type || faker.helpers.arrayElement(Object.values(IssueType));
     return {
       description: faker.lorem.paragraph(),
       id: faker.datatype.number(5000),
