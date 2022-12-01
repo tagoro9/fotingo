@@ -92,7 +92,7 @@ Object {
 }
 `;
 
-exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-2928"`;
+exports[`Git getBranchNameForIssue should generate a branch name for an issue 1`] = `"fotingo-1963"`;
 
 exports[`Git getRemote should fall back to the first remote if it cannot find the specified one 1`] = `
 Object {
@@ -102,14 +102,19 @@ Object {
   "full_name": "tagoro9/fotingo-rewrite",
   "git_suffix": true,
   "hash": "",
+  "host": "github.com",
   "href": "git@github.com:tagoro9/fotingo-rewrite.git",
   "name": "fotingo-rewrite",
   "organization": "tagoro9",
   "owner": "tagoro9",
+  "parse_failed": false,
+  "password": "",
   "pathname": "/tagoro9/fotingo-rewrite.git",
-  "port": null,
+  "port": "",
   "protocol": "ssh",
-  "protocols": Array [],
+  "protocols": Array [
+    "ssh",
+  ],
   "query": Object {},
   "ref": "",
   "resource": "github.com",
@@ -129,14 +134,19 @@ Object {
   "full_name": "tagoro9/fotingo-rewrite",
   "git_suffix": true,
   "hash": "",
+  "host": "github.com",
   "href": "git@github.com:tagoro9/fotingo-rewrite.git",
   "name": "fotingo-rewrite",
   "organization": "tagoro9",
   "owner": "tagoro9",
+  "parse_failed": false,
+  "password": "",
   "pathname": "/tagoro9/fotingo-rewrite.git",
-  "port": null,
+  "port": "",
   "protocol": "ssh",
-  "protocols": Array [],
+  "protocols": Array [
+    "ssh",
+  ],
   "query": Object {},
   "ref": "",
   "resource": "github.com",

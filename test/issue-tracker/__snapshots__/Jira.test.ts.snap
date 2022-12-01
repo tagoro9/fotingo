@@ -8,8 +8,8 @@ Object {
 
 exports[`jira getCurrentUser should get the current user 1`] = `
 Object {
-  "accountId": "Olaf_Kuphal19",
-  "displayName": "Nikko",
+  "accountId": "Jerry.Rosenbaum",
+  "displayName": "Niko",
   "groups": Object {
     "items": Object {
       "name": "asda",
@@ -35,15 +35,15 @@ Object {
 exports[`jira getIssue gets and transforms the issue from Jira 1`] = `
 Object {
   "description": undefined,
-  "id": 4266,
-  "key": "FOTINGO-3004",
+  "id": 3695,
+  "key": "FOTINGO-1314",
   "project": Object {
-    "id": "soluta",
-    "key": "qui",
+    "id": "doloremque",
+    "key": "nisi",
   },
   "sanitizedSummary": "issue_with_a_lot_of_characters",
   "summary": "Issue with a lot of characters \\"$&'*,:;<>?@[]\`~‘’“”",
-  "type": "Story",
-  "url": "https://vallie.biz/browse/FOTINGO-3004",
+  "type": "Sub-task",
+  "url": "https://wee-codling.biz/browse/FOTINGO-1314",
 }
 `;
