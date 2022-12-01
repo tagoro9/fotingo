@@ -130,7 +130,7 @@ export class Start extends FotingoCommand<Issue | void, StartData> {
     }
     return {
       git,
-      issue: args.issue != undefined ? { id: args.issue as string } : undefined,
+      issue: args.issue == undefined ? undefined : { id: args.issue as string },
     };
   }
 

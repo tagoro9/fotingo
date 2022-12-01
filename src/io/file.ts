@@ -53,7 +53,7 @@ async function editFile(path: string): Promise<string> {
       if (code !== 0 || signal !== null) {
         return reject(new Error('The editor exited with an error code'));
       }
-      resolve(readFile(path, 'utf-8'));
+      resolve(readFile(path, 'utf8'));
     });
   });
 }
@@ -88,7 +88,7 @@ export async function getFileContent(
   const data = await Promise.all(
     folders
       .map((folder) => path.resolve(root, folder, name))
-      .map((p) => readFile(p, 'utf-8').catch(() => undefined)),
+      .map((p) => readFile(p, 'utf8').catch(() => undefined)),
   );
   return data.find((error) => error !== undefined);
 }
