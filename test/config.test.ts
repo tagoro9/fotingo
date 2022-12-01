@@ -29,7 +29,7 @@ describe('config', () => {
     mockSearch(search);
     expect(readConfig()).toEqual({});
     expect(search).toHaveBeenCalledTimes(2);
-    expect(search).toBeCalledWith(process.env.HOME);
+    expect(search).toHaveBeenCalledWith(process.env.HOME);
   });
 
   test('merges configuration objects', () => {

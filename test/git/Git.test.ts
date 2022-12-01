@@ -69,7 +69,7 @@ describe('Git', () => {
   describe('push', () => {
     it('should do a git push', async () => {
       await git.push();
-      expect(gitMocks.push).toBeCalledTimes(1);
+      expect(gitMocks.push).toHaveBeenCalledTimes(1);
     });
   });
 

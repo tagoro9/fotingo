@@ -57,13 +57,13 @@ export function enhanceConfigWithRuntimeArguments(
   data: { branch?: string },
 ): Config {
   return mergeDeepLeft(
-    data.branch !== undefined
-      ? {
+    data.branch === undefined
+      ? {}
+      : {
           git: {
             baseBranch: data.branch,
           },
-        }
-      : {},
+        },
     config,
   ) as Config;
 }

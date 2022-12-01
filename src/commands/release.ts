@@ -89,9 +89,8 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
     ): Observable<JointRelease> => {
       return source.pipe(
         switchMap(([release, releaseData]) =>
-          !releaseData.vcs.enabled
-            ? of({ release })
-            : getReleaseNotes(
+          releaseData.vcs.enabled
+            ? getReleaseNotes(
                 this.fotingo.release,
                 this.messenger,
                 release,
@@ -102,7 +101,8 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
                   release,
                 })),
                 switchMap(({ notes, release }) => this.github.createRelease(release, notes)),
-              ),
+              )
+            : of({ release }),
         ),
       );
     };
