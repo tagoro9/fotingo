@@ -64,7 +64,7 @@
     "autobind-decorator": "^2.4.0",
     "chalk": "^4.0.0",
     "conventional-commits-parser": "^3.2.4",
-    "cosmiconfig": "^7.0.1",
+    "cosmiconfig": "^8.0.0",
     "debug": "^4.3.3",
     "editor": "^1.0.0",
     "env-ci": "^5.0.2",
