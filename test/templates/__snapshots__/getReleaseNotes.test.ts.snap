@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getReleaseNotes generates the release notes from the template 1`] = `
-Object {
+{
   "body": "
 # Bug fixes:
 

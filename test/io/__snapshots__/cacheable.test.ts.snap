@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`@cacheable caches values returned from the function 1`] = `
-Array [
-  "prefixCacheableClass_cached_\\"test\\"",
+[
+  "prefixCacheableClass_cached_"test"",
 ]
 `;
 
 exports[`@cacheable caches values returned from the function 2`] = `
-Array [
-  "prefixCacheableClass_cached_\\"test\\"",
+[
+  "prefixCacheableClass_cached_"test"",
 ]
 `;
 
 exports[`@cacheable caches values returned from the function 3`] = `
-Array [
-  "prefixCacheableClass_cached_\\"test\\"",
-  Array [
+[
+  "prefixCacheableClass_cached_"test"",
+  [
     "test",
     "test",
   ],

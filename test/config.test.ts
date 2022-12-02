@@ -76,23 +76,23 @@ describe('config', () => {
     process.env.FOTINGO_JIRA_USER_LOGIN = 'test@test.com';
     process.env.FOTINGO_JIRA_USER_TOKEN = 'jira-token';
     expect(readConfig()).toMatchInlineSnapshot(`
-      Object {
-        "github": Object {
+      {
+        "github": {
           "authToken": "github-token",
           "owner": "tagoro9",
           "pullRequestTemplate": "{summary}",
           "repo": "tagoro9/fotingo",
         },
-        "jira": Object {
+        "jira": {
           "root": "https://test.com",
-          "status": Object {
+          "status": {
             "BACKLOG": /backlog/i,
             "DONE": /done/i,
             "IN_PROGRESS": /progress/i,
             "IN_REVIEW": /review/i,
             "SELECTED_FOR_DEVELOPMENT": /to do/i,
           },
-          "user": Object {
+          "user": {
             "login": "test@test.com",
             "token": "jira-token",
           },
