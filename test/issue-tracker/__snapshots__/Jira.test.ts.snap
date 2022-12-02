@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`jira getCurrentUser should forward any unknown error 1`] = `
-Object {
+{
   "message": "Some error message",
 }
 `;
 
 exports[`jira getCurrentUser should get the current user 1`] = `
-Object {
+{
   "accountId": "Jerry.Rosenbaum",
   "displayName": "Niko",
-  "groups": Object {
-    "items": Object {
+  "groups": {
+    "items": {
       "name": "asda",
     },
   },
@@ -19,30 +19,30 @@ Object {
 `;
 
 exports[`jira getCurrentUser should have a default message if there is none 1`] = `
-Object {
+{
   "code": 404,
   "message": "Something went wrong when connecting with jira",
 }
 `;
 
 exports[`jira getCurrentUser should map the jira errors 1`] = `
-Object {
+{
   "code": 404,
   "message": "There was an error",
 }
 `;
 
 exports[`jira getIssue gets and transforms the issue from Jira 1`] = `
-Object {
+{
   "description": undefined,
   "id": 3695,
   "key": "FOTINGO-1314",
-  "project": Object {
+  "project": {
     "id": "doloremque",
     "key": "nisi",
   },
   "sanitizedSummary": "issue_with_a_lot_of_characters",
-  "summary": "Issue with a lot of characters \\"$&'*,:;<>?@[]\`~‘’“”",
+  "summary": "Issue with a lot of characters "$&'*,:;<>?@[]\`~‘’“”",
   "type": "Sub-task",
   "url": "https://wee-codling.biz/browse/FOTINGO-1314",
 }

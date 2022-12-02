@@ -18,7 +18,7 @@ jest.mock('keyv', () => {
   };
 });
 
-const mockKeyv = jest.mocked(Keyv, true);
+const mockKeyv = jest.mocked(Keyv, { shallow: true });
 
 class CacheableClass {
   private value = 'prefix';

@@ -16,11 +16,11 @@ const latestCommitHash = '547433c';
 const remote = 'git@github.com:tagoro9/fotingo-rewrite.git';
 
 const gitMocks = {
-  branch: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: ['remotes/origin/master'] }),
-  branchLocal: jest.fn<Promise<unknown>, []>().mockResolvedValue({ all: [] }),
-  checkoutBranch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  fetch: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  getRemotes: jest.fn<Promise<unknown>, []>().mockResolvedValue([
+  branch: jest.fn<() => Promise<unknown>>().mockResolvedValue({ all: ['remotes/origin/master'] }),
+  branchLocal: jest.fn<() => Promise<unknown>>().mockResolvedValue({ all: [] }),
+  checkoutBranch: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  fetch: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  getRemotes: jest.fn<() => Promise<unknown>>().mockResolvedValue([
     {
       name: 'origin',
       refs: {
@@ -29,13 +29,13 @@ const gitMocks = {
       },
     },
   ]),
-  log: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  push: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  raw: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  remote: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  revparse: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  stash: jest.fn<Promise<unknown>, []>().mockResolvedValue(undefined),
-  status: jest.fn<Promise<unknown>, []>().mockResolvedValue({
+  log: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  push: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  raw: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  remote: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  revparse: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  stash: jest.fn<() => Promise<unknown>>().mockResolvedValue(undefined),
+  status: jest.fn<() => Promise<unknown>>().mockResolvedValue({
     files: [],
   }),
 };
