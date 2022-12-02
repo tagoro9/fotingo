@@ -21,12 +21,13 @@ import {
   trim,
   uniqBy,
 } from 'ramda';
-import simpleGit, {
+import {
   BranchSummary,
   DefaultLogFields,
   LogResult,
   PushResult,
   SimpleGit,
+  simpleGit,
   StatusResult,
 } from 'simple-git';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
