@@ -13,7 +13,7 @@ export function Footer({ executionTime }: FooterProperties): JSX.Element {
         <Text>✨</Text>
       </Box>
       <Box>
-        <Text>Done in {humanize(executionTime, { round: true })}.</Text>
+        <Text>Done in {humanize(executionTime, { round: executionTime >= 1000 })}.</Text>
       </Box>
     </Box>
   );
