@@ -1,4 +1,5 @@
 import { boundMethod } from 'autobind-decorator';
+import { execSync } from 'child_process';
 import { CommitReference, ParsedCommit, sync } from 'conventional-commits-parser';
 import { Debugger } from 'debug';
 import gitUrlParse from 'git-url-parse';
@@ -31,6 +32,7 @@ import {
   simpleGit,
   StatusResult,
 } from 'simple-git';
+import { cacheable } from 'src/io/cacheable';
 import { debug } from 'src/io/debug';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
@@ -62,19 +64,35 @@ interface CommitIssue {
 }
 
 export class Git {
+  private static git: SimpleGit = simpleGit();
+  private static rootDir: string | undefined;
   private readonly git: SimpleGit;
   private readonly config: GitConfig;
   private readonly messenger: Messenger;
-  private readonly debug: Debugger;
+  private static readonly debug: Debugger = debug.extend('git');
 
   constructor(config: GitConfig, messenger?: Messenger) {
-    this.git = simpleGit();
+    this.git = Git.git;
     this.config = config;
-    this.debug = debug.extend('git');
     // TODO This is error prone
     if (messenger) {
       this.messenger = messenger;
     }
+  }
+
+  static getRootDir() {
+    if (!Git.rootDir) {
+      try {
+        Git.rootDir = compose(
+          trim,
+          replace('\n', ''),
+        )(execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }));
+      } catch (error) {
+        Git.mapAndThrowError(error);
+      }
+    }
+
+    return Git.rootDir;
   }
 
   /**
@@ -83,7 +101,7 @@ export class Git {
    */
   @boundMethod
   public getBranchNameForIssue(issue: Issue): string {
-    this.debug(`creating branch name for ${issue.key}`);
+    Git.debug(`creating branch name for ${issue.key}`);
     return getName(this.config, issue);
   }
 
@@ -108,7 +126,7 @@ export class Git {
       .then((lastCommitHash) =>
         this.git.checkoutBranch(branchName, lastCommitHash || this.config.baseBranch),
       )
-      .catch(this.mapAndThrowError);
+      .catch(Git.mapAndThrowError);
   }
 
   /**
@@ -123,7 +141,7 @@ export class Git {
       try {
         await this.git.push(this.config.remote);
       } catch (error) {
-        this.mapAndThrowError(error);
+        Git.mapAndThrowError(error);
       }
       this.messenger.inThread(false);
       return;
@@ -154,6 +172,7 @@ export class Git {
    * Get the remote information for the given remote name
    * @param name Remote name
    */
+  @cacheable({ getPrefix: Git.getRootDir })
   public getRemote(name: string): Promise<GitRemote> {
     return this.git.getRemotes(true).then((remotes: Remote[]) => {
       const origin = remotes.find((remote: Remote) => remote.name === name);
@@ -165,16 +184,6 @@ export class Git {
 
       return gitUrlParse((origin || firstRemote).refs.fetch);
     });
-  }
-
-  /**
-   * Get the root dir of the repository
-   */
-  public getRootDir(): Promise<string> {
-    return this.git
-      .raw(['rev-parse', '--show-toplevel'])
-      .then(compose(trim, replace('\n', '')))
-      .catch(this.mapAndThrowError);
   }
 
   public async doesBranchExist(branchName: string): Promise<boolean> {
@@ -194,13 +203,14 @@ export class Git {
         if (/no upstream configured for branch/.test(error.message)) {
           return false;
         }
-        return this.mapAndThrowError(error);
+        return Git.mapAndThrowError(error);
       });
   }
 
   /**
    * Get the default branch name in the configured remote
    */
+  @cacheable({ getPrefix: Git.getRootDir })
   public async getDefaultBranch(): Promise<string> {
     return this.git
       .remote(['show', this.config.remote])
@@ -211,7 +221,7 @@ export class Git {
         }
         throw new Error(`Could not find the default branch for ${this.config.remote}`);
       })
-      .catch(this.mapAndThrowError);
+      .catch(Git.mapAndThrowError);
   }
 
   /**
@@ -305,7 +315,7 @@ export class Git {
    * Get the name for the current branch
    */
   public getCurrentBranchName(): Promise<string> {
-    return this.git.revparse(['--abbrev-ref', 'HEAD']).catch(this.mapAndThrowError);
+    return this.git.revparse(['--abbrev-ref', 'HEAD']).catch(Git.mapAndThrowError);
   }
 
   /**
@@ -352,9 +362,8 @@ export class Git {
    * known errors
    * @param error Error
    */
-  @boundMethod
-  private mapAndThrowError(error: Error): never {
-    this.debug(serializeError(error));
+  private static mapAndThrowError(error: Error): never {
+    Git.debug(serializeError(error));
     if (/A branch named .* already exists/.test(error.message)) {
       throw new GitErrorImpl(error.message, GitErrorType.BRANCH_ALREADY_EXISTS);
     }

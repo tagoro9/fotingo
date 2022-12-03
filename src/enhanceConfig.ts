@@ -82,7 +82,7 @@ export async function enhanceConfig(config: Config): Promise<Config> {
   try {
     // TODO I don't like this instantiation of Git here
     const git = new Git(configWithDefaults.git);
-    const rootDirectory = await git.getRootDir();
+    const rootDirectory = Git.getRootDir();
     const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDirectory, [
       '.',
       '.github',
