@@ -19,10 +19,8 @@ export function Messages({
     isDebugging && lastMessage !== undefined ? [...pastMessages, lastMessage] : pastMessages;
   return (
     <Box flexDirection="column">
-      <Static>
-        {staticMessages.map((message, id) => (
-          <Message key={id} message={message} />
-        ))}
+      <Static items={staticMessages}>
+        {(message, id) => <Message key={id} message={message} />}
       </Static>
       {lastMessage && !isDebugging && !isRequesting && !isInThread && (
         <Message isDone={isDone} isLast={true} message={lastMessage} />

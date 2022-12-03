@@ -1,7 +1,7 @@
 import React = require('react');
 
 import { pointer } from 'figures';
-import { Box, Color } from 'ink';
+import { Box, Text } from 'ink';
 
 interface ControlledSelectInputProperties {
   items: Array<{
@@ -22,11 +22,13 @@ interface ItemProperties {
 }
 
 function Indicator({ isSelected }: IndicatorProperties): JSX.Element {
-  return <Box marginRight={1}>{isSelected ? <Color blue>{pointer}</Color> : ' '}</Box>;
+  return (
+    <Box marginRight={1}>{isSelected ? <Text color="blue">{pointer}</Text> : <Text> </Text>}</Box>
+  );
 }
 
 function Item({ isSelected, label }: ItemProperties): JSX.Element {
-  return <Color blue={isSelected}>{label}</Color>;
+  return <Text color={isSelected ? 'blue' : undefined}>{label}</Text>;
 }
 
 export function ControlledSelectInput({

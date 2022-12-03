@@ -1,6 +1,6 @@
 import React = require('react');
 
-import { Box, Color } from 'ink';
+import { Box, Text } from 'ink';
 
 interface QuestionProperties {
   hint?: string;
@@ -10,11 +10,15 @@ interface QuestionProperties {
 export function Question({ hint, message }: QuestionProperties): JSX.Element {
   return (
     <Box marginRight={1}>
-      <Box marginRight={2}>❔</Box>
-      <Box>{message}</Box>
+      <Box marginRight={2}>
+        <Text>❔</Text>
+      </Box>
+      <Box>
+        <Text>{message}</Text>
+      </Box>
       {hint && (
         <Box marginLeft={1}>
-          <Color grey>[{hint}]</Color>
+          <Text color="grey>">[{hint}]</Text>
         </Box>
       )}
     </Box>
