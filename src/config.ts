@@ -103,6 +103,9 @@ export const readConfig: () => Config = R.compose(
  * @param config Partial configuration
  */
 export const writeConfig: (data: Partial<Config>) => Partial<Config> = (data) => {
+  if (Object.keys(data).length === 0) {
+    return data;
+  }
   const search = cosmiconfig('fotingo').search() || { filepath: undefined, config: {} };
   const mergedConfigs = R.mergeDeepLeft(data, search.config);
   writeFileSync(

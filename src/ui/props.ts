@@ -29,5 +29,6 @@ export interface FotingoProps {
   cmd: () => Observable<unknown>;
   isDebugging: boolean;
   messenger: Messenger;
+  programStartTime: number;
   showFooter?: boolean;
 }
