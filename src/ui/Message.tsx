@@ -1,6 +1,6 @@
 import React = require('react');
 
-import { Box, Color } from 'ink';
+import { Box, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import { get as getEmoji } from 'node-emoji';
 
@@ -18,18 +18,20 @@ export function Message({ isDone = false, isLast = false, message }: MessageProp
     <Box>
       <Box marginRight={2}>
         {!isDone && message.showSpinner && isLast ? (
-          <Color cyan>
+          <Text color="cyan">
             <Spinner type="dots" />
-          </Color>
+          </Text>
         ) : (
-          (message.emoji && getEmoji(message.emoji)) || MESSAGE_TYPE_TO_EMOJI[message.type]
+          <Text>
+            {(message.emoji && getEmoji(message.emoji)) || MESSAGE_TYPE_TO_EMOJI[message.type]}
+          </Text>
         )}
       </Box>
       <Box>
-        <Color red={message.type === 'error'}>{message.message}</Color>
+        <Text color={message.type === 'error' ? 'red' : undefined}>{message.message}</Text>
         {message.detail && (
           <Box marginLeft={1}>
-            <Color grey={message.type === 'request'}>{message.detail}</Color>
+            <Text color={message.type === 'request' ? 'gray' : undefined}>{message.detail}</Text>
           </Box>
         )}
       </Box>

@@ -99,23 +99,25 @@ export abstract class FotingoCommand<T, R> extends Command {
    */
   private async readConfig(): Promise<Config> {
     const initialConfig = readConfig();
-    return new Promise((resolve) => {
-      const ui = renderUi({
-        cmd: () =>
-          this.askForRequiredConfig(initialConfig).pipe(
-            map((d) => mergeDeepRight(initialConfig, d) as Config),
-            tap(async (config: Config) => {
-              // Give the UI some time to render
-              await new Promise((resolve) => setTimeout(resolve, 300));
-              await ui.waitUntilExit();
-              resolve(config);
-            }),
-          ),
-        isDebugging: process.env.DEBUG !== undefined,
-        messenger: this.messenger,
-        showFooter: false,
-      });
+    let config: Config | undefined = undefined;
+    const ui = renderUi({
+      cmd: () =>
+        this.askForRequiredConfig(initialConfig).pipe(
+          map((d) => mergeDeepRight(initialConfig, d) as Config),
+          tap(async (innerConfig: Config) => {
+            config = innerConfig;
+          }),
+        ),
+      isDebugging: process.env.DEBUG !== undefined,
+      messenger: this.messenger,
+      showFooter: false,
     });
+    await ui.waitUntilExit();
+    if (config) {
+      return config;
+    } else {
+      throw new Error('Failed to read config');
+    }
   }
 
   /**

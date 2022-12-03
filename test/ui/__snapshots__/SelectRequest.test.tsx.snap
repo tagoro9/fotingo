@@ -12,24 +12,24 @@ exports[`<SelectRequest /> allows to navigate the list of options using the arro
 exports[`<SelectRequest /> allows to navigate the list of options using the arrow keys 2`] = `
 "❔   Select an option
 
+   Item 1
+ [34m❯[39m [34mItem 2[39m
+   Item 3
+"
+`;
+
+exports[`<SelectRequest /> displays the list of options filtering by the text input 1`] = `
+"❔   Select an option [7m [27m
+
  [34m❯[39m [34mItem 1[39m
    Item 2
    Item 3
 "
 `;
 
-exports[`<SelectRequest /> displays the list of options filtering by the text input 1`] = `
-"❔   Select an option
-
- ❯ Item 1
-   Item 2
-   Item 3
-"
-`;
-
 exports[`<SelectRequest /> displays the list of options filtering by the text input 2`] = `
-"❔   Select an option 1
+"❔   Select an option 1[7m [27m
 
- ❯ Item 1
+ [34m❯[39m [34mItem 1[39m
 "
 `;
