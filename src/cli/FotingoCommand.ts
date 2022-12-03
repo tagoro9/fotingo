@@ -182,7 +182,7 @@ export abstract class FotingoCommand<T, R> extends Command {
    */
   @boundMethod
   protected isGitRepo(): Observable<boolean> {
-    return from(this.git.getRootDir()).pipe(
+    return of(Git.getRootDir()).pipe(
       map(() => true),
       catchError((error) => of(error.code && error.code !== GitErrorType.NOT_A_GIT_REPO)),
     );
