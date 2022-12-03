@@ -21,6 +21,8 @@ import {
 } from 'ramda';
 import { lastValueFrom } from 'rxjs';
 import sanitizeHtml from 'sanitize-html';
+import { serializeError } from 'serialize-error';
+import { GithubErrorImpl, GithubRequestError } from 'src/git/GithubError';
 import { cacheable, ONE_DAY } from 'src/io/cacheable';
 import { debug } from 'src/io/debug';
 import { editVirtualFile } from 'src/io/file';
@@ -283,7 +285,7 @@ export class Github implements Remote {
           }
           outerResolve(...resolvedValues);
         })
-        .catch(outerReject);
+        .catch(compose(outerReject, this.mapError));
     });
     return promiseToReturn;
   }
@@ -513,5 +515,32 @@ export class Github implements Remote {
     return pullRequests.length > 0
       ? { issues: [], number: pullRequests[0].number, url: pullRequests[0].html_url }
       : undefined;
+  }
+
+  private isGithubRequestError(error: Error): error is GithubRequestError {
+    return 'name' in error && error.name === 'HttpError';
+  }
+
+  /**
+   * Transform errors coming from github
+   * known errors
+   * @param error Error
+   */
+  @boundMethod
+  private mapError(error: Error): Error {
+    if (this.isGithubRequestError(error)) {
+      const { status, ...rest } = error;
+      // Don't serialize at the top to avoid the deprecation warning avoid accessing error.code
+      this.debug(serializeError(rest));
+      if (error.message === 'Bad credentials') {
+        return new GithubErrorImpl(
+          'Could not authenticate with Github. Double check that you credentials are correct.',
+          status,
+        );
+      }
+      return new GithubErrorImpl(error.message, status);
+    }
+    this.debug(serializeError(error));
+    return error;
   }
 }

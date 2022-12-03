@@ -1,4 +1,5 @@
 import { boundMethod } from 'autobind-decorator';
+import { Debugger } from 'debug';
 import {
   always,
   compose,
@@ -18,6 +19,8 @@ import {
 } from 'ramda';
 import { from, merge, Observable, of, throwError, zip } from 'rxjs';
 import { catchError, map, mergeMap, reduce, switchMap, withLatestFrom } from 'rxjs/operators';
+import { serializeError } from 'serialize-error';
+import { debug } from 'src/io/debug';
 import { Messenger } from 'src/io/messenger';
 import { Tracker } from 'src/issue-tracker/Tracker';
 import { HttpClient } from 'src/network/HttpClient';
@@ -73,6 +76,7 @@ export class Jira implements Tracker {
   private client: HttpClient;
   private config: TrackerConfig;
   private messenger: Messenger;
+  private readonly debug: Debugger;
   public readonly name = 'Jira';
 
   constructor(config: TrackerConfig, messenger: Messenger) {
@@ -84,6 +88,7 @@ export class Jira implements Tracker {
       auth: { pass: config.user.token, user: config.user.login },
       root: `${config.root}/rest/api/2`,
     });
+    this.debug = debug.extend('jira');
   }
 
   public setIssueStatus(status: IssueStatus, issueId: string): Observable<Issue> {
@@ -392,7 +397,9 @@ export class Jira implements Tracker {
     return issue.transitions.find((transition) => this.config.status[status].test(transition.name));
   }
 
+  @boundMethod
   private mapError(error: NodeJS.ErrnoException | HttpError): Observable<never> {
+    this.debug(serializeError(error));
     if ('status' in error) {
       const code = error.status;
       if (code === 401) {
