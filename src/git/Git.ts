@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 import { CommitReference, ParsedCommit, sync } from 'conventional-commits-parser';
-import createDebugger from 'debug';
+import { Debugger } from 'debug';
 import gitUrlParse from 'git-url-parse';
 import {
   always,
@@ -21,6 +21,7 @@ import {
   trim,
   uniqBy,
 } from 'ramda';
+import { serializeError } from 'serialize-error';
 import {
   BranchSummary,
   DefaultLogFields,
@@ -30,6 +31,7 @@ import {
   simpleGit,
   StatusResult,
 } from 'simple-git';
+import { debug } from 'src/io/debug';
 import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji, Messenger } from 'src/io/messenger';
 import { Issue } from 'src/types';
@@ -39,8 +41,6 @@ import { getIssueId, getName } from './Branch';
 import { GitConfig } from './Config';
 import { GitErrorImpl, GitErrorType } from './GitError';
 import { GitRemote } from './Remote';
-
-const debug = createDebugger('fotingo:git');
 
 interface Remote {
   name: string;
@@ -65,10 +65,12 @@ export class Git {
   private readonly git: SimpleGit;
   private readonly config: GitConfig;
   private readonly messenger: Messenger;
+  private readonly debug: Debugger;
 
   constructor(config: GitConfig, messenger?: Messenger) {
     this.git = simpleGit();
     this.config = config;
+    this.debug = debug.extend('git');
     // TODO This is error prone
     if (messenger) {
       this.messenger = messenger;
@@ -81,7 +83,7 @@ export class Git {
    */
   @boundMethod
   public getBranchNameForIssue(issue: Issue): string {
-    debug(`creating branch name for ${issue.key}`);
+    this.debug(`creating branch name for ${issue.key}`);
     return getName(this.config, issue);
   }
 
@@ -350,7 +352,9 @@ export class Git {
    * known errors
    * @param error Error
    */
+  @boundMethod
   private mapAndThrowError(error: Error): never {
+    this.debug(serializeError(error));
     if (/A branch named .* already exists/.test(error.message)) {
       throw new GitErrorImpl(error.message, GitErrorType.BRANCH_ALREADY_EXISTS);
     }
