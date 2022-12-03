@@ -10,10 +10,12 @@ export function Fotingo({
   cmd,
   isDebugging,
   messenger,
+  programStartTime,
   showFooter = true,
 }: FotingoProps): JSX.Element {
   const { executionTime, isDone, isInThread, messages, request, sendRequestData } = useCmd(
     messenger,
+    programStartTime,
     cmd,
   );
 

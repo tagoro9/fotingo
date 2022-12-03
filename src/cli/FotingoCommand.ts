@@ -46,6 +46,8 @@ export abstract class FotingoCommand<T, R> extends Command {
   protected git: Git;
   protected readonly isCi: boolean;
   protected readonly debug: Debugger;
+
+  protected readonly startTime: number;
   protected readonly validations: {
     defaultBranchExist: (commandData$: Observable<R>) => [() => Observable<boolean>, string];
     isGitRepo: (commandData$: Observable<R>) => [() => Observable<boolean>, string];
@@ -53,6 +55,7 @@ export abstract class FotingoCommand<T, R> extends Command {
 
   constructor(argv: string[], config: IConfig) {
     super(argv, config);
+    this.startTime = Date.now();
     this.createConfigFolder();
     this.isCi = envCi().isCi;
     this.debug = debug.extend(this.constructor.name.toLowerCase());
@@ -100,6 +103,8 @@ export abstract class FotingoCommand<T, R> extends Command {
   private async readConfig(): Promise<Config> {
     const initialConfig = readConfig();
     let config: Config | undefined = undefined;
+    // TODO Refactor this so we only call renderUI once and CMD is a different observable
+    // that gets piped all the commands
     const ui = renderUi({
       cmd: () =>
         this.askForRequiredConfig(initialConfig).pipe(
@@ -110,6 +115,7 @@ export abstract class FotingoCommand<T, R> extends Command {
         ),
       isDebugging: process.env.DEBUG !== undefined,
       messenger: this.messenger,
+      programStartTime: this.startTime,
       showFooter: false,
     });
     await ui.waitUntilExit();
@@ -145,6 +151,7 @@ export abstract class FotingoCommand<T, R> extends Command {
     this.tracker = new Jira(this.fotingo.jira, this.messenger);
     this.git = new Git(this.fotingo.git, this.messenger);
     this.github = new Github(this.fotingo.github, this.messenger, this.git);
+    this.debug(`Initialized in ${Date.now() - this.startTime}ms`);
     return super.init();
   }
 
@@ -156,6 +163,7 @@ export abstract class FotingoCommand<T, R> extends Command {
         return this.validate(commandData$).pipe(switchMap(() => this.runCmd(commandData$)));
       },
       isDebugging: process.env.DEBUG !== undefined,
+      programStartTime: this.startTime,
       messenger: this.messenger,
     });
     try {
@@ -163,6 +171,8 @@ export abstract class FotingoCommand<T, R> extends Command {
     } catch {
       // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
       process.exit(1);
+    } finally {
+      this.debug(`Ran command in ${Date.now() - this.startTime}ms`);
     }
   }
 
@@ -242,9 +252,13 @@ export abstract class FotingoCommand<T, R> extends Command {
       // this still works
       of(undefined),
     ).pipe(
-      switchMap((message) =>
-        message === undefined ? of(undefined) : throwError(new Error(message)),
-      ),
+      switchMap((message) => {
+        if (message === undefined) {
+          return of(undefined);
+        }
+        this.debug('Command data validation failed');
+        return throwError(new Error(message));
+      }),
       last(),
     );
   }

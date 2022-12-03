@@ -36,7 +36,7 @@ export function cacheable({
 }: {
   getPrefix?: () => string;
   minutes?: number;
-}): Cacheable {
+} = {}): Cacheable {
   return (
     // eslint-disable-next-line @typescript-eslint/ban-types
     target: Object,

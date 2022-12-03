@@ -18,7 +18,7 @@ import {
   when,
 } from 'ramda';
 import { from, merge, Observable, of, throwError, zip } from 'rxjs';
-import { catchError, map, mergeMap, reduce, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, reduce, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { serializeError } from 'serialize-error';
 import { debug } from 'src/io/debug';
 import { Messenger } from 'src/io/messenger';
@@ -131,6 +131,7 @@ export class Jira implements Tracker {
   @boundMethod
   public getProject(id: string): Observable<Project> {
     return this.client.get<RawProject>(`/project/${id}`).pipe(
+      tap(console.log),
       map(
         compose(
           (data: RawProject) =>
