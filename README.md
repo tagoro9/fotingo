@@ -30,7 +30,7 @@ $ npm install -g fotingo
 $ fotingo COMMAND
 running command...
 $ fotingo (-v|--version|version)
-fotingo/4.0.0 linux-x64 node-v16.16.0
+fotingo/4.0.0 linux-x64 node-v16.18.1
 $ fotingo --help [COMMAND]
 USAGE
   $ fotingo COMMAND
@@ -44,6 +44,7 @@ USAGE
 <!-- prettier-ignore-start -->
 <!-- commands -->
 * [`fotingo help [COMMAND]`](#fotingo-help-command)
+* [`fotingo open [SOURCE]`](#fotingo-open-source)
 * [`fotingo release RELEASE`](#fotingo-release-release)
 * [`fotingo review`](#fotingo-review)
 * [`fotingo start [ISSUE]`](#fotingo-start-issue)
@@ -65,6 +66,20 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
+
+## `fotingo open [SOURCE]`
+
+Open the pull request or the jira ticket from the fotingo context in a browser
+
+```
+USAGE
+  $ fotingo open [SOURCE]
+
+ARGUMENTS
+  SOURCE  (jira|pr) [default: jira] Source place that you want to open
+```
+
+_See code: [src/commands/open.ts](https://github.com/tagoro9/fotingo/blob/v4.0.0/src/commands/open.ts)_
 
 ## `fotingo release RELEASE`
 
