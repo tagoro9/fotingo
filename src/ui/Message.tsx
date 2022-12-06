@@ -16,11 +16,13 @@ const MESSAGE_TYPE_TO_EMOJI: Record<MessageProps['message']['type'], string | un
 export function Message({ isDone = false, isLast = false, message }: MessageProps): JSX.Element {
   return (
     <Box>
-      <Box marginRight={2}>
+      <Box>
         {!isDone && message.showSpinner && isLast ? (
-          <Text color="cyan">
-            <Spinner type="dots" />
-          </Text>
+          <Box marginRight={1}>
+            <Text color="cyan">
+              <Spinner type="dots" />
+            </Text>
+          </Box>
         ) : (
           <Text>
             {(message.emoji && getEmoji(message.emoji)) || MESSAGE_TYPE_TO_EMOJI[message.type]}
