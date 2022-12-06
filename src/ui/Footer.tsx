@@ -9,7 +9,7 @@ interface FooterProperties {
 export function Footer({ executionTime }: FooterProperties): JSX.Element {
   return (
     <Box marginTop={1}>
-      <Box marginRight={2}>
+      <Box>
         <Text>✨</Text>
       </Box>
       <Box>
