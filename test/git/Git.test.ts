@@ -1,15 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import * as simpleGitMock from 'simple-git';
-import { Git } from 'src/git/Git';
 import { GitErrorType } from 'src/git/GitError';
 import { Messenger } from 'src/io/messenger';
 import { data } from 'test/lib/data';
+import { clearCache } from "src/io/cacheable";
 
 jest.mock('simple-git');
 
 const simpleGit = simpleGitMock as unknown as ReturnType<typeof jest.fn>;
 
-let git: Git;
+let git: InstanceType<typeof import('src/git/Git').Git>;
 let branchName: string;
 let remoteBranch: string;
 const latestCommitHash = '547433c';
@@ -53,6 +53,7 @@ describe('Git', () => {
       },
     });
     simpleGit.mockReturnValue({ ...gitMocks });
+    const Git = jest.requireActual<typeof import('src/git/Git')>('src/git/Git').Git;
     git = new Git(gitConfig, new Messenger());
   });
 
@@ -119,6 +120,7 @@ describe('Git', () => {
     });
 
     it('should throw an error if there are no remotes', async () => {
+      await clearCache();
       gitMocks.getRemotes.mockResolvedValue([]);
       await expect(git.getRemote('origin')).rejects.toMatchInlineSnapshot(
         `[Error: The repository does not have a remote]`,

@@ -195,6 +195,7 @@ export class Git {
   /**
    * Check if the current branch has a tracking branch in the configured remote
    */
+  @boundMethod
   public async doesCurrentBranchExistInRemote(): Promise<boolean> {
     return this.git
       .revparse(['--abbrev-ref', '--symbolic-full-name', '@{u}'])

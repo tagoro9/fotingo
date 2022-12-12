@@ -8,7 +8,7 @@ if (!existsSync(fotingoHome)) {
   mkdirSync(fotingoHome);
 }
 const path = `sqlite://${fotingoHome}/cache.sqlite3`;
-const keyv = new Keyv(path);
+const keyv = new Keyv(process.env.NODE_ENV === 'test' ? undefined : path);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PromiseFunction = (...arguments_: any[]) => Promise<any>;
@@ -76,3 +76,10 @@ export function cacheable({
 
 // One day in minutes
 export const ONE_DAY = 60 * 24;
+
+/**
+ * Clear the fotingo cache
+ */
+export function clearCache(): Promise<void> {
+  return keyv.clear();
+}
