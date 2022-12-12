@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import * as simpleGitMock from 'simple-git';
 import { GitErrorType } from 'src/git/GitError';
+import { clearCache } from 'src/io/cacheable';
 import { Messenger } from 'src/io/messenger';
 import { data } from 'test/lib/data';
-import { clearCache } from "src/io/cacheable";
 
 jest.mock('simple-git');
 
