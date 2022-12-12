@@ -31,4 +31,4 @@ jobs:
       - run: yarn test --coverage
         name: Run tests
         env:
-          CI: true
+          FORCE_COLOR: true
