@@ -19,10 +19,10 @@
       }
     ],
     [
-      "@semantic-release/git",
+      "semantic-release-github-pullrequest",
       {
         "assets": ["package.json", "README.md", "yarn.lock"],
-        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        "baseRef": "main"
       }
     ]
   ]
