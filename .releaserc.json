@@ -21,7 +21,7 @@
     [
       "semantic-release-github-pullrequest",
       {
-        "assets": ["package.json", "README.md", "yarn.lock"],
+        "assets": ["package.json"],
         "baseRef": "main"
       }
     ]
