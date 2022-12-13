@@ -88,7 +88,7 @@ function useCmdRunner(
     } catch (error) {
       handleError(error);
     }
-  }, [app, addMessageReference, cmd, setInThreadReference, errorReference]);
+  }, [app, addMessageReference, cmd, setInThreadReference, errorReference, startTime]);
 
   return done;
 }
