@@ -21,7 +21,7 @@
     [
       "semantic-release-github-pullrequest",
       {
-        "assets": ["package.json"],
+        "assets": ["package.json", "README.md"],
         "baseRef": "main"
       }
     ]
