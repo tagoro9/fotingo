@@ -128,11 +128,27 @@ export abstract class FotingoCommand<T, R> extends Command {
 
   /**
    * Ask the user for the required configurations that are currently missing and write them to the closest config
-   * file
+   * file. If running in CI, throw an error instead
    */
   private askForRequiredConfig(config: Config): Observable<Partial<Config>> {
     // TODO requiredConfig should be configurable by each command
-    return from(requiredConfigs.filter((cfg) => path(cfg.path, config) === undefined)).pipe(
+    const missingConfig$ = from(
+      requiredConfigs.filter((cfg) => path(cfg.path, config) === undefined),
+    );
+    if (this.isCi) {
+      return missingConfig$.pipe(
+        reduce((accumulator: string[], current) => [...accumulator, current.path.join('.')], []),
+        switchMap((configurations) => {
+          if (configurations.length === 0) {
+            return of({});
+          }
+          return throwError(
+            () => new Error(`Missing required configuration: ${configurations.join(', ')}`),
+          );
+        }),
+      );
+    }
+    return missingConfig$.pipe(
       concatMap((requiredConfig) =>
         this.messenger
           .request(requiredConfig.request)
