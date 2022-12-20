@@ -33,6 +33,20 @@ import { renderUi } from 'src/ui/ui';
 
 const returnIfFalse = (message: string) => ifElse(equals(true), always(undefined), () => message);
 
+class FotingoError extends Error {
+  static CODES = {
+    MISSING_REQUIRED_CONFIG: 20,
+  };
+
+  public readonly code?: number;
+
+  constructor(message: string, code: number) {
+    super(message);
+    Object.setPrototypeOf(this, new.target.prototype);
+    this.code = code;
+  }
+}
+
 /**
  * Abstract class every fotingo command must extend. It provides
  * defaults and helper methods to make it easier to
@@ -143,7 +157,11 @@ export abstract class FotingoCommand<T, R> extends Command {
             return of({});
           }
           return throwError(
-            () => new Error(`Missing required configuration: ${configurations.join(', ')}`),
+            () =>
+              new FotingoError(
+                `Missing required configuration: ${configurations.join(', ')}`,
+                FotingoError.CODES.MISSING_REQUIRED_CONFIG,
+              ),
           );
         }),
       );
@@ -171,6 +189,18 @@ export abstract class FotingoCommand<T, R> extends Command {
     return super.init();
   }
 
+  async catch(error: Error): Promise<void> {
+    const unknownError = error as unknown as Record<string, unknown>;
+    const errorCode =
+      'code' in unknownError && typeof unknownError.code === 'number' ? unknownError.code : 1;
+    this.exit(errorCode);
+  }
+
+  async finally(error?: Error): Promise<void> {
+    this.debug(`Ran command in ${Date.now() - this.startTime}ms`);
+    super.finally(error);
+  }
+
   async run(): Promise<void> {
     const { waitUntilExit } = renderUi({
       cmd: () => {
@@ -182,14 +212,7 @@ export abstract class FotingoCommand<T, R> extends Command {
       programStartTime: this.startTime,
       messenger: this.messenger,
     });
-    try {
-      await waitUntilExit();
-    } catch {
-      // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
-      process.exit(1);
-    } finally {
-      this.debug(`Ran command in ${Date.now() - this.startTime}ms`);
-    }
+    await waitUntilExit();
   }
 
   /**
