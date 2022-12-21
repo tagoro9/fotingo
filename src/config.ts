@@ -22,6 +22,7 @@ const environmentVariablesToConfigPath = {
   FOTINGO_JIRA_ROOT: ['jira', 'root'],
   FOTINGO_JIRA_USER_LOGIN: ['jira', 'user', 'login'],
   FOTINGO_JIRA_USER_TOKEN: ['jira', 'user', 'token'],
+  FOTINGO_GIT_REMOTE: ['git', 'remote'],
   GITHUB_TOKEN: ['github', 'authToken'],
 };
 
