@@ -103,7 +103,7 @@ export class Review extends FotingoCommand<FotingoReview, ReviewData> {
   protected runCmd(commandData$: Observable<ReviewData>): Observable<FotingoReview> {
     return commandData$.pipe(
       switchMap(this.git.push),
-      switchMap(this.git.getBranchInfo),
+      switchMap(() => this.git.getBranchInfo()),
       withLatestFrom(commandData$),
       switchMap(this.getLocalChangesInformation),
       withLatestFrom(commandData$),

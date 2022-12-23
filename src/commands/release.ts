@@ -77,7 +77,7 @@ export class Release extends FotingoCommand<JointRelease, ReleaseData> {
 
   protected runCmd(commandData$: Observable<ReleaseData>): Observable<JointRelease> {
     const releaseInformation$ = commandData$.pipe(
-      switchMap(this.git.getBranchInfo),
+      switchMap(() => this.git.getBranchInfo()),
       withLatestFrom(commandData$),
       switchMap(this.getLocalChangesInformation),
       withLatestFrom(commandData$),
