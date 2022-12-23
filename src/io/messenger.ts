@@ -35,6 +35,7 @@ export interface Message {
   detail?: string;
   emoji?: Emoji;
   message: string;
+  showInRawMode?: boolean;
   showSpinner: boolean;
   type: MessageType;
 }
@@ -69,8 +70,8 @@ export class Messenger {
   }
 
   @boundMethod
-  public emit(message: string, emoji?: Emoji): void {
-    this.subject.next({ emoji, message, type: MessageType.INFO, showSpinner: true });
+  public emit(message: string, emoji?: Emoji, showInRawMode?: boolean): void {
+    this.subject.next({ emoji, message, type: MessageType.INFO, showInRawMode, showSpinner: true });
   }
 
   @boundMethod

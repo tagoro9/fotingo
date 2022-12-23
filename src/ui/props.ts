@@ -15,6 +15,7 @@ export interface MessageProps {
   isDone?: boolean;
   isLast?: boolean;
   message: Omit<Message, 'message'> & { message: string | Element };
+  useRawOutput?: boolean;
 }
 
 export interface MessagesProps {
@@ -23,6 +24,7 @@ export interface MessagesProps {
   isInThread: boolean;
   isRequesting: boolean;
   messages: Array<Omit<Message, 'message'> & { message: string | Element }>;
+  useRawOutput?: boolean;
 }
 
 export interface FotingoProps {
@@ -31,4 +33,5 @@ export interface FotingoProps {
   messenger: Messenger;
   programStartTime: number;
   showFooter?: boolean;
+  useRawOutput?: boolean;
 }
