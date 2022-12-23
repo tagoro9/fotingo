@@ -60,6 +60,7 @@ export abstract class FotingoCommand<T, R> extends Command {
   protected git: Git;
   protected readonly isCi: boolean;
   protected readonly debug: Debugger;
+  protected readonly rawOutput: boolean;
 
   protected readonly startTime: number;
   protected readonly validations: {
@@ -74,6 +75,7 @@ export abstract class FotingoCommand<T, R> extends Command {
     this.isCi = envCi().isCi;
     this.debug = debug.extend(this.constructor.name.toLowerCase());
     this.messenger = new Messenger();
+    this.rawOutput = this.useRawOutput();
     this.validations = {
       defaultBranchExist: () => [
         () => from(this.git.doesBranchExist(this.fotingo.git.baseBranch)),
@@ -211,8 +213,17 @@ export abstract class FotingoCommand<T, R> extends Command {
       isDebugging: process.env.DEBUG !== undefined,
       programStartTime: this.startTime,
       messenger: this.messenger,
+      useRawOutput: this.rawOutput,
     });
     await waitUntilExit();
+  }
+
+  /**
+   * Return if raw output should be used (no emojis, timings, colors, etc)
+   * @protected
+   */
+  protected useRawOutput(): boolean {
+    return false;
   }
 
   /**
