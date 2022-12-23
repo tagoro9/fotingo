@@ -4,6 +4,7 @@ A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on
 
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 ![Scarf](https://static.scarf.sh/a.png?x-pxid=31890a02-9148-498c-8158-3e3db7f11422)
+
 ## Installation
 
 Run:
@@ -16,7 +17,8 @@ npm install -g fotingo
 
 The first time that you run fotingo, it will ask you for some information:
 
-- A GitHub personal access token. You can create one [here](https://github.com/settings/tokens). Only _repo_ permissions are needed
+- A GitHub personal access token. You can create one [here](https://github.com/settings/tokens). Only _repo_ permissions
+  are needed
 - Your Jira username
 - Your Jira server root URL
 - A Jira access token for your user. You can create one [here](https://id.atlassian.com/manage/api-tokens)
@@ -25,6 +27,7 @@ The first time that you run fotingo, it will ask you for some information:
 
 <!-- prettier-ignore-start -->
 <!-- usage -->
+
 ```sh-session
 $ npm install -g fotingo
 $ fotingo COMMAND
@@ -36,6 +39,7 @@ USAGE
   $ fotingo COMMAND
 ...
 ```
+
 <!-- usagestop -->
 <!-- prettier-ignore-end -->
 
@@ -43,6 +47,7 @@ USAGE
 
 <!-- prettier-ignore-start -->
 <!-- commands -->
+
 * [`fotingo help [COMMAND]`](#fotingo-help-command)
 * [`fotingo inspect`](#fotingo-inspect)
 * [`fotingo open [SOURCE]`](#fotingo-open-source)
@@ -70,7 +75,8 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1
 
 ## `fotingo inspect`
 
-Output information about the specified element. If no element is specified, output information about the execution context
+Output information about the specified element. If no element is specified, output information about the execution
+context
 
 ```
 USAGE
@@ -173,14 +179,21 @@ _See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v4.4
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
 
+## Semantic release
+
+Fotingo can be used as a [semantic-release](https://github.com/semantic-release/semantic-release) plugin via https://github.com/tagoro9/semantic-release-fotingo
+
 ## Configuration
 
-Fotingo will try to guess most of the information based on the user environment, but there is some data that it still needs to be stored. On the first run, fotingo will create a `.fotingorc` configuration file inside your home directory. This file is used to store access tokens and some basic configuration information.
+Fotingo will try to guess most of the information based on the user environment, but there is some data that it still
+needs to be stored. On the first run, fotingo will create a `.fotingorc` configuration file inside your home directory.
+This file is used to store access tokens and some basic configuration information.
 
 ### Local configuration files
 
 You can create project-specific configuration files. Just create a `.fotingorc` file inside your project root folder.
-This file, needs to be in JSON format as well. You can also overwrite global configuration in this file. An example config file may just be:
+This file, needs to be in JSON format as well. You can also overwrite global configuration in this file. An example
+config file may just be:
 
 ```json
 {
@@ -192,27 +205,40 @@ This file, needs to be in JSON format as well. You can also overwrite global con
 
 ### Configuration properties
 
-Fotingo will use as many defaults as possible to make it easier to use, but maybe you want to change some of the defaults. In that case, you can update any of the next properties in a fotingo configuration file
+Fotingo will use as many defaults as possible to make it easier to use, but maybe you want to change some of the
+defaults. In that case, you can update any of the next properties in a fotingo configuration file
 
-| Path                       | Description                                       | default                          |
-| -------------------------- | ------------------------------------------------- | -------------------------------- |
-| git.baseBranch             | Git base branch to use when creating new branches | master                           |
-| git.branchTemplate         | Template used when creating a new branch          | See [templates](#templates)      |
-| git.remote                 | Git remote to use                                 | origin                           |
-| github.authToken           | Auth token to connect to Github                   | -                                |
-| github.baseBranch          | Base branch to use to create PRs                  | master                           |
-| github.owner               | Owner of the repository when creating a PR        | Extracted from remote            |
-| github.pullRequestTemplate | Template to use when creating a PR                | See [templates](#templates)      |
-| github.repo                | Name of the repository when creating a PR         | Extracted from remote            |
-| jira.releaseTemplate       | Template to use when creating a release           | See [templates](#templates)      |
-| jira.root                  | URL root to the Jira server                       | -                                |
+| Path                       | Description                                       | default                         |
+| -------------------------- | ------------------------------------------------- | ------------------------------- |
+| git.baseBranch             | Git base branch to use when creating new branches | master                          |
+| git.branchTemplate         | Template used when creating a new branch          | See [templates](#templates)     |
+| git.remote                 | Git remote to use                                 | origin                          |
+| github.authToken           | Auth token to connect to Github                   | -                               |
+| github.owner               | Owner of the repository when creating a PR        | Extracted from remote           |
+| github.pullRequestTemplate | Template to use when creating a PR                | See [templates](#templates)     |
+| github.repo                | Name of the repository when creating a PR         | Extracted from remote           |
+| jira.releaseTemplate       | Template to use when creating a release           | See [templates](#templates)     |
+| jira.root                  | URL root to the Jira server                       | -                               |
 | jira.status                | Regexes to identify workflow statuses             | See [jira status](#jira-status) |
-| jira.user.login            | User login to connect to Jira                     | -                                |
-| jira.user.token            | User token to connect to Jira                     | -                                |
+| jira.user.login            | User login to connect to Jira                     | -                               |
+| jira.user.token            | User token to connect to Jira                     | -                               |
+
+### Environment variables
+
+Some of the fotingo configuration properties can be set using environment variables.
+
+| Variable                | Property         |
+| ----------------------- | ---------------- |
+| FOTINGO_JIRA_ROOT       | jira.root        |
+| FOTINGO_JIRA_USER_LOGIN | jira.user.login  |
+| FOTINGO_JIRA_USER_TOKEN | jira.user.token  |
+| FOTINGO_GIT_REMOTE      | git.remote       |
+| GITHUB_TOKEN            | github.authToken |
 
 ### Templates
 
-There are some configuration properties in fotingo that are template based, meaning that they can be customized to better suit your needs.
+There are some configuration properties in fotingo that are template based, meaning that they can be customized to better
+suit your needs.
 
 You can use `{` and `}` to interpolate the desired data. This is the data that is available in each template:
 
@@ -227,7 +253,8 @@ You can use `{` and `}` to interpolate the desired data. This is the data that i
   - `branchName`. Name of the branch
   - `changes`. List of the commit messages in the PR
   - `fixedIssues`. Text with the comma separated list of the fixed issues
-  - `summary`. Pull request summary. Summary of the first Jira issue in the PR or first commit header if there are no fixed issues
+  - `summary`. Pull request summary. Summary of the first Jira issue in the PR or first commit header if there are no
+    fixed issues
   - `description`. Description of the first Jira issue in the PR or first commit body if there are no fixed issues
   - `fotingo.banner`. Banner that indicates that the release was created with fotingo
 
@@ -275,7 +302,8 @@ When working on _Jira_ backed projects, I see a common pattern I repeat several 
 - Create a Jira release and update the issue fix version and status
 - Create a GitHub release that points back to Jira and has meaningful release notes
 
-This seems like a reasonable workflow, but when addressing several issues on a given day, this process becomes very cumbersome. Thus... Fotingo.
+This seems like a reasonable workflow, but when addressing several issues on a given day, this process becomes very
+cumbersome. Thus... Fotingo.
 
 ## Debugging
 
@@ -295,8 +323,10 @@ After that, just run `yarn run watch` and the script will compile with every cha
 
 ### `fotingo not found` when installing with yarn.
 
-You need to have the directory where yarn installs global packages in your path. You can read more about that [here](https://github.com/yarnpkg/yarn/issues/648)
-and [here](https://github.com/yarnpkg/yarn/issues/851). You just need to add `export PATH="$(yarn global bin | grep -o '/.*'):$PATH"`
+You need to have the directory where yarn installs global packages in your path. You can read more about
+that [here](https://github.com/yarnpkg/yarn/issues/648)
+and [here](https://github.com/yarnpkg/yarn/issues/851). You just need to
+add `export PATH="$(yarn global bin | grep -o '/.*'):$PATH"`
 to your `.bash_profile` or equivalent.
 
 ## Contributing
@@ -305,4 +335,7 @@ If you want to extend this tool with anything, feel free to submit a pull reques
 
 ## What is a fotingo?
 
-This word in Spanish (Canary Islands) means _Rickety old car_, but what is more interesting is the word's origin: In 1908 the _Ford Motor Company_ released the _Ford Model T_ with the slogan of _foot 'n go_, as in, just put your "foot on the pedal and go". In some hispanic regions this morphed into the current version of _fotingo_. With a single command, you can put your _foot 'n go_ on your next issue.
+This word in Spanish (Canary Islands) means _Rickety old car_, but what is more interesting is the word's origin: In 1908
+the _Ford Motor Company_ released the _Ford Model T_ with the slogan of _foot 'n go_, as in, just put your "foot on the
+pedal and go". In some hispanic regions this morphed into the current version of _fotingo_. With a single command, you
+can put your _foot 'n go_ on your next issue.
