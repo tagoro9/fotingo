@@ -12,18 +12,23 @@ export function Messages({
   isInThread,
   isRequesting,
   messages,
+  useRawOutput = false,
 }: MessagesProps): JSX.Element {
-  const pastMessages = init(messages);
-  const lastMessage = last(messages);
+  const actualMessages = messages.filter(
+    (message) =>
+      message.showInRawMode || ['request', 'error'].includes(message.type) || !useRawOutput,
+  );
+  const pastMessages = init(actualMessages);
+  const lastMessage = last(actualMessages);
   const staticMessages =
     isDebugging && lastMessage !== undefined ? [...pastMessages, lastMessage] : pastMessages;
   return (
     <Box flexDirection="column">
       <Static items={staticMessages}>
-        {(message, id) => <Message key={id} message={message} />}
+        {(message, id) => <Message key={id} message={message} useRawOutput={useRawOutput} />}
       </Static>
       {lastMessage && !isDebugging && !isRequesting && !isInThread && (
-        <Message isDone={isDone} isLast={true} message={lastMessage} />
+        <Message isDone={isDone} isLast={true} message={lastMessage} useRawOutput={useRawOutput} />
       )}
     </Box>
   );

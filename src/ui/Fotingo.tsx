@@ -12,6 +12,7 @@ export function Fotingo({
   messenger,
   programStartTime,
   showFooter = true,
+  useRawOutput = false,
 }: FotingoProps): JSX.Element {
   const { executionTime, isDone, isInThread, messages, request, sendRequestData } = useCmd(
     messenger,
@@ -27,9 +28,12 @@ export function Fotingo({
         isRequesting={request !== undefined}
         isInThread={isInThread}
         messages={messages}
+        useRawOutput={useRawOutput}
       />
       {request && <InputRequest request={request} onSubmit={sendRequestData} />}
-      {!request && executionTime && showFooter && <Footer executionTime={executionTime} />}
+      {!request && executionTime && showFooter && !useRawOutput && (
+        <Footer executionTime={executionTime} />
+      )}
     </>
   );
 }

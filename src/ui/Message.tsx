@@ -13,9 +13,14 @@ const MESSAGE_TYPE_TO_EMOJI: Record<MessageProps['message']['type'], string | un
   status: undefined,
 };
 
-export function Message({ isDone = false, isLast = false, message }: MessageProps): JSX.Element {
-  return (
-    <Box>
+export function Message({
+  isDone = false,
+  isLast = false,
+  message,
+  useRawOutput = false,
+}: MessageProps): JSX.Element {
+  const spinnerOrEmoji =
+    useRawOutput && message.type !== 'error' ? undefined : (
       <Box>
         {!isDone && message.showSpinner && isLast ? (
           <Box marginRight={1}>
@@ -29,11 +34,22 @@ export function Message({ isDone = false, isLast = false, message }: MessageProp
           </Text>
         )}
       </Box>
+    );
+  const messageColor = useRawOutput || message.type !== 'error' ? undefined : 'red';
+  const messageDetailColor = useRawOutput || message.type !== 'request' ? undefined : 'gray';
+  const wrap = useRawOutput ? 'end' : undefined;
+  return (
+    <Box>
+      {spinnerOrEmoji}
       <Box>
-        <Text color={message.type === 'error' ? 'red' : undefined}>{message.message}</Text>
+        <Text color={messageColor} wrap={wrap}>
+          {message.message}
+        </Text>
         {message.detail && (
           <Box marginLeft={1}>
-            <Text color={message.type === 'request' ? 'gray' : undefined}>{message.detail}</Text>
+            <Text color={messageDetailColor} wrap={wrap}>
+              {message.detail}
+            </Text>
           </Box>
         )}
       </Box>
