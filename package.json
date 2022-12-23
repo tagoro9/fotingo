@@ -26,6 +26,9 @@
     "watch": "tsc-watch -p ./ --onSuccess 'yarn build:fix-paths'"
   },
   "lint-staged": {
+    "README.md": [
+      "prettier --write"
+    ],
     "src/**/*.ts": [
       "prettier --write"
     ]
