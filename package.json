@@ -15,7 +15,6 @@
   "scripts": {
     "build": "yarn clean && tsc -p ./ && yarn build:fix-paths",
     "build:fix-paths": "tscpaths -p ./tsconfig.json -s ./src -o ./lib",
-    "circular-dependencies": "madge --circular src",
     "clean": "rimraf lib",
     "coverage": "jest --coverage --silent",
     "lint": "eslint ./src ./test ./types --color --ext .ts --ext .tsx",
@@ -133,7 +132,6 @@
     "ink-testing-library": "^2.1.0",
     "jest": "^29.3.1",
     "lint-staged": "^13.1.0",
-    "madge": "^5.0.1",
     "mem-fs": "^2.2.1",
     "mem-fs-editor": "^9.5.0",
     "nock": "^13.2.9",
