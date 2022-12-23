@@ -154,17 +154,20 @@ export class Git {
 
   /**
    * Get full information about the current branch (including commits and fixed issues)
+   * or the passed branch
    */
   @boundMethod
-  public async getBranchInfo(): Promise<BranchInfo> {
-    const branchName = await this.getCurrentBranchName();
-    const issueId = getIssueId(this.config, branchName);
+  public async getBranchInfo(branchName?: string): Promise<BranchInfo> {
+    const branch = branchName || (await this.getCurrentBranchName());
+    const issueId = getIssueId(this.config, branch);
     this.messenger.emit('Analyzing commit history', Emoji.MAG_RIGHT);
-    const commits = await this.getBranchCommitsFromMergeBase().then(this.transformCommits);
+    const commits = branchName
+      ? []
+      : await this.getBranchCommitsFromMergeBase().then(this.transformCommits);
     return {
       commits,
       issues: this.getIssues(commits, issueId),
-      name: branchName,
+      name: branch,
     };
   }
 

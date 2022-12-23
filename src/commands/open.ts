@@ -71,7 +71,7 @@ export class Open extends FotingoCommand<void, OpenData> {
         switchMap((pr) => from(open(pr.url))),
       );
     return commandData$.pipe(
-      switchMap(this.git.getBranchInfo),
+      switchMap(() => this.git.getBranchInfo()),
       switchMap(this.getLocalChangesInformation),
       withLatestFrom(commandData$),
       switchMap(([changes, commandData]) => {
