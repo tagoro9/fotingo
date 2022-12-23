@@ -85,7 +85,7 @@ export class Jira implements Tracker {
     // TODO Add a new client for agile API https://developer.atlassian.com/cloud/jira/software/rest/
     this.client = new HttpClient({
       allowConcurrentRequests: false,
-      auth: { pass: config.user.token, user: config.user.login },
+      auth: { password: config.user.token, username: config.user.login },
       root: `${config.root}/rest/api/2`,
     });
     this.debug = debug.extend('jira');

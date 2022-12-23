@@ -1,12 +1,9 @@
+import axios, { AxiosResponse } from 'axios';
 import debug, { Debugger } from 'debug';
 import * as R from 'ramda';
-import request from 'request';
 import { from, Observable } from 'rxjs';
-import { promisify } from 'util';
 
 import { HttpErrorImpl } from './HttpError';
-
-const requestAsPromise = promisify(request);
 
 interface HttpClientOptions {
   allowConcurrentRequests?: boolean;
@@ -16,8 +13,8 @@ interface HttpClientOptions {
 }
 
 interface HttpBasicAuth {
-  pass: string;
-  user: string;
+  password: string;
+  username: string;
 }
 
 interface GetOptions {
@@ -27,7 +24,6 @@ interface GetOptions {
 
 interface PostOptions extends GetOptions {
   body?: Record<string, unknown>;
-  form?: Record<string, unknown>;
 }
 
 export interface HttpResponse<T> {
@@ -42,7 +38,8 @@ enum HttpMethod {
   PUT = 'put',
 }
 
-const headers = { accept: 'application/json' };
+// Accept-Encoding needed because of https://github.com/axios/axios/issues/5346
+const headers = { accept: 'application/json', 'Accept-Encoding': 'gzip,deflate,compress' };
 
 type HttpMethodCall<T> = (path: string, options?: PostOptions) => Observable<HttpResponse<T>>;
 
@@ -71,44 +68,48 @@ export class HttpClient {
         this.debug(`Making ${method} call to ${path}`);
         return new Promise((resolve, reject) =>
           R.composeP(
-            R.ifElse(
-              R.propSatisfies(R.gt(400), 'statusCode'),
-              R.compose(
-                (data: HttpResponse<T>) => {
-                  if (this.options.slowDownRequests) {
-                    setTimeout(() => {
-                      resolve(data);
-                    }, 1000);
-                  } else {
+            R.compose(
+              (data: HttpResponse<T>) => {
+                if (this.options.slowDownRequests) {
+                  setTimeout(() => {
                     resolve(data);
-                  }
-                },
-                R.tap(() => {
-                  this.debug(`Finished ${method} call to ${path}`);
-                }),
-                R.unapply((functionArguments) => ({
-                  response: functionArguments[0],
-                  body: functionArguments[0].body,
-                })),
-              ),
-              R.compose((response: request.Response) => {
-                throw new HttpErrorImpl(response.statusMessage, response.statusCode, response.body);
+                  }, 1000);
+                } else {
+                  resolve(data);
+                }
+                return Promise.resolve();
+              },
+              R.tap(() => {
+                this.debug(`Finished ${method} call to ${path}`);
+              }),
+              (response: AxiosResponse) => ({
+                body: response.data,
+                response: response,
               }),
             ),
-            requestAsPromise,
+            axios.request,
           )({
             auth: options.auth || this.options.auth,
-            body: options.body,
-            form: options.form,
+            data: options.body,
             headers,
-            json: true,
+            responseType: 'json',
             method,
-            qs: options.qs,
+            params: options.qs,
             url: `${this.options.root}${path}`,
           }).catch((error: NodeJS.ErrnoException) => {
-            this.debug(`Failed ${method} call to ${path}`);
-            // TODO Transform error
-            reject(error);
+            if (axios.isAxiosError(error) && error.response) {
+              reject(
+                new HttpErrorImpl(
+                  error.response.statusText,
+                  error.response.status,
+                  error.response.data,
+                ),
+              );
+            } else {
+              this.debug(`Failed ${method} call to ${path}`);
+              // TODO Transform error
+              reject(error);
+            }
           }),
         );
       };
