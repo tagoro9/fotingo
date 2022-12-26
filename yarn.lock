@@ -4584,14 +4584,13 @@ env-ci@^5.0.0:
     execa "^4.0.0"
     java-properties "^1.0.0"
 
-env-ci@^7.3.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/env-ci/-/env-ci-7.3.0.tgz#737502bc7f7cc9d1863541681157b208b6683fa7"
-  integrity sha512-L8vK54CSjKB4pwlwx0YaqeBdUSGufaLHl/pEgD+EqnMrYCVUA8HzMjURALSyvOlC57e953yN7KyXS63qDoc3Rg==
+env-ci@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/env-ci/-/env-ci-8.0.0.tgz#97a6605c6639b2a74c74b1557500bc152c1c6e7e"
+  integrity sha512-W+3BqGZozFua9MPeXpmTm5eYEBtGgL76jGu/pwMVp/L8PdECSCEWaIp7d4Mw7kuUrbUldK0oV0bNd6ZZjLiMiA==
   dependencies:
-    execa "^5.0.0"
-    fromentries "^1.3.2"
-    java-properties "^1.0.0"
+    execa "^6.1.0"
+    java-properties "^1.0.2"
 
 env-paths@^2.2.0:
   version "2.2.1"
@@ -5485,11 +5484,6 @@ from@~0:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/from/-/from-0.1.7.tgz#83c60afc58b9c56997007ed1a768b3ab303a44fe"
   integrity sha1-g8YK/Fi5xWmXAH7Rp2izqzA6RP4=
-
-fromentries@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/fromentries/-/fromentries-1.3.2.tgz#e4bca6808816bf8f93b52750f1127f5a6fd86e3a"
-  integrity sha512-cHEpEQHUg0f8XdtZCc2ZAhrHzKzT0MrFUTcvx+hfxYu7rGMDc5SKoXFh+n4YigxsHXRzc6OrCshdR1bWH6HHyg==
 
 fs-constants@^1.0.0:
   version "1.0.0"
@@ -6999,7 +6993,7 @@ jake@^10.8.5:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
-java-properties@^1.0.0:
+java-properties@^1.0.0, java-properties@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/java-properties/-/java-properties-1.0.2.tgz#ccd1fa73907438a5b5c38982269d0e771fe78211"
   integrity sha512-qjdpeo2yKlYTH7nFdK0vbZWuTCesk4o63v5iVOlhMQPfuIZQfW/HI35SjfhA+4qpg36rnFSvUK5b1m+ckIblQQ==
