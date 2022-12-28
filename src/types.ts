@@ -295,5 +295,5 @@ export interface LocalChanges {
 }
 
 export interface OpenData {
-  source: 'pr' | 'jira';
+  source: 'pr' | 'jira' | 'repo';
 }

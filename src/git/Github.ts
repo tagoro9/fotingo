@@ -316,6 +316,27 @@ export class Github implements Remote {
   }
 
   /**
+   * Return the repository URL for the current workspace
+   */
+  @boundMethod
+  @cacheable({
+    getPrefix: Github.getCachePrefix,
+    minutes: 10 * ONE_DAY,
+  })
+  public getRepoUrl(): Promise<string> {
+    return this.queueCall(
+      () =>
+        this.api.repos
+          .get({
+            owner: this.config.owner,
+            repo: this.config.repo,
+          })
+          .then((data) => data.data.html_url),
+      `Getting repo url`,
+    );
+  }
+
+  /**
    * Submit a pull request for review
    * @param content Content of the pull request
    * @param isDraft Whether the pull request should be a draft

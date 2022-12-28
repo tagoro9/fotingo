@@ -7,6 +7,10 @@ import { maybeAskUserToSelectMatches } from 'src/io/input';
 import { Emoji } from 'src/io/messenger';
 import { Issue, LocalChanges, OpenData, PullRequest } from 'src/types';
 
+function assertNever(message: string): never {
+  throw new Error(message);
+}
+
 export class Open extends FotingoCommand<void, OpenData> {
   static description =
     'Open the pull request or the jira ticket from the fotingo context in a browser';
@@ -16,7 +20,7 @@ export class Open extends FotingoCommand<void, OpenData> {
       default: 'jira',
       description: 'Source place that you want to open',
       name: 'source',
-      options: ['jira', 'pr'],
+      options: ['jira', 'pr', 'repo'],
       required: false,
     },
   ];
@@ -70,15 +74,32 @@ export class Open extends FotingoCommand<void, OpenData> {
         ),
         switchMap((pr) => from(open(pr.url))),
       );
+
+    const getRepo = (_: LocalChanges) =>
+      from(this.github.getRepoUrl()).pipe(
+        tap((url: string) => this.messenger.emit(`Opening browser for ${url}`, Emoji.EARTH_AFRICA)),
+        switchMap((url) => from(open(url))),
+      );
+
     return commandData$.pipe(
       switchMap(() => this.git.getBranchInfo()),
       switchMap(this.getLocalChangesInformation),
       withLatestFrom(commandData$),
       switchMap(([changes, commandData]) => {
-        if (commandData.source === 'pr') {
-          return getPullRequest(changes);
+        switch (commandData.source) {
+          case 'jira': {
+            return getIssue(changes);
+          }
+          case 'pr': {
+            return getPullRequest(changes);
+          }
+          case 'repo': {
+            return getRepo(changes);
+          }
+          default: {
+            assertNever(`Unexpected source: ${commandData.source}`);
+          }
         }
-        return getIssue(changes);
       }),
       map(always(undefined)),
     );
