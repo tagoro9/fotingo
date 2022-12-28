@@ -248,7 +248,9 @@ You can use `{` and `}` to interpolate the desired data. This is the data that i
   - `fixedIssuesByCategory`. Text that contains a list of the fixed issues by category
   - `fotingo.banner`. Banner that indicates that the release was created with fotingo
 
-- `github.pullRequestTemplate`
+- `github.pullRequestTemplate`. fotingo will give preference to the template specified in `.github/PULL_REQUEST_TEMPLATE/fotingo.md`,
+  `PULL_REQUEST_TEMPLATE.md`, `.github/PULL_REQUEST_TEMPLATE.md` file. If those files don't exist, it will use
+  the template specified in the configuration file.
 
   - `branchName`. Name of the branch
   - `changes`. List of the commit messages in the PR

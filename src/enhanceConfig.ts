@@ -1,4 +1,4 @@
-import { ifElse, isNil, mergeDeepLeft, mergeDeepWith, nthArg } from 'ramda';
+import { compose, find, ifElse, isNil, mergeDeepLeft, mergeDeepWith, not, nthArg } from 'ramda';
 import { Config, IssueStatus } from 'src/types';
 
 import { Git } from './git/Git';
@@ -83,10 +83,13 @@ export async function enhanceConfig(config: Config): Promise<Config> {
     // TODO I don't like this instantiation of Git here
     const git = new Git(configWithDefaults.git);
     const rootDirectory = Git.getRootDir();
-    const prTemplate = await getFileContent('PULL_REQUEST_TEMPLATE.md', rootDirectory, [
-      '.',
-      '.github',
-    ]);
+    const prTemplate = find(
+      compose(not, isNil),
+      await Promise.all([
+        getFileContent('fotingo.md', rootDirectory, ['.github/PULL_REQUEST_TEMPLATE']),
+        getFileContent('PULL_REQUEST_TEMPLATE.md', rootDirectory, ['.', '.github']),
+      ]),
+    );
     return Promise.all([git.getRemote(configWithDefaults.git.remote), git.getDefaultBranch()]).then(
       ([remote, defaultBranch]) =>
         mergeDeepWith(
