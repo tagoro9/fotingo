@@ -98,6 +98,7 @@ export class HttpClient {
             url: `${this.options.root}${path}`,
           }).catch((error: NodeJS.ErrnoException) => {
             if (axios.isAxiosError(error) && error.response) {
+              this.debug(`Failed ${method} call to ${path}`, error.response.data);
               reject(
                 new HttpErrorImpl(
                   error.response.statusText,
