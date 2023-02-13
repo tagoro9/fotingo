@@ -27,19 +27,17 @@ The first time that you run fotingo, it will ask you for some information:
 
 <!-- prettier-ignore-start -->
 <!-- usage -->
-
 ```sh-session
 $ npm install -g fotingo
 $ fotingo COMMAND
 running command...
 $ fotingo (-v|--version|version)
-fotingo/4.4.0 linux-x64 node-v16.18.1
+fotingo/4.6.0 linux-x64 node-v16.19.0
 $ fotingo --help [COMMAND]
 USAGE
   $ fotingo COMMAND
 ...
 ```
-
 <!-- usagestop -->
 <!-- prettier-ignore-end -->
 
@@ -47,7 +45,6 @@ USAGE
 
 <!-- prettier-ignore-start -->
 <!-- commands -->
-
 * [`fotingo help [COMMAND]`](#fotingo-help-command)
 * [`fotingo inspect`](#fotingo-inspect)
 * [`fotingo open [SOURCE]`](#fotingo-open-source)
@@ -75,8 +72,7 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1
 
 ## `fotingo inspect`
 
-Output information about the specified element. If no element is specified, output information about the execution
-context
+Output information about the specified element. If no element is specified, output information about the execution context
 
 ```
 USAGE
@@ -87,7 +83,7 @@ OPTIONS
   -i, --issue=issue    Specify more issues to include in the release
 ```
 
-_See code: [src/commands/inspect.ts](https://github.com/tagoro9/fotingo/blob/v4.4.0/src/commands/inspect.ts)_
+_See code: [src/commands/inspect.ts](https://github.com/tagoro9/fotingo/blob/v4.6.0/src/commands/inspect.ts)_
 
 ## `fotingo open [SOURCE]`
 
@@ -98,10 +94,10 @@ USAGE
   $ fotingo open [SOURCE]
 
 ARGUMENTS
-  SOURCE  (jira|pr) [default: jira] Source place that you want to open
+  SOURCE  (jira|pr|repo) [default: jira] Source place that you want to open
 ```
 
-_See code: [src/commands/open.ts](https://github.com/tagoro9/fotingo/blob/v4.4.0/src/commands/open.ts)_
+_See code: [src/commands/open.ts](https://github.com/tagoro9/fotingo/blob/v4.6.0/src/commands/open.ts)_
 
 ## `fotingo release RELEASE`
 
@@ -121,7 +117,7 @@ OPTIONS
   -y, --yes            Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v4.4.0/src/commands/release.ts)_
+_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v4.6.0/src/commands/release.ts)_
 
 ## `fotingo review`
 
@@ -140,7 +136,7 @@ OPTIONS
   -y, --yes                  Do not prompt for any input but accept all the defaults
 ```
 
-_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v4.4.0/src/commands/review.ts)_
+_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v4.6.0/src/commands/review.ts)_
 
 ## `fotingo start [ISSUE]`
 
@@ -164,7 +160,7 @@ OPTIONS
   -t, --title=title              Title of issue to create
 ```
 
-_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v4.4.0/src/commands/start.ts)_
+_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v4.6.0/src/commands/start.ts)_
 
 ## `fotingo verify`
 
@@ -175,7 +171,7 @@ USAGE
   $ fotingo verify
 ```
 
-_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v4.4.0/src/commands/verify.ts)_
+_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v4.6.0/src/commands/verify.ts)_
 <!-- commandsstop -->
 <!-- prettier-ignore-end -->
 
