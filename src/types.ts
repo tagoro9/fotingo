@@ -62,6 +62,7 @@ export interface DefaultConfig {
 export enum IssueType {
   BUG = 'Bug',
   FEATURE = 'Feature',
+  SPIKE = 'Spike',
   STORY = 'Story',
   SUB_TASK = 'Sub-task',
   TASK = 'Task',

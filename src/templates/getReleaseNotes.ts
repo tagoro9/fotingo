@@ -36,6 +36,7 @@ const ISSUE_TYPE_TO_RELEASE_SECTION: { [k in IssueType]: string } = {
   [IssueType.SUB_TASK]: 'Features',
   [IssueType.BUG]: 'Bug fixes',
   [IssueType.STORY]: 'Features',
+  [IssueType.SPIKE]: 'Features',
   [IssueType.FEATURE]: 'Features',
 };
 

@@ -29,6 +29,7 @@ const ISSUE_TYPE_TO_BRANCH_PREFIX: { [S in IssueType]: string } = {
   [IssueType.BUG]: 'b',
   [IssueType.FEATURE]: 'f',
   [IssueType.STORY]: 'f',
+  [IssueType.SPIKE]: 's',
   [IssueType.SUB_TASK]: 'f',
   [IssueType.TASK]: 'c',
 };
