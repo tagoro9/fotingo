@@ -6,7 +6,6 @@ import {
   compose,
   concat as rConcat,
   filter,
-  has,
   head,
   join,
   map,
@@ -247,7 +246,10 @@ export class Github implements Remote {
           map<RestEndpointMethodTypes['users']['getByUsername']['response']['data'], Reviewer>(
             (user) => user as Reviewer,
           ),
-          filter(has('login')),
+          filter(
+            (data: RestEndpointMethodTypes['users']['getByUsername']['response']['data']) =>
+              data !== undefined && 'login' in data,
+          ),
         ),
       );
   }
@@ -300,9 +302,18 @@ export class Github implements Remote {
   })
   private getUserInfo(
     username: string,
-  ): Promise<RestEndpointMethodTypes['users']['getByUsername']['response']['data']> {
+  ): Promise<RestEndpointMethodTypes['users']['getByUsername']['response']['data'] | undefined> {
     return this.queueCall(
-      () => this.api.users.getByUsername({ username }).then(prop('data')),
+      () =>
+        this.api.users
+          .getByUsername({ username })
+          .then(prop('data'))
+          .catch((error) => {
+            if (error.status !== 404) {
+              throw error;
+            }
+            return undefined;
+          }),
       `Getting user info for %s`,
       username,
     );
