@@ -193,7 +193,7 @@ config file may just be:
 
 ```json
 {
-  "github": {
+  "git": {
     "baseBranch": "develop"
   }
 }
