@@ -66,6 +66,7 @@ export enum IssueType {
   STORY = 'Story',
   SUB_TASK = 'Sub-task',
   TASK = 'Task',
+  TECH_DEBT = 'Tech-debt',
 }
 
 export enum IssueStatus {
