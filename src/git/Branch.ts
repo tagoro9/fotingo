@@ -32,6 +32,7 @@ const ISSUE_TYPE_TO_BRANCH_PREFIX: { [S in IssueType]: string } = {
   [IssueType.SPIKE]: 's',
   [IssueType.SUB_TASK]: 'f',
   [IssueType.TASK]: 'c',
+  [IssueType.TECH_DEBT]: 'd',
 };
 
 enum TemplateKey {
