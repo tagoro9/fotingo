@@ -38,7 +38,7 @@ const ISSUE_TYPE_TO_RELEASE_SECTION: { [k in IssueType]: string } = {
   [IssueType.STORY]: 'Features',
   [IssueType.SPIKE]: 'Features',
   [IssueType.FEATURE]: 'Features',
-  [IssueType.TECH_DEBT]: 'Tech debt',
+  [IssueType.TECH_DEBT]: 'Code Refactoring',
 };
 
 /**
