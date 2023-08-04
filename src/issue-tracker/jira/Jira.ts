@@ -293,19 +293,20 @@ export class Jira implements Tracker {
 
   public getCurrentUserOpenIssues(): Observable<Issue[]> {
     return zip(this.getCurrentUser(), this.getStatuses()).pipe(
-      switchMap(([user, status]: [User, Partial<Record<IssueStatus, JiraIssueStatus>>]) => {
+      switchMap(([user, status]: [User, Partial<Record<IssueStatus, JiraIssueStatus[]>>]) => {
+        const qs = {
+          expand: 'transitions, renderedFields',
+          jql: `assignee=${user.accountId} AND status IN (${[
+            IssueStatus.BACKLOG,
+            IssueStatus.SELECTED_FOR_DEVELOPMENT,
+          ]
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            .flatMap((s) => (status[s] ? status[s]!.map((t) => "'" + t.name + "'") : undefined))
+            .filter((s) => s !== undefined)
+            .join(',')}) ORDER BY CREATED DESC`,
+        };
         return this.client.get<{ issues: JiraIssue[] }>(`/search`, {
-          qs: {
-            expand: 'transitions, renderedFields',
-            jql: `assignee=${user.accountId} AND status IN (${[
-              IssueStatus.BACKLOG,
-              IssueStatus.SELECTED_FOR_DEVELOPMENT,
-            ]
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              .map((s) => (status[s] ? "'" + status[s]!.name + "'" : undefined))
-              .filter((s) => s !== undefined)
-              .join(',')}) ORDER BY CREATED DESC`,
-          },
+          qs: qs,
         });
       }),
       map(prop('body')),
@@ -375,16 +376,29 @@ export class Jira implements Tracker {
       );
   }
 
-  // TODO This should be cacheable, but cacheable does not understand observables yer
-  private getStatuses(): Observable<Partial<Record<IssueStatus, JiraIssueStatus>>> {
+  /**
+   * Get all the statuses from Jira for any project and then map then to the internal fotingo statuses. Ensure no duplicate statuses are returned
+   * for each internal status
+   * @private
+   */
+  // TODO This should be cacheable, but cacheable does not understand observables yet
+  private getStatuses(): Observable<Partial<Record<IssueStatus, JiraIssueStatus[]>>> {
     return this.client.get<JiraIssueStatus[]>('/status').pipe(
       map(prop('body')),
       map((status: JiraIssueStatus[]) => {
         return Object.fromEntries(
-          Object.entries(IssueStatus).map(([key, value]) => [
-            key,
-            status.find((t) => this.config.status[value].test(t.name)),
-          ]),
+          Object.entries(IssueStatus).map(([key, value]) => {
+            // Get statuses that match the internal status regex
+            const matchedStatues = status.filter((t) => this.config.status[value].test(t.name));
+            return [
+              key,
+              // Ensure only one status per name is returned
+              matchedStatues.filter(
+                (status, index, collection) =>
+                  collection.findIndex((t) => t.name === status.name) === index,
+              ),
+            ];
+          }),
         );
       }),
     );

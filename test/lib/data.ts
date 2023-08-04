@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { GitConfig } from 'src/git/Config';
-import { JiraIssue } from 'src/issue-tracker/jira/types';
+import { JiraIssue, JiraIssueStatus } from 'src/issue-tracker/jira/types';
 import { HttpResponse } from 'src/network/HttpClient';
 import {
   Config,
@@ -106,6 +106,15 @@ export const data = {
         },
       },
     };
+  },
+  createJiraStatuses(): JiraIssueStatus[] {
+    return ['To do', 'to do', 'selected for development', 'backlog', 'in progress'].map(
+      (statusName) => ({
+        description: faker.lorem.paragraph(),
+        id: String(faker.datatype.number(5000)),
+        name: statusName,
+      }),
+    );
   },
   createRelease(): Release {
     return {
