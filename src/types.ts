@@ -96,6 +96,7 @@ export interface Issue {
     id: string;
     key: string;
   };
+  raw?: unknown;
   sanitizedSummary: string;
   summary: string;
   type: IssueType;

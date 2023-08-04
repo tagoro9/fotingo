@@ -98,4 +98,23 @@ describe('jira', () => {
       });
     });
   });
+
+  describe('getCurrentUserOpenIssues', () => {
+    it('gets the issues in all the configured selected for development status regexes', async () => {
+      httpClientMocks.get.mockReturnValueOnce(of(data.createHttpResponse(data.createJiraUser())));
+      httpClientMocks.get.mockReturnValueOnce(
+        of(data.createHttpResponse(data.createJiraStatuses())),
+      );
+      httpClientMocks.get.mockReturnValueOnce(of(data.createHttpResponse({ issues: [] })));
+      await lastValueFrom(jira.getCurrentUserOpenIssues());
+      expect(httpClientMocks.get.mock.calls[2][1]).toMatchInlineSnapshot(`
+        {
+          "qs": {
+            "expand": "transitions, renderedFields",
+            "jql": "assignee=Jerry.Rosenbaum AND status IN ('backlog','To do','to do') ORDER BY CREATED DESC",
+          },
+        }
+      `);
+    });
+  });
 });
