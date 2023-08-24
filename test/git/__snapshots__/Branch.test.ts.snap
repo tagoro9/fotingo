@@ -2,4 +2,4 @@
 
 exports[`Branch getName ignores unknown template data 1`] = `"{does_not_exist}"`;
 
-exports[`Branch getName replaces the placeholders with the issue data 1`] = `"fotingo-2484.c.Legacy"`;
+exports[`Branch getName replaces the placeholders with the issue data 1`] = `"fotingo-2484.d.Legacy"`;
