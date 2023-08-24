@@ -43,7 +43,7 @@ exports[`jira getIssue gets and transforms the issue from Jira 1`] = `
   },
   "sanitizedSummary": "issue_with_a_lot_of_characters",
   "summary": "Issue with a lot of characters "$&'*,:;<>?@[]\`~‘’“”",
-  "type": "Sub-task",
+  "type": "Task",
   "url": "https://wee-codling.biz/browse/FOTINGO-1314",
 }
 `;
