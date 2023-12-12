@@ -1,5 +1,6 @@
 import { Command } from '@oclif/command';
 import { IConfig } from '@oclif/config';
+import { Errors } from '@oclif/core';
 import { boundMethod } from 'autobind-decorator';
 import { Debugger } from 'debug';
 import envCi from 'env-ci';
@@ -70,6 +71,7 @@ export abstract class FotingoCommand<T, R> extends Command {
 
   constructor(argv: string[], config: IConfig) {
     super(argv, config);
+    console.log('Constructing command');
     this.startTime = Date.now();
     this.createConfigFolder();
     this.isCi = envCi().isCi;
@@ -195,7 +197,7 @@ export abstract class FotingoCommand<T, R> extends Command {
     const unknownError = error as unknown as Record<string, unknown>;
     const errorCode =
       'code' in unknownError && typeof unknownError.code === 'number' ? unknownError.code : 1;
-    this.exit(errorCode);
+    throw new Errors.CLIError(error, { exit: errorCode });
   }
 
   async finally(error?: Error): Promise<void> {
@@ -204,6 +206,7 @@ export abstract class FotingoCommand<T, R> extends Command {
   }
 
   async run(): Promise<void> {
+    console.log('Running command');
     const { waitUntilExit } = renderUi({
       cmd: () => {
         const commandData = this.getCommandData();
