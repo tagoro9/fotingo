@@ -1,0 +1,53 @@
+Start working on a Jira issue by setting it to "In Progress" and creating a feature branch.
+
+The start command will:
+1. Set the issue status to "In Progress" in Jira
+2. Create a new branch based on the issue key and summary
+3. Switch to the newly created branch
+
+If no issue ID is provided, you will be presented with a list of your open issues to choose from.
+
+You can also create a new issue on the fly using the --title and --project flags.
+
+Examples:
+  # Start working on an existing issue
+  fotingo start PROJ-123
+
+  # Select from your open issues interactively
+  fotingo start
+
+  # Create a new issue and start working on it
+  fotingo start -t "Fix login bug" -p PROJ -k Bug
+
+  # Create a sub-task under a parent issue
+  fotingo start -t "Implement feature" -p PROJ -a PROJ-100
+
+  # Start an issue without creating a branch (just set status)
+  fotingo start PROJ-123 --no-branch
+
+  # Start with labels on a new issue
+  fotingo start -t "New feature" -p PROJ -l frontend -l priority
+
+Usage:
+  fotingo start [issueId] [flags]
+
+Flags:
+  -d, --description string   Description for new issue
+  -e, --epic string          Epic issue to link the created issue to
+  -h, --help                 help for start
+  -i, --interactive          Interactively create a new issue before starting work
+  -k, --kind string          Issue type: Story, Bug, Task (default: Task) (default "Task")
+  -l, --labels strings       Labels to add to created issue
+  -n, --no-branch            Set issue to In Progress without creating/switching branch
+  -a, --parent string        Parent issue for sub-tasks
+  -p, --project string       Project key for new issue (required with --title)
+  -t, --title string         Create new issue with this title
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting

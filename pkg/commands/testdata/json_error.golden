@@ -1,0 +1,5 @@
+{
+  "error": "failed to create branch",
+  "code": 4,
+  "type": "Git error"
+}

@@ -1,0 +1,76 @@
+Fotingo is a command-line tool that simplifies the workflow between
+Git, GitHub, and Jira when working on tasks.
+
+It helps you:
+- Start working on Jira issues with proper branch naming
+- Create pull requests with issue references
+- Create releases with proper versioning
+- Inspect your current context
+
+COMMON WORKFLOWS:
+
+  Start working on an issue:
+    fotingo start PROJ-123
+
+  Create a pull request:
+    fotingo review
+
+  Non-interactive mode (for scripts/AI agents):
+    fotingo start PROJ-123 -y
+    fotingo review -y --json
+
+  Open URLs in browser:
+    fotingo open pr
+    fotingo open issue
+
+GLOBAL FLAGS:
+
+  --json       Output results as JSON (for scripting/AI agents)
+  --quiet      Suppress non-essential output
+  --verbose    Show step-level progress output
+  --debug      Show diagnostic output (includes verbose)
+  --yes/-y     Accept defaults without prompting
+  --no-color   Disable colored output
+
+EXIT CODES:
+
+  0   Success
+  1   General error
+  2   Configuration error (missing/invalid config)
+  3   Authentication error (invalid token, expired credentials)
+  4   Git error (not a repo, branch issues, push failed)
+  5   Jira error (issue not found, permission denied)
+  6   GitHub error (PR creation failed, rate limited)
+  130 Operation cancelled (Ctrl+C)
+
+For more information on a specific command, run:
+  fotingo <command> --help
+
+Usage:
+  fotingo [command]
+
+Available Commands:
+  ai          AI-related setup and utilities
+  cache       Inspect and clear fotingo cache entries
+  completion  Generate shell completion scripts
+  config      View and update fotingo configuration values
+  help        Help about any command
+  inspect     Output information about the current context
+  login       Log into all the services that need authentication
+  open        Open a URL in your browser
+  release     Create a release with associated issues
+  review      Create a pull request for the current branch
+  start       Start working on a Jira issue
+  version     Print the version number of fotingo
+
+Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+  -h, --help            help for fotingo
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting
+
+Use "fotingo [command] --help" for more information about a command.
