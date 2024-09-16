@@ -1,0 +1,4 @@
+{
+  "success": false,
+  "error": "failed to initialize Jira client: authentication required"
+}
