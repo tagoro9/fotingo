@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }}</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/assets/oauth.css">
+</head>
+<body>
+  <main class="layout">
+    <section class="card" role="status" aria-live="polite">
+      <div class="brand">fotingo</div>
+      <h1>{{ .Heading }}</h1>
+      <p>{{ .Body }}</p>
+      <p class="action">{{ .Action }}</p>
+    </section>
+  </main>
+</body>
+</html>
