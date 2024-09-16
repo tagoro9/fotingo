@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    branches: [main, "v*"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    name: Release
+    if: false
+    outputs:
+      new-release-version: ${{ steps.release.outputs.new-release-version }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Release
+        uses: open-turo/actions-go/release@v4
+        id: release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Required to push formula updates to the external Homebrew tap repository.
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          # OAuth values are injected into the binary by ldflags.
+          FOTINGO_JIRA_OAUTH_CLIENT_ID: ${{ secrets.FOTINGO_JIRA_OAUTH_CLIENT_ID }}
+          FOTINGO_JIRA_OAUTH_CLIENT_SECRET: ${{ secrets.FOTINGO_JIRA_OAUTH_CLIENT_SECRET }}
+          FOTINGO_GH_OAUTH_CLIENT_ID: ${{ secrets.FOTINGO_GH_OAUTH_CLIENT_ID }}
+          FOTINGO_POSTHOG_API_KEY: ${{ secrets.FOTINGO_POSTHOG_API_KEY }}

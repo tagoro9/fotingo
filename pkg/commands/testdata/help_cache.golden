@@ -1,0 +1,35 @@
+Inspect and clear entries in fotingo cache storage.
+
+Examples:
+  # Browse cache entries
+  fotingo cache view
+
+  # Filter cache entries
+  fotingo cache view github:
+
+  # Clear matching entries
+  fotingo cache clear github:
+
+  # Clear all cache entries
+  fotingo cache clear --all
+
+Usage:
+  fotingo cache [command]
+
+Available Commands:
+  clear       Clear cache entries by key, pattern, or all
+  view        Interactively browse cache entries
+
+Flags:
+  -h, --help   help for cache
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting
+
+Use "fotingo cache [command] --help" for more information about a command.

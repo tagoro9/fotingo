@@ -1,0 +1,23 @@
+Search review reviewers, assignees, and labels using the same metadata and fuzzy ranking used by `fotingo review`.
+
+Usage:
+  fotingo search [command]
+
+Available Commands:
+  assignees   Search review assignees non-interactively
+  labels      Search review labels non-interactively
+  reviewers   Search review reviewers non-interactively
+
+Flags:
+  -h, --help   help for search
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting
+
+Use "fotingo search [command] --help" for more information about a command.

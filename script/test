@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+coverage_file="${1:-${COVERAGE_FILE:-coverage.out}}"
+
+if [[ "${CI:-}" != "true" ]]; then
+  go test -race -cover -covermode atomic -coverprofile="${coverage_file}" ./...
+  exit 0
+fi
+
+go test ./...
