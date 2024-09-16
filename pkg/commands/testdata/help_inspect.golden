@@ -1,0 +1,37 @@
+Output information about the current execution context as JSON.
+
+The inspect command displays detailed information about your current working state,
+including branch details, associated Jira issues, and commit history.
+
+This command is useful for:
+- Debugging fotingo configuration
+- AI agents that need to understand the current context
+- Scripts that need to extract branch/issue information
+
+Examples:
+  # Inspect current branch context
+  fotingo inspect
+
+  # Inspect a specific branch
+  fotingo inspect -b feature/PROJ-123-my-feature
+
+  # Inspect a specific issue
+  fotingo inspect -i PROJ-123
+
+Output is always JSON formatted for easy parsing.
+
+Usage:
+  fotingo inspect [flags]
+
+Flags:
+  -b, --branch string   Inspect a specific branch
+  -h, --help            help for inspect
+  -i, --issue string    Inspect a specific issue
+
+Global Flags:
+      --debug      Show diagnostic output (includes verbose)
+      --json       Output results as JSON
+      --no-color   Disable colored output
+      --quiet      Suppress non-essential output
+  -v, --verbose    Show step-level progress output
+  -y, --yes        Accept defaults without prompting

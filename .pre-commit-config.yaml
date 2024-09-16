@@ -1,0 +1,39 @@
+default_stages: [pre-commit]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-json
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v9.24.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies: ["@open-turo/commitlint-config-conventional"]
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.1
+    hooks:
+      - id: actionlint
+  - repo: https://github.com/turo/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: go-mod-tidy
+      - id: go-fmt
+      - id: go-build
+      - id: gomarkdoc
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v2.11.2
+    hooks:
+      - id: golangci-lint-full
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 3.0.0
+    hooks:
+      - id: shellcheck
+      - id: shfmt

@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Setup tools
+        uses: open-turo/action-setup-tools@v3
+      - uses: mfinelli/setup-shfmt@v3
+      - name: Install Gomarkdoc
+        shell: bash
+        run: go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@v1.1.0
+      - uses: open-turo/actions-go/lint@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          checkout-repo: false
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: open-turo/actions-go/test@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+goreleaser check --config .goreleaser.yaml
+goreleaser build --single-target --snapshot --clean --config .goreleaser.yaml
+
+binary_path="$(find dist -type f -name fotingo | head -n1)"
+if [[ -z "${binary_path}" ]]; then
+  echo "failed to locate built fotingo binary in dist/" >&2
+  exit 1
+fi
+
+mkdir -p "${HOME}/bin"
+install -m 755 "${binary_path}" "${HOME}/bin/fotingo"

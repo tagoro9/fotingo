@@ -1,0 +1,71 @@
+Generate shell completion scripts for fotingo.
+
+Completions allow you to press <TAB> to autocomplete commands, flags, and arguments.
+
+Supported shells:
+  bash   - Bash completion script
+  zsh    - Zsh completion script
+  fish   - Fish completion script
+  powershell - PowerShell completion script
+
+Installation Instructions:
+
+  Bash (Linux):
+    # Add to your ~/.bashrc:
+    source <(fotingo completion bash)
+
+    # Or install system-wide:
+    fotingo completion bash > /etc/bash_completion.d/fotingo
+
+  Bash (macOS with Homebrew):
+    # First, ensure bash-completion is installed:
+    brew install bash-completion
+
+    # Add to your ~/.bash_profile:
+    source <(fotingo completion bash)
+
+  Zsh:
+    # Add to your ~/.zshrc (before compinit):
+    source <(fotingo completion zsh)
+
+    # Or generate a file in your fpath:
+    fotingo completion zsh > "${fpath[1]}/_fotingo"
+
+    # You may need to run this once for new completions:
+    rm -f ~/.zcompdump; compinit
+
+  Fish:
+    # Add to your Fish config:
+    fotingo completion fish | source
+
+    # Or generate a file:
+    fotingo completion fish > ~/.config/fish/completions/fotingo.fish
+
+  PowerShell:
+    # Add to your PowerShell profile:
+    fotingo completion powershell | Out-String | Invoke-Expression
+
+Examples:
+  # Generate and source bash completions inline
+  source <(fotingo completion bash)
+
+  # Generate zsh completions to a file
+  fotingo completion zsh > /usr/local/share/zsh/site-functions/_fotingo
+
+  # Test completion output
+  fotingo completion bash | head -20
+
+Usage:
+  fotingo completion [shell]
+
+Flags:
+  -h, --help   help for completion
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting

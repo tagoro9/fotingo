@@ -1,0 +1,52 @@
+version: 2
+
+project_name: fotingo
+
+builds:
+  - id: fotingo
+    main: ./cmd/fotingo
+    binary: fotingo
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X github.com/tagoro9/fotingo/internal/jira.jiraOAuthClientID={{ with index .Env "FOTINGO_JIRA_OAUTH_CLIENT_ID" }}{{ . }}{{ end }}
+      - -X github.com/tagoro9/fotingo/internal/jira.jiraOAuthClientSecret={{ with index .Env "FOTINGO_JIRA_OAUTH_CLIENT_SECRET" }}{{ . }}{{ end }}
+      - -X github.com/tagoro9/fotingo/internal/github.oauthClientID={{ with index .Env "FOTINGO_GH_OAUTH_CLIENT_ID" }}{{ . }}{{ end }}
+      - -X github.com/tagoro9/fotingo/internal/telemetry.posthogAPIKey={{ with index .Env "FOTINGO_POSTHOG_API_KEY" }}{{ . }}{{ end }}
+      - -X github.com/tagoro9/fotingo/pkg/commands.Version={{ .Version }}
+      - -X github.com/tagoro9/fotingo/pkg/commands.GitCommit={{ .ShortCommit }}
+      - -X github.com/tagoro9/fotingo/pkg/commands.BuildTime={{ .CommitDate }}
+      - -X github.com/tagoro9/fotingo/pkg/commands.Platform={{ .Os }}/{{ .Arch }}
+
+archives:
+  - id: tarballs
+    formats:
+      - tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+
+release:
+  prerelease: auto
+
+homebrew_casks:
+  - name: fotingo
+    repository:
+      owner: tagoro9
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Casks
+    homepage: https://github.com/tagoro9/fotingo
+    description: CLI to streamline workflows across Git, GitHub, and Jira.
+    license: MIT
+    binaries:
+      - fotingo
