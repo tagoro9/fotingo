@@ -1,0 +1,11 @@
+providers:
+  devlake:
+    kind: dotenv
+    maps:
+      - id: "local"
+        path: config/local.env
+        keys:
+          FOTINGO_JIRA_OAUTH_CLIENT_ID: ==
+          FOTINGO_JIRA_OAUTH_CLIENT_SECRET: ==
+          FOTINGO_GH_OAUTH_CLIENT_ID: ==
+          FOTINGO_POSTHOG_API_KEY: ==

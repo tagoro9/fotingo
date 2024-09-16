@@ -1,0 +1,6 @@
+{
+  "success": true,
+  "target": "pr",
+  "url": "https://github.com/owner/repo/pull/42",
+  "opened": true
+}

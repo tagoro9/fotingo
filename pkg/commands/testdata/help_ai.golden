@@ -1,0 +1,21 @@
+Commands for configuring AI tooling integrations with fotingo.
+
+Usage:
+  fotingo ai [command]
+
+Available Commands:
+  setup       Install fotingo agent skills for supported AI providers
+
+Flags:
+  -h, --help   help for ai
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting
+
+Use "fotingo ai [command] --help" for more information about a command.
