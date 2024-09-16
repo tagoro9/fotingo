@@ -1,339 +1,127 @@
 # Fotingo
 
-A CLI to ease the interaction between _Git_, _GitHub_ and _Jira_ when working on tasks.
+A CLI to streamline workflows across Git, GitHub, and Jira.
 
-[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
-![Scarf](https://static.scarf.sh/a.png?x-pxid=31890a02-9148-498c-8158-3e3db7f11422)
+[![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go)](https://go.dev)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+## Overview
+
+Fotingo helps you:
+
+- Start working on Jira issues with consistent branch naming
+- Create pull requests with issue context and metadata
+- Open related URLs for branch, issue, PR, and repository
+- Inspect local branch/issue context as JSON
+- Automate command flows with machine-readable output
 
 ## Installation
 
-Run:
+### From source
 
 ```bash
-npm install -g fotingo
+go install github.com/tagoro9/fotingo@latest
 ```
 
-## Requirements
+### From binary
 
-The first time that you run fotingo, it will ask you for some information:
+Download the latest release from the [releases page](https://github.com/tagoro9/fotingo/releases).
 
-- A GitHub personal access token. You can create one [here](https://github.com/settings/tokens). Only _repo_ permissions
-  are needed
-- Your Jira username
-- Your Jira server root URL
-- A Jira access token for your user. You can create one [here](https://id.atlassian.com/manage/api-tokens)
+### Homebrew
 
-## Usage
-
-<!-- prettier-ignore-start -->
-<!-- usage -->
-```sh-session
-$ npm install -g fotingo
-$ fotingo COMMAND
-running command...
-$ fotingo (-v|--version|version)
-fotingo/4.7.2 linux-x64 node-v16.20.2
-$ fotingo --help [COMMAND]
-USAGE
-  $ fotingo COMMAND
-...
-```
-<!-- usagestop -->
-<!-- prettier-ignore-end -->
-
-## Commands
-
-<!-- prettier-ignore-start -->
-<!-- commands -->
-* [`fotingo help [COMMAND]`](#fotingo-help-command)
-* [`fotingo inspect`](#fotingo-inspect)
-* [`fotingo open [SOURCE]`](#fotingo-open-source)
-* [`fotingo release RELEASE`](#fotingo-release-release)
-* [`fotingo review`](#fotingo-review)
-* [`fotingo start [ISSUE]`](#fotingo-start-issue)
-* [`fotingo verify`](#fotingo-verify)
-
-## `fotingo help [COMMAND]`
-
-display help for fotingo
-
-```
-USAGE
-  $ fotingo help [COMMAND]
-
-ARGUMENTS
-  COMMAND  command to show help for
-
-OPTIONS
-  --all  see all commands in CLI
+```bash
+brew tap tagoro9/tap
+brew install fotingo
+xattr -dr com.apple.quarantine /opt/homebrew/bin/fotingo
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
+On macOS, Homebrew can preserve the `com.apple.quarantine` attribute on downloaded binaries. Because `fotingo` is a standalone CLI binary distributed outside the App Store, Gatekeeper may block execution until that quarantine attribute is removed. Running `xattr -dr com.apple.quarantine /opt/homebrew/bin/fotingo` clears the attribute so the binary can run normally.
 
-## `fotingo inspect`
+## Quick Start
 
-Output information about the specified element. If no element is specified, output information about the execution context
+Prerequisites:
 
-```
-USAGE
-  $ fotingo inspect
+1. GitHub authentication:
+   - Fotingo GitHub App installed in the orgs you want to access (it can be installed during the auth flow), or
+   - A classic GitHub PAT from `https://github.com/settings/tokens` with `repo` scope
+2. Jira authentication:
+   - Atlassian API token from `https://id.atlassian.com/manage-profile/security/api-tokens`, or
+   - OAuth only in internal binaries compiled with Jira OAuth client credentials
+3. Jira account email
+4. Jira server URL (for example `https://yourcompany.atlassian.net`)
 
-OPTIONS
-  -b, --branch=branch  Name of the base branch of the pull request
-  -i, --issue=issue    Specify more issues to include in the release
-```
+Jira OAuth client credentials include a client secret and are intended for internal builds only.
+Committing or broadly distributing binaries with embedded Jira OAuth client secret is not considered safe.
 
-_See code: [src/commands/inspect.ts](https://github.com/tagoro9/fotingo/blob/v4.7.2/src/commands/inspect.ts)_
+Basic flow:
 
-## `fotingo open [SOURCE]`
+```bash
+# Authenticate services
+fotingo login
 
-Open the pull request or the jira ticket from the fotingo context in a browser
+# Start work on an issue
+fotingo start PROJ-123
 
-```
-USAGE
-  $ fotingo open [SOURCE]
+# Create a pull request for current branch
+fotingo review -y
 
-ARGUMENTS
-  SOURCE  (jira|pr|repo) [default: jira] Source place that you want to open
-```
-
-_See code: [src/commands/open.ts](https://github.com/tagoro9/fotingo/blob/v4.7.2/src/commands/open.ts)_
-
-## `fotingo release RELEASE`
-
-Create a release with your changes
-
-```
-USAGE
-  $ fotingo release RELEASE
-
-ARGUMENTS
-  RELEASE  Name of the release to be created
-
-OPTIONS
-  -i, --issues=issues  Specify more issues to include in the release
-  -n, --noVcsRelease   Do not create a release in the remote VCS
-  -s, --simple         Do not use any issue tracker
-  -y, --yes            Do not prompt for any input but accept all the defaults
+# Open the PR in browser
+fotingo open pr
 ```
 
-_See code: [src/commands/release.ts](https://github.com/tagoro9/fotingo/blob/v4.7.2/src/commands/release.ts)_
+For full authentication setup details, see [docs/authentication.md](./docs/authentication.md).
 
-## `fotingo review`
+## Telemetry
 
-Submit current issue for review
+Fotingo emits anonymous product telemetry to understand command usage, latency, and failures.
 
-```
-USAGE
-  $ fotingo review
+- Enabled by default (`telemetry.enabled: true`)
+- Opt out anytime:
 
-OPTIONS
-  -b, --branch=branch        Name of the base branch of the pull request
-  -d, --draft                Create a draft pull request
-  -l, --labels=labels        Labels to add to the pull request
-  -r, --reviewers=reviewers  Request some people to review your pull request
-  -s, --simple               Do not use any issue tracker
-  -y, --yes                  Do not prompt for any input but accept all the defaults
+```bash
+fotingo config set telemetry.enabled false
 ```
 
-_See code: [src/commands/review.ts](https://github.com/tagoro9/fotingo/blob/v4.7.2/src/commands/review.ts)_
+- Telemetry never sends raw tokens, freeform descriptions/titles, branch names, issue IDs, or raw API URLs.
 
-## `fotingo start [ISSUE]`
+See [docs/telemetry.md](./docs/telemetry.md) for event categories and privacy constraints.
 
-Start working on an issue
+## Documentation
 
-```
-USAGE
-  $ fotingo start [ISSUE]
+User and maintainer docs live in [`docs/`](./docs/README.md):
 
-ARGUMENTS
-  ISSUE  Id of the issue to start working with
+- [Breaking Changes v5](./docs/breaking-changes/v5.md)
+- [Authentication](./docs/authentication.md)
+- [CLI Reference](./docs/cli-reference.md)
+- [Configuration](./docs/configuration.md)
+- [Telemetry](./docs/telemetry.md)
+- [Automation and JSON](./docs/automation-and-json.md)
+- [Shell Completion](./docs/shell-completion.md)
+- [Exit Codes](./docs/exit-codes.md)
+- [Release Operations](./docs/release-operations.md)
+- [Homebrew Tap Setup](./docs/homebrew-tap-setup.md)
 
-OPTIONS
-  -a, --parent=parent            Parent of the issue to be created
-  -b, --branch=branch            Name of the base branch of the pull request
-  -d, --description=description  Description of the issue to be created
-  -k, --kind=kind                Kind of issue to be created
-  -l, --labels=labels            Labels to add to the issue
-  -n, --no-branch-issue          Do not create a branch with the issue name
-  -p, --project=project          Name of the project where to create the issue
-  -t, --title=title              Title of issue to create
-```
+## Why Fotingo?
 
-_See code: [src/commands/start.ts](https://github.com/tagoro9/fotingo/blob/v4.7.2/src/commands/start.ts)_
+Jira-backed development often repeats the same sequence:
 
-## `fotingo verify`
+1. Pick/assign an issue
+2. Move it to `In Progress`
+3. Create a correctly named branch
+4. Implement and commit
+5. Open and enrich a PR
+6. Move issue to `In Review` and add PR link
 
-Verify that fotingo can authenticate with the remote services
+Fotingo turns this into a small set of consistent commands.
 
-```
-USAGE
-  $ fotingo verify
-```
+## What is a Fotingo?
 
-_See code: [src/commands/verify.ts](https://github.com/tagoro9/fotingo/blob/v4.7.2/src/commands/verify.ts)_
-<!-- commandsstop -->
-<!-- prettier-ignore-end -->
-
-## Semantic release
-
-Fotingo can be used as a [semantic-release](https://github.com/semantic-release/semantic-release) plugin via https://github.com/tagoro9/semantic-release-fotingo
-
-## Configuration
-
-Fotingo will try to guess most of the information based on the user environment, but there is some data that it still
-needs to be stored. On the first run, fotingo will create a `.fotingorc` configuration file inside your home directory.
-This file is used to store access tokens and some basic configuration information.
-
-### Local configuration files
-
-You can create project-specific configuration files. Just create a `.fotingorc` file inside your project root folder.
-This file, needs to be in JSON format as well. You can also overwrite global configuration in this file. An example
-config file may just be:
-
-```json
-{
-  "git": {
-    "baseBranch": "develop"
-  }
-}
-```
-
-### Configuration properties
-
-Fotingo will use as many defaults as possible to make it easier to use, but maybe you want to change some of the
-defaults. In that case, you can update any of the next properties in a fotingo configuration file
-
-| Path                       | Description                                       | default                         |
-| -------------------------- | ------------------------------------------------- | ------------------------------- |
-| git.baseBranch             | Git base branch to use when creating new branches | master                          |
-| git.branchTemplate         | Template used when creating a new branch          | See [templates](#templates)     |
-| git.remote                 | Git remote to use                                 | origin                          |
-| github.authToken           | Auth token to connect to Github                   | -                               |
-| github.owner               | Owner of the repository when creating a PR        | Extracted from remote           |
-| github.pullRequestTemplate | Template to use when creating a PR                | See [templates](#templates)     |
-| github.repo                | Name of the repository when creating a PR         | Extracted from remote           |
-| jira.releaseTemplate       | Template to use when creating a release           | See [templates](#templates)     |
-| jira.root                  | URL root to the Jira server                       | -                               |
-| jira.status                | Regexes to identify workflow statuses             | See [jira status](#jira-status) |
-| jira.user.login            | User login to connect to Jira                     | -                               |
-| jira.user.token            | User token to connect to Jira                     | -                               |
-
-### Environment variables
-
-Some of the fotingo configuration properties can be set using environment variables.
-
-| Variable                | Property         |
-| ----------------------- | ---------------- |
-| FOTINGO_JIRA_ROOT       | jira.root        |
-| FOTINGO_JIRA_USER_LOGIN | jira.user.login  |
-| FOTINGO_JIRA_USER_TOKEN | jira.user.token  |
-| FOTINGO_GIT_REMOTE      | git.remote       |
-| GITHUB_TOKEN            | github.authToken |
-
-### Templates
-
-There are some configuration properties in fotingo that are template based, meaning that they can be customized to better
-suit your needs.
-
-You can use `{` and `}` to interpolate the desired data. This is the data that is available in each template:
-
-- `jira.releaseTemplate`
-
-  - `version`. The version name specified through the CLI
-  - `fixedIssuesByCategory`. Text that contains a list of the fixed issues by category
-  - `fotingo.banner`. Banner that indicates that the release was created with fotingo
-
-- `github.pullRequestTemplate`. fotingo will give preference to the template specified in `.github/PULL_REQUEST_TEMPLATE/fotingo.md`,
-  `PULL_REQUEST_TEMPLATE.md`, `.github/PULL_REQUEST_TEMPLATE.md` file. If those files don't exist, it will use
-  the template specified in the configuration file.
-
-  - `branchName`. Name of the branch
-  - `changes`. List of the commit messages in the PR
-  - `fixedIssues`. Text with the comma separated list of the fixed issues
-  - `summary`. Pull request summary. Summary of the first Jira issue in the PR or first commit header if there are no
-    fixed issues
-  - `description`. Description of the first Jira issue in the PR or first commit body if there are no fixed issues
-  - `fotingo.banner`. Banner that indicates that the release was created with fotingo
-
-- `git.branchTemplate`
-
-  - `issue.shortName`. A short name that represents a Jira issue type (e.g. _f_ for features).
-  - `issue.key`. The key of the issue.
-  - `issue.sanitizedSummary`. This is the summary of the issue, sanitized for use as a branch name.
-
-### Jira status
-
-Fotingo internally uses 5 status for an issue: `Backlog`, `Selected for Development`, `In progress`, `In review`, `Done`.
-It automatically tries to map these statuses to Jira statuses, but sometimes projects may have simplified statuses in
-Jira and fotingo won't be able to do the mapping automatically. If that is the case, the `jira.status` config can be
-used to help fotingo do the mapping. Each entry should be a regex to map to that status:
-
-```json
-{
-  "jira": {
-    "status": {
-      "BACKLOG": "backlog",
-      "IN_PROGRESS": "in progress",
-      "IN_REVIEW": "review",
-      "DONE": "done",
-      "SELECTED_FOR_DEVELOPMENT": "(todo)|(to do)|(selected for development)"
-    }
-  }
-}
-```
-
-Multiple fotingo status can point to the same Jira status.
-
-## Why fotingo?
-
-When working on _Jira_ backed projects, I see a common pattern I repeat several times a day:
-
-- Pick an issue in _Jira_ to work on
-- Assign the issue to me and transition it to _in progress_
-- Create a new branch in my local Git repository that follows certain naming conventions
-- Do the work and commit some changes
-- Create a _GitHub_ pull request with a description very similar to the ticket and a link back to the _Jira_ issue
-- Set different _GitHub_ labels and request reviewers
-- Set the _Jira_ issue state to _In Review_ and add a comment with the pull request URL
-- Merge the PR and deploy the code via a CI server
-- Create a Jira release and update the issue fix version and status
-- Create a GitHub release that points back to Jira and has meaningful release notes
-
-This seems like a reasonable workflow, but when addressing several issues on a given day, this process becomes very
-cumbersome. Thus... Fotingo.
-
-## Debugging
-
-If you run into problems, you can get more verbose output from the tool by adding:
-
-    DEBUG="fotingo:*" fotingo ...
-
-## Running locally
-
-In order to run the tool locally you will have to clone the repo and then run:
-
-    yarn link
-
-After that, just run `yarn run watch` and the script will compile with every change you make to the source code.
-
-## Troubleshooting
-
-### `fotingo not found` when installing with yarn.
-
-You need to have the directory where yarn installs global packages in your path. You can read more about
-that [here](https://github.com/yarnpkg/yarn/issues/648)
-and [here](https://github.com/yarnpkg/yarn/issues/851). You just need to
-add `export PATH="$(yarn global bin | grep -o '/.*'):$PATH"`
-to your `.bash_profile` or equivalent.
+In Canary Islands Spanish, "fotingo" means an old, rickety car. One origin story links it to Ford's "foot 'n go" phrase from the Model T era. The name fits the CLI goal: minimal friction to get moving.
 
 ## Contributing
 
-If you want to extend this tool with anything, feel free to submit a pull request.
+Contributions are welcome. Open an issue or submit a pull request.
 
-## What is a fotingo?
+## License
 
-This word in Spanish (Canary Islands) means _Rickety old car_, but what is more interesting is the word's origin: In 1908
-the _Ford Motor Company_ released the _Ford Model T_ with the slogan of _foot 'n go_, as in, just put your "foot on the
-pedal and go". In some hispanic regions this morphed into the current version of _fotingo_. With a single command, you
-can put your _foot 'n go_ on your next issue.
+MIT License. See [LICENSE](LICENSE).

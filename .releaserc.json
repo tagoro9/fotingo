@@ -1,29 +1,3 @@
 {
-  "branches": [
-    "main",
-    {"name": "next", "channel": "next"}
-  ],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    [
-      "@semantic-release/npm",
-      {
-        "tarballDir": "pack"
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "assets": "pack/*.tgz"
-      }
-    ],
-    [
-      "semantic-release-github-pullrequest",
-      {
-        "assets": ["package.json", "README.md"],
-        "baseRef": "main"
-      }
-    ]
-  ]
+  "extends": "@open-turo/semantic-release-config"
 }
