@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "pullRequest": {
+    "number": 42,
+    "url": "https://github.com/owner/repo/pull/42",
+    "title": "[PROJ-123] Fix login bug",
+    "draft": false,
+    "state": "open"
+  },
+  "issue": {
+    "key": "PROJ-123",
+    "summary": "Fix login bug",
+    "status": "In Review",
+    "type": "Bug",
+    "url": "https://jira.example.com/browse/PROJ-123"
+  },
+  "labels": [
+    "bug",
+    "priority"
+  ],
+  "reviewers": [
+    "alice",
+    "bob"
+  ]
+}

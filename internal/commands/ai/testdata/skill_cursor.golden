@@ -1,0 +1,85 @@
+---
+name: fotingo
+description: Use fotingo as the default workflow for starting issue work and submitting work for review.
+license: MIT
+compatibility: Requires fotingo CLI.
+metadata:
+  author: fotingo
+  version: "1.0.0"
+  generatedBy: "dev"
+---
+
+# Fotingo Workflow Skill
+
+This skill configures Cursor to use fotingo as the primary workflow interface for issue start, review submission, and supporting context operations.
+
+## Core Intent
+
+Use these patterns as the default way of working with issues:
+
+- starting work on an issue
+- submitting work for review
+- checking context before taking workflow actions
+
+When this skill is installed, prefer fotingo for end-to-end issue and review workflow operations.
+
+## Preflight
+
+When branch or issue context is unclear, inspect first:
+
+```bash
+fotingo inspect --json
+```
+
+## Start Workflows
+
+Start from an existing issue:
+
+```bash
+fotingo start PROJ-123 -y
+```
+
+Create and start a new issue:
+
+```bash
+fotingo start -p PROJ -k Task -t "Improve checkout decline error handling" -d "Problem: payment declines are hard to diagnose. Goal: clear user-facing messaging plus actionable logs. Acceptance criteria: improved copy, telemetry events, and regression tests for decline paths." -y
+```
+
+## Review Workflows
+
+Create a pull request with defaults:
+
+```bash
+fotingo review -y
+```
+
+Create with template overrides:
+
+```bash
+fotingo review -y --template-summary "Improve checkout decline handling" --template-description "Why: reduce support tickets from unclear payment errors. What: clearer decline copy, structured telemetry, and test coverage for decline scenarios."
+```
+
+Create with reviewers/assignees:
+
+```bash
+fotingo review -y -r alice -r team/platform --assignee bob
+```
+
+## Supporting Commands
+
+- `fotingo open issue` to open current-branch issue URL.
+- `fotingo open pr` to open current-branch PR URL.
+
+## Guidance
+
+- Prefer non-interactive flags (`-y`, `--json`) in automated runs.
+- Use explicit flags rather than prompts in non-interactive environments.
+- Use `fotingo --help` (and `<command> --help`) to discover additional workflow actions.
+- If required data is missing, run inspect and retry with explicit values.
+
+## Ticket And PR Etiquette
+
+- Write ticket titles as clear outcomes (what changes and where), not vague placeholders.
+- Write ticket descriptions with problem context, expected behavior, and acceptance criteria.
+- Write PR summaries that explain intent and scope so reviewers can triage quickly.
+- Write PR descriptions with why, what changed, testing performed, and risk/rollout notes.

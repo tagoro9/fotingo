@@ -1,0 +1,73 @@
+:root {
+  --bg-top: #eef3ff;
+  --bg-bottom: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #334155;
+  --brand-bg: #0f172a;
+  --brand-text: #f8fafc;
+  --card-border: #dbe3ef;
+  --accent: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Avenir Next", "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: var(--text-main);
+  background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+}
+
+.layout {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.card {
+  width: min(34rem, 100%);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1.5rem 1.5rem 1.2rem;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.1);
+}
+
+.brand {
+  display: inline-block;
+  background: var(--brand-bg);
+  color: var(--brand-text);
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 0.22rem 0.66rem;
+}
+
+h1 {
+  margin: 0.85rem 0 0.65rem;
+  font-size: clamp(1.35rem, 1.2rem + 0.8vw, 1.75rem);
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.action {
+  margin-top: 0.95rem;
+  color: var(--accent);
+  font-weight: 700;
+}
