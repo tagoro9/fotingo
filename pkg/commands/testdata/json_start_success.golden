@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "issue": {
+    "key": "PROJ-123",
+    "summary": "Fix login bug",
+    "status": "In Progress",
+    "type": "Bug",
+    "url": "https://jira.example.com/browse/PROJ-123"
+  },
+  "branch": {
+    "name": "feature/PROJ-123-fix-login-bug",
+    "created": true
+  }
+}

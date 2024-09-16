@@ -1,0 +1,38 @@
+Open various project-related URLs in your default browser.
+
+Available targets:
+  branch  - Open the current branch on GitHub
+  issue   - Open the Jira issue associated with the current branch
+  pr      - Open the pull request for the current branch
+  repo    - Open the repository homepage on GitHub
+
+Examples:
+  # Open the current branch on GitHub
+  fotingo open branch
+
+  # Open the Jira issue for the current branch
+  fotingo open issue
+
+  # Open the pull request for the current branch
+  fotingo open pr
+
+  # Open the repository homepage
+  fotingo open repo
+
+  # Get the URL as JSON without opening browser
+  fotingo open pr --json
+
+Usage:
+  fotingo open [what] [flags]
+
+Flags:
+  -h, --help   help for open
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting
