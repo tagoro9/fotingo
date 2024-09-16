@@ -1,0 +1,33 @@
+Inspect and update fotingo configuration values.
+
+Examples:
+  # Browse config values interactively
+  fotingo config view
+
+  # Get a specific key
+  fotingo config get git.remote
+
+  # Update a key
+  fotingo config set git.remote upstream
+
+Usage:
+  fotingo config [command]
+
+Available Commands:
+  get         Get one configuration value or browse all keys
+  set         Set a configuration value
+  view        Interactively browse configuration keys
+
+Flags:
+  -h, --help   help for config
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting
+
+Use "fotingo config [command] --help" for more information about a command.
