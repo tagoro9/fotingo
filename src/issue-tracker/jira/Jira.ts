@@ -331,9 +331,10 @@ export class Jira implements Tracker {
   @boundMethod
   private convertIssue(issue: JiraIssue): Issue {
     return {
-      description: issue.renderedFields.description
-        ? turnDownService.turndown(issue.renderedFields.description)
-        : undefined,
+      description:
+        issue.renderedFields.description || issue.fields.description
+          ? turnDownService.turndown(issue.renderedFields.description)
+          : undefined,
       id: issue.id,
       key: issue.key,
       project: {

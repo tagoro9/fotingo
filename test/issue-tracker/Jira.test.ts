@@ -92,10 +92,19 @@ describe('jira', () => {
       const issue = await lastValueFrom(jira.getIssue(jiraIssue.key));
       expect(issue).not.toBeUndefined();
       expect(issue.sanitizedSummary).not.toContain(':');
+      expect(issue.description).not.toBeUndefined();
       expect(issue).toMatchSnapshot();
       expect(httpClientMocks.get).toHaveBeenCalledWith(`/issue/${jiraIssue.key}`, {
         qs: { expand: 'transitions, renderedFields' },
       });
+    });
+
+    it('uses the description when the rendered field description is not present', async () => {
+      const jiraIssue = data.createJiraIssue();
+      jiraIssue.renderedFields.description = 'Rendered description';
+      httpClientMocks.get.mockReturnValue(of(data.createHttpResponse(jiraIssue)));
+      const issue = await lastValueFrom(jira.getIssue(jiraIssue.key));
+      expect(issue.description).toBe(jiraIssue.renderedFields.description);
     });
   });
 

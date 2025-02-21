@@ -34,7 +34,7 @@ exports[`jira getCurrentUser should map the jira errors 1`] = `
 
 exports[`jira getIssue gets and transforms the issue from Jira 1`] = `
 {
-  "description": undefined,
+  "description": "Eligendi placeat eos hic. Nostrum nam vel ipsa consequuntur nam repellendus. Architecto animi consectetur eaque quibusdam suscipit dolore similique. Quisquam similique eius non eveniet aut ullam. Odio perspiciatis sapiente porro illum quasi necessitatibus necessitatibus.",
   "id": 3695,
   "key": "FOTINGO-1314",
   "project": {
