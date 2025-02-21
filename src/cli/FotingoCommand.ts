@@ -71,7 +71,6 @@ export abstract class FotingoCommand<T, R> extends Command {
 
   constructor(argv: string[], config: IConfig) {
     super(argv, config);
-    console.log('Constructing command');
     this.startTime = Date.now();
     this.createConfigFolder();
     this.isCi = envCi().isCi;
@@ -206,7 +205,6 @@ export abstract class FotingoCommand<T, R> extends Command {
   }
 
   async run(): Promise<void> {
-    console.log('Running command');
     const { waitUntilExit } = renderUi({
       cmd: () => {
         const commandData = this.getCommandData();
