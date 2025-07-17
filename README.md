@@ -17,8 +17,7 @@ npm install -g fotingo
 
 The first time that you run fotingo, it will ask you for some information:
 
-- A GitHub personal access token. You can create one [here](https://github.com/settings/tokens). Only _repo_ permissions
-  are needed
+- A GitHub personal access token. You can create one [here](https://github.com/settings/tokens). Select 'Generate new token (Classic)', then select the 'repo' option which will auto-select the appropriate sub-permissions required.
 - Your Jira username
 - Your Jira server root URL
 - A Jira access token for your user. You can create one [here](https://id.atlassian.com/manage/api-tokens)
