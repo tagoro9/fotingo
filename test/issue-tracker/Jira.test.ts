@@ -120,6 +120,7 @@ describe('jira', () => {
         {
           "qs": {
             "expand": "transitions, renderedFields",
+            "fields": "*all",
             "jql": "assignee=Jerry.Rosenbaum AND status IN ('backlog','To do','to do') ORDER BY CREATED DESC",
           },
         }

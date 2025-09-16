@@ -71,9 +71,11 @@ const isCreateSubTask = (
   return 'parent' in createIssue;
 };
 
-// Using Jira REST API v2 (https://developer.atlassian.com/cloud/jira/platform/rest/v2)
+// Using Jira REST API v2 for most endpoints, v3 for search (https://developer.atlassian.com/cloud/jira/platform/rest/)
+// TODO Use v3 for all endpoints
 export class Jira implements Tracker {
   private client: HttpClient;
+  private searchClient: HttpClient;
   private config: TrackerConfig;
   private messenger: Messenger;
   private readonly debug: Debugger;
@@ -82,11 +84,17 @@ export class Jira implements Tracker {
   constructor(config: TrackerConfig, messenger: Messenger) {
     this.config = config;
     this.messenger = messenger;
-    // TODO Add a new client for agile API https://developer.atlassian.com/cloud/jira/software/rest/
+    // Main client uses API v2 for compatibility
     this.client = new HttpClient({
       allowConcurrentRequests: false,
       auth: { password: config.user.token, username: config.user.login },
       root: `${config.root}/rest/api/2`,
+    });
+    // Separate client for v3 search endpoints (required due to API deprecation)
+    this.searchClient = new HttpClient({
+      allowConcurrentRequests: false,
+      auth: { password: config.user.token, username: config.user.login },
+      root: `${config.root}/rest/api/3`,
     });
     this.debug = debug.extend('jira');
   }
@@ -296,6 +304,7 @@ export class Jira implements Tracker {
       switchMap(([user, status]: [User, Partial<Record<IssueStatus, JiraIssueStatus[]>>]) => {
         const qs = {
           expand: 'transitions, renderedFields',
+          fields: '*all',
           jql: `assignee=${user.accountId} AND status IN (${[
             IssueStatus.BACKLOG,
             IssueStatus.SELECTED_FOR_DEVELOPMENT,
@@ -305,7 +314,7 @@ export class Jira implements Tracker {
             .filter((s) => s !== undefined)
             .join(',')}) ORDER BY CREATED DESC`,
         };
-        return this.client.get<{ issues: JiraIssue[] }>(`/search`, {
+        return this.searchClient.get<{ issues: JiraIssue[] }>(`/search/jql`, {
           qs: qs,
         });
       }),
