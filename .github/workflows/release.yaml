@@ -12,7 +12,6 @@ concurrency:
 jobs:
   release:
     name: Release
-    if: false
     outputs:
       new-release-version: ${{ steps.release.outputs.new-release-version }}
     runs-on: ubuntu-latest
