@@ -68,6 +68,7 @@ type interactiveContext struct {
 
 // RunInteractive executes the interactive start flow.
 func (r WorkflowRunner) RunInteractive(cmd *cobra.Command, issueID string) error {
+	issueID = normalizeWorkflowIssueID(issueID, r.Config)
 	if err := r.validateDeps(); err != nil {
 		return err
 	}
@@ -94,6 +95,7 @@ func (r WorkflowRunner) RunInteractive(cmd *cobra.Command, issueID string) error
 // RunWithResult executes the non-interactive start flow used by JSON mode.
 func (r WorkflowRunner) RunWithResult(cmd *cobra.Command, statusCh *chan string, issueID string, out WorkflowEmitter) WorkflowResult {
 	result := WorkflowResult{}
+	issueID = normalizeWorkflowIssueID(issueID, r.Config)
 	if err := r.validateDeps(); err != nil {
 		result.Err = err
 		return result
@@ -383,6 +385,15 @@ func logStartPhaseTiming(out WorkflowEmitter, phase string, start time.Time) {
 		return
 	}
 	out.DebugRaw(fmt.Sprintf("start timing phase=%s duration=%s", phase, commandruntime.HumanizeDuration(time.Since(start))))
+}
+
+func normalizeWorkflowIssueID(issueID string, cfg *viper.Viper) string {
+	jiraRoot := ""
+	if cfg != nil {
+		jiraRoot = cfg.GetString("jira.root")
+	}
+
+	return NormalizeIssueInput(issueID, jiraRoot)
 }
 
 func (r WorkflowRunner) validateDeps() error {

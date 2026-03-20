@@ -13,6 +13,7 @@ Package start contains reusable command logic for the start workflow.
 ## Index
 
 - [func IssueMatchesAllowedTypes\(issueType tracker.IssueType, allowed \[\]tracker.IssueType\) bool](<#IssueMatchesAllowedTypes>)
+- [func NormalizeIssueInput\(raw string, jiraRoot string\) string](<#NormalizeIssueInput>)
 - [func ParseInteractiveLabels\(raw string\) \[\]string](<#ParseInteractiveLabels>)
 - [func ParseIssueKind\(kind string\) \(tracker.IssueType, bool\)](<#ParseIssueKind>)
 - [func ProjectIssueTypeNames\(issueTypes \[\]tracker.ProjectIssueType\) \[\]string](<#ProjectIssueTypeNames>)
@@ -40,6 +41,15 @@ func IssueMatchesAllowedTypes(issueType tracker.IssueType, allowed []tracker.Iss
 ```
 
 IssueMatchesAllowedTypes reports whether the issue type is allowed.
+
+<a name="NormalizeIssueInput"></a>
+## func [NormalizeIssueInput](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/link_resolver.go#L117>)
+
+```go
+func NormalizeIssueInput(raw string, jiraRoot string) string
+```
+
+NormalizeIssueInput converts a matching Jira browse URL into its issue key.
 
 <a name="ParseInteractiveLabels"></a>
 ## func [ParseInteractiveLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/helpers.go#L28>)
@@ -233,7 +243,7 @@ func (r WorkflowRunner) RunInteractive(cmd *cobra.Command, issueID string) error
 RunInteractive executes the interactive start flow.
 
 <a name="WorkflowRunner.RunWithResult"></a>
-### func \(WorkflowRunner\) [RunWithResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L95>)
+### func \(WorkflowRunner\) [RunWithResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L96>)
 
 ```go
 func (r WorkflowRunner) RunWithResult(cmd *cobra.Command, statusCh *chan string, issueID string, out WorkflowEmitter) WorkflowResult
