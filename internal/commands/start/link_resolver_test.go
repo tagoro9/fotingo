@@ -88,6 +88,17 @@ func TestResolveIssueLink_MatchingJiraBrowseURL(t *testing.T) {
 	assert.Equal(t, 0, client.searchCalls)
 }
 
+func TestNormalizeIssueInput_MatchingJiraBrowseURL(t *testing.T) {
+	t.Parallel()
+
+	normalized := NormalizeIssueInput(
+		"https://tagoro9.atlassian.net/browse/FOTINGO-17?focusedCommentId=1",
+		"https://tagoro9.atlassian.net",
+	)
+
+	assert.Equal(t, "FOTINGO-17", normalized)
+}
+
 func TestResolveIssueLink_NonMatchingJiraBrowseURLFallsBackToSearch(t *testing.T) {
 	t.Parallel()
 

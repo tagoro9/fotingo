@@ -151,7 +151,8 @@ func (m *workflowMockGit) SaveConfig(string, any) error {
 }
 
 type workflowMockJira struct {
-	setIssue *jira.Issue
+	setIssue          *jira.Issue
+	setIssueStatusIDs []string
 }
 
 func (m *workflowMockJira) Name() string { return "Jira" }
@@ -196,7 +197,8 @@ func (m *workflowMockJira) GetIssueUrl(string) (string, error) { return "", nil 
 func (m *workflowMockJira) GetJiraIssue(string) (*jira.Issue, error) {
 	return m.setIssue, nil
 }
-func (m *workflowMockJira) SetJiraIssueStatus(string, jira.IssueStatus) (*jira.Issue, error) {
+func (m *workflowMockJira) SetJiraIssueStatus(issueID string, _ jira.IssueStatus) (*jira.Issue, error) {
+	m.setIssueStatusIDs = append(m.setIssueStatusIDs, issueID)
 	return m.setIssue, nil
 }
 func (m *workflowMockJira) SearchIssues(string, string, []tracker.IssueType, int) ([]tracker.Issue, error) {
@@ -266,4 +268,49 @@ func TestWorkflowRunnerProgressStartWorkflow_WaitsForGitDebugForwarding(t *testi
 	assert.Equal(t, 1, gitClient.fetchDefaultCalls)
 	assert.Equal(t, 1, gitClient.createBranchCalls)
 	assert.Equal(t, 1, gitClient.hasUncommitedCalls)
+}
+
+func TestWorkflowRunnerRunWithResult_NormalizesJiraBrowseURLInput(t *testing.T) {
+	jiraClient := &workflowMockJira{
+		setIssue: &jira.Issue{
+			Key:     "DEVOPS-13148",
+			Summary: "Test URL start flow",
+			Type:    "Task",
+			Status:  string(jira.StatusInProgress),
+		},
+	}
+	runner := WorkflowRunner{
+		Config: func() *viper.Viper {
+			cfg := viper.New()
+			cfg.Set("jira.root", "https://team-turo.atlassian.net")
+			return cfg
+		}(),
+		Options: WorkflowOptions{NoBranch: true},
+		Deps: WorkflowDeps{
+			NormalizeFlags: func(*cobra.Command, string) error { return nil },
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return jiraClient, nil
+			},
+			CreateNewIssue: func(WorkflowEmitter, jira.Jira) (*jira.Issue, error) { return nil, nil },
+			SelectIssueWithPicker: func([]tracker.Issue) (*tracker.Issue, error) {
+				return nil, nil
+			},
+			RunWithSpinner:       func(func(WorkflowEmitter) error) error { return nil },
+			ResolveIssueAssignee: func(WorkflowEmitter, jira.Jira, string) {},
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return nil, nil
+			},
+			StashChanges: func(WorkflowEmitter, git.Git) error { return nil },
+		},
+	}
+
+	result := runner.RunWithResult(
+		&cobra.Command{},
+		nil,
+		"https://team-turo.atlassian.net/browse/DEVOPS-13148",
+		nil,
+	)
+	require.NoError(t, result.Err)
+	require.Len(t, jiraClient.setIssueStatusIDs, 1)
+	assert.Equal(t, "DEVOPS-13148", jiraClient.setIssueStatusIDs[0])
 }

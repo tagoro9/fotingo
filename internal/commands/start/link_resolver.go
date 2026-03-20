@@ -113,6 +113,18 @@ func ResolveIssueLink(client IssueLinkClient, opts ResolveIssueLinkOptions) (str
 	}
 }
 
+// NormalizeIssueInput converts a matching Jira browse URL into its issue key.
+func NormalizeIssueInput(raw string, jiraRoot string) string {
+	trimmed := strings.TrimSpace(raw)
+	if trimmed == "" {
+		return ""
+	}
+	if issueID, ok := extractIssueIDFromJiraBrowseURL(trimmed, jiraRoot); ok {
+		return issueID
+	}
+	return trimmed
+}
+
 func extractIssueIDFromJiraBrowseURL(raw string, jiraRoot string) (string, bool) {
 	normalizedRoot, err := commandruntime.NormalizeHTTPSRootURL(jiraRoot, "jira root")
 	if err != nil {
