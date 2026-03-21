@@ -18,7 +18,7 @@ repos:
         stages: [commit-msg]
         additional_dependencies: ["@open-turo/commitlint-config-conventional"]
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.1
+    rev: v1.7.11
     hooks:
       - id: actionlint
   - repo: https://github.com/turo/pre-commit-hooks
@@ -29,7 +29,7 @@ repos:
       - id: go-build
       - id: gomarkdoc
   - repo: https://github.com/golangci/golangci-lint
-    rev: v2.11.2
+    rev: v2.11.3
     hooks:
       - id: golangci-lint-full
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
