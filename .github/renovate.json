@@ -1,3 +1,3 @@
 {
-  "extends": ["github>open-turo/renovate-config#v1.17.0"]
+  "extends": ["github>open-turo/renovate-config#v1.17.1"]
 }
