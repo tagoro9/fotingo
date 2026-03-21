@@ -37,7 +37,7 @@ jobs:
       - name: Get token
         id: get_token
         if: steps.check.outputs.should-run == 'true'
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           private-key: ${{ secrets.RENOVATE_BOT_PRIVATE_KEY }}
           app-id: ${{ secrets.RENOVATE_BOT_APP_ID }}
