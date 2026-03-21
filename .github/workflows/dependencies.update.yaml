@@ -1,4 +1,4 @@
-name: Update dependencies
+name: Dependencies - update
 concurrency: update-dependencies
 
 on:
@@ -27,7 +27,7 @@ jobs:
           RENOVATE_BOT_USERNAME: ${{ secrets.RENOVATE_BOT_USERNAME }}
         run: |
           # shellcheck disable=SC2235
-          if [[ "${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) }}" == "true" ]] || ([[ "${{ contains(fromJSON('["issues", "issue_comment", "pull_request"]'), github.event_name) }}" == "true" ]] && [[ "${{ github.event.sender.login }}" == "$RENOVATE_BOT_USERNAME" ]] && [[ "${{ github.event.action }}" == "edited" || "${{ github.event.action }}" == "synchronize" ]]); then
+          if [[ "${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) }}" == "true" ]] || ([[ "${{ contains(fromJSON('["issues", "issue_comment"]'), github.event_name) }}" == "true" ]] && [[ "${{ github.event.issue.user.login }}" == "$RENOVATE_BOT_USERNAME" ]] && [[ "${{ github.event.action }}" == "edited" ]]) || ([[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.pull_request.user.login }}" == "$RENOVATE_BOT_USERNAME" ]] && [[ "${{ github.event.action }}" == "edited" || "${{ github.event.action }}" == "synchronize" ]]); then
             # shellcheck disable=SC2086
             echo "should-run=true" >> $GITHUB_OUTPUT
           else
