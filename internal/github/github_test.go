@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	hub "github.com/google/go-github/v65/github"
+	hub "github.com/google/go-github/v84/github"
 	giturl "github.com/kubescape/go-git-url"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"

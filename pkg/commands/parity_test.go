@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	hub "github.com/google/go-github/v65/github"
+	hub "github.com/google/go-github/v84/github"
 	giturl "github.com/kubescape/go-git-url"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -37,7 +37,7 @@ func TestRunLoginWithStatus_Success(t *testing.T) {
 
 	newGitHubAuthClient = func(cfg *viper.Viper) (github.Github, error) {
 		return &mockGitHub{
-			currentUser: &hub.User{Login: hub.String("octocat")},
+			currentUser: &hub.User{Login: hub.Ptr("octocat")},
 		}, nil
 	}
 	newJiraAuthClient = func(cfg *viper.Viper) (jira.Jira, error) {
@@ -93,7 +93,7 @@ func TestRunLoginWithStatus_DoesNotRequireGitRepository(t *testing.T) {
 		return nil, errors.New("not a git repository")
 	}
 	newGitHubAuthClient = func(cfg *viper.Viper) (github.Github, error) {
-		return &mockGitHub{currentUser: &hub.User{Login: hub.String("octocat")}}, nil
+		return &mockGitHub{currentUser: &hub.User{Login: hub.Ptr("octocat")}}, nil
 	}
 	newJiraAuthClient = func(cfg *viper.Viper) (jira.Jira, error) {
 		return &mockJira{currentUser: &tracker.User{Name: "jira-user"}}, nil
@@ -125,7 +125,7 @@ func TestRunLoginWithStatus_Jira401RetriesWithFreshCredentials(t *testing.T) {
 	fotingoConfig = cfg
 
 	newGitHubAuthClient = func(cfg *viper.Viper) (github.Github, error) {
-		return &mockGitHub{currentUser: &hub.User{Login: hub.String("octocat")}}, nil
+		return &mockGitHub{currentUser: &hub.User{Login: hub.Ptr("octocat")}}, nil
 	}
 
 	attempt := 0
@@ -163,7 +163,7 @@ func TestRunLoginWithStatus_WarnsWhenStoredOAuthTokenIgnored(t *testing.T) {
 	fotingoConfig = cfg
 
 	newGitHubAuthClient = func(cfg *viper.Viper) (github.Github, error) {
-		return &mockGitHub{currentUser: &hub.User{Login: hub.String("octocat")}}, nil
+		return &mockGitHub{currentUser: &hub.User{Login: hub.Ptr("octocat")}}, nil
 	}
 	newJiraAuthClient = func(cfg *viper.Viper) (jira.Jira, error) {
 		return &mockJira{currentUser: &tracker.User{Name: "jira-user"}}, nil

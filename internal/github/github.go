@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/cli/oauth"
-	hub "github.com/google/go-github/v65/github"
+	hub "github.com/google/go-github/v84/github"
 	"github.com/spf13/viper"
 	"github.com/tagoro9/fotingo/internal/auth"
 	"github.com/tagoro9/fotingo/internal/cache"
