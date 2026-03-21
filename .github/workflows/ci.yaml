@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
       - name: Setup tools
         uses: open-turo/action-setup-tools@v3
-      - uses: mfinelli/setup-shfmt@v3
+      - uses: mfinelli/setup-shfmt@v4
       - name: Install Gomarkdoc
         shell: bash
         run: go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@v1.1.0
