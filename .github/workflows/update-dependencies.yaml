@@ -1,0 +1,53 @@
+name: Update dependencies
+concurrency: update-dependencies
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  issues:
+    types:
+      - edited
+  issue_comment:
+    types:
+      - edited
+  pull_request:
+    types:
+      - edited
+      - synchronize
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    name: Update dependencies
+    steps:
+      - name: Check conditions
+        id: check
+        env:
+          RENOVATE_BOT_USERNAME: ${{ secrets.RENOVATE_BOT_USERNAME }}
+        run: |
+          # shellcheck disable=SC2235
+          if [[ "${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) }}" == "true" ]] || ([[ "${{ contains(fromJSON('["issues", "issue_comment", "pull_request"]'), github.event_name) }}" == "true" ]] && [[ "${{ github.event.sender.login }}" == "$RENOVATE_BOT_USERNAME" ]] && [[ "${{ github.event.action }}" == "edited" || "${{ github.event.action }}" == "synchronize" ]]); then
+            # shellcheck disable=SC2086
+            echo "should-run=true" >> $GITHUB_OUTPUT
+          else
+            # shellcheck disable=SC2086
+            echo "should-run=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Get token
+        id: get_token
+        if: steps.check.outputs.should-run == 'true'
+        uses: actions/create-github-app-token@v2
+        with:
+          private-key: ${{ secrets.RENOVATE_BOT_PRIVATE_KEY }}
+          app-id: ${{ secrets.RENOVATE_BOT_APP_ID }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+      - name: Update dependencies
+        if: steps.check.outputs.should-run == 'true'
+        uses: open-turo/action-renovate@v1
+        with:
+          github-token: ${{ steps.get_token.outputs.token }}
+        env:
+          RENOVATE_USERNAME: ${{ secrets.RENOVATE_BOT_USERNAME }}
+          RENOVATE_GIT_AUTHOR: ${{ secrets.RENOVATE_BOT_GIT_AUTHOR }}
