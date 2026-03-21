@@ -1,0 +1,137 @@
+name: Dependencies - pre-commit
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+concurrency:
+  group: renovate-pre-commit-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  FIXUP_COMMIT_MESSAGE: "refactor: fix lint issues"
+  RENOVATE_BOT_USERNAME: ${{ secrets.RENOVATE_BOT_USERNAME }}
+
+jobs:
+  check-last-commit:
+    name: Check last commit
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.final.outputs.skip }}
+    steps:
+      - name: Check Renovate PR
+        id: decision
+        shell: bash
+        run: |
+          if [[ "${{ github.event.pull_request.user.login }}" != "$RENOVATE_BOT_USERNAME" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+      - name: Get token
+        if: steps.decision.outputs.skip == 'false'
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          private-key: ${{ secrets.RENOVATE_BOT_PRIVATE_KEY }}
+          app-id: ${{ secrets.RENOVATE_BOT_APP_ID }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+      - name: Checkout PR branch
+        if: steps.decision.outputs.skip == 'false'
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Check for fixup commit
+        id: last-commit
+        if: steps.decision.outputs.skip == 'false'
+        shell: bash
+        run: |
+          if [[ "$(git log -1 --pretty=%s)" == "$FIXUP_COMMIT_MESSAGE" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Resolve skip output
+        id: final
+        shell: bash
+        run: |
+          if [[ "${{ steps.decision.outputs.skip }}" == "true" || "${{ steps.last-commit.outputs.skip }}" == "true" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  fix-pre-commit-issues:
+    name: Fix pre-commit issues
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs:
+      - check-last-commit
+    if: needs.check-last-commit.outputs.skip == 'false'
+    env:
+      RENOVATE_GIT_AUTHOR: ${{ secrets.RENOVATE_BOT_GIT_AUTHOR }}
+    steps:
+      - name: Get token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          private-key: ${{ secrets.RENOVATE_BOT_PRIVATE_KEY }}
+          app-id: ${{ secrets.RENOVATE_BOT_APP_ID }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Setup tools
+        uses: open-turo/action-setup-tools@v3
+      - name: Setup shfmt
+        uses: mfinelli/setup-shfmt@v4
+      - name: Install Gomarkdoc
+        shell: bash
+        run: go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@v1.1.0
+      - name: Run pre-commit
+        id: pre-commit
+        continue-on-error: true
+        uses: open-turo/action-pre-commit@v3.5.1
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+      - name: Detect changes
+        id: changes
+        shell: bash
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Parse Renovate author
+        id: author
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          author_name="${RENOVATE_GIT_AUTHOR% <*}"
+          author_email="${RENOVATE_GIT_AUTHOR##*<}"
+          author_email="${author_email%>}"
+          echo "name=$author_name" >> "$GITHUB_OUTPUT"
+          echo "email=$author_email" >> "$GITHUB_OUTPUT"
+      - name: Commit fixes
+        if: steps.changes.outputs.changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: ${{ env.FIXUP_COMMIT_MESSAGE }}
+          commit_author: ${{ env.RENOVATE_GIT_AUTHOR }}
+          commit_user_name: ${{ steps.author.outputs.name }}
+          commit_user_email: ${{ steps.author.outputs.email }}
