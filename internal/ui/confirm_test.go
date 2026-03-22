@@ -5,6 +5,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
+	teatest "github.com/tagoro9/fotingo/internal/testutil"
 )
 
 func TestNewConfirm(t *testing.T) {
@@ -162,7 +163,7 @@ func TestConfirmUpdate(t *testing.T) {
 	t.Run("handles ctrl+c to cancel", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
-		updated, cmd := c.Update(ctrlKey('c'))
+		updated, cmd := c.Update(teatest.CtrlKey('c'))
 		assert.True(t, updated.cancelled)
 		assert.NotNil(t, cmd)
 	})
@@ -190,21 +191,21 @@ func TestConfirmView(t *testing.T) {
 	t.Run("renders inline style with default no", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithConfirmPrompt("Continue?"))
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.Contains(t, view, "Continue?")
 	})
 
 	t.Run("renders inline style with default yes", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultYes())
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 
 	t.Run("renders button style", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithShowButtons())
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.Contains(t, view, "Yes")
 		assert.Contains(t, view, "No")
 	})
@@ -212,14 +213,14 @@ func TestConfirmView(t *testing.T) {
 	t.Run("renders with yes selected in buttons", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithShowButtons(), WithDefaultYes())
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.Contains(t, view, "Yes")
 	})
 
 	t.Run("renders with no selected in buttons", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithShowButtons(), WithDefaultNo())
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.Contains(t, view, "No")
 	})
 }
@@ -299,7 +300,7 @@ func TestConfirmWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewConfirm(WithConfirmPrompt("Test?"))
 		w := &confirmWrapper{model: m}
-		view := viewString(w.View())
+		view := teatest.ViewString(w.View())
 		assert.Contains(t, view, "Test?")
 	})
 }
@@ -311,7 +312,7 @@ func TestConfirmViewVariations(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultNo())
 		c.selected = false
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 
@@ -319,7 +320,7 @@ func TestConfirmViewVariations(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultNo())
 		c.selected = true
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 
@@ -327,7 +328,7 @@ func TestConfirmViewVariations(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultYes())
 		c.selected = false
-		view := viewString(c.View())
+		view := teatest.ViewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 }

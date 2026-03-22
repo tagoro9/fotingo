@@ -7,6 +7,7 @@ import (
 
 	"charm.land/bubbles/v2/spinner"
 	"github.com/stretchr/testify/assert"
+	teatest "github.com/tagoro9/fotingo/internal/testutil"
 )
 
 func TestNewSpinner(t *testing.T) {
@@ -104,7 +105,7 @@ func TestSpinnerView(t *testing.T) {
 	t.Run("renders empty spinner", func(t *testing.T) {
 		t.Parallel()
 		s := NewSpinner()
-		view := viewString(s.View())
+		view := teatest.ViewString(s.View())
 		// Should contain spinner character
 		assert.NotEmpty(t, view)
 	})
@@ -112,7 +113,7 @@ func TestSpinnerView(t *testing.T) {
 	t.Run("renders message", func(t *testing.T) {
 		t.Parallel()
 		s := NewSpinner(WithMessage("Loading..."))
-		view := viewString(s.View())
+		view := teatest.ViewString(s.View())
 		assert.Contains(t, view, "Loading...")
 	})
 
@@ -120,7 +121,7 @@ func TestSpinnerView(t *testing.T) {
 		t.Parallel()
 		s := NewSpinner(WithMessage("Done"))
 		s.Finish(nil)
-		view := viewString(s.View())
+		view := teatest.ViewString(s.View())
 		assert.Contains(t, view, "Done")
 		assert.Contains(t, view, Icons.Check)
 	})
@@ -129,7 +130,7 @@ func TestSpinnerView(t *testing.T) {
 		t.Parallel()
 		s := NewSpinner(WithMessage("Failed"))
 		s.Finish(errors.New("test error"))
-		view := viewString(s.View())
+		view := teatest.ViewString(s.View())
 		assert.Contains(t, view, "Failed")
 		assert.Contains(t, view, Icons.Cross)
 	})
@@ -139,7 +140,7 @@ func TestSpinnerView(t *testing.T) {
 		s := NewSpinner()
 		s.AddStep("Step 1")
 		s.AddStep("Step 2")
-		view := viewString(s.View())
+		view := teatest.ViewString(s.View())
 		assert.Contains(t, view, "Step 1")
 		assert.Contains(t, view, "Step 2")
 		// Step 1 should be completed
@@ -223,7 +224,7 @@ func TestSpinnerViewNoSteps(t *testing.T) {
 	// Test done state with no message or steps
 	s := NewSpinner()
 	s.Finish(nil)
-	view := viewString(s.View())
+	view := teatest.ViewString(s.View())
 	// Should be empty or minimal since no message was set
 	assert.True(t, len(strings.TrimSpace(view)) >= 0)
 }
@@ -243,7 +244,7 @@ func TestSpinnerWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewSpinner()
 		w := spinnerWrapper{model: m}
-		_, cmd := w.Update(ctrlKey('c'))
+		_, cmd := w.Update(teatest.CtrlKey('c'))
 		assert.NotNil(t, cmd)
 		// tea.Quit returns a special msg
 		msg := cmd()
@@ -272,7 +273,7 @@ func TestSpinnerWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewSpinner(WithMessage("Test"))
 		w := spinnerWrapper{model: m}
-		view := viewString(w.View())
+		view := teatest.ViewString(w.View())
 		assert.Contains(t, view, "Test")
 	})
 }

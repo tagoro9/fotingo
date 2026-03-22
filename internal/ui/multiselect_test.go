@@ -7,6 +7,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	teatest "github.com/tagoro9/fotingo/internal/testutil"
 )
 
 func createTestReviewers() []PickerItem {
@@ -185,7 +186,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect(WithMultiSelectItems(createTestReviewers()))
 
-		updated, cmd := m.Update(ctrlKey('c'))
+		updated, cmd := m.Update(teatest.CtrlKey('c'))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 	})
@@ -195,7 +196,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		updated, _ := m.Update(ctrlKey('a'))
+		updated, _ := m.Update(teatest.CtrlKey('a'))
 		selected := updated.SelectedItems()
 		assert.Len(t, selected, len(items))
 	})
@@ -208,7 +209,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 			WithMultiSelectMaximum(2),
 		)
 
-		updated, _ := m.Update(ctrlKey('a'))
+		updated, _ := m.Update(teatest.CtrlKey('a'))
 		selected := updated.SelectedItems()
 		assert.Len(t, selected, 2)
 	})
@@ -265,7 +266,7 @@ func TestMultiSelectView(t *testing.T) {
 		m.items[0].Selected = true
 		m.items[1].Selected = true
 
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "Reviewers")
 		assert.Contains(t, view, "2 selected")
 	})
@@ -276,7 +277,7 @@ func TestMultiSelectView(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items))
 		m.items[0].Selected = true
 
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, Icons.Selected)
 		assert.Contains(t, view, Icons.Checkbox)
 	})
@@ -286,7 +287,7 @@ func TestMultiSelectView(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "Alice Smith")
 		assert.Contains(t, view, "Bob Jones")
 	})
@@ -294,7 +295,7 @@ func TestMultiSelectView(t *testing.T) {
 	t.Run("renders help text", func(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect()
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "toggle")
 		assert.Contains(t, view, "confirm")
 	})
@@ -307,14 +308,14 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectMinimum(2),
 		)
 
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "Select at least 2")
 	})
 
 	t.Run("renders empty state", func(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect()
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "No matching items")
 	})
 
@@ -328,7 +329,7 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectStyles(styles),
 		)
 		base.cursor = 1
-		baseLine := findLineContaining(viewString(base.View()), "Alice Smith")
+		baseLine := findLineContaining(teatest.ViewString(base.View()), "Alice Smith")
 		baseLabelIndex := strings.Index(baseLine, "Alice Smith")
 		require.GreaterOrEqual(t, baseLabelIndex, 0)
 
@@ -338,7 +339,7 @@ func TestMultiSelectView(t *testing.T) {
 		)
 		selected.cursor = 1
 		selected.items[0].Selected = true
-		selectedLine := findLineContaining(viewString(selected.View()), "Alice Smith")
+		selectedLine := findLineContaining(teatest.ViewString(selected.View()), "Alice Smith")
 		selectedLabelIndex := strings.Index(selectedLine, "Alice Smith")
 		require.GreaterOrEqual(t, selectedLabelIndex, 0)
 
@@ -358,7 +359,7 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectStyles(styles),
 		)
 		nonCursor.cursor = 1
-		nonCursorLine := findLineContaining(viewString(nonCursor.View()), "Codex")
+		nonCursorLine := findLineContaining(teatest.ViewString(nonCursor.View()), "Codex")
 		nonCursorIconIndex := strings.Index(nonCursorLine, "⚙")
 		require.GreaterOrEqual(t, nonCursorIconIndex, 0)
 
@@ -367,7 +368,7 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectStyles(styles),
 		)
 		cursor.cursor = 0
-		cursorLine := findLineContaining(viewString(cursor.View()), "Codex")
+		cursorLine := findLineContaining(teatest.ViewString(cursor.View()), "Codex")
 		cursorIconIndex := strings.Index(cursorLine, "⚙")
 		require.GreaterOrEqual(t, cursorIconIndex, 0)
 
@@ -383,7 +384,7 @@ func TestMultiSelectViewShowsFullPlaceholder(t *testing.T) {
 		WithMultiSelectItems(createTestReviewers()),
 	)
 
-	assert.Contains(t, viewString(m.View()), "Type to filter...")
+	assert.Contains(t, teatest.ViewString(m.View()), "Type to filter...")
 }
 
 func findLineContaining(view, needle string) string {
@@ -509,10 +510,10 @@ func TestMultiSelectScrolling(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		m, _ = m.Update(ctrlKey('n'))
+		m, _ = m.Update(teatest.CtrlKey('n'))
 		assert.Equal(t, 1, m.cursor)
 
-		m, _ = m.Update(ctrlKey('p'))
+		m, _ = m.Update(teatest.CtrlKey('p'))
 		assert.Equal(t, 0, m.cursor)
 	})
 
@@ -654,7 +655,7 @@ func TestMultiSelectWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect(WithMultiSelectTitle("Test"))
 		w := &multiSelectWrapper{model: m}
-		view := viewString(w.View())
+		view := teatest.ViewString(w.View())
 		assert.Contains(t, view, "Test")
 	})
 }
@@ -668,7 +669,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items), WithMultiSelectHeight(2))
 		m.offset = 2
 
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "more items above")
 	})
 
@@ -677,7 +678,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items), WithMultiSelectHeight(2))
 
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "more items below")
 	})
 
@@ -687,7 +688,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 			{ID: "1", Label: "Item 1", Icon: Icons.Bug},
 		}
 		m := NewMultiSelect(WithMultiSelectItems(items))
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, Icons.Bug)
 	})
 
@@ -697,7 +698,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 			{ID: "1", Label: "Item 1", Detail: "Important"},
 		}
 		m := NewMultiSelect(WithMultiSelectItems(items))
-		view := viewString(m.View())
+		view := teatest.ViewString(m.View())
 		assert.Contains(t, view, "Important")
 	})
 }

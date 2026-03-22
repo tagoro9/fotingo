@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	fio "github.com/tagoro9/fotingo/internal/io"
+	teatest "github.com/tagoro9/fotingo/internal/testutil"
 )
 
 func TestStatusModel_StatusOperationUpdateReusesLine(t *testing.T) {
@@ -55,15 +56,15 @@ func TestStatusModel_View_EmojiAndActiveStatus(t *testing.T) {
 	m.done = true
 
 	view := m.View()
-	assert.Contains(t, viewString(view), "🌍")
-	assert.NotContains(t, viewString(view), ":earth_africa:")
+	assert.Contains(t, teatest.ViewString(view), "🌍")
+	assert.NotContains(t, teatest.ViewString(view), ":earth_africa:")
 
 	m = NewStatusModel(StatusModelOptions{})
 	m.messages = []fio.Message{{Emoji: string(LogEmojiBrowser), Message: "Opening browser", Type: fio.MessageTypeStatus}}
 	m.done = false
 	view = m.View()
-	assert.Contains(t, viewString(view), "Opening browser")
-	assert.NotContains(t, viewString(view), "🌍")
+	assert.Contains(t, teatest.ViewString(view), "Opening browser")
+	assert.NotContains(t, teatest.ViewString(view), "🌍")
 }
 
 func TestStatusModel_UpdateCorePaths(t *testing.T) {
@@ -79,7 +80,7 @@ func TestStatusModel_UpdateCorePaths(t *testing.T) {
 	assert.NotNil(t, cmd)
 	assert.True(t, updated.(StatusModel).done)
 
-	updated, cmd = model.Update(ctrlKey('c'))
+	updated, cmd = model.Update(teatest.CtrlKey('c'))
 	assert.NotNil(t, cmd)
 	assert.Equal(t, model, updated)
 }
@@ -106,7 +107,7 @@ func TestStatusModel_ViewSuppressOutput(t *testing.T) {
 		SuppressOutput: func() bool { return true },
 	})
 	updated, _ := m.Update(UpdateStatus("hello"))
-	assert.Equal(t, "", viewString(updated.(StatusModel).View()))
+	assert.Equal(t, "", teatest.ViewString(updated.(StatusModel).View()))
 }
 
 func TestStatusModel_ViewSingleDoneMessage(t *testing.T) {
@@ -116,5 +117,5 @@ func TestStatusModel_ViewSingleDoneMessage(t *testing.T) {
 	model.demoteActiveMessages()
 	model.done = true
 	view := model.View()
-	assert.True(t, strings.Contains(viewString(view), "one"))
+	assert.True(t, strings.Contains(teatest.ViewString(view), "one"))
 }

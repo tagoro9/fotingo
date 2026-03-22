@@ -7,6 +7,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
+	teatest "github.com/tagoro9/fotingo/internal/testutil"
 )
 
 func TestNewInput(t *testing.T) {
@@ -86,13 +87,13 @@ func TestNewInput(t *testing.T) {
 		i := NewInput(WithPrompt("Description"), WithMultiline(5))
 		assert.True(t, i.multiline)
 		assert.True(t, i.textarea.VirtualCursor())
-		assert.Contains(t, viewString(i.View()), "Ctrl+D")
+		assert.Contains(t, teatest.ViewString(i.View()), "Ctrl+D")
 	})
 
 	t.Run("multiline prompt renders once", func(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithPrompt("Issue description (optional)"), WithMultiline(5))
-		view := viewString(i.View())
+		view := teatest.ViewString(i.View())
 		assert.Equal(t, 1, strings.Count(view, "Issue description (optional)"))
 	})
 }
@@ -133,7 +134,7 @@ func TestInputUpdate(t *testing.T) {
 		t.Parallel()
 		i := NewInput()
 
-		updated, cmd := i.Update(ctrlKey('c'))
+		updated, cmd := i.Update(teatest.CtrlKey('c'))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 	})
@@ -176,7 +177,7 @@ func TestInputUpdate(t *testing.T) {
 		i := NewInput(WithMultiline(4))
 		i.SetValue("line one\nline two")
 
-		updated, cmd := i.Update(ctrlKey('d'))
+		updated, cmd := i.Update(teatest.CtrlKey('d'))
 		assert.True(t, updated.Submitted())
 		assert.NotNil(t, cmd)
 
@@ -201,7 +202,7 @@ func TestInputView(t *testing.T) {
 	t.Run("renders input", func(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithPrompt("Name:"))
-		view := viewString(i.View())
+		view := teatest.ViewString(i.View())
 		assert.NotEmpty(t, view)
 	})
 
@@ -210,7 +211,7 @@ func TestInputView(t *testing.T) {
 		i := NewInput(WithPrompt("Issue title"), WithPlaceholder("Add a summary"))
 
 		view := i.View()
-		assert.Contains(t, viewString(view), "Issue title Add a summary")
+		assert.Contains(t, teatest.ViewString(view), "Issue title Add a summary")
 	})
 
 	t.Run("multiline view keeps the prompt on the first line", func(t *testing.T) {
@@ -221,7 +222,7 @@ func TestInputView(t *testing.T) {
 			WithMultiline(5),
 		)
 
-		rendered := viewString(i.View())
+		rendered := teatest.ViewString(i.View())
 		assert.Contains(t, rendered, "Issue description (optional) Add more context")
 		assert.NotContains(t, rendered, "┃")
 	})
@@ -234,7 +235,7 @@ func TestInputView(t *testing.T) {
 		)
 		i.SetValue("Add more context")
 
-		rendered := viewString(i.View())
+		rendered := teatest.ViewString(i.View())
 		assert.Equal(t, 1, strings.Count(rendered, "Issue description (optional)"))
 		assert.Contains(t, rendered, "Issue description (optional) Add more context")
 	})
@@ -243,7 +244,7 @@ func TestInputView(t *testing.T) {
 		t.Parallel()
 		i := NewInput()
 		i.err = errors.New("validation failed")
-		view := viewString(i.View())
+		view := teatest.ViewString(i.View())
 		assert.Contains(t, view, "validation failed")
 	})
 }
@@ -358,7 +359,7 @@ func TestInputWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewInput(WithPrompt("Test:"))
 		w := &inputWrapper{model: m}
-		view := viewString(w.View())
+		view := teatest.ViewString(w.View())
 		assert.NotEmpty(t, view)
 	})
 }
