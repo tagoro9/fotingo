@@ -3,7 +3,7 @@ package ui
 import (
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 )
 
 // BrowserProgram provides a list/detail interactive browser experience.
@@ -52,7 +52,7 @@ func (m *browserModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 		return m, nil
 
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if m.inDetail {
 			switch msg.String() {
 			case "esc":
@@ -112,7 +112,7 @@ func (m *browserModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *browserModel) View() string {
+func (m *browserModel) View() tea.View {
 	if !m.inDetail {
 		return m.picker.View()
 	}
@@ -156,7 +156,7 @@ func (m *browserModel) View() string {
 	sb.WriteString(m.styles.HelpDesc.Render(" exit"))
 	sb.WriteString("\n")
 
-	return sb.String()
+	return tea.NewView(sb.String())
 }
 
 // NewBrowserProgram creates a browser program for list/detail navigation.

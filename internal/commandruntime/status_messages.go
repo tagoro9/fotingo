@@ -1,6 +1,6 @@
 package commandruntime
 
-import tea "github.com/charmbracelet/bubbletea"
+import tea "charm.land/bubbletea/v2"
 
 // StatusMsg carries one status-channel update to the status model.
 type StatusMsg string

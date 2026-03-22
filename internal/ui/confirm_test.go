@@ -3,7 +3,7 @@ package ui
 import (
 	"testing"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -58,7 +58,7 @@ func TestConfirmUpdate(t *testing.T) {
 	t.Run("handles y key", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'y'}})
+		updated, cmd := c.Update(textKey("y"))
 		assert.True(t, updated.confirmed)
 		assert.True(t, updated.selected)
 		assert.NotNil(t, cmd)
@@ -72,7 +72,7 @@ func TestConfirmUpdate(t *testing.T) {
 	t.Run("handles Y key", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'Y'}})
+		updated, cmd := c.Update(textKey("Y"))
 		assert.True(t, updated.confirmed)
 		assert.True(t, updated.selected)
 		assert.NotNil(t, cmd)
@@ -81,7 +81,7 @@ func TestConfirmUpdate(t *testing.T) {
 	t.Run("handles n key", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'n'}})
+		updated, cmd := c.Update(textKey("n"))
 		assert.True(t, updated.confirmed)
 		assert.False(t, updated.selected)
 		assert.NotNil(t, cmd)
@@ -95,7 +95,7 @@ func TestConfirmUpdate(t *testing.T) {
 	t.Run("handles N key", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'N'}})
+		updated, cmd := c.Update(textKey("N"))
 		assert.True(t, updated.confirmed)
 		assert.False(t, updated.selected)
 		assert.NotNil(t, cmd)
@@ -106,7 +106,7 @@ func TestConfirmUpdate(t *testing.T) {
 		c := NewConfirm()
 		c.selected = false
 		// Simulate left key
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyLeft})
+		updated, cmd := c.Update(specialKey(tea.KeyLeft))
 		assert.True(t, updated.selected)
 		assert.Nil(t, cmd)
 	})
@@ -115,7 +115,7 @@ func TestConfirmUpdate(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
 		c.selected = true
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyRight})
+		updated, cmd := c.Update(specialKey(tea.KeyRight))
 		assert.False(t, updated.selected)
 		assert.Nil(t, cmd)
 	})
@@ -124,11 +124,11 @@ func TestConfirmUpdate(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
 		c.selected = true
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyTab})
+		updated, cmd := c.Update(specialKey(tea.KeyTab))
 		assert.False(t, updated.selected)
 		assert.Nil(t, cmd)
 
-		updated, _ = updated.Update(tea.KeyMsg{Type: tea.KeyTab})
+		updated, _ = updated.Update(specialKey(tea.KeyTab))
 		assert.True(t, updated.selected)
 	})
 
@@ -136,7 +136,7 @@ func TestConfirmUpdate(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
 		c.selected = true
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := c.Update(specialKey(tea.KeyEnter))
 		assert.True(t, updated.confirmed)
 		assert.NotNil(t, cmd)
 
@@ -149,7 +149,7 @@ func TestConfirmUpdate(t *testing.T) {
 	t.Run("handles escape to cancel", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyEscape})
+		updated, cmd := c.Update(specialKey(tea.KeyEscape))
 		assert.True(t, updated.cancelled)
 		assert.NotNil(t, cmd)
 
@@ -162,7 +162,7 @@ func TestConfirmUpdate(t *testing.T) {
 	t.Run("handles ctrl+c to cancel", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
-		updated, cmd := c.Update(tea.KeyMsg{Type: tea.KeyCtrlC})
+		updated, cmd := c.Update(ctrlKey('c'))
 		assert.True(t, updated.cancelled)
 		assert.NotNil(t, cmd)
 	})
@@ -171,7 +171,7 @@ func TestConfirmUpdate(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
 		c.selected = false
-		updated, _ := c.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'h'}})
+		updated, _ := c.Update(textKey("h"))
 		assert.True(t, updated.selected)
 	})
 
@@ -179,7 +179,7 @@ func TestConfirmUpdate(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm()
 		c.selected = true
-		updated, _ := c.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'l'}})
+		updated, _ := c.Update(textKey("l"))
 		assert.False(t, updated.selected)
 	})
 }
@@ -190,21 +190,21 @@ func TestConfirmView(t *testing.T) {
 	t.Run("renders inline style with default no", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithConfirmPrompt("Continue?"))
-		view := c.View()
+		view := viewString(c.View())
 		assert.Contains(t, view, "Continue?")
 	})
 
 	t.Run("renders inline style with default yes", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultYes())
-		view := c.View()
+		view := viewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 
 	t.Run("renders button style", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithShowButtons())
-		view := c.View()
+		view := viewString(c.View())
 		assert.Contains(t, view, "Yes")
 		assert.Contains(t, view, "No")
 	})
@@ -212,14 +212,14 @@ func TestConfirmView(t *testing.T) {
 	t.Run("renders with yes selected in buttons", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithShowButtons(), WithDefaultYes())
-		view := c.View()
+		view := viewString(c.View())
 		assert.Contains(t, view, "Yes")
 	})
 
 	t.Run("renders with no selected in buttons", func(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithShowButtons(), WithDefaultNo())
-		view := c.View()
+		view := viewString(c.View())
 		assert.Contains(t, view, "No")
 	})
 }
@@ -291,7 +291,7 @@ func TestConfirmWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewConfirm()
 		w := &confirmWrapper{model: m}
-		_, _ = w.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'y'}})
+		_, _ = w.Update(textKey("y"))
 		assert.True(t, w.model.confirmed)
 	})
 
@@ -299,7 +299,7 @@ func TestConfirmWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewConfirm(WithConfirmPrompt("Test?"))
 		w := &confirmWrapper{model: m}
-		view := w.View()
+		view := viewString(w.View())
 		assert.Contains(t, view, "Test?")
 	})
 }
@@ -311,7 +311,7 @@ func TestConfirmViewVariations(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultNo())
 		c.selected = false
-		view := c.View()
+		view := viewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 
@@ -319,7 +319,7 @@ func TestConfirmViewVariations(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultNo())
 		c.selected = true
-		view := c.View()
+		view := viewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 
@@ -327,7 +327,7 @@ func TestConfirmViewVariations(t *testing.T) {
 		t.Parallel()
 		c := NewConfirm(WithDefaultYes())
 		c.selected = false
-		view := c.View()
+		view := viewString(c.View())
 		assert.NotEmpty(t, view)
 	})
 }

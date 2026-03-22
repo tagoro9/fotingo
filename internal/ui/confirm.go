@@ -3,7 +3,7 @@ package ui
 import (
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/tagoro9/fotingo/internal/i18n"
 )
 
@@ -87,7 +87,7 @@ type ConfirmResultMsg struct {
 // Update handles messages for the confirmation model.
 func (m ConfirmModel) Update(msg tea.Msg) (ConfirmModel, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		switch msg.String() {
 		case "y", "Y":
 			m.confirmed = true
@@ -125,7 +125,7 @@ func (m ConfirmModel) Update(msg tea.Msg) (ConfirmModel, tea.Cmd) {
 }
 
 // View renders the confirmation prompt.
-func (m ConfirmModel) View() string {
+func (m ConfirmModel) View() tea.View {
 	var sb strings.Builder
 
 	// Render prompt
@@ -170,7 +170,7 @@ func (m ConfirmModel) View() string {
 
 	sb.WriteString("\n")
 
-	return sb.String()
+	return tea.NewView(sb.String())
 }
 
 // Confirmed returns whether Yes was selected.
@@ -214,7 +214,7 @@ func (w *confirmWrapper) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return w, cmd
 }
 
-func (w *confirmWrapper) View() string {
+func (w *confirmWrapper) View() tea.View {
 	return w.model.View()
 }
 

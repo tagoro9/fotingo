@@ -2,34 +2,35 @@
 package ui
 
 import (
+	"image/color"
 	"os"
 
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/lipgloss/v2"
 )
 
 // ColorScheme defines the color palette for UI components.
 type ColorScheme struct {
 	// Primary colors
-	Primary   lipgloss.TerminalColor
-	Secondary lipgloss.TerminalColor
-	Accent    lipgloss.TerminalColor
+	Primary   color.Color
+	Secondary color.Color
+	Accent    color.Color
 
 	// Status colors
-	Success lipgloss.TerminalColor
-	Warning lipgloss.TerminalColor
-	Error   lipgloss.TerminalColor
-	Info    lipgloss.TerminalColor
+	Success color.Color
+	Warning color.Color
+	Error   color.Color
+	Info    color.Color
 
 	// UI colors
-	Border     lipgloss.TerminalColor
-	Muted      lipgloss.TerminalColor
-	Background lipgloss.TerminalColor
-	Foreground lipgloss.TerminalColor
+	Border     color.Color
+	Muted      color.Color
+	Background color.Color
+	Foreground color.Color
 
 	// Selection colors
-	Selected   lipgloss.TerminalColor
-	Unselected lipgloss.TerminalColor
-	Cursor     lipgloss.TerminalColor
+	Selected   color.Color
+	Unselected color.Color
+	Cursor     color.Color
 }
 
 // DarkScheme returns the color scheme for dark terminals.
