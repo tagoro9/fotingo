@@ -115,6 +115,15 @@ func IsInputTerminal() bool {
 	return (info.Mode() & os.ModeCharDevice) != 0
 }
 
+// IsOutputTerminal reports whether stdout points to an interactive terminal.
+func IsOutputTerminal() bool {
+	info, err := os.Stdout.Stat()
+	if err != nil {
+		return false
+	}
+	return (info.Mode() & os.ModeCharDevice) != 0
+}
+
 // CanPromptForMissingConfig reports whether interactive config prompts are allowed.
 func CanPromptForMissingConfig(jsonOutput bool, assumeYes bool, isInputTerminal func() bool) bool {
 	if jsonOutput || assumeYes {

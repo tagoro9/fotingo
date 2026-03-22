@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -25,7 +25,7 @@ func TestBrowserModel_EnterShowsDetailAndEscapeReturnsToList(t *testing.T) {
 	assert.Equal(t, "One", browser.detailTitle)
 	assert.Equal(t, "value-one", browser.detailBody)
 
-	updated, _ = browser.Update(tea.KeyMsg{Type: tea.KeyEscape})
+	updated, _ = browser.Update(specialKey(tea.KeyEscape))
 	browser, ok = updated.(*browserModel)
 	require.True(t, ok)
 	assert.False(t, browser.inDetail)
@@ -41,7 +41,7 @@ func TestBrowserModel_EscapeOnListCancels(t *testing.T) {
 		nil,
 	)
 
-	updated, cmd := model.Update(tea.KeyMsg{Type: tea.KeyEscape})
+	updated, cmd := model.Update(specialKey(tea.KeyEscape))
 	browser, ok := updated.(*browserModel)
 	require.True(t, ok)
 	require.NotNil(t, cmd)
@@ -86,22 +86,22 @@ func TestBrowserModel_DetailScrolling(t *testing.T) {
 	require.True(t, browser.inDetail)
 	assert.Equal(t, 0, browser.detailOffset)
 
-	updated, _ = browser.Update(tea.KeyMsg{Type: tea.KeyDown})
+	updated, _ = browser.Update(specialKey(tea.KeyDown))
 	browser, ok = updated.(*browserModel)
 	require.True(t, ok)
 	assert.Equal(t, 1, browser.detailOffset)
 
-	updated, _ = browser.Update(tea.KeyMsg{Type: tea.KeyPgDown})
+	updated, _ = browser.Update(specialKey(tea.KeyPgDown))
 	browser, ok = updated.(*browserModel)
 	require.True(t, ok)
 	assert.Greater(t, browser.detailOffset, 1)
 
-	updated, _ = browser.Update(tea.KeyMsg{Type: tea.KeyHome})
+	updated, _ = browser.Update(specialKey(tea.KeyHome))
 	browser, ok = updated.(*browserModel)
 	require.True(t, ok)
 	assert.Equal(t, 0, browser.detailOffset)
 
-	updated, _ = browser.Update(tea.KeyMsg{Type: tea.KeyEnd})
+	updated, _ = browser.Update(specialKey(tea.KeyEnd))
 	browser, ok = updated.(*browserModel)
 	require.True(t, ok)
 	assert.Greater(t, browser.detailOffset, 0)

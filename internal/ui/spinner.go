@@ -3,9 +3,9 @@ package ui
 import (
 	"strings"
 
-	"github.com/charmbracelet/bubbles/spinner"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/bubbles/v2/spinner"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 )
 
 // SpinnerStep represents a single step in a multi-step progress display.
@@ -138,7 +138,7 @@ func (m SpinnerModel) Update(msg tea.Msg) (SpinnerModel, tea.Cmd) {
 }
 
 // View renders the spinner.
-func (m SpinnerModel) View() string {
+func (m SpinnerModel) View() tea.View {
 	var sb strings.Builder
 
 	if len(m.steps) > 0 {
@@ -194,7 +194,7 @@ func (m SpinnerModel) View() string {
 		}
 	}
 
-	return sb.String()
+	return tea.NewView(sb.String())
 }
 
 // Done returns whether the spinner has completed.
@@ -266,7 +266,7 @@ func (w spinnerWrapper) Init() tea.Cmd {
 
 func (w spinnerWrapper) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if msg.String() == "ctrl+c" {
 			return w, tea.Quit
 		}
@@ -281,7 +281,7 @@ func (w spinnerWrapper) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return w, cmd
 }
 
-func (w spinnerWrapper) View() string {
+func (w spinnerWrapper) View() tea.View {
 	return w.model.View()
 }
 

@@ -3,8 +3,8 @@ package commandruntime
 import (
 	"strings"
 
-	"github.com/charmbracelet/bubbles/spinner"
-	tea "github.com/charmbracelet/bubbletea"
+	"charm.land/bubbles/v2/spinner"
+	tea "charm.land/bubbletea/v2"
 	fio "github.com/tagoro9/fotingo/internal/io"
 	"github.com/tagoro9/fotingo/internal/ui"
 )
@@ -47,7 +47,7 @@ func (m StatusModel) Init() tea.Cmd {
 // Update handles messages and updates the status model.
 func (m StatusModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if msg.String() == "ctrl+c" {
 			return m, tea.Quit
 		}
@@ -67,9 +67,9 @@ func (m StatusModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // View renders the status model.
-func (m StatusModel) View() string {
+func (m StatusModel) View() tea.View {
 	if m.suppressOutput != nil && m.suppressOutput() {
-		return ""
+		return tea.NewView("")
 	}
 
 	var sb strings.Builder
@@ -90,7 +90,7 @@ func (m StatusModel) View() string {
 		}
 	}
 
-	return sb.String()
+	return tea.NewView(sb.String())
 }
 
 func (m StatusModel) renderMessage(

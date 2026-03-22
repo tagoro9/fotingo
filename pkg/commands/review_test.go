@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	tea "charm.land/bubbletea/v2"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -286,9 +287,9 @@ func TestReviewModel(t *testing.T) {
 	cmd := model.Init()
 	assert.NotNil(t, cmd)
 
-	// Test View returns string
+	// Test View returns a Bubble Tea view
 	view := model.View()
-	assert.IsType(t, "", view)
+	assert.IsType(t, tea.View{}, view)
 }
 
 func TestBuildReviewTemplateData_IssueSummaryIsKeyPrefixedAndTruncated(t *testing.T) {
