@@ -26,6 +26,7 @@ Package commandruntime coordinates shared terminal handoff and runtime control f
 - [func IsErrorMessage\(message string\) bool](<#IsErrorMessage>)
 - [func IsInputTerminal\(\) bool](<#IsInputTerminal>)
 - [func IsKnownOutputLevel\(level OutputLevel\) bool](<#IsKnownOutputLevel>)
+- [func IsOutputTerminal\(\) bool](<#IsOutputTerminal>)
 - [func IsVisualPrefixToken\(token string\) bool](<#IsVisualPrefixToken>)
 - [func IsWarningMessage\(message string\) bool](<#IsWarningMessage>)
 - [func NormalizeHTTPSRootURL\(raw string, label string\) \(string, error\)](<#NormalizeHTTPSRootURL>)
@@ -102,7 +103,7 @@ Package commandruntime coordinates shared terminal handoff and runtime control f
   - [func NewStatusModel\(options StatusModelOptions\) StatusModel](<#NewStatusModel>)
   - [func \(m StatusModel\) Init\(\) tea.Cmd](<#StatusModel.Init>)
   - [func \(m StatusModel\) Update\(msg tea.Msg\) \(tea.Model, tea.Cmd\)](<#StatusModel.Update>)
-  - [func \(m StatusModel\) View\(\) string](<#StatusModel.View>)
+  - [func \(m StatusModel\) View\(\) tea.View](<#StatusModel.View>)
 - [type StatusModelOptions](<#StatusModelOptions>)
 - [type StatusMsg](<#StatusMsg>)
 - [type TerminalController](<#TerminalController>)
@@ -136,7 +137,7 @@ func ActiveDisplayMessage(message io.Message, normalized string) string
 ActiveDisplayMessage returns the spinner\-line text for active status entries.
 
 <a name="CanPromptForMissingConfig"></a>
-## func [CanPromptForMissingConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/commandruntime/config_requirements.go#L119>)
+## func [CanPromptForMissingConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/commandruntime/config_requirements.go#L128>)
 
 ```go
 func CanPromptForMissingConfig(jsonOutput bool, assumeYes bool, isInputTerminal func() bool) bool
@@ -243,6 +244,15 @@ func IsKnownOutputLevel(level OutputLevel) bool
 
 IsKnownOutputLevel reports whether a level belongs to the known output\-level set.
 
+<a name="IsOutputTerminal"></a>
+## func [IsOutputTerminal](<https://github.com/tagoro9/fotingo/blob/main/internal/commandruntime/config_requirements.go#L119>)
+
+```go
+func IsOutputTerminal() bool
+```
+
+IsOutputTerminal reports whether stdout points to an interactive terminal.
+
 <a name="IsVisualPrefixToken"></a>
 ## func [IsVisualPrefixToken](<https://github.com/tagoro9/fotingo/blob/main/internal/commandruntime/model_helpers.go#L68>)
 
@@ -307,7 +317,7 @@ func PrintDoneFooter(w io.Writer, start time.Time)
 PrintDoneFooter writes the completion footer to the provided writer.
 
 <a name="PromptForConfigRequirement"></a>
-## func [PromptForConfigRequirement](<https://github.com/tagoro9/fotingo/blob/main/internal/commandruntime/config_requirements.go#L130>)
+## func [PromptForConfigRequirement](<https://github.com/tagoro9/fotingo/blob/main/internal/commandruntime/config_requirements.go#L139>)
 
 ```go
 func PromptForConfigRequirement(requirement ConfigRequirement) (string, error)
@@ -1053,7 +1063,7 @@ Update handles messages and updates the status model.
 ### func \(StatusModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/commandruntime/status_model.go#L70>)
 
 ```go
-func (m StatusModel) View() string
+func (m StatusModel) View() tea.View
 ```
 
 View renders the status model.

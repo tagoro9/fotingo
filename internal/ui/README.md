@@ -39,7 +39,7 @@ Package ui provides reusable Bubble Tea UI components for the fotingo CLI.
   - [func \(m ConfirmModel\) Init\(\) tea.Cmd](<#ConfirmModel.Init>)
   - [func \(m ConfirmModel\) Selected\(\) bool](<#ConfirmModel.Selected>)
   - [func \(m ConfirmModel\) Update\(msg tea.Msg\) \(ConfirmModel, tea.Cmd\)](<#ConfirmModel.Update>)
-  - [func \(m ConfirmModel\) View\(\) string](<#ConfirmModel.View>)
+  - [func \(m ConfirmModel\) View\(\) tea.View](<#ConfirmModel.View>)
 - [type ConfirmOption](<#ConfirmOption>)
   - [func WithConfirmPrompt\(prompt string\) ConfirmOption](<#WithConfirmPrompt>)
   - [func WithConfirmStyles\(styles Styles\) ConfirmOption](<#WithConfirmStyles>)
@@ -69,7 +69,7 @@ Package ui provides reusable Bubble Tea UI components for the fotingo CLI.
   - [func \(m InputModel\) Submitted\(\) bool](<#InputModel.Submitted>)
   - [func \(m InputModel\) Update\(msg tea.Msg\) \(InputModel, tea.Cmd\)](<#InputModel.Update>)
   - [func \(m InputModel\) Value\(\) string](<#InputModel.Value>)
-  - [func \(m InputModel\) View\(\) string](<#InputModel.View>)
+  - [func \(m InputModel\) View\(\) tea.View](<#InputModel.View>)
 - [type InputOption](<#InputOption>)
   - [func WithCharLimit\(limit int\) InputOption](<#WithCharLimit>)
   - [func WithInitialValue\(value string\) InputOption](<#WithInitialValue>)
@@ -96,7 +96,7 @@ Package ui provides reusable Bubble Tea UI components for the fotingo CLI.
   - [func \(m \*MultiSelectModel\) SetItems\(items \[\]PickerItem\)](<#MultiSelectModel.SetItems>)
   - [func \(m MultiSelectModel\) Submitted\(\) bool](<#MultiSelectModel.Submitted>)
   - [func \(m MultiSelectModel\) Update\(msg tea.Msg\) \(MultiSelectModel, tea.Cmd\)](<#MultiSelectModel.Update>)
-  - [func \(m MultiSelectModel\) View\(\) string](<#MultiSelectModel.View>)
+  - [func \(m MultiSelectModel\) View\(\) tea.View](<#MultiSelectModel.View>)
 - [type MultiSelectOption](<#MultiSelectOption>)
   - [func WithMultiSelectHeight\(height int\) MultiSelectOption](<#WithMultiSelectHeight>)
   - [func WithMultiSelectItems\(items \[\]PickerItem\) MultiSelectOption](<#WithMultiSelectItems>)
@@ -122,7 +122,7 @@ Package ui provides reusable Bubble Tea UI components for the fotingo CLI.
   - [func \(m \*PickerModel\) SetItems\(items \[\]PickerItem\)](<#PickerModel.SetItems>)
   - [func \(m PickerModel\) Submitted\(\) bool](<#PickerModel.Submitted>)
   - [func \(m PickerModel\) Update\(msg tea.Msg\) \(PickerModel, tea.Cmd\)](<#PickerModel.Update>)
-  - [func \(m PickerModel\) View\(\) string](<#PickerModel.View>)
+  - [func \(m PickerModel\) View\(\) tea.View](<#PickerModel.View>)
 - [type PickerOption](<#PickerOption>)
   - [func WithPickerHeight\(height int\) PickerOption](<#WithPickerHeight>)
   - [func WithPickerItems\(items \[\]PickerItem\) PickerOption](<#WithPickerItems>)
@@ -145,7 +145,7 @@ Package ui provides reusable Bubble Tea UI components for the fotingo CLI.
   - [func \(m SpinnerModel\) Init\(\) tea.Cmd](<#SpinnerModel.Init>)
   - [func \(m \*SpinnerModel\) SetMessage\(msg string\)](<#SpinnerModel.SetMessage>)
   - [func \(m SpinnerModel\) Update\(msg tea.Msg\) \(SpinnerModel, tea.Cmd\)](<#SpinnerModel.Update>)
-  - [func \(m SpinnerModel\) View\(\) string](<#SpinnerModel.View>)
+  - [func \(m SpinnerModel\) View\(\) tea.View](<#SpinnerModel.View>)
 - [type SpinnerOption](<#SpinnerOption>)
   - [func WithMessage\(msg string\) SpinnerOption](<#WithMessage>)
   - [func WithSpinnerStyle\(s spinner.Spinner\) SpinnerOption](<#WithSpinnerStyle>)
@@ -288,7 +288,7 @@ func HasEditor() bool
 HasEditor returns true if an editor is available.
 
 <a name="IssueTypeIcon"></a>
-## func [IssueTypeIcon](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L351>)
+## func [IssueTypeIcon](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L352>)
 
 ```go
 func IssueTypeIcon(issueType string) string
@@ -380,38 +380,38 @@ func (bp *BrowserProgram) Run() error
 Run executes the browser program.
 
 <a name="ColorScheme"></a>
-## type [ColorScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L11-L33>)
+## type [ColorScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L12-L34>)
 
 ColorScheme defines the color palette for UI components.
 
 ```go
 type ColorScheme struct {
     // Primary colors
-    Primary   lipgloss.TerminalColor
-    Secondary lipgloss.TerminalColor
-    Accent    lipgloss.TerminalColor
+    Primary   color.Color
+    Secondary color.Color
+    Accent    color.Color
 
     // Status colors
-    Success lipgloss.TerminalColor
-    Warning lipgloss.TerminalColor
-    Error   lipgloss.TerminalColor
-    Info    lipgloss.TerminalColor
+    Success color.Color
+    Warning color.Color
+    Error   color.Color
+    Info    color.Color
 
     // UI colors
-    Border     lipgloss.TerminalColor
-    Muted      lipgloss.TerminalColor
-    Background lipgloss.TerminalColor
-    Foreground lipgloss.TerminalColor
+    Border     color.Color
+    Muted      color.Color
+    Background color.Color
+    Foreground color.Color
 
     // Selection colors
-    Selected   lipgloss.TerminalColor
-    Unselected lipgloss.TerminalColor
-    Cursor     lipgloss.TerminalColor
+    Selected   color.Color
+    Unselected color.Color
+    Cursor     color.Color
 }
 ```
 
 <a name="DarkScheme"></a>
-### func [DarkScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L36>)
+### func [DarkScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L37>)
 
 ```go
 func DarkScheme() ColorScheme
@@ -420,7 +420,7 @@ func DarkScheme() ColorScheme
 DarkScheme returns the color scheme for dark terminals.
 
 <a name="DefaultScheme"></a>
-### func [DefaultScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L83>)
+### func [DefaultScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L84>)
 
 ```go
 func DefaultScheme() ColorScheme
@@ -429,7 +429,7 @@ func DefaultScheme() ColorScheme
 DefaultScheme returns the appropriate color scheme based on terminal settings. It respects NO\_COLOR environment variable.
 
 <a name="LightScheme"></a>
-### func [LightScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L59>)
+### func [LightScheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L60>)
 
 ```go
 func LightScheme() ColorScheme
@@ -506,7 +506,7 @@ Update handles messages for the confirmation model.
 ### func \(ConfirmModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/confirm.go#L128>)
 
 ```go
-func (m ConfirmModel) View() string
+func (m ConfirmModel) View() tea.View
 ```
 
 View renders the confirmation prompt.
@@ -678,7 +678,7 @@ func DefaultEditorConfig() EditorConfig
 DefaultEditorConfig returns the default editor configuration.
 
 <a name="InputCancelMsg"></a>
-## type [InputCancelMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L204>)
+## type [InputCancelMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L273>)
 
 InputCancelMsg is sent when the input is cancelled.
 
@@ -687,7 +687,7 @@ type InputCancelMsg struct{}
 ```
 
 <a name="InputModel"></a>
-## type [InputModel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L15-L28>)
+## type [InputModel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L16-L31>)
 
 InputModel represents a styled text input with validation support.
 
@@ -698,7 +698,7 @@ type InputModel struct {
 ```
 
 <a name="NewInput"></a>
-### func [NewInput](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L131>)
+### func [NewInput](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L146>)
 
 ```go
 func NewInput(opts ...InputOption) InputModel
@@ -707,7 +707,7 @@ func NewInput(opts ...InputOption) InputModel
 NewInput creates a new InputModel.
 
 <a name="InputModel.Blur"></a>
-### func \(\*InputModel\) [Blur](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L328>)
+### func \(\*InputModel\) [Blur](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L402>)
 
 ```go
 func (m *InputModel) Blur()
@@ -716,7 +716,7 @@ func (m *InputModel) Blur()
 Blur removes focus from the input.
 
 <a name="InputModel.Cancelled"></a>
-### func \(InputModel\) [Cancelled](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L342>)
+### func \(InputModel\) [Cancelled](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L416>)
 
 ```go
 func (m InputModel) Cancelled() bool
@@ -725,7 +725,7 @@ func (m InputModel) Cancelled() bool
 Cancelled returns whether the input was cancelled.
 
 <a name="InputModel.Error"></a>
-### func \(InputModel\) [Error](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L347>)
+### func \(InputModel\) [Error](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L421>)
 
 ```go
 func (m InputModel) Error() error
@@ -734,7 +734,7 @@ func (m InputModel) Error() error
 Error returns any validation error.
 
 <a name="InputModel.Focus"></a>
-### func \(\*InputModel\) [Focus](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L320>)
+### func \(\*InputModel\) [Focus](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L394>)
 
 ```go
 func (m *InputModel) Focus() tea.Cmd
@@ -743,7 +743,7 @@ func (m *InputModel) Focus() tea.Cmd
 Focus focuses the input.
 
 <a name="InputModel.Init"></a>
-### func \(InputModel\) [Init](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L191>)
+### func \(InputModel\) [Init](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L260>)
 
 ```go
 func (m InputModel) Init() tea.Cmd
@@ -752,7 +752,7 @@ func (m InputModel) Init() tea.Cmd
 Init initializes the input model.
 
 <a name="InputModel.Reset"></a>
-### func \(\*InputModel\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L352>)
+### func \(\*InputModel\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L426>)
 
 ```go
 func (m *InputModel) Reset()
@@ -761,7 +761,7 @@ func (m *InputModel) Reset()
 Reset resets the input state.
 
 <a name="InputModel.SetValue"></a>
-### func \(\*InputModel\) [SetValue](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L311>)
+### func \(\*InputModel\) [SetValue](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L385>)
 
 ```go
 func (m *InputModel) SetValue(value string)
@@ -770,7 +770,7 @@ func (m *InputModel) SetValue(value string)
 SetValue sets the input value.
 
 <a name="InputModel.Submitted"></a>
-### func \(InputModel\) [Submitted](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L337>)
+### func \(InputModel\) [Submitted](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L411>)
 
 ```go
 func (m InputModel) Submitted() bool
@@ -779,7 +779,7 @@ func (m InputModel) Submitted() bool
 Submitted returns whether the input was submitted.
 
 <a name="InputModel.Update"></a>
-### func \(InputModel\) [Update](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L207>)
+### func \(InputModel\) [Update](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L276>)
 
 ```go
 func (m InputModel) Update(msg tea.Msg) (InputModel, tea.Cmd)
@@ -788,7 +788,7 @@ func (m InputModel) Update(msg tea.Msg) (InputModel, tea.Cmd)
 Update handles messages for the input model.
 
 <a name="InputModel.Value"></a>
-### func \(InputModel\) [Value](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L303>)
+### func \(InputModel\) [Value](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L377>)
 
 ```go
 func (m InputModel) Value() string
@@ -797,16 +797,16 @@ func (m InputModel) Value() string
 Value returns the current input value.
 
 <a name="InputModel.View"></a>
-### func \(InputModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L280>)
+### func \(InputModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L349>)
 
 ```go
-func (m InputModel) View() string
+func (m InputModel) View() tea.View
 ```
 
 View renders the input.
 
 <a name="InputOption"></a>
-## type [InputOption](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L31>)
+## type [InputOption](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L38>)
 
 InputOption configures an InputModel.
 
@@ -815,7 +815,7 @@ type InputOption func(*InputModel)
 ```
 
 <a name="WithCharLimit"></a>
-### func [WithCharLimit](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L66>)
+### func [WithCharLimit](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L75>)
 
 ```go
 func WithCharLimit(limit int) InputOption
@@ -824,7 +824,7 @@ func WithCharLimit(limit int) InputOption
 WithCharLimit sets the character limit.
 
 <a name="WithInitialValue"></a>
-### func [WithInitialValue](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L112>)
+### func [WithInitialValue](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L127>)
 
 ```go
 func WithInitialValue(value string) InputOption
@@ -833,7 +833,7 @@ func WithInitialValue(value string) InputOption
 WithInitialValue sets the initial input value.
 
 <a name="WithInputStyles"></a>
-### func [WithInputStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L123>)
+### func [WithInputStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L138>)
 
 ```go
 func WithInputStyles(styles Styles) InputOption
@@ -842,7 +842,7 @@ func WithInputStyles(styles Styles) InputOption
 WithInputStyles sets custom styles for the input.
 
 <a name="WithMasked"></a>
-### func [WithMasked](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L88>)
+### func [WithMasked](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L99>)
 
 ```go
 func WithMasked() InputOption
@@ -851,7 +851,7 @@ func WithMasked() InputOption
 WithMasked enables password masking mode.
 
 <a name="WithMultiline"></a>
-### func [WithMultiline](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L97>)
+### func [WithMultiline](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L108>)
 
 ```go
 func WithMultiline(height int) InputOption
@@ -860,7 +860,7 @@ func WithMultiline(height int) InputOption
 WithMultiline enables wrapped multiline input.
 
 <a name="WithPlaceholder"></a>
-### func [WithPlaceholder](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L46>)
+### func [WithPlaceholder](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L53>)
 
 ```go
 func WithPlaceholder(placeholder string) InputOption
@@ -869,7 +869,7 @@ func WithPlaceholder(placeholder string) InputOption
 WithPlaceholder sets the placeholder text.
 
 <a name="WithPrompt"></a>
-### func [WithPrompt](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L34>)
+### func [WithPrompt](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L41>)
 
 ```go
 func WithPrompt(prompt string) InputOption
@@ -878,7 +878,7 @@ func WithPrompt(prompt string) InputOption
 WithPrompt sets the input prompt text.
 
 <a name="WithValidation"></a>
-### func [WithValidation](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L58>)
+### func [WithValidation](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L67>)
 
 ```go
 func WithValidation(fn ValidationFunc) InputOption
@@ -887,7 +887,7 @@ func WithValidation(fn ValidationFunc) InputOption
 WithValidation sets the validation function.
 
 <a name="WithWidth"></a>
-### func [WithWidth](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L77>)
+### func [WithWidth](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L86>)
 
 ```go
 func WithWidth(width int) InputOption
@@ -896,7 +896,7 @@ func WithWidth(width int) InputOption
 WithWidth sets the input width.
 
 <a name="InputProgram"></a>
-## type [InputProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L364-L367>)
+## type [InputProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L438-L441>)
 
 InputProgram wraps an InputModel in a tea.Program for standalone use.
 
@@ -907,7 +907,7 @@ type InputProgram struct {
 ```
 
 <a name="NewInputProgram"></a>
-### func [NewInputProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L394>)
+### func [NewInputProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L468>)
 
 ```go
 func NewInputProgram(opts ...InputOption) *InputProgram
@@ -916,7 +916,7 @@ func NewInputProgram(opts ...InputOption) *InputProgram
 NewInputProgram creates a new input program for standalone operation.
 
 <a name="InputProgram.Run"></a>
-### func \(\*InputProgram\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L405>)
+### func \(\*InputProgram\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L479>)
 
 ```go
 func (ip *InputProgram) Run() (string, error)
@@ -925,7 +925,7 @@ func (ip *InputProgram) Run() (string, error)
 Run runs the input program and returns the entered value.
 
 <a name="InputProgram.RunWithCancel"></a>
-### func \(\*InputProgram\) [RunWithCancel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L419>)
+### func \(\*InputProgram\) [RunWithCancel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L493>)
 
 ```go
 func (ip *InputProgram) RunWithCancel() (value string, cancelled bool, err error)
@@ -934,7 +934,7 @@ func (ip *InputProgram) RunWithCancel() (value string, cancelled bool, err error
 RunWithCancel runs the input program and returns the entered value and cancellation status.
 
 <a name="InputSubmitMsg"></a>
-## type [InputSubmitMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L199-L201>)
+## type [InputSubmitMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L268-L270>)
 
 InputSubmitMsg is sent when the input is submitted.
 
@@ -945,7 +945,7 @@ type InputSubmitMsg struct {
 ```
 
 <a name="MultiSelectCancelMsg"></a>
-## type [MultiSelectCancelMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L142>)
+## type [MultiSelectCancelMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L150>)
 
 MultiSelectCancelMsg is sent when the multi\-select is cancelled.
 
@@ -968,7 +968,7 @@ type MultiSelectItem struct {
 ```
 
 <a name="MultiSelectModel"></a>
-## type [MultiSelectModel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L14-L28>)
+## type [MultiSelectModel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L15-L29>)
 
 MultiSelectModel represents a multi\-select picker with fuzzy search filtering.
 
@@ -979,7 +979,7 @@ type MultiSelectModel struct {
 ```
 
 <a name="NewMultiSelect"></a>
-### func [NewMultiSelect](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L102>)
+### func [NewMultiSelect](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L103>)
 
 ```go
 func NewMultiSelect(opts ...MultiSelectOption) MultiSelectModel
@@ -988,7 +988,7 @@ func NewMultiSelect(opts ...MultiSelectOption) MultiSelectModel
 NewMultiSelect creates a new MultiSelectModel.
 
 <a name="MultiSelectModel.Cancelled"></a>
-### func \(MultiSelectModel\) [Cancelled](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L489>)
+### func \(MultiSelectModel\) [Cancelled](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L507>)
 
 ```go
 func (m MultiSelectModel) Cancelled() bool
@@ -997,7 +997,7 @@ func (m MultiSelectModel) Cancelled() bool
 Cancelled returns whether the selection was cancelled.
 
 <a name="MultiSelectModel.Init"></a>
-### func \(MultiSelectModel\) [Init](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L129>)
+### func \(MultiSelectModel\) [Init](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L137>)
 
 ```go
 func (m MultiSelectModel) Init() tea.Cmd
@@ -1006,7 +1006,7 @@ func (m MultiSelectModel) Init() tea.Cmd
 Init initializes the multi\-select model.
 
 <a name="MultiSelectModel.Items"></a>
-### func \(MultiSelectModel\) [Items](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L473>)
+### func \(MultiSelectModel\) [Items](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L491>)
 
 ```go
 func (m MultiSelectModel) Items() []PickerItem
@@ -1015,7 +1015,7 @@ func (m MultiSelectModel) Items() []PickerItem
 Items returns all items.
 
 <a name="MultiSelectModel.SelectedItems"></a>
-### func \(MultiSelectModel\) [SelectedItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L462>)
+### func \(MultiSelectModel\) [SelectedItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L480>)
 
 ```go
 func (m MultiSelectModel) SelectedItems() []PickerItem
@@ -1024,7 +1024,7 @@ func (m MultiSelectModel) SelectedItems() []PickerItem
 SelectedItems returns all selected items.
 
 <a name="MultiSelectModel.SetItems"></a>
-### func \(\*MultiSelectModel\) [SetItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L478>)
+### func \(\*MultiSelectModel\) [SetItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L496>)
 
 ```go
 func (m *MultiSelectModel) SetItems(items []PickerItem)
@@ -1033,7 +1033,7 @@ func (m *MultiSelectModel) SetItems(items []PickerItem)
 SetItems updates the items and resets the filter.
 
 <a name="MultiSelectModel.Submitted"></a>
-### func \(MultiSelectModel\) [Submitted](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L484>)
+### func \(MultiSelectModel\) [Submitted](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L502>)
 
 ```go
 func (m MultiSelectModel) Submitted() bool
@@ -1042,7 +1042,7 @@ func (m MultiSelectModel) Submitted() bool
 Submitted returns whether the selection was confirmed.
 
 <a name="MultiSelectModel.Update"></a>
-### func \(MultiSelectModel\) [Update](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L145>)
+### func \(MultiSelectModel\) [Update](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L153>)
 
 ```go
 func (m MultiSelectModel) Update(msg tea.Msg) (MultiSelectModel, tea.Cmd)
@@ -1051,16 +1051,16 @@ func (m MultiSelectModel) Update(msg tea.Msg) (MultiSelectModel, tea.Cmd)
 Update handles messages for the multi\-select model.
 
 <a name="MultiSelectModel.View"></a>
-### func \(MultiSelectModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L347>)
+### func \(MultiSelectModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L355>)
 
 ```go
-func (m MultiSelectModel) View() string
+func (m MultiSelectModel) View() tea.View
 ```
 
 View renders the multi\-select.
 
 <a name="MultiSelectOption"></a>
-## type [MultiSelectOption](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L31>)
+## type [MultiSelectOption](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L32>)
 
 MultiSelectOption configures a MultiSelectModel.
 
@@ -1069,7 +1069,7 @@ type MultiSelectOption func(*MultiSelectModel)
 ```
 
 <a name="WithMultiSelectHeight"></a>
-### func [WithMultiSelectHeight](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L52>)
+### func [WithMultiSelectHeight](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L53>)
 
 ```go
 func WithMultiSelectHeight(height int) MultiSelectOption
@@ -1078,7 +1078,7 @@ func WithMultiSelectHeight(height int) MultiSelectOption
 WithMultiSelectHeight sets the maximum visible items.
 
 <a name="WithMultiSelectItems"></a>
-### func [WithMultiSelectItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L41>)
+### func [WithMultiSelectItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L42>)
 
 ```go
 func WithMultiSelectItems(items []PickerItem) MultiSelectOption
@@ -1087,7 +1087,7 @@ func WithMultiSelectItems(items []PickerItem) MultiSelectOption
 WithMultiSelectItems sets the initial items.
 
 <a name="WithMultiSelectMaximum"></a>
-### func [WithMultiSelectMaximum](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L73>)
+### func [WithMultiSelectMaximum](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L74>)
 
 ```go
 func WithMultiSelectMaximum(max int) MultiSelectOption
@@ -1096,7 +1096,7 @@ func WithMultiSelectMaximum(max int) MultiSelectOption
 WithMultiSelectMaximum sets the maximum allowed selections.
 
 <a name="WithMultiSelectMinimum"></a>
-### func [WithMultiSelectMinimum](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L66>)
+### func [WithMultiSelectMinimum](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L67>)
 
 ```go
 func WithMultiSelectMinimum(min int) MultiSelectOption
@@ -1105,7 +1105,7 @@ func WithMultiSelectMinimum(min int) MultiSelectOption
 WithMultiSelectMinimum sets the minimum required selections.
 
 <a name="WithMultiSelectSearch"></a>
-### func [WithMultiSelectSearch](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L59>)
+### func [WithMultiSelectSearch](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L60>)
 
 ```go
 func WithMultiSelectSearch(enabled bool) MultiSelectOption
@@ -1114,7 +1114,7 @@ func WithMultiSelectSearch(enabled bool) MultiSelectOption
 WithMultiSelectSearch enables or disables the search input.
 
 <a name="WithMultiSelectStyles"></a>
-### func [WithMultiSelectStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L80>)
+### func [WithMultiSelectStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L81>)
 
 ```go
 func WithMultiSelectStyles(styles Styles) MultiSelectOption
@@ -1123,7 +1123,7 @@ func WithMultiSelectStyles(styles Styles) MultiSelectOption
 WithMultiSelectStyles sets custom styles.
 
 <a name="WithMultiSelectTitle"></a>
-### func [WithMultiSelectTitle](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L34>)
+### func [WithMultiSelectTitle](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L35>)
 
 ```go
 func WithMultiSelectTitle(title string) MultiSelectOption
@@ -1132,7 +1132,7 @@ func WithMultiSelectTitle(title string) MultiSelectOption
 WithMultiSelectTitle sets the title.
 
 <a name="WithPreselected"></a>
-### func [WithPreselected](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L87>)
+### func [WithPreselected](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L88>)
 
 ```go
 func WithPreselected(ids []string) MultiSelectOption
@@ -1141,7 +1141,7 @@ func WithPreselected(ids []string) MultiSelectOption
 WithPreselected marks specific items as selected by their IDs.
 
 <a name="MultiSelectProgram"></a>
-## type [MultiSelectProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L494-L497>)
+## type [MultiSelectProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L512-L515>)
 
 MultiSelectProgram wraps a MultiSelectModel in a tea.Program for standalone use.
 
@@ -1152,7 +1152,7 @@ type MultiSelectProgram struct {
 ```
 
 <a name="NewMultiSelectProgram"></a>
-### func [NewMultiSelectProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L524>)
+### func [NewMultiSelectProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L542>)
 
 ```go
 func NewMultiSelectProgram(opts ...MultiSelectOption) *MultiSelectProgram
@@ -1161,7 +1161,7 @@ func NewMultiSelectProgram(opts ...MultiSelectOption) *MultiSelectProgram
 NewMultiSelectProgram creates a new multi\-select program for standalone operation.
 
 <a name="MultiSelectProgram.Run"></a>
-### func \(\*MultiSelectProgram\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L535>)
+### func \(\*MultiSelectProgram\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L553>)
 
 ```go
 func (mp *MultiSelectProgram) Run() ([]PickerItem, error)
@@ -1170,7 +1170,7 @@ func (mp *MultiSelectProgram) Run() ([]PickerItem, error)
 Run runs the multi\-select program and returns the selected items.
 
 <a name="MultiSelectResultMsg"></a>
-## type [MultiSelectResultMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L137-L139>)
+## type [MultiSelectResultMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/multiselect.go#L145-L147>)
 
 MultiSelectResultMsg is sent when the multi\-select is confirmed.
 
@@ -1181,7 +1181,7 @@ type MultiSelectResultMsg struct {
 ```
 
 <a name="PickerCancelMsg"></a>
-## type [PickerCancelMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L120>)
+## type [PickerCancelMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L128>)
 
 PickerCancelMsg is sent when the picker is cancelled.
 
@@ -1190,7 +1190,7 @@ type PickerCancelMsg struct{}
 ```
 
 <a name="PickerItem"></a>
-## type [PickerItem](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L13-L20>)
+## type [PickerItem](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L14-L21>)
 
 PickerItem represents an item in the picker.
 
@@ -1215,7 +1215,7 @@ func SelectOne(title string, items []PickerItem) (*PickerItem, error)
 SelectOne renders a searchable single\-select picker and returns the selected item.
 
 <a name="PickerModel"></a>
-## type [PickerModel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L23-L35>)
+## type [PickerModel](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L24-L36>)
 
 PickerModel represents a list picker with fuzzy search filtering.
 
@@ -1226,7 +1226,7 @@ type PickerModel struct {
 ```
 
 <a name="NewPicker"></a>
-### func [NewPicker](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L80>)
+### func [NewPicker](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L81>)
 
 ```go
 func NewPicker(opts ...PickerOption) PickerModel
@@ -1235,7 +1235,7 @@ func NewPicker(opts ...PickerOption) PickerModel
 NewPicker creates a new PickerModel.
 
 <a name="PickerModel.Cancelled"></a>
-### func \(PickerModel\) [Cancelled](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L399>)
+### func \(PickerModel\) [Cancelled](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L417>)
 
 ```go
 func (m PickerModel) Cancelled() bool
@@ -1244,7 +1244,7 @@ func (m PickerModel) Cancelled() bool
 Cancelled returns whether the picker was cancelled.
 
 <a name="PickerModel.Init"></a>
-### func \(PickerModel\) [Init](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L107>)
+### func \(PickerModel\) [Init](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L115>)
 
 ```go
 func (m PickerModel) Init() tea.Cmd
@@ -1253,7 +1253,7 @@ func (m PickerModel) Init() tea.Cmd
 Init initializes the picker model.
 
 <a name="PickerModel.Items"></a>
-### func \(PickerModel\) [Items](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L383>)
+### func \(PickerModel\) [Items](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L401>)
 
 ```go
 func (m PickerModel) Items() []PickerItem
@@ -1262,7 +1262,7 @@ func (m PickerModel) Items() []PickerItem
 Items returns all items.
 
 <a name="PickerModel.SelectedItem"></a>
-### func \(PickerModel\) [SelectedItem](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L375>)
+### func \(PickerModel\) [SelectedItem](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L393>)
 
 ```go
 func (m PickerModel) SelectedItem() *PickerItem
@@ -1271,7 +1271,7 @@ func (m PickerModel) SelectedItem() *PickerItem
 SelectedItem returns the currently highlighted item, or nil if none.
 
 <a name="PickerModel.SetItems"></a>
-### func \(\*PickerModel\) [SetItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L388>)
+### func \(\*PickerModel\) [SetItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L406>)
 
 ```go
 func (m *PickerModel) SetItems(items []PickerItem)
@@ -1280,7 +1280,7 @@ func (m *PickerModel) SetItems(items []PickerItem)
 SetItems updates the items and resets the filter.
 
 <a name="PickerModel.Submitted"></a>
-### func \(PickerModel\) [Submitted](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L394>)
+### func \(PickerModel\) [Submitted](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L412>)
 
 ```go
 func (m PickerModel) Submitted() bool
@@ -1289,7 +1289,7 @@ func (m PickerModel) Submitted() bool
 Submitted returns whether an item was selected.
 
 <a name="PickerModel.Update"></a>
-### func \(PickerModel\) [Update](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L123>)
+### func \(PickerModel\) [Update](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L131>)
 
 ```go
 func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd)
@@ -1298,16 +1298,16 @@ func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd)
 Update handles messages for the picker model.
 
 <a name="PickerModel.View"></a>
-### func \(PickerModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L285>)
+### func \(PickerModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L293>)
 
 ```go
-func (m PickerModel) View() string
+func (m PickerModel) View() tea.View
 ```
 
 View renders the picker.
 
 <a name="PickerOption"></a>
-## type [PickerOption](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L38>)
+## type [PickerOption](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L39>)
 
 PickerOption configures a PickerModel.
 
@@ -1316,7 +1316,7 @@ type PickerOption func(*PickerModel)
 ```
 
 <a name="WithPickerHeight"></a>
-### func [WithPickerHeight](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L59>)
+### func [WithPickerHeight](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L60>)
 
 ```go
 func WithPickerHeight(height int) PickerOption
@@ -1325,7 +1325,7 @@ func WithPickerHeight(height int) PickerOption
 WithPickerHeight sets the maximum visible items.
 
 <a name="WithPickerItems"></a>
-### func [WithPickerItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L48>)
+### func [WithPickerItems](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L49>)
 
 ```go
 func WithPickerItems(items []PickerItem) PickerOption
@@ -1334,7 +1334,7 @@ func WithPickerItems(items []PickerItem) PickerOption
 WithPickerItems sets the initial items.
 
 <a name="WithPickerSearch"></a>
-### func [WithPickerSearch](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L66>)
+### func [WithPickerSearch](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L67>)
 
 ```go
 func WithPickerSearch(enabled bool) PickerOption
@@ -1343,7 +1343,7 @@ func WithPickerSearch(enabled bool) PickerOption
 WithPickerSearch enables or disables the search input.
 
 <a name="WithPickerStyles"></a>
-### func [WithPickerStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L73>)
+### func [WithPickerStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L74>)
 
 ```go
 func WithPickerStyles(styles Styles) PickerOption
@@ -1352,7 +1352,7 @@ func WithPickerStyles(styles Styles) PickerOption
 WithPickerStyles sets custom styles.
 
 <a name="WithPickerTitle"></a>
-### func [WithPickerTitle](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L41>)
+### func [WithPickerTitle](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L42>)
 
 ```go
 func WithPickerTitle(title string) PickerOption
@@ -1361,7 +1361,7 @@ func WithPickerTitle(title string) PickerOption
 WithPickerTitle sets the picker title.
 
 <a name="PickerProgram"></a>
-## type [PickerProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L404-L407>)
+## type [PickerProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L422-L425>)
 
 PickerProgram wraps a PickerModel in a tea.Program for standalone use.
 
@@ -1372,7 +1372,7 @@ type PickerProgram struct {
 ```
 
 <a name="NewPickerProgram"></a>
-### func [NewPickerProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L434>)
+### func [NewPickerProgram](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L452>)
 
 ```go
 func NewPickerProgram(opts ...PickerOption) *PickerProgram
@@ -1381,7 +1381,7 @@ func NewPickerProgram(opts ...PickerOption) *PickerProgram
 NewPickerProgram creates a new picker program for standalone operation.
 
 <a name="PickerProgram.Run"></a>
-### func \(\*PickerProgram\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L445>)
+### func \(\*PickerProgram\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L463>)
 
 ```go
 func (pp *PickerProgram) Run() (*PickerItem, error)
@@ -1390,7 +1390,7 @@ func (pp *PickerProgram) Run() (*PickerItem, error)
 Run runs the picker program and returns the selected item.
 
 <a name="PickerSelectMsg"></a>
-## type [PickerSelectMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L115-L117>)
+## type [PickerSelectMsg](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/picker.go#L123-L125>)
 
 PickerSelectMsg is sent when an item is selected.
 
@@ -1518,7 +1518,7 @@ Update handles messages for the spinner model.
 ### func \(SpinnerModel\) [View](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/spinner.go#L141>)
 
 ```go
-func (m SpinnerModel) View() string
+func (m SpinnerModel) View() tea.View
 ```
 
 View renders the spinner.
@@ -1667,7 +1667,7 @@ type SpinnerUpdateMsg string
 ```
 
 <a name="Styles"></a>
-## type [Styles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L115-L165>)
+## type [Styles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L116-L166>)
 
 Styles provides a collection of reusable Lipgloss styles.
 
@@ -1726,7 +1726,7 @@ type Styles struct {
 ```
 
 <a name="DefaultStyles"></a>
-### func [DefaultStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L168>)
+### func [DefaultStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L169>)
 
 ```go
 func DefaultStyles() Styles
@@ -1735,7 +1735,7 @@ func DefaultStyles() Styles
 DefaultStyles returns a new Styles instance with the default color scheme.
 
 <a name="NewStyles"></a>
-### func [NewStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L173>)
+### func [NewStyles](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L174>)
 
 ```go
 func NewStyles(scheme ColorScheme) Styles
@@ -1744,7 +1744,7 @@ func NewStyles(scheme ColorScheme) Styles
 NewStyles creates a new Styles instance with the given color scheme.
 
 <a name="Styles.Scheme"></a>
-### func \(Styles\) [Scheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L291>)
+### func \(Styles\) [Scheme](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/styles.go#L292>)
 
 ```go
 func (s Styles) Scheme() ColorScheme
@@ -1753,7 +1753,7 @@ func (s Styles) Scheme() ColorScheme
 Scheme returns the color scheme used by these styles.
 
 <a name="ValidationFunc"></a>
-## type [ValidationFunc](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L12>)
+## type [ValidationFunc](<https://github.com/tagoro9/fotingo/blob/main/internal/ui/input.go#L13>)
 
 ValidationFunc is a function that validates input and returns an error message if invalid.
 
@@ -1765,1672 +1765,3 @@ Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
 
 
 <!-- gomarkdoc:embed:end -->
-`go
-import "github.com/tagoro9/fotingo/internal/ui"
-```
-
-Package ui provides reusable Bubble Tea UI components for the fotingo CLI.
-
-## Index
-
-- [Variables](<#variables>)
-- [func Confirm\(prompt string, defaultYes bool\) \(bool, error\)](<#Confirm>)
-- [func GetEditor\(\) string](<#GetEditor>)
-- [func HasEditor\(\) bool](<#HasEditor>)
-- [func IssueTypeIcon\(issueType string\) string](<#IssueTypeIcon>)
-- [func OpenEditor\(initialContent string\) \(string, error\)](<#OpenEditor>)
-- [func OpenEditorOrFallback\(initialContent string, fallback string\) string](<#OpenEditorOrFallback>)
-- [func OpenEditorWithConfig\(config EditorConfig\) \(string, error\)](<#OpenEditorWithConfig>)
-- [func RenderStaticSpinner\(message string, completed bool, err error\) string](<#RenderStaticSpinner>)
-- [type ColorScheme](<#ColorScheme>)
-  - [func DarkScheme\(\) ColorScheme](<#DarkScheme>)
-  - [func DefaultScheme\(\) ColorScheme](<#DefaultScheme>)
-  - [func LightScheme\(\) ColorScheme](<#LightScheme>)
-- [type ConfirmModel](<#ConfirmModel>)
-  - [func NewConfirm\(opts ...ConfirmOption\) ConfirmModel](<#NewConfirm>)
-  - [func \(m ConfirmModel\) Cancelled\(\) bool](<#ConfirmModel.Cancelled>)
-  - [func \(m ConfirmModel\) Confirmed\(\) bool](<#ConfirmModel.Confirmed>)
-  - [func \(m ConfirmModel\) Init\(\) tea.Cmd](<#ConfirmModel.Init>)
-  - [func \(m ConfirmModel\) Selected\(\) bool](<#ConfirmModel.Selected>)
-  - [func \(m ConfirmModel\) Update\(msg tea.Msg\) \(ConfirmModel, tea.Cmd\)](<#ConfirmModel.Update>)
-  - [func \(m ConfirmModel\) View\(\) string](<#ConfirmModel.View>)
-- [type ConfirmOption](<#ConfirmOption>)
-  - [func WithConfirmPrompt\(prompt string\) ConfirmOption](<#WithConfirmPrompt>)
-  - [func WithConfirmStyles\(styles Styles\) ConfirmOption](<#WithConfirmStyles>)
-  - [func WithDefaultNo\(\) ConfirmOption](<#WithDefaultNo>)
-  - [func WithDefaultYes\(\) ConfirmOption](<#WithDefaultYes>)
-  - [func WithShowButtons\(\) ConfirmOption](<#WithShowButtons>)
-- [type ConfirmProgram](<#ConfirmProgram>)
-  - [func NewConfirmProgram\(opts ...ConfirmOption\) \*ConfirmProgram](<#NewConfirmProgram>)
-  - [func \(cp \*ConfirmProgram\) Run\(\) \(confirmed bool, cancelled bool, err error\)](<#ConfirmProgram.Run>)
-- [type ConfirmResultMsg](<#ConfirmResultMsg>)
-- [type Editor](<#Editor>)
-  - [func NewEditor\(config EditorConfig\) \(\*Editor, error\)](<#NewEditor>)
-  - [func \(e \*Editor\) Edit\(\) \(string, error\)](<#Editor.Edit>)
-  - [func \(e \*Editor\) FilePath\(\) string](<#Editor.FilePath>)
-- [type EditorConfig](<#EditorConfig>)
-  - [func DefaultEditorConfig\(\) EditorConfig](<#DefaultEditorConfig>)
-- [type InputCancelMsg](<#InputCancelMsg>)
-- [type InputModel](<#InputModel>)
-  - [func NewInput\(opts ...InputOption\) InputModel](<#NewInput>)
-  - [func \(m \*InputModel\) Blur\(\)](<#InputModel.Blur>)
-  - [func \(m InputModel\) Cancelled\(\) bool](<#InputModel.Cancelled>)
-  - [func \(m InputModel\) Error\(\) error](<#InputModel.Error>)
-  - [func \(m \*InputModel\) Focus\(\) tea.Cmd](<#InputModel.Focus>)
-  - [func \(m InputModel\) Init\(\) tea.Cmd](<#InputModel.Init>)
-  - [func \(m \*InputModel\) Reset\(\)](<#InputModel.Reset>)
-  - [func \(m \*InputModel\) SetValue\(value string\)](<#InputModel.SetValue>)
-  - [func \(m InputModel\) Submitted\(\) bool](<#InputModel.Submitted>)
-  - [func \(m InputModel\) Update\(msg tea.Msg\) \(InputModel, tea.Cmd\)](<#InputModel.Update>)
-  - [func \(m InputModel\) Value\(\) string](<#InputModel.Value>)
-  - [func \(m InputModel\) View\(\) string](<#InputModel.View>)
-- [type InputOption](<#InputOption>)
-  - [func WithCharLimit\(limit int\) InputOption](<#WithCharLimit>)
-  - [func WithInitialValue\(value string\) InputOption](<#WithInitialValue>)
-  - [func WithInputStyles\(styles Styles\) InputOption](<#WithInputStyles>)
-  - [func WithMasked\(\) InputOption](<#WithMasked>)
-  - [func WithPlaceholder\(placeholder string\) InputOption](<#WithPlaceholder>)
-  - [func WithPrompt\(prompt string\) InputOption](<#WithPrompt>)
-  - [func WithValidation\(fn ValidationFunc\) InputOption](<#WithValidation>)
-  - [func WithWidth\(width int\) InputOption](<#WithWidth>)
-- [type InputProgram](<#InputProgram>)
-  - [func NewInputProgram\(opts ...InputOption\) \*InputProgram](<#NewInputProgram>)
-  - [func \(ip \*InputProgram\) Run\(\) \(string, error\)](<#InputProgram.Run>)
-  - [func \(ip \*InputProgram\) RunWithCancel\(\) \(value string, cancelled bool, err error\)](<#InputProgram.RunWithCancel>)
-- [type InputSubmitMsg](<#InputSubmitMsg>)
-- [type MultiSelectCancelMsg](<#MultiSelectCancelMsg>)
-- [type MultiSelectModel](<#MultiSelectModel>)
-  - [func NewMultiSelect\(opts ...MultiSelectOption\) MultiSelectModel](<#NewMultiSelect>)
-  - [func \(m MultiSelectModel\) Cancelled\(\) bool](<#MultiSelectModel.Cancelled>)
-  - [func \(m MultiSelectModel\) Init\(\) tea.Cmd](<#MultiSelectModel.Init>)
-  - [func \(m MultiSelectModel\) Items\(\) \[\]PickerItem](<#MultiSelectModel.Items>)
-  - [func \(m MultiSelectModel\) SelectedItems\(\) \[\]PickerItem](<#MultiSelectModel.SelectedItems>)
-  - [func \(m \*MultiSelectModel\) SetItems\(items \[\]PickerItem\)](<#MultiSelectModel.SetItems>)
-  - [func \(m MultiSelectModel\) Submitted\(\) bool](<#MultiSelectModel.Submitted>)
-  - [func \(m MultiSelectModel\) Update\(msg tea.Msg\) \(MultiSelectModel, tea.Cmd\)](<#MultiSelectModel.Update>)
-  - [func \(m MultiSelectModel\) View\(\) string](<#MultiSelectModel.View>)
-- [type MultiSelectOption](<#MultiSelectOption>)
-  - [func WithMultiSelectHeight\(height int\) MultiSelectOption](<#WithMultiSelectHeight>)
-  - [func WithMultiSelectItems\(items \[\]PickerItem\) MultiSelectOption](<#WithMultiSelectItems>)
-  - [func WithMultiSelectMaximum\(max int\) MultiSelectOption](<#WithMultiSelectMaximum>)
-  - [func WithMultiSelectMinimum\(min int\) MultiSelectOption](<#WithMultiSelectMinimum>)
-  - [func WithMultiSelectSearch\(enabled bool\) MultiSelectOption](<#WithMultiSelectSearch>)
-  - [func WithMultiSelectStyles\(styles Styles\) MultiSelectOption](<#WithMultiSelectStyles>)
-  - [func WithMultiSelectTitle\(title string\) MultiSelectOption](<#WithMultiSelectTitle>)
-  - [func WithPreselected\(ids \[\]string\) MultiSelectOption](<#WithPreselected>)
-- [type MultiSelectProgram](<#MultiSelectProgram>)
-  - [func NewMultiSelectProgram\(opts ...MultiSelectOption\) \*MultiSelectProgram](<#NewMultiSelectProgram>)
-  - [func \(mp \*MultiSelectProgram\) Run\(\) \(\[\]PickerItem, error\)](<#MultiSelectProgram.Run>)
-- [type MultiSelectResultMsg](<#MultiSelectResultMsg>)
-- [type PickerCancelMsg](<#PickerCancelMsg>)
-- [type PickerItem](<#PickerItem>)
-- [type PickerModel](<#PickerModel>)
-  - [func NewPicker\(opts ...PickerOption\) PickerModel](<#NewPicker>)
-  - [func \(m PickerModel\) Cancelled\(\) bool](<#PickerModel.Cancelled>)
-  - [func \(m PickerModel\) Init\(\) tea.Cmd](<#PickerModel.Init>)
-  - [func \(m PickerModel\) Items\(\) \[\]PickerItem](<#PickerModel.Items>)
-  - [func \(m PickerModel\) SelectedItem\(\) \*PickerItem](<#PickerModel.SelectedItem>)
-  - [func \(m \*PickerModel\) SetItems\(items \[\]PickerItem\)](<#PickerModel.SetItems>)
-  - [func \(m PickerModel\) Submitted\(\) bool](<#PickerModel.Submitted>)
-  - [func \(m PickerModel\) Update\(msg tea.Msg\) \(PickerModel, tea.Cmd\)](<#PickerModel.Update>)
-  - [func \(m PickerModel\) View\(\) string](<#PickerModel.View>)
-- [type PickerOption](<#PickerOption>)
-  - [func WithPickerHeight\(height int\) PickerOption](<#WithPickerHeight>)
-  - [func WithPickerItems\(items \[\]PickerItem\) PickerOption](<#WithPickerItems>)
-  - [func WithPickerSearch\(enabled bool\) PickerOption](<#WithPickerSearch>)
-  - [func WithPickerStyles\(styles Styles\) PickerOption](<#WithPickerStyles>)
-  - [func WithPickerTitle\(title string\) PickerOption](<#WithPickerTitle>)
-- [type PickerProgram](<#PickerProgram>)
-  - [func NewPickerProgram\(opts ...PickerOption\) \*PickerProgram](<#NewPickerProgram>)
-  - [func \(pp \*PickerProgram\) Run\(\) \(\*PickerItem, error\)](<#PickerProgram.Run>)
-- [type PickerSelectMsg](<#PickerSelectMsg>)
-- [type SpinnerCompleteStepMsg](<#SpinnerCompleteStepMsg>)
-- [type SpinnerDoneMsg](<#SpinnerDoneMsg>)
-- [type SpinnerModel](<#SpinnerModel>)
-  - [func NewSpinner\(opts ...SpinnerOption\) SpinnerModel](<#NewSpinner>)
-  - [func \(m \*SpinnerModel\) AddStep\(msg string\)](<#SpinnerModel.AddStep>)
-  - [func \(m \*SpinnerModel\) CompleteStep\(err error\)](<#SpinnerModel.CompleteStep>)
-  - [func \(m SpinnerModel\) Done\(\) bool](<#SpinnerModel.Done>)
-  - [func \(m SpinnerModel\) Error\(\) error](<#SpinnerModel.Error>)
-  - [func \(m \*SpinnerModel\) Finish\(err error\)](<#SpinnerModel.Finish>)
-  - [func \(m SpinnerModel\) Init\(\) tea.Cmd](<#SpinnerModel.Init>)
-  - [func \(m \*SpinnerModel\) SetMessage\(msg string\)](<#SpinnerModel.SetMessage>)
-  - [func \(m SpinnerModel\) Update\(msg tea.Msg\) \(SpinnerModel, tea.Cmd\)](<#SpinnerModel.Update>)
-  - [func \(m SpinnerModel\) View\(\) string](<#SpinnerModel.View>)
-- [type SpinnerOption](<#SpinnerOption>)
-  - [func WithMessage\(msg string\) SpinnerOption](<#WithMessage>)
-  - [func WithSpinnerStyle\(s spinner.Spinner\) SpinnerOption](<#WithSpinnerStyle>)
-  - [func WithStyles\(styles Styles\) SpinnerOption](<#WithStyles>)
-- [type SpinnerProgram](<#SpinnerProgram>)
-  - [func NewSpinnerProgram\(opts ...SpinnerOption\) \*SpinnerProgram](<#NewSpinnerProgram>)
-  - [func \(sp \*SpinnerProgram\) AddStep\(msg string\)](<#SpinnerProgram.AddStep>)
-  - [func \(sp \*SpinnerProgram\) CompleteStep\(err error\)](<#SpinnerProgram.CompleteStep>)
-  - [func \(sp \*SpinnerProgram\) Done\(err error\)](<#SpinnerProgram.Done>)
-  - [func \(sp \*SpinnerProgram\) Start\(\) error](<#SpinnerProgram.Start>)
-  - [func \(sp \*SpinnerProgram\) UpdateMessage\(msg string\)](<#SpinnerProgram.UpdateMessage>)
-  - [func \(sp \*SpinnerProgram\) Wait\(\) error](<#SpinnerProgram.Wait>)
-- [type SpinnerStep](<#SpinnerStep>)
-- [type SpinnerStepMsg](<#SpinnerStepMsg>)
-- [type SpinnerUpdateMsg](<#SpinnerUpdateMsg>)
-- [type Styles](<#Styles>)
-  - [func DefaultStyles\(\) Styles](<#DefaultStyles>)
-  - [func NewStyles\(scheme ColorScheme\) Styles](<#NewStyles>)
-  - [func \(s Styles\) Scheme\(\) ColorScheme](<#Styles.Scheme>)
-- [type ValidationFunc](<#ValidationFunc>)
-
-
-## Variables
-
-<a name="ErrEditorEmpty"></a>ErrEditorEmpty is returned when the editor content is empty.
-
-```go
-var ErrEditorEmpty = errors.New(i18n.T(i18n.UIErrEditorEmpty))
-```
-
-<a name="ErrEditorFailed"></a>ErrEditorFailed is returned when the editor exits with an error.
-
-```go
-var ErrEditorFailed = errors.New(i18n.T(i18n.UIErrEditorFailed))
-```
-
-<a name="ErrNoEditor"></a>ErrNoEditor is returned when no editor is available.
-
-```go
-var ErrNoEditor = errors.New(i18n.T(i18n.UIErrNoEditor))
-```
-
-<a name="Icons"></a>Icons provides consistent unicode icons for UI elements.
-
-```go
-var Icons = struct {
-    // Issue type icons
-    Bug         string
-    Story       string
-    Task        string
-    Epic        string
-    Subtask     string
-    Improvement string
-    NewFeature  string
-    Unknown     string
-
-    // Status icons
-    Check    string
-    Cross    string
-    Warning  string
-    Info     string
-    Question string
-
-    // UI icons
-    Cursor    string
-    Checkbox  string
-    Selected  string
-    Arrow     string
-    Spinner   string
-    Ellipsis  string
-    Separator string
-}{
-
-    Bug:         "[B]",
-    Story:       "[S]",
-    Task:        "[T]",
-    Epic:        "[E]",
-    Subtask:     "[s]",
-    Improvement: "[I]",
-    NewFeature:  "[N]",
-    Unknown:     "[?]",
-
-    Check:    "[v]",
-    Cross:    "[x]",
-    Warning:  "[!]",
-    Info:     "[i]",
-    Question: "[?]",
-
-    Cursor:    ">",
-    Checkbox:  "[ ]",
-    Selected:  "[x]",
-    Arrow:     "->",
-    Spinner:   "*",
-    Ellipsis:  "...",
-    Separator: "|",
-}
-```
-
-<a name="Spacing"></a>Spacing provides consistent spacing values.
-
-```go
-var Spacing = struct {
-    None   int
-    Small  int
-    Medium int
-    Large  int
-}{
-    None:   0,
-    Small:  1,
-    Medium: 2,
-    Large:  4,
-}
-```
-
-<a name="Confirm"></a>
-## func [Confirm](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L243>)
-
-```go
-func Confirm(prompt string, defaultYes bool) (bool, error)
-```
-
-Confirm is a helper function to show a confirmation prompt and return the result.
-
-<a name="GetEditor"></a>
-## func [GetEditor](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L161>)
-
-```go
-func GetEditor() string
-```
-
-GetEditor returns the path to the editor command.
-
-<a name="HasEditor"></a>
-## func [HasEditor](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L156>)
-
-```go
-func HasEditor() bool
-```
-
-HasEditor returns true if an editor is available.
-
-<a name="IssueTypeIcon"></a>
-## func [IssueTypeIcon](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L351>)
-
-```go
-func IssueTypeIcon(issueType string) string
-```
-
-IssueTypeIcon returns the appropriate icon for a Jira issue type.
-
-<a name="OpenEditor"></a>
-## func [OpenEditor](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L255>)
-
-```go
-func OpenEditor(initialContent string) (string, error)
-```
-
-OpenEditor is a convenience function to open an editor with content and return the result.
-
-<a name="OpenEditorOrFallback"></a>
-## func [OpenEditorOrFallback](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L278>)
-
-```go
-func OpenEditorOrFallback(initialContent string, fallback string) string
-```
-
-OpenEditorOrFallback opens an editor if available, otherwise returns the fallback content.
-
-<a name="OpenEditorWithConfig"></a>
-## func [OpenEditorWithConfig](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L268>)
-
-```go
-func OpenEditorWithConfig(config EditorConfig) (string, error)
-```
-
-OpenEditorWithConfig is a convenience function to open an editor with custom config.
-
-<a name="RenderStaticSpinner"></a>
-## func [RenderStaticSpinner](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L323>)
-
-```go
-func RenderStaticSpinner(message string, completed bool, err error) string
-```
-
-RenderStaticSpinner renders a non\-animated spinner view for non\-TTY output.
-
-<a name="ColorScheme"></a>
-## type [ColorScheme](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L11-L33>)
-
-ColorScheme defines the color palette for UI components.
-
-```go
-type ColorScheme struct {
-    // Primary colors
-    Primary   lipgloss.TerminalColor
-    Secondary lipgloss.TerminalColor
-    Accent    lipgloss.TerminalColor
-
-    // Status colors
-    Success lipgloss.TerminalColor
-    Warning lipgloss.TerminalColor
-    Error   lipgloss.TerminalColor
-    Info    lipgloss.TerminalColor
-
-    // UI colors
-    Border     lipgloss.TerminalColor
-    Muted      lipgloss.TerminalColor
-    Background lipgloss.TerminalColor
-    Foreground lipgloss.TerminalColor
-
-    // Selection colors
-    Selected   lipgloss.TerminalColor
-    Unselected lipgloss.TerminalColor
-    Cursor     lipgloss.TerminalColor
-}
-```
-
-<a name="DarkScheme"></a>
-### func [DarkScheme](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L36>)
-
-```go
-func DarkScheme() ColorScheme
-```
-
-DarkScheme returns the color scheme for dark terminals.
-
-<a name="DefaultScheme"></a>
-### func [DefaultScheme](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L83>)
-
-```go
-func DefaultScheme() ColorScheme
-```
-
-DefaultScheme returns the appropriate color scheme based on terminal settings. It respects NO\_COLOR environment variable.
-
-<a name="LightScheme"></a>
-### func [LightScheme](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L59>)
-
-```go
-func LightScheme() ColorScheme
-```
-
-LightScheme returns the color scheme for light terminals.
-
-<a name="ConfirmModel"></a>
-## type [ConfirmModel](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L11-L19>)
-
-ConfirmModel represents a y/n confirmation prompt.
-
-```go
-type ConfirmModel struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewConfirm"></a>
-### func [NewConfirm](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L62>)
-
-```go
-func NewConfirm(opts ...ConfirmOption) ConfirmModel
-```
-
-NewConfirm creates a new ConfirmModel.
-
-<a name="ConfirmModel.Cancelled"></a>
-### func \(ConfirmModel\) [Cancelled](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L182>)
-
-```go
-func (m ConfirmModel) Cancelled() bool
-```
-
-Cancelled returns whether the prompt was cancelled.
-
-<a name="ConfirmModel.Confirmed"></a>
-### func \(ConfirmModel\) [Confirmed](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L177>)
-
-```go
-func (m ConfirmModel) Confirmed() bool
-```
-
-Confirmed returns whether Yes was selected.
-
-<a name="ConfirmModel.Init"></a>
-### func \(ConfirmModel\) [Init](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L77>)
-
-```go
-func (m ConfirmModel) Init() tea.Cmd
-```
-
-Init initializes the confirmation model.
-
-<a name="ConfirmModel.Selected"></a>
-### func \(ConfirmModel\) [Selected](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L187>)
-
-```go
-func (m ConfirmModel) Selected() bool
-```
-
-Selected returns the current selection \(true = Yes, false = No\).
-
-<a name="ConfirmModel.Update"></a>
-### func \(ConfirmModel\) [Update](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L88>)
-
-```go
-func (m ConfirmModel) Update(msg tea.Msg) (ConfirmModel, tea.Cmd)
-```
-
-Update handles messages for the confirmation model.
-
-<a name="ConfirmModel.View"></a>
-### func \(ConfirmModel\) [View](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L128>)
-
-```go
-func (m ConfirmModel) View() string
-```
-
-View renders the confirmation prompt.
-
-<a name="ConfirmOption"></a>
-## type [ConfirmOption](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L22>)
-
-ConfirmOption configures a ConfirmModel.
-
-```go
-type ConfirmOption func(*ConfirmModel)
-```
-
-<a name="WithConfirmPrompt"></a>
-### func [WithConfirmPrompt](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L25>)
-
-```go
-func WithConfirmPrompt(prompt string) ConfirmOption
-```
-
-WithConfirmPrompt sets the confirmation prompt text.
-
-<a name="WithConfirmStyles"></a>
-### func [WithConfirmStyles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L55>)
-
-```go
-func WithConfirmStyles(styles Styles) ConfirmOption
-```
-
-WithConfirmStyles sets custom styles for the confirmation.
-
-<a name="WithDefaultNo"></a>
-### func [WithDefaultNo](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L40>)
-
-```go
-func WithDefaultNo() ConfirmOption
-```
-
-WithDefaultNo sets the default selection to No.
-
-<a name="WithDefaultYes"></a>
-### func [WithDefaultYes](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L32>)
-
-```go
-func WithDefaultYes() ConfirmOption
-```
-
-WithDefaultYes sets the default selection to Yes.
-
-<a name="WithShowButtons"></a>
-### func [WithShowButtons](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L48>)
-
-```go
-func WithShowButtons() ConfirmOption
-```
-
-WithShowButtons enables button\-style display.
-
-<a name="ConfirmProgram"></a>
-## type [ConfirmProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L192-L195>)
-
-ConfirmProgram wraps a ConfirmModel in a tea.Program for standalone use.
-
-```go
-type ConfirmProgram struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewConfirmProgram"></a>
-### func [NewConfirmProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L222>)
-
-```go
-func NewConfirmProgram(opts ...ConfirmOption) *ConfirmProgram
-```
-
-NewConfirmProgram creates a new confirmation program for standalone operation.
-
-<a name="ConfirmProgram.Run"></a>
-### func \(\*ConfirmProgram\) [Run](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L233>)
-
-```go
-func (cp *ConfirmProgram) Run() (confirmed bool, cancelled bool, err error)
-```
-
-Run runs the confirmation program and returns the result.
-
-<a name="ConfirmResultMsg"></a>
-## type [ConfirmResultMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/confirm.go#L82-L85>)
-
-ConfirmResultMsg is sent when the confirmation is resolved.
-
-```go
-type ConfirmResultMsg struct {
-    Confirmed bool
-    Cancelled bool
-}
-```
-
-<a name="Editor"></a>
-## type [Editor](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L52-L55>)
-
-Editor provides functionality to open an external editor.
-
-```go
-type Editor struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewEditor"></a>
-### func [NewEditor](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L64>)
-
-```go
-func NewEditor(config EditorConfig) (*Editor, error)
-```
-
-NewEditor creates a new Editor instance.
-
-<a name="Editor.Edit"></a>
-### func \(\*Editor\) [Edit](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L166>)
-
-```go
-func (e *Editor) Edit() (string, error)
-```
-
-Edit opens the editor with the initial content and returns the edited content.
-
-<a name="Editor.FilePath"></a>
-### func \(\*Editor\) [FilePath](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L250>)
-
-```go
-func (e *Editor) FilePath() string
-```
-
-FilePath returns the path of the temp file \(useful if DeleteOnClose is false\).
-
-<a name="EditorConfig"></a>
-## type [EditorConfig](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L25-L40>)
-
-EditorConfig configures the editor behavior.
-
-```go
-type EditorConfig struct {
-    // Extension is the file extension for the temp file (default: ".md")
-    Extension string
-
-    // InitialContent is the initial content to show in the editor
-    InitialContent string
-
-    // Prefix is a prefix for the temp file name
-    Prefix string
-
-    // AllowEmpty if true, allows empty content to be returned
-    AllowEmpty bool
-
-    // DeleteOnClose if true, deletes the temp file after editing
-    DeleteOnClose bool
-}
-```
-
-<a name="DefaultEditorConfig"></a>
-### func [DefaultEditorConfig](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/editor.go#L43>)
-
-```go
-func DefaultEditorConfig() EditorConfig
-```
-
-DefaultEditorConfig returns the default editor configuration.
-
-<a name="InputCancelMsg"></a>
-## type [InputCancelMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L132>)
-
-InputCancelMsg is sent when the input is cancelled.
-
-```go
-type InputCancelMsg struct{}
-```
-
-<a name="InputModel"></a>
-## type [InputModel](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L14-L25>)
-
-InputModel represents a styled text input with validation support.
-
-```go
-type InputModel struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewInput"></a>
-### func [NewInput](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L93>)
-
-```go
-func NewInput(opts ...InputOption) InputModel
-```
-
-NewInput creates a new InputModel.
-
-<a name="InputModel.Blur"></a>
-### func \(\*InputModel\) [Blur](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L206>)
-
-```go
-func (m *InputModel) Blur()
-```
-
-Blur removes focus from the input.
-
-<a name="InputModel.Cancelled"></a>
-### func \(InputModel\) [Cancelled](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L216>)
-
-```go
-func (m InputModel) Cancelled() bool
-```
-
-Cancelled returns whether the input was cancelled.
-
-<a name="InputModel.Error"></a>
-### func \(InputModel\) [Error](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L221>)
-
-```go
-func (m InputModel) Error() error
-```
-
-Error returns any validation error.
-
-<a name="InputModel.Focus"></a>
-### func \(\*InputModel\) [Focus](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L201>)
-
-```go
-func (m *InputModel) Focus() tea.Cmd
-```
-
-Focus focuses the input.
-
-<a name="InputModel.Init"></a>
-### func \(InputModel\) [Init](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L122>)
-
-```go
-func (m InputModel) Init() tea.Cmd
-```
-
-Init initializes the input model.
-
-<a name="InputModel.Reset"></a>
-### func \(\*InputModel\) [Reset](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L226>)
-
-```go
-func (m *InputModel) Reset()
-```
-
-Reset resets the input state.
-
-<a name="InputModel.SetValue"></a>
-### func \(\*InputModel\) [SetValue](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L196>)
-
-```go
-func (m *InputModel) SetValue(value string)
-```
-
-SetValue sets the input value.
-
-<a name="InputModel.Submitted"></a>
-### func \(InputModel\) [Submitted](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L211>)
-
-```go
-func (m InputModel) Submitted() bool
-```
-
-Submitted returns whether the input was submitted.
-
-<a name="InputModel.Update"></a>
-### func \(InputModel\) [Update](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L135>)
-
-```go
-func (m InputModel) Update(msg tea.Msg) (InputModel, tea.Cmd)
-```
-
-Update handles messages for the input model.
-
-<a name="InputModel.Value"></a>
-### func \(InputModel\) [Value](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L191>)
-
-```go
-func (m InputModel) Value() string
-```
-
-Value returns the current input value.
-
-<a name="InputModel.View"></a>
-### func \(InputModel\) [View](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L174>)
-
-```go
-func (m InputModel) View() string
-```
-
-View renders the input.
-
-<a name="InputOption"></a>
-## type [InputOption](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L28>)
-
-InputOption configures an InputModel.
-
-```go
-type InputOption func(*InputModel)
-```
-
-<a name="WithCharLimit"></a>
-### func [WithCharLimit](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L55>)
-
-```go
-func WithCharLimit(limit int) InputOption
-```
-
-WithCharLimit sets the character limit.
-
-<a name="WithInitialValue"></a>
-### func [WithInitialValue](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L78>)
-
-```go
-func WithInitialValue(value string) InputOption
-```
-
-WithInitialValue sets the initial input value.
-
-<a name="WithInputStyles"></a>
-### func [WithInputStyles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L85>)
-
-```go
-func WithInputStyles(styles Styles) InputOption
-```
-
-WithInputStyles sets custom styles for the input.
-
-<a name="WithMasked"></a>
-### func [WithMasked](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L69>)
-
-```go
-func WithMasked() InputOption
-```
-
-WithMasked enables password masking mode.
-
-<a name="WithPlaceholder"></a>
-### func [WithPlaceholder](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L39>)
-
-```go
-func WithPlaceholder(placeholder string) InputOption
-```
-
-WithPlaceholder sets the placeholder text.
-
-<a name="WithPrompt"></a>
-### func [WithPrompt](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L31>)
-
-```go
-func WithPrompt(prompt string) InputOption
-```
-
-WithPrompt sets the input prompt text.
-
-<a name="WithValidation"></a>
-### func [WithValidation](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L47>)
-
-```go
-func WithValidation(fn ValidationFunc) InputOption
-```
-
-WithValidation sets the validation function.
-
-<a name="WithWidth"></a>
-### func [WithWidth](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L62>)
-
-```go
-func WithWidth(width int) InputOption
-```
-
-WithWidth sets the input width.
-
-<a name="InputProgram"></a>
-## type [InputProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L234-L237>)
-
-InputProgram wraps an InputModel in a tea.Program for standalone use.
-
-```go
-type InputProgram struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewInputProgram"></a>
-### func [NewInputProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L264>)
-
-```go
-func NewInputProgram(opts ...InputOption) *InputProgram
-```
-
-NewInputProgram creates a new input program for standalone operation.
-
-<a name="InputProgram.Run"></a>
-### func \(\*InputProgram\) [Run](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L275>)
-
-```go
-func (ip *InputProgram) Run() (string, error)
-```
-
-Run runs the input program and returns the entered value.
-
-<a name="InputProgram.RunWithCancel"></a>
-### func \(\*InputProgram\) [RunWithCancel](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L289>)
-
-```go
-func (ip *InputProgram) RunWithCancel() (value string, cancelled bool, err error)
-```
-
-RunWithCancel runs the input program and returns the entered value and cancellation status.
-
-<a name="InputSubmitMsg"></a>
-## type [InputSubmitMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L127-L129>)
-
-InputSubmitMsg is sent when the input is submitted.
-
-```go
-type InputSubmitMsg struct {
-    Value string
-}
-```
-
-<a name="MultiSelectCancelMsg"></a>
-## type [MultiSelectCancelMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L142>)
-
-MultiSelectCancelMsg is sent when the multi\-select is cancelled.
-
-```go
-type MultiSelectCancelMsg struct{}
-```
-
-<a name="MultiSelectModel"></a>
-## type [MultiSelectModel](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L14-L28>)
-
-MultiSelectModel represents a multi\-select picker with fuzzy search filtering.
-
-```go
-type MultiSelectModel struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewMultiSelect"></a>
-### func [NewMultiSelect](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L102>)
-
-```go
-func NewMultiSelect(opts ...MultiSelectOption) MultiSelectModel
-```
-
-NewMultiSelect creates a new MultiSelectModel.
-
-<a name="MultiSelectModel.Cancelled"></a>
-### func \(MultiSelectModel\) [Cancelled](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L486>)
-
-```go
-func (m MultiSelectModel) Cancelled() bool
-```
-
-Cancelled returns whether the selection was cancelled.
-
-<a name="MultiSelectModel.Init"></a>
-### func \(MultiSelectModel\) [Init](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L129>)
-
-```go
-func (m MultiSelectModel) Init() tea.Cmd
-```
-
-Init initializes the multi\-select model.
-
-<a name="MultiSelectModel.Items"></a>
-### func \(MultiSelectModel\) [Items](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L470>)
-
-```go
-func (m MultiSelectModel) Items() []PickerItem
-```
-
-Items returns all items.
-
-<a name="MultiSelectModel.SelectedItems"></a>
-### func \(MultiSelectModel\) [SelectedItems](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L459>)
-
-```go
-func (m MultiSelectModel) SelectedItems() []PickerItem
-```
-
-SelectedItems returns all selected items.
-
-<a name="MultiSelectModel.SetItems"></a>
-### func \(\*MultiSelectModel\) [SetItems](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L475>)
-
-```go
-func (m *MultiSelectModel) SetItems(items []PickerItem)
-```
-
-SetItems updates the items and resets the filter.
-
-<a name="MultiSelectModel.Submitted"></a>
-### func \(MultiSelectModel\) [Submitted](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L481>)
-
-```go
-func (m MultiSelectModel) Submitted() bool
-```
-
-Submitted returns whether the selection was confirmed.
-
-<a name="MultiSelectModel.Update"></a>
-### func \(MultiSelectModel\) [Update](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L145>)
-
-```go
-func (m MultiSelectModel) Update(msg tea.Msg) (MultiSelectModel, tea.Cmd)
-```
-
-Update handles messages for the multi\-select model.
-
-<a name="MultiSelectModel.View"></a>
-### func \(MultiSelectModel\) [View](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L347>)
-
-```go
-func (m MultiSelectModel) View() string
-```
-
-View renders the multi\-select.
-
-<a name="MultiSelectOption"></a>
-## type [MultiSelectOption](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L31>)
-
-MultiSelectOption configures a MultiSelectModel.
-
-```go
-type MultiSelectOption func(*MultiSelectModel)
-```
-
-<a name="WithMultiSelectHeight"></a>
-### func [WithMultiSelectHeight](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L52>)
-
-```go
-func WithMultiSelectHeight(height int) MultiSelectOption
-```
-
-WithMultiSelectHeight sets the maximum visible items.
-
-<a name="WithMultiSelectItems"></a>
-### func [WithMultiSelectItems](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L41>)
-
-```go
-func WithMultiSelectItems(items []PickerItem) MultiSelectOption
-```
-
-WithMultiSelectItems sets the initial items.
-
-<a name="WithMultiSelectMaximum"></a>
-### func [WithMultiSelectMaximum](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L73>)
-
-```go
-func WithMultiSelectMaximum(max int) MultiSelectOption
-```
-
-WithMultiSelectMaximum sets the maximum allowed selections.
-
-<a name="WithMultiSelectMinimum"></a>
-### func [WithMultiSelectMinimum](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L66>)
-
-```go
-func WithMultiSelectMinimum(min int) MultiSelectOption
-```
-
-WithMultiSelectMinimum sets the minimum required selections.
-
-<a name="WithMultiSelectSearch"></a>
-### func [WithMultiSelectSearch](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L59>)
-
-```go
-func WithMultiSelectSearch(enabled bool) MultiSelectOption
-```
-
-WithMultiSelectSearch enables or disables the search input.
-
-<a name="WithMultiSelectStyles"></a>
-### func [WithMultiSelectStyles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L80>)
-
-```go
-func WithMultiSelectStyles(styles Styles) MultiSelectOption
-```
-
-WithMultiSelectStyles sets custom styles.
-
-<a name="WithMultiSelectTitle"></a>
-### func [WithMultiSelectTitle](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L34>)
-
-```go
-func WithMultiSelectTitle(title string) MultiSelectOption
-```
-
-WithMultiSelectTitle sets the title.
-
-<a name="WithPreselected"></a>
-### func [WithPreselected](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L87>)
-
-```go
-func WithPreselected(ids []string) MultiSelectOption
-```
-
-WithPreselected marks specific items as selected by their IDs.
-
-<a name="MultiSelectProgram"></a>
-## type [MultiSelectProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L491-L494>)
-
-MultiSelectProgram wraps a MultiSelectModel in a tea.Program for standalone use.
-
-```go
-type MultiSelectProgram struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewMultiSelectProgram"></a>
-### func [NewMultiSelectProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L521>)
-
-```go
-func NewMultiSelectProgram(opts ...MultiSelectOption) *MultiSelectProgram
-```
-
-NewMultiSelectProgram creates a new multi\-select program for standalone operation.
-
-<a name="MultiSelectProgram.Run"></a>
-### func \(\*MultiSelectProgram\) [Run](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L532>)
-
-```go
-func (mp *MultiSelectProgram) Run() ([]PickerItem, error)
-```
-
-Run runs the multi\-select program and returns the selected items.
-
-<a name="MultiSelectResultMsg"></a>
-## type [MultiSelectResultMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/multiselect.go#L137-L139>)
-
-MultiSelectResultMsg is sent when the multi\-select is confirmed.
-
-```go
-type MultiSelectResultMsg struct {
-    Items []PickerItem
-}
-```
-
-<a name="PickerCancelMsg"></a>
-## type [PickerCancelMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L120>)
-
-PickerCancelMsg is sent when the picker is cancelled.
-
-```go
-type PickerCancelMsg struct{}
-```
-
-<a name="PickerItem"></a>
-## type [PickerItem](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L13-L20>)
-
-PickerItem represents an item in the picker.
-
-```go
-type PickerItem struct {
-    ID       string // Unique identifier
-    Label    string // Display text
-    Detail   string // Additional detail (displayed after label)
-    Icon     string // Optional icon prefix
-    Selected bool   // For multi-select mode
-    Value    any    // Optional associated value
-}
-```
-
-<a name="PickerModel"></a>
-## type [PickerModel](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L23-L35>)
-
-PickerModel represents a list picker with fuzzy search filtering.
-
-```go
-type PickerModel struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewPicker"></a>
-### func [NewPicker](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L80>)
-
-```go
-func NewPicker(opts ...PickerOption) PickerModel
-```
-
-NewPicker creates a new PickerModel.
-
-<a name="PickerModel.Cancelled"></a>
-### func \(PickerModel\) [Cancelled](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L399>)
-
-```go
-func (m PickerModel) Cancelled() bool
-```
-
-Cancelled returns whether the picker was cancelled.
-
-<a name="PickerModel.Init"></a>
-### func \(PickerModel\) [Init](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L107>)
-
-```go
-func (m PickerModel) Init() tea.Cmd
-```
-
-Init initializes the picker model.
-
-<a name="PickerModel.Items"></a>
-### func \(PickerModel\) [Items](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L383>)
-
-```go
-func (m PickerModel) Items() []PickerItem
-```
-
-Items returns all items.
-
-<a name="PickerModel.SelectedItem"></a>
-### func \(PickerModel\) [SelectedItem](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L375>)
-
-```go
-func (m PickerModel) SelectedItem() *PickerItem
-```
-
-SelectedItem returns the currently highlighted item, or nil if none.
-
-<a name="PickerModel.SetItems"></a>
-### func \(\*PickerModel\) [SetItems](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L388>)
-
-```go
-func (m *PickerModel) SetItems(items []PickerItem)
-```
-
-SetItems updates the items and resets the filter.
-
-<a name="PickerModel.Submitted"></a>
-### func \(PickerModel\) [Submitted](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L394>)
-
-```go
-func (m PickerModel) Submitted() bool
-```
-
-Submitted returns whether an item was selected.
-
-<a name="PickerModel.Update"></a>
-### func \(PickerModel\) [Update](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L123>)
-
-```go
-func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd)
-```
-
-Update handles messages for the picker model.
-
-<a name="PickerModel.View"></a>
-### func \(PickerModel\) [View](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L285>)
-
-```go
-func (m PickerModel) View() string
-```
-
-View renders the picker.
-
-<a name="PickerOption"></a>
-## type [PickerOption](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L38>)
-
-PickerOption configures a PickerModel.
-
-```go
-type PickerOption func(*PickerModel)
-```
-
-<a name="WithPickerHeight"></a>
-### func [WithPickerHeight](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L59>)
-
-```go
-func WithPickerHeight(height int) PickerOption
-```
-
-WithPickerHeight sets the maximum visible items.
-
-<a name="WithPickerItems"></a>
-### func [WithPickerItems](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L48>)
-
-```go
-func WithPickerItems(items []PickerItem) PickerOption
-```
-
-WithPickerItems sets the initial items.
-
-<a name="WithPickerSearch"></a>
-### func [WithPickerSearch](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L66>)
-
-```go
-func WithPickerSearch(enabled bool) PickerOption
-```
-
-WithPickerSearch enables or disables the search input.
-
-<a name="WithPickerStyles"></a>
-### func [WithPickerStyles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L73>)
-
-```go
-func WithPickerStyles(styles Styles) PickerOption
-```
-
-WithPickerStyles sets custom styles.
-
-<a name="WithPickerTitle"></a>
-### func [WithPickerTitle](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L41>)
-
-```go
-func WithPickerTitle(title string) PickerOption
-```
-
-WithPickerTitle sets the picker title.
-
-<a name="PickerProgram"></a>
-## type [PickerProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L404-L407>)
-
-PickerProgram wraps a PickerModel in a tea.Program for standalone use.
-
-```go
-type PickerProgram struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewPickerProgram"></a>
-### func [NewPickerProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L434>)
-
-```go
-func NewPickerProgram(opts ...PickerOption) *PickerProgram
-```
-
-NewPickerProgram creates a new picker program for standalone operation.
-
-<a name="PickerProgram.Run"></a>
-### func \(\*PickerProgram\) [Run](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L445>)
-
-```go
-func (pp *PickerProgram) Run() (*PickerItem, error)
-```
-
-Run runs the picker program and returns the selected item.
-
-<a name="PickerSelectMsg"></a>
-## type [PickerSelectMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/picker.go#L115-L117>)
-
-PickerSelectMsg is sent when an item is selected.
-
-```go
-type PickerSelectMsg struct {
-    Item PickerItem
-}
-```
-
-<a name="SpinnerCompleteStepMsg"></a>
-## type [SpinnerCompleteStepMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L90-L92>)
-
-SpinnerCompleteStepMsg marks the current step as completed.
-
-```go
-type SpinnerCompleteStepMsg struct {
-    Error error
-}
-```
-
-<a name="SpinnerDoneMsg"></a>
-## type [SpinnerDoneMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L95-L97>)
-
-SpinnerDoneMsg signals that the spinner should stop.
-
-```go
-type SpinnerDoneMsg struct {
-    Error error
-}
-```
-
-<a name="SpinnerModel"></a>
-## type [SpinnerModel](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L19-L26>)
-
-SpinnerModel represents a progress spinner with optional multi\-step display.
-
-```go
-type SpinnerModel struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewSpinner"></a>
-### func [NewSpinner](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L53>)
-
-```go
-func NewSpinner(opts ...SpinnerOption) SpinnerModel
-```
-
-NewSpinner creates a new SpinnerModel.
-
-<a name="SpinnerModel.AddStep"></a>
-### func \(\*SpinnerModel\) [AddStep](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L216>)
-
-```go
-func (m *SpinnerModel) AddStep(msg string)
-```
-
-AddStep adds a new step to the multi\-step progress display.
-
-<a name="SpinnerModel.CompleteStep"></a>
-### func \(\*SpinnerModel\) [CompleteStep](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L225>)
-
-```go
-func (m *SpinnerModel) CompleteStep(err error)
-```
-
-CompleteStep marks the current step as completed.
-
-<a name="SpinnerModel.Done"></a>
-### func \(SpinnerModel\) [Done](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L201>)
-
-```go
-func (m SpinnerModel) Done() bool
-```
-
-Done returns whether the spinner has completed.
-
-<a name="SpinnerModel.Error"></a>
-### func \(SpinnerModel\) [Error](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L206>)
-
-```go
-func (m SpinnerModel) Error() error
-```
-
-Error returns any error that occurred.
-
-<a name="SpinnerModel.Finish"></a>
-### func \(\*SpinnerModel\) [Finish](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L233>)
-
-```go
-func (m *SpinnerModel) Finish(err error)
-```
-
-Finish marks the spinner as done.
-
-<a name="SpinnerModel.Init"></a>
-### func \(SpinnerModel\) [Init](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L77>)
-
-```go
-func (m SpinnerModel) Init() tea.Cmd
-```
-
-Init initializes the spinner model.
-
-<a name="SpinnerModel.SetMessage"></a>
-### func \(\*SpinnerModel\) [SetMessage](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L211>)
-
-```go
-func (m *SpinnerModel) SetMessage(msg string)
-```
-
-SetMessage sets the current message.
-
-<a name="SpinnerModel.Update"></a>
-### func \(SpinnerModel\) [Update](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L100>)
-
-```go
-func (m SpinnerModel) Update(msg tea.Msg) (SpinnerModel, tea.Cmd)
-```
-
-Update handles messages for the spinner model.
-
-<a name="SpinnerModel.View"></a>
-### func \(SpinnerModel\) [View](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L141>)
-
-```go
-func (m SpinnerModel) View() string
-```
-
-View renders the spinner.
-
-<a name="SpinnerOption"></a>
-## type [SpinnerOption](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L29>)
-
-SpinnerOption configures a SpinnerModel.
-
-```go
-type SpinnerOption func(*SpinnerModel)
-```
-
-<a name="WithMessage"></a>
-### func [WithMessage](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L39>)
-
-```go
-func WithMessage(msg string) SpinnerOption
-```
-
-WithMessage sets the initial message.
-
-<a name="WithSpinnerStyle"></a>
-### func [WithSpinnerStyle](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L32>)
-
-```go
-func WithSpinnerStyle(s spinner.Spinner) SpinnerOption
-```
-
-WithSpinnerStyle sets the spinner animation style.
-
-<a name="WithStyles"></a>
-### func [WithStyles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L46>)
-
-```go
-func WithStyles(styles Styles) SpinnerOption
-```
-
-WithStyles sets custom styles for the spinner.
-
-<a name="SpinnerProgram"></a>
-## type [SpinnerProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L243-L246>)
-
-SpinnerProgram wraps a SpinnerModel in a tea.Program for standalone use.
-
-```go
-type SpinnerProgram struct {
-    // contains filtered or unexported fields
-}
-```
-
-<a name="NewSpinnerProgram"></a>
-### func [NewSpinnerProgram](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L249>)
-
-```go
-func NewSpinnerProgram(opts ...SpinnerOption) *SpinnerProgram
-```
-
-NewSpinnerProgram creates a new spinner program for standalone operation.
-
-<a name="SpinnerProgram.AddStep"></a>
-### func \(\*SpinnerProgram\) [AddStep](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L302>)
-
-```go
-func (sp *SpinnerProgram) AddStep(msg string)
-```
-
-AddStep adds a new step to the spinner.
-
-<a name="SpinnerProgram.CompleteStep"></a>
-### func \(\*SpinnerProgram\) [CompleteStep](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L307>)
-
-```go
-func (sp *SpinnerProgram) CompleteStep(err error)
-```
-
-CompleteStep completes the current step.
-
-<a name="SpinnerProgram.Done"></a>
-### func \(\*SpinnerProgram\) [Done](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L312>)
-
-```go
-func (sp *SpinnerProgram) Done(err error)
-```
-
-Done signals completion and stops the spinner.
-
-<a name="SpinnerProgram.Start"></a>
-### func \(\*SpinnerProgram\) [Start](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L289>)
-
-```go
-func (sp *SpinnerProgram) Start() error
-```
-
-Start starts the spinner program in the background.
-
-<a name="SpinnerProgram.UpdateMessage"></a>
-### func \(\*SpinnerProgram\) [UpdateMessage](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L297>)
-
-```go
-func (sp *SpinnerProgram) UpdateMessage(msg string)
-```
-
-UpdateMessage sends a message update to the spinner.
-
-<a name="SpinnerProgram.Wait"></a>
-### func \(\*SpinnerProgram\) [Wait](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L317>)
-
-```go
-func (sp *SpinnerProgram) Wait() error
-```
-
-Wait blocks until the program exits.
-
-<a name="SpinnerStep"></a>
-## type [SpinnerStep](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L12-L16>)
-
-SpinnerStep represents a single step in a multi\-step progress display.
-
-```go
-type SpinnerStep struct {
-    Message   string
-    Completed bool
-    Error     error
-}
-```
-
-<a name="SpinnerStepMsg"></a>
-## type [SpinnerStepMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L85-L87>)
-
-SpinnerStepMsg adds a new step to the spinner.
-
-```go
-type SpinnerStepMsg struct {
-    Message string
-}
-```
-
-<a name="SpinnerUpdateMsg"></a>
-## type [SpinnerUpdateMsg](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/spinner.go#L82>)
-
-SpinnerUpdateMsg updates the spinner message.
-
-```go
-type SpinnerUpdateMsg string
-```
-
-<a name="Styles"></a>
-## type [Styles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L115-L165>)
-
-Styles provides a collection of reusable Lipgloss styles.
-
-```go
-type Styles struct {
-
-    // Base styles
-    Base lipgloss.Style
-
-    // Title and header styles
-    Title    lipgloss.Style
-    Subtitle lipgloss.Style
-    Header   lipgloss.Style
-
-    // Content styles
-    Normal    lipgloss.Style
-    Bold      lipgloss.Style
-    Muted     lipgloss.Style
-    Highlight lipgloss.Style
-
-    // Status styles
-    Success lipgloss.Style
-    Warning lipgloss.Style
-    Error   lipgloss.Style
-    Info    lipgloss.Style
-
-    // List/Picker styles
-    ListItem         lipgloss.Style
-    ListItemSelected lipgloss.Style
-    ListCursor       lipgloss.Style
-
-    // Input styles
-    InputPrompt      lipgloss.Style
-    InputText        lipgloss.Style
-    InputPlaceholder lipgloss.Style
-
-    // Border styles
-    BorderedBox lipgloss.Style
-
-    // Spinner styles
-    Spinner lipgloss.Style
-
-    // Button styles
-    ButtonActive   lipgloss.Style
-    ButtonInactive lipgloss.Style
-
-    // Checkbox styles
-    CheckboxChecked   lipgloss.Style
-    CheckboxUnchecked lipgloss.Style
-
-    // Help styles
-    HelpKey  lipgloss.Style
-    HelpDesc lipgloss.Style
-    // contains filtered or unexported fields
-}
-```
-
-<a name="DefaultStyles"></a>
-### func [DefaultStyles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L168>)
-
-```go
-func DefaultStyles() Styles
-```
-
-DefaultStyles returns a new Styles instance with the default color scheme.
-
-<a name="NewStyles"></a>
-### func [NewStyles](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L173>)
-
-```go
-func NewStyles(scheme ColorScheme) Styles
-```
-
-NewStyles creates a new Styles instance with the given color scheme.
-
-<a name="Styles.Scheme"></a>
-### func \(Styles\) [Scheme](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/styles.go#L291>)
-
-```go
-func (s Styles) Scheme() ColorScheme
-```
-
-Scheme returns the color scheme used by these styles.
-
-<a name="ValidationFunc"></a>
-## type [ValidationFunc](<https://github.com/tagoro9/fotin-go/blob/main/internal/ui/input.go#L11>)
-
-ValidationFunc is a function that validates input and returns an error message if invalid.
-
-```go
-type ValidationFunc func(value string) error
-```
-
-Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
