@@ -3,9 +3,10 @@ package ui
 import (
 	"strings"
 
-	"github.com/charmbracelet/bubbles/textarea"
-	"github.com/charmbracelet/bubbles/textinput"
-	tea "github.com/charmbracelet/bubbletea"
+	"charm.land/bubbles/v2/textarea"
+	"charm.land/bubbles/v2/textinput"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 )
 
 // ValidationFunc is a function that validates input and returns an error message if invalid.
@@ -19,13 +20,19 @@ type InputModel struct {
 	prompt      string
 	placeholder string
 	validate    ValidationFunc
+	width       int
 	validating  bool
 	err         error
 	submitted   bool
 	cancelled   bool
 	masked      bool
 	multiline   bool
+	widthSet    bool
 }
+
+// defaultMultilineContentWidth keeps multiline prompts readable before Bubble
+// Tea reports the terminal width.
+const defaultMultilineContentWidth = 20
 
 // InputOption configures an InputModel.
 type InputOption func(*InputModel)
@@ -48,9 +55,11 @@ func WithPlaceholder(placeholder string) InputOption {
 		m.placeholder = placeholder
 		if m.multiline {
 			m.textarea.Placeholder = placeholder
+			m.ensureMultilineWidth()
 			return
 		}
 		m.input.Placeholder = placeholder
+		m.ensureSingleLineWidth()
 	}
 }
 
@@ -76,11 +85,13 @@ func WithCharLimit(limit int) InputOption {
 // WithWidth sets the input width.
 func WithWidth(width int) InputOption {
 	return func(m *InputModel) {
+		m.width = width
+		m.widthSet = true
 		if m.multiline {
 			m.textarea.SetWidth(width)
 			return
 		}
-		m.input.Width = width
+		m.input.SetWidth(width)
 	}
 }
 
@@ -103,8 +114,12 @@ func WithMultiline(height int) InputOption {
 		m.textarea.SetHeight(height)
 		m.textarea.Placeholder = m.placeholder
 		m.textarea.CharLimit = m.input.CharLimit
+		if m.widthSet {
+			m.textarea.SetWidth(m.width)
+		}
 		m.applyStyles()
 		m.setMultilinePrompt()
+		m.ensureMultilineWidth()
 	}
 }
 
@@ -151,22 +166,31 @@ func NewInput(opts ...InputOption) InputModel {
 // applyStyles applies the current styles to the input.
 func (m *InputModel) applyStyles() {
 	if m.multiline {
-		m.textarea.FocusedStyle.Prompt = m.styles.InputPrompt
-		m.textarea.FocusedStyle.Text = m.styles.InputText
-		m.textarea.FocusedStyle.Placeholder = m.styles.InputPlaceholder
-		m.textarea.BlurredStyle.Prompt = m.styles.InputPrompt
-		m.textarea.BlurredStyle.Text = m.styles.InputText
-		m.textarea.BlurredStyle.Placeholder = m.styles.InputPlaceholder
-		m.textarea.Cursor.Style = m.styles.Highlight
+		styles := m.textarea.Styles()
+		styles.Focused.Prompt = m.styles.InputPrompt
+		styles.Focused.Text = m.styles.InputText
+		styles.Focused.Placeholder = m.styles.InputPlaceholder
+		styles.Blurred.Prompt = m.styles.InputPrompt
+		styles.Blurred.Text = m.styles.InputText
+		styles.Blurred.Placeholder = m.styles.InputPlaceholder
+		styles.Cursor.Color = m.styles.scheme.Accent
+		m.textarea.SetStyles(styles)
 		m.setMultilinePrompt()
 		return
 	}
-	m.input.PromptStyle = m.styles.InputPrompt
-	m.input.TextStyle = m.styles.InputText
-	m.input.PlaceholderStyle = m.styles.InputPlaceholder
-	m.input.Cursor.Style = m.styles.Highlight
+	styles := m.input.Styles()
+	styles.Focused.Prompt = m.styles.InputPrompt
+	styles.Focused.Text = m.styles.InputText
+	styles.Focused.Placeholder = m.styles.InputPlaceholder
+	styles.Blurred.Prompt = m.styles.InputPrompt
+	styles.Blurred.Text = m.styles.InputText
+	styles.Blurred.Placeholder = m.styles.InputPlaceholder
+	styles.Cursor.Color = m.styles.scheme.Accent
+	m.input.SetStyles(styles)
 }
 
+// setMultilinePrompt anchors the prompt to the first line and aligns wrapped
+// content under it.
 func (m *InputModel) setMultilinePrompt() {
 	if !m.multiline {
 		return
@@ -177,14 +201,59 @@ func (m *InputModel) setMultilinePrompt() {
 		promptText += " "
 	}
 
-	promptWidth := len([]rune(promptText))
+	promptWidth := lipgloss.Width(promptText)
 	continuation := strings.Repeat(" ", promptWidth)
-	m.textarea.SetPromptFunc(promptWidth, func(lineIdx int) string {
-		if lineIdx == 0 {
+	m.textarea.SetPromptFunc(promptWidth, func(info textarea.PromptInfo) string {
+		if info.LineNumber == 0 {
 			return promptText
 		}
 		return continuation
 	})
+}
+
+// ensureSingleLineWidth gives Bubble Tea enough width to render the whole
+// placeholder on the first paint.
+func (m *InputModel) ensureSingleLineWidth() {
+	if m.multiline || m.widthSet || m.placeholder == "" || m.input.Width() > 0 {
+		return
+	}
+
+	m.input.SetWidth(maxPlaceholderWidth(m.placeholder))
+}
+
+// ensureMultilineWidth reserves room for the prompt and placeholder before the
+// first window-size message arrives.
+func (m *InputModel) ensureMultilineWidth() {
+	if !m.multiline || m.widthSet {
+		return
+	}
+
+	minWidth := lipgloss.Width(strings.TrimSpace(m.prompt))
+	if minWidth > 0 {
+		minWidth++
+	}
+	contentWidth := maxPlaceholderWidth(m.placeholder)
+	if contentWidth < defaultMultilineContentWidth {
+		contentWidth = defaultMultilineContentWidth
+	}
+	minWidth += contentWidth
+	if m.textarea.Width() >= minWidth {
+		return
+	}
+
+	m.textarea.SetWidth(minWidth)
+}
+
+// maxPlaceholderWidth returns the widest placeholder line in display cells.
+func maxPlaceholderWidth(placeholder string) int {
+	maxWidth := 0
+	for _, line := range strings.Split(placeholder, "\n") {
+		width := lipgloss.Width(line)
+		if width > maxWidth {
+			maxWidth = width
+		}
+	}
+	return maxWidth
 }
 
 // Init initializes the input model.
@@ -217,10 +286,10 @@ func (m InputModel) Update(msg tea.Msg) (InputModel, tea.Cmd) {
 			m.textarea.SetWidth(width)
 		}
 
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if m.multiline {
-			switch msg.Type {
-			case tea.KeyCtrlD:
+			switch msg.String() {
+			case "ctrl+d":
 				if m.validating && m.validate != nil {
 					if err := m.validate(m.textarea.Value()); err != nil {
 						m.err = err
@@ -230,15 +299,15 @@ func (m InputModel) Update(msg tea.Msg) (InputModel, tea.Cmd) {
 				m.submitted = true
 				m.err = nil
 				return m, func() tea.Msg { return InputSubmitMsg{Value: m.textarea.Value()} }
-			case tea.KeyEscape, tea.KeyCtrlC:
+			case "esc", "ctrl+c":
 				m.cancelled = true
 				return m, func() tea.Msg { return InputCancelMsg{} }
 			default:
 				m.err = nil
 			}
 		} else {
-			switch msg.Type {
-			case tea.KeyEnter:
+			switch msg.String() {
+			case "enter":
 				// Validate before submitting
 				if m.validating && m.validate != nil {
 					if err := m.validate(m.input.Value()); err != nil {
@@ -250,7 +319,7 @@ func (m InputModel) Update(msg tea.Msg) (InputModel, tea.Cmd) {
 				m.err = nil
 				return m, func() tea.Msg { return InputSubmitMsg{Value: m.input.Value()} }
 
-			case tea.KeyEscape, tea.KeyCtrlC:
+			case "esc", "ctrl+c":
 				m.cancelled = true
 				return m, func() tea.Msg { return InputCancelMsg{} }
 
@@ -277,7 +346,7 @@ func (m InputModel) Update(msg tea.Msg) (InputModel, tea.Cmd) {
 }
 
 // View renders the input.
-func (m InputModel) View() string {
+func (m InputModel) View() tea.View {
 	var sb strings.Builder
 
 	// Render the input
@@ -286,7 +355,12 @@ func (m InputModel) View() string {
 		sb.WriteString("\n")
 		sb.WriteString(m.styles.Muted.Render("  Press Ctrl+D to submit"))
 	} else {
-		sb.WriteString(m.input.View())
+		view := tea.NewView(m.input.View() + "\n")
+		if m.err != nil {
+			view.Content += m.styles.Error.Render("  " + m.err.Error())
+			view.Content += "\n"
+		}
+		return view
 	}
 	sb.WriteString("\n")
 
@@ -296,7 +370,7 @@ func (m InputModel) View() string {
 		sb.WriteString("\n")
 	}
 
-	return sb.String()
+	return tea.NewView(sb.String())
 }
 
 // Value returns the current input value.
@@ -386,7 +460,7 @@ func (w *inputWrapper) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return w, cmd
 }
 
-func (w *inputWrapper) View() string {
+func (w *inputWrapper) View() tea.View {
 	return w.model.View()
 }
 

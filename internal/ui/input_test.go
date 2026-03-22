@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -32,6 +32,12 @@ func TestNewInput(t *testing.T) {
 		assert.Equal(t, "Enter value", i.input.Placeholder)
 	})
 
+	t.Run("uses the default virtual cursor for single-line input", func(t *testing.T) {
+		t.Parallel()
+		i := NewInput(WithPlaceholder("Enter value"))
+		assert.True(t, i.input.VirtualCursor())
+	})
+
 	t.Run("with char limit option", func(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithCharLimit(50))
@@ -41,7 +47,7 @@ func TestNewInput(t *testing.T) {
 	t.Run("with width option", func(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithWidth(40))
-		assert.Equal(t, 40, i.input.Width)
+		assert.Equal(t, 40, i.input.Width())
 	})
 
 	t.Run("with masked option", func(t *testing.T) {
@@ -79,13 +85,14 @@ func TestNewInput(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithPrompt("Description"), WithMultiline(5))
 		assert.True(t, i.multiline)
-		assert.Contains(t, i.View(), "Ctrl+D")
+		assert.True(t, i.textarea.VirtualCursor())
+		assert.Contains(t, viewString(i.View()), "Ctrl+D")
 	})
 
 	t.Run("multiline prompt renders once", func(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithPrompt("Issue description (optional)"), WithMultiline(5))
-		view := i.View()
+		view := viewString(i.View())
 		assert.Equal(t, 1, strings.Count(view, "Issue description (optional)"))
 	})
 }
@@ -98,7 +105,7 @@ func TestInputUpdate(t *testing.T) {
 		i := NewInput()
 		i.SetValue("test value")
 
-		updated, cmd := i.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := i.Update(specialKey(tea.KeyEnter))
 		assert.True(t, updated.Submitted())
 		assert.NotNil(t, cmd)
 
@@ -113,7 +120,7 @@ func TestInputUpdate(t *testing.T) {
 		t.Parallel()
 		i := NewInput()
 
-		updated, cmd := i.Update(tea.KeyMsg{Type: tea.KeyEscape})
+		updated, cmd := i.Update(specialKey(tea.KeyEscape))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 
@@ -126,7 +133,7 @@ func TestInputUpdate(t *testing.T) {
 		t.Parallel()
 		i := NewInput()
 
-		updated, cmd := i.Update(tea.KeyMsg{Type: tea.KeyCtrlC})
+		updated, cmd := i.Update(ctrlKey('c'))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 	})
@@ -142,7 +149,7 @@ func TestInputUpdate(t *testing.T) {
 		i := NewInput(WithValidation(validate))
 		i.SetValue("ab")
 
-		updated, cmd := i.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := i.Update(specialKey(tea.KeyEnter))
 		assert.False(t, updated.Submitted())
 		assert.Nil(t, cmd)
 		assert.NotNil(t, updated.Error())
@@ -159,7 +166,7 @@ func TestInputUpdate(t *testing.T) {
 		i := NewInput(WithValidation(validate))
 		i.SetValue("valid")
 
-		updated, _ := i.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, _ := i.Update(specialKey(tea.KeyEnter))
 		assert.True(t, updated.Submitted())
 		assert.Nil(t, updated.Error())
 	})
@@ -169,7 +176,7 @@ func TestInputUpdate(t *testing.T) {
 		i := NewInput(WithMultiline(4))
 		i.SetValue("line one\nline two")
 
-		updated, cmd := i.Update(tea.KeyMsg{Type: tea.KeyCtrlD})
+		updated, cmd := i.Update(ctrlKey('d'))
 		assert.True(t, updated.Submitted())
 		assert.NotNil(t, cmd)
 
@@ -183,7 +190,7 @@ func TestInputUpdate(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithMultiline(4))
 
-		updated, _ := i.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, _ := i.Update(specialKey(tea.KeyEnter))
 		assert.False(t, updated.Submitted())
 	})
 }
@@ -194,15 +201,49 @@ func TestInputView(t *testing.T) {
 	t.Run("renders input", func(t *testing.T) {
 		t.Parallel()
 		i := NewInput(WithPrompt("Name:"))
-		view := i.View()
+		view := viewString(i.View())
 		assert.NotEmpty(t, view)
+	})
+
+	t.Run("single-line view renders the full placeholder", func(t *testing.T) {
+		t.Parallel()
+		i := NewInput(WithPrompt("Issue title"), WithPlaceholder("Add a summary"))
+
+		view := i.View()
+		assert.Contains(t, viewString(view), "Issue title Add a summary")
+	})
+
+	t.Run("multiline view keeps the prompt on the first line", func(t *testing.T) {
+		t.Parallel()
+		i := NewInput(
+			WithPrompt("Issue description (optional)"),
+			WithPlaceholder("Add more context"),
+			WithMultiline(5),
+		)
+
+		rendered := viewString(i.View())
+		assert.Contains(t, rendered, "Issue description (optional) Add more context")
+		assert.NotContains(t, rendered, "┃")
+	})
+
+	t.Run("multiline prompt stays anchored after typing", func(t *testing.T) {
+		t.Parallel()
+		i := NewInput(
+			WithPrompt("Issue description (optional)"),
+			WithMultiline(5),
+		)
+		i.SetValue("Add more context")
+
+		rendered := viewString(i.View())
+		assert.Equal(t, 1, strings.Count(rendered, "Issue description (optional)"))
+		assert.Contains(t, rendered, "Issue description (optional) Add more context")
 	})
 
 	t.Run("renders validation error", func(t *testing.T) {
 		t.Parallel()
 		i := NewInput()
 		i.err = errors.New("validation failed")
-		view := i.View()
+		view := viewString(i.View())
 		assert.Contains(t, view, "validation failed")
 	})
 }
@@ -221,9 +262,9 @@ func TestInputMethods(t *testing.T) {
 		t.Parallel()
 		i := NewInput()
 		i.Blur()
-		// Should not panic
-		cmd := i.Focus()
-		assert.NotNil(t, cmd)
+		assert.False(t, i.input.Focused())
+		_ = i.Focus()
+		assert.True(t, i.input.Focused())
 	})
 
 	t.Run("Reset", func(t *testing.T) {
@@ -263,7 +304,7 @@ func TestInputLiveValidation(t *testing.T) {
 		i.SetValue("a")
 
 		// Simulate typing 'b' — value becomes "ab" which is still < 3
-		updated, _ := i.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'b'}})
+		updated, _ := i.Update(textKey("b"))
 		// Should have validation error for "ab" (2 chars < 3)
 		assert.NotNil(t, updated.Error())
 	})
@@ -272,7 +313,7 @@ func TestInputLiveValidation(t *testing.T) {
 		t.Parallel()
 		i := NewInput()
 		i.err = errors.New("old error")
-		updated, _ := i.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}})
+		updated, _ := i.Update(textKey("a"))
 		// Error should be cleared on input
 		assert.Nil(t, updated.err)
 	})
@@ -309,7 +350,7 @@ func TestInputWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewInput()
 		w := &inputWrapper{model: m}
-		_, _ = w.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}})
+		_, _ = w.Update(textKey("a"))
 		// Should not panic
 	})
 
@@ -317,7 +358,7 @@ func TestInputWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewInput(WithPrompt("Test:"))
 		w := &inputWrapper{model: m}
-		view := w.View()
+		view := viewString(w.View())
 		assert.NotEmpty(t, view)
 	})
 }
