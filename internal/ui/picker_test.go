@@ -3,7 +3,7 @@ package ui
 import (
 	"testing"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -54,6 +54,12 @@ func TestNewPicker(t *testing.T) {
 		assert.False(t, p.showSearch)
 	})
 
+	t.Run("uses the default virtual cursor for search input", func(t *testing.T) {
+		t.Parallel()
+		p := NewPicker()
+		assert.True(t, p.search.VirtualCursor())
+	})
+
 	t.Run("with custom styles", func(t *testing.T) {
 		t.Parallel()
 		styles := NewStyles(LightScheme())
@@ -71,7 +77,7 @@ func TestPickerUpdate(t *testing.T) {
 		p := NewPicker(WithPickerItems(items))
 		assert.Equal(t, 0, p.cursor)
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyDown})
+		updated, _ := p.Update(specialKey(tea.KeyDown))
 		assert.Equal(t, 1, updated.cursor)
 	})
 
@@ -81,7 +87,7 @@ func TestPickerUpdate(t *testing.T) {
 		p := NewPicker(WithPickerItems(items))
 		p.cursor = 2
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyUp})
+		updated, _ := p.Update(specialKey(tea.KeyUp))
 		assert.Equal(t, 1, updated.cursor)
 	})
 
@@ -90,10 +96,10 @@ func TestPickerUpdate(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyCtrlN})
+		updated, _ := p.Update(ctrlKey('n'))
 		assert.Equal(t, 1, updated.cursor)
 
-		updated, _ = updated.Update(tea.KeyMsg{Type: tea.KeyCtrlP})
+		updated, _ = updated.Update(ctrlKey('p'))
 		assert.Equal(t, 0, updated.cursor)
 	})
 
@@ -103,7 +109,7 @@ func TestPickerUpdate(t *testing.T) {
 		p := NewPicker(WithPickerItems(items))
 		p.cursor = 3
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyHome})
+		updated, _ := p.Update(specialKey(tea.KeyHome))
 		assert.Equal(t, 0, updated.cursor)
 		assert.Equal(t, 0, updated.offset)
 	})
@@ -113,7 +119,7 @@ func TestPickerUpdate(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyEnd})
+		updated, _ := p.Update(specialKey(tea.KeyEnd))
 		assert.Equal(t, len(items)-1, updated.cursor)
 	})
 
@@ -122,10 +128,10 @@ func TestPickerUpdate(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyPgDown})
+		updated, _ := p.Update(specialKey(tea.KeyPgDown))
 		assert.Equal(t, 2, updated.cursor)
 
-		updated, _ = updated.Update(tea.KeyMsg{Type: tea.KeyPgUp})
+		updated, _ = updated.Update(specialKey(tea.KeyPgUp))
 		assert.Equal(t, 0, updated.cursor)
 	})
 
@@ -135,7 +141,7 @@ func TestPickerUpdate(t *testing.T) {
 		p := NewPicker(WithPickerItems(items))
 		p.cursor = 1
 
-		updated, cmd := p.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := p.Update(specialKey(tea.KeyEnter))
 		assert.True(t, updated.Submitted())
 		assert.NotNil(t, cmd)
 
@@ -149,7 +155,7 @@ func TestPickerUpdate(t *testing.T) {
 		t.Parallel()
 		p := NewPicker(WithPickerItems(createTestItems()))
 
-		updated, cmd := p.Update(tea.KeyMsg{Type: tea.KeyEscape})
+		updated, cmd := p.Update(specialKey(tea.KeyEscape))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 
@@ -162,7 +168,7 @@ func TestPickerUpdate(t *testing.T) {
 		t.Parallel()
 		p := NewPicker(WithPickerItems(createTestItems()))
 
-		updated, cmd := p.Update(tea.KeyMsg{Type: tea.KeyCtrlC})
+		updated, cmd := p.Update(ctrlKey('c'))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 	})
@@ -171,7 +177,7 @@ func TestPickerUpdate(t *testing.T) {
 		t.Parallel()
 		p := NewPicker(WithPickerItems(createTestItems()))
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyUp})
+		updated, _ := p.Update(specialKey(tea.KeyUp))
 		assert.Equal(t, 0, updated.cursor)
 	})
 
@@ -181,7 +187,7 @@ func TestPickerUpdate(t *testing.T) {
 		p := NewPicker(WithPickerItems(items))
 		p.cursor = len(items) - 1
 
-		updated, _ := p.Update(tea.KeyMsg{Type: tea.KeyDown})
+		updated, _ := p.Update(specialKey(tea.KeyDown))
 		assert.Equal(t, len(items)-1, updated.cursor)
 	})
 }
@@ -260,13 +266,24 @@ func TestPickerFilter(t *testing.T) {
 	})
 }
 
+func TestPickerViewShowsFullPlaceholder(t *testing.T) {
+	t.Parallel()
+
+	p := NewPicker(
+		WithPickerTitle("Select Issue"),
+		WithPickerItems(createTestItems()),
+	)
+
+	assert.Contains(t, viewString(p.View()), "Type to filter...")
+}
+
 func TestPickerView(t *testing.T) {
 	t.Parallel()
 
 	t.Run("renders title", func(t *testing.T) {
 		t.Parallel()
 		p := NewPicker(WithPickerTitle("Select Item"))
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, "Select Item")
 	})
 
@@ -274,21 +291,21 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, "Fix login bug")
 	})
 
 	t.Run("renders empty state", func(t *testing.T) {
 		t.Parallel()
 		p := NewPicker()
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, "No matching items")
 	})
 
 	t.Run("renders help text", func(t *testing.T) {
 		t.Parallel()
 		p := NewPicker()
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, "navigate")
 		assert.Contains(t, view, "select")
 		assert.Contains(t, view, "cancel")
@@ -298,7 +315,7 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, Icons.Bug)
 	})
 
@@ -306,7 +323,7 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, "High priority")
 	})
 
@@ -314,7 +331,7 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, "more items below")
 	})
 }
@@ -400,8 +417,8 @@ func TestPickerScrolling(t *testing.T) {
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 
 		// Move down past visible area
-		p, _ = p.Update(tea.KeyMsg{Type: tea.KeyDown})
-		p, _ = p.Update(tea.KeyMsg{Type: tea.KeyDown})
+		p, _ = p.Update(specialKey(tea.KeyDown))
+		p, _ = p.Update(specialKey(tea.KeyDown))
 
 		assert.Equal(t, 2, p.cursor)
 		assert.Equal(t, 1, p.offset) // Should have scrolled
@@ -415,8 +432,8 @@ func TestPickerScrolling(t *testing.T) {
 		p.offset = 2
 
 		// Move up past visible area
-		p, _ = p.Update(tea.KeyMsg{Type: tea.KeyUp})
-		p, _ = p.Update(tea.KeyMsg{Type: tea.KeyUp})
+		p, _ = p.Update(specialKey(tea.KeyUp))
+		p, _ = p.Update(specialKey(tea.KeyUp))
 
 		assert.Equal(t, 1, p.cursor)
 		assert.Equal(t, 1, p.offset)
@@ -428,7 +445,7 @@ func TestPickerScrolling(t *testing.T) {
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 		p.cursor = len(items) - 2
 
-		p, _ = p.Update(tea.KeyMsg{Type: tea.KeyPgDown})
+		p, _ = p.Update(specialKey(tea.KeyPgDown))
 		assert.Equal(t, len(items)-1, p.cursor)
 	})
 
@@ -438,7 +455,7 @@ func TestPickerScrolling(t *testing.T) {
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(10))
 		p.cursor = 1
 
-		p, _ = p.Update(tea.KeyMsg{Type: tea.KeyPgUp})
+		p, _ = p.Update(specialKey(tea.KeyPgUp))
 		assert.Equal(t, 0, p.cursor)
 	})
 
@@ -447,7 +464,7 @@ func TestPickerScrolling(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 
-		p, _ = p.Update(tea.KeyMsg{Type: tea.KeyEnd})
+		p, _ = p.Update(specialKey(tea.KeyEnd))
 		assert.Equal(t, len(items)-1, p.cursor)
 		assert.True(t, p.offset > 0)
 	})
@@ -460,7 +477,7 @@ func TestPickerEdgeCases(t *testing.T) {
 		t.Parallel()
 		p := NewPicker()
 		// No items, filtered is empty
-		updated, cmd := p.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := p.Update(specialKey(tea.KeyEnter))
 		assert.False(t, updated.Submitted())
 		assert.Nil(t, cmd)
 	})
@@ -471,7 +488,7 @@ func TestPickerEdgeCases(t *testing.T) {
 		p := NewPicker(WithPickerItems(items))
 		p.cursor = len(p.filtered) + 10 // Beyond bounds
 
-		updated, cmd := p.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := p.Update(specialKey(tea.KeyEnter))
 		assert.False(t, updated.Submitted())
 		assert.Nil(t, cmd)
 	})
@@ -520,7 +537,7 @@ func TestPickerWrapper(t *testing.T) {
 		m := NewPicker(WithPickerItems(items))
 		w := &pickerWrapper{model: m}
 		// Send a key down to move selection
-		_, _ = w.Update(tea.KeyMsg{Type: tea.KeyDown})
+		_, _ = w.Update(specialKey(tea.KeyDown))
 		assert.Equal(t, 1, w.model.cursor)
 	})
 
@@ -528,7 +545,7 @@ func TestPickerWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewPicker(WithPickerTitle("Test"))
 		w := &pickerWrapper{model: m}
-		view := w.View()
+		view := viewString(w.View())
 		assert.Contains(t, view, "Test")
 	})
 }
@@ -588,7 +605,7 @@ func TestPickerViewScrollIndicators(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 		p.offset = 2
-		view := p.View()
+		view := viewString(p.View())
 		assert.Contains(t, view, "more items above")
 	})
 
@@ -597,7 +614,7 @@ func TestPickerViewScrollIndicators(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 		p.offset = 0
-		view := p.View()
+		view := viewString(p.View())
 		assert.NotContains(t, view, "more items above")
 	})
 }

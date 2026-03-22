@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -55,6 +55,12 @@ func TestNewMultiSelect(t *testing.T) {
 		assert.False(t, m.showSearch)
 	})
 
+	t.Run("uses the default virtual cursor for search input", func(t *testing.T) {
+		t.Parallel()
+		m := NewMultiSelect()
+		assert.True(t, m.search.VirtualCursor())
+	})
+
 	t.Run("with minimum selection", func(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect(WithMultiSelectMinimum(2))
@@ -95,11 +101,11 @@ func TestMultiSelectUpdate(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
 		// Toggle first item
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeySpace})
+		updated, _ := m.Update(textKey(" "))
 		assert.True(t, updated.items[0].Selected)
 
 		// Toggle again
-		updated, _ = updated.Update(tea.KeyMsg{Type: tea.KeySpace})
+		updated, _ = updated.Update(textKey(" "))
 		assert.False(t, updated.items[0].Selected)
 	})
 
@@ -108,10 +114,10 @@ func TestMultiSelectUpdate(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyDown})
+		updated, _ := m.Update(specialKey(tea.KeyDown))
 		assert.Equal(t, 1, updated.cursor)
 
-		updated, _ = updated.Update(tea.KeyMsg{Type: tea.KeyUp})
+		updated, _ = updated.Update(specialKey(tea.KeyUp))
 		assert.Equal(t, 0, updated.cursor)
 	})
 
@@ -122,7 +128,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 		m.items[0].Selected = true
 		m.items[2].Selected = true
 
-		updated, cmd := m.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := m.Update(specialKey(tea.KeyEnter))
 		assert.True(t, updated.Submitted())
 		assert.NotNil(t, cmd)
 
@@ -141,7 +147,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 		)
 		m.items[0].Selected = true // Only 1 selected
 
-		updated, cmd := m.Update(tea.KeyMsg{Type: tea.KeyEnter})
+		updated, cmd := m.Update(specialKey(tea.KeyEnter))
 		assert.False(t, updated.Submitted())
 		assert.Nil(t, cmd)
 	})
@@ -158,7 +164,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 
 		// Try to select a third item
 		m.cursor = 2
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeySpace})
+		updated, _ := m.Update(textKey(" "))
 		assert.False(t, updated.items[2].Selected)
 	})
 
@@ -166,7 +172,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect(WithMultiSelectItems(createTestReviewers()))
 
-		updated, cmd := m.Update(tea.KeyMsg{Type: tea.KeyEscape})
+		updated, cmd := m.Update(specialKey(tea.KeyEscape))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 
@@ -179,7 +185,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect(WithMultiSelectItems(createTestReviewers()))
 
-		updated, cmd := m.Update(tea.KeyMsg{Type: tea.KeyCtrlC})
+		updated, cmd := m.Update(ctrlKey('c'))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 	})
@@ -189,7 +195,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyCtrlA})
+		updated, _ := m.Update(ctrlKey('a'))
 		selected := updated.SelectedItems()
 		assert.Len(t, selected, len(items))
 	})
@@ -202,7 +208,7 @@ func TestMultiSelectUpdate(t *testing.T) {
 			WithMultiSelectMaximum(2),
 		)
 
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyCtrlA})
+		updated, _ := m.Update(ctrlKey('a'))
 		selected := updated.SelectedItems()
 		assert.Len(t, selected, 2)
 	})
@@ -259,7 +265,7 @@ func TestMultiSelectView(t *testing.T) {
 		m.items[0].Selected = true
 		m.items[1].Selected = true
 
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "Reviewers")
 		assert.Contains(t, view, "2 selected")
 	})
@@ -270,7 +276,7 @@ func TestMultiSelectView(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items))
 		m.items[0].Selected = true
 
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, Icons.Selected)
 		assert.Contains(t, view, Icons.Checkbox)
 	})
@@ -280,7 +286,7 @@ func TestMultiSelectView(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "Alice Smith")
 		assert.Contains(t, view, "Bob Jones")
 	})
@@ -288,7 +294,7 @@ func TestMultiSelectView(t *testing.T) {
 	t.Run("renders help text", func(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect()
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "toggle")
 		assert.Contains(t, view, "confirm")
 	})
@@ -301,14 +307,14 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectMinimum(2),
 		)
 
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "Select at least 2")
 	})
 
 	t.Run("renders empty state", func(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect()
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "No matching items")
 	})
 
@@ -322,7 +328,7 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectStyles(styles),
 		)
 		base.cursor = 1
-		baseLine := findLineContaining(base.View(), "Alice Smith")
+		baseLine := findLineContaining(viewString(base.View()), "Alice Smith")
 		baseLabelIndex := strings.Index(baseLine, "Alice Smith")
 		require.GreaterOrEqual(t, baseLabelIndex, 0)
 
@@ -332,7 +338,7 @@ func TestMultiSelectView(t *testing.T) {
 		)
 		selected.cursor = 1
 		selected.items[0].Selected = true
-		selectedLine := findLineContaining(selected.View(), "Alice Smith")
+		selectedLine := findLineContaining(viewString(selected.View()), "Alice Smith")
 		selectedLabelIndex := strings.Index(selectedLine, "Alice Smith")
 		require.GreaterOrEqual(t, selectedLabelIndex, 0)
 
@@ -352,7 +358,7 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectStyles(styles),
 		)
 		nonCursor.cursor = 1
-		nonCursorLine := findLineContaining(nonCursor.View(), "Codex")
+		nonCursorLine := findLineContaining(viewString(nonCursor.View()), "Codex")
 		nonCursorIconIndex := strings.Index(nonCursorLine, "⚙")
 		require.GreaterOrEqual(t, nonCursorIconIndex, 0)
 
@@ -361,12 +367,23 @@ func TestMultiSelectView(t *testing.T) {
 			WithMultiSelectStyles(styles),
 		)
 		cursor.cursor = 0
-		cursorLine := findLineContaining(cursor.View(), "Codex")
+		cursorLine := findLineContaining(viewString(cursor.View()), "Codex")
 		cursorIconIndex := strings.Index(cursorLine, "⚙")
 		require.GreaterOrEqual(t, cursorIconIndex, 0)
 
 		assert.Equal(t, nonCursorIconIndex, cursorIconIndex)
 	})
+}
+
+func TestMultiSelectViewShowsFullPlaceholder(t *testing.T) {
+	t.Parallel()
+
+	m := NewMultiSelect(
+		WithMultiSelectTitle("Select Reviewers"),
+		WithMultiSelectItems(createTestReviewers()),
+	)
+
+	assert.Contains(t, viewString(m.View()), "Type to filter...")
 }
 
 func findLineContaining(view, needle string) string {
@@ -468,10 +485,10 @@ func TestMultiSelectScrolling(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items), WithMultiSelectHeight(2))
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyPgDown})
+		m, _ = m.Update(specialKey(tea.KeyPgDown))
 		assert.Equal(t, 2, m.cursor)
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyPgUp})
+		m, _ = m.Update(specialKey(tea.KeyPgUp))
 		assert.Equal(t, 0, m.cursor)
 	})
 
@@ -480,10 +497,10 @@ func TestMultiSelectScrolling(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyEnd})
+		m, _ = m.Update(specialKey(tea.KeyEnd))
 		assert.Equal(t, len(items)-1, m.cursor)
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyHome})
+		m, _ = m.Update(specialKey(tea.KeyHome))
 		assert.Equal(t, 0, m.cursor)
 	})
 
@@ -492,10 +509,10 @@ func TestMultiSelectScrolling(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items))
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyCtrlN})
+		m, _ = m.Update(ctrlKey('n'))
 		assert.Equal(t, 1, m.cursor)
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyCtrlP})
+		m, _ = m.Update(ctrlKey('p'))
 		assert.Equal(t, 0, m.cursor)
 	})
 
@@ -505,7 +522,7 @@ func TestMultiSelectScrolling(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items), WithMultiSelectHeight(2))
 		m.cursor = len(items) - 2
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyPgDown})
+		m, _ = m.Update(specialKey(tea.KeyPgDown))
 		assert.Equal(t, len(items)-1, m.cursor)
 	})
 
@@ -518,7 +535,7 @@ func TestMultiSelectScrolling(t *testing.T) {
 
 		// Move down multiple times to go beyond visible area
 		for i := 0; i < 3; i++ {
-			m, _ = m.Update(tea.KeyMsg{Type: tea.KeyDown})
+			m, _ = m.Update(specialKey(tea.KeyDown))
 		}
 		// Should have scrolled
 		assert.True(t, m.offset > 0)
@@ -531,7 +548,7 @@ func TestMultiSelectScrolling(t *testing.T) {
 		m.cursor = 3
 		m.offset = 2
 
-		m, _ = m.Update(tea.KeyMsg{Type: tea.KeyUp})
+		m, _ = m.Update(specialKey(tea.KeyUp))
 		assert.Equal(t, 2, m.cursor)
 		assert.Equal(t, 2, m.offset)
 	})
@@ -545,7 +562,7 @@ func TestMultiSelectKeyHandlers(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items), WithMultiSelectSearch(false))
 
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}})
+		updated, _ := m.Update(textKey("a"))
 		selected := updated.SelectedItems()
 		assert.Len(t, selected, len(items))
 	})
@@ -556,7 +573,7 @@ func TestMultiSelectKeyHandlers(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items))
 		m.search.SetValue("")
 
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}})
+		updated, _ := m.Update(textKey("a"))
 		selected := updated.SelectedItems()
 		assert.Len(t, selected, len(items))
 	})
@@ -570,7 +587,7 @@ func TestMultiSelectKeyHandlers(t *testing.T) {
 			WithMultiSelectSearch(false),
 		)
 
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'a'}})
+		updated, _ := m.Update(textKey("a"))
 		selected := updated.SelectedItems()
 		assert.Len(t, selected, 2)
 	})
@@ -579,7 +596,7 @@ func TestMultiSelectKeyHandlers(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect()
 		// No items, filtered is empty
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeySpace})
+		updated, _ := m.Update(textKey(" "))
 		// Should not panic
 		assert.NotNil(t, updated)
 	})
@@ -590,7 +607,7 @@ func TestMultiSelectKeyHandlers(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items))
 		m.cursor = len(m.filtered) + 10 // Beyond bounds
 
-		updated, _ := m.Update(tea.KeyMsg{Type: tea.KeySpace})
+		updated, _ := m.Update(textKey(" "))
 		// Should not panic
 		assert.NotNil(t, updated)
 	})
@@ -629,7 +646,7 @@ func TestMultiSelectWrapper(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items))
 		w := &multiSelectWrapper{model: m}
 		// Send a key down to move selection
-		_, _ = w.Update(tea.KeyMsg{Type: tea.KeyDown})
+		_, _ = w.Update(specialKey(tea.KeyDown))
 		assert.Equal(t, 1, w.model.cursor)
 	})
 
@@ -637,7 +654,7 @@ func TestMultiSelectWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewMultiSelect(WithMultiSelectTitle("Test"))
 		w := &multiSelectWrapper{model: m}
-		view := w.View()
+		view := viewString(w.View())
 		assert.Contains(t, view, "Test")
 	})
 }
@@ -651,7 +668,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 		m := NewMultiSelect(WithMultiSelectItems(items), WithMultiSelectHeight(2))
 		m.offset = 2
 
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "more items above")
 	})
 
@@ -660,7 +677,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 		items := createTestReviewers()
 		m := NewMultiSelect(WithMultiSelectItems(items), WithMultiSelectHeight(2))
 
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "more items below")
 	})
 
@@ -670,7 +687,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 			{ID: "1", Label: "Item 1", Icon: Icons.Bug},
 		}
 		m := NewMultiSelect(WithMultiSelectItems(items))
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, Icons.Bug)
 	})
 
@@ -680,7 +697,7 @@ func TestMultiSelectViewEdgeCases(t *testing.T) {
 			{ID: "1", Label: "Item 1", Detail: "Important"},
 		}
 		m := NewMultiSelect(WithMultiSelectItems(items))
-		view := m.View()
+		view := viewString(m.View())
 		assert.Contains(t, view, "Important")
 	})
 }

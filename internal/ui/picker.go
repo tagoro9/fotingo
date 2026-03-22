@@ -3,8 +3,9 @@ package ui
 import (
 	"strings"
 
-	"github.com/charmbracelet/bubbles/textinput"
-	tea "github.com/charmbracelet/bubbletea"
+	"charm.land/bubbles/v2/textinput"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 	"github.com/tagoro9/fotingo/internal/i18n"
 	"github.com/texttheater/golang-levenshtein/levenshtein"
 )
@@ -80,12 +81,19 @@ func WithPickerStyles(styles Styles) PickerOption {
 func NewPicker(opts ...PickerOption) PickerModel {
 	ti := textinput.New()
 	ti.Placeholder = i18n.T(i18n.UIPickerFilterPrompt)
+	ti.SetWidth(lipgloss.Width(ti.Placeholder))
 	ti.Focus()
 
 	styles := DefaultStyles()
-	ti.PromptStyle = styles.InputPrompt
-	ti.TextStyle = styles.InputText
-	ti.PlaceholderStyle = styles.InputPlaceholder
+	tiStyles := ti.Styles()
+	tiStyles.Focused.Prompt = styles.InputPrompt
+	tiStyles.Focused.Text = styles.InputText
+	tiStyles.Focused.Placeholder = styles.InputPlaceholder
+	tiStyles.Blurred.Prompt = styles.InputPrompt
+	tiStyles.Blurred.Text = styles.InputText
+	tiStyles.Blurred.Placeholder = styles.InputPlaceholder
+	tiStyles.Cursor.Color = styles.scheme.Accent
+	ti.SetStyles(tiStyles)
 
 	m := PickerModel{
 		styles:     styles,
@@ -124,9 +132,9 @@ func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd) {
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.Type {
-		case tea.KeyUp, tea.KeyCtrlP:
+	case tea.KeyPressMsg:
+		switch msg.String() {
+		case "up", "ctrl+p":
 			if m.cursor > 0 {
 				m.cursor--
 				// Scroll up if needed
@@ -136,7 +144,7 @@ func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd) {
 			}
 			return m, nil
 
-		case tea.KeyDown, tea.KeyCtrlN:
+		case "down", "ctrl+n":
 			if m.cursor < len(m.filtered)-1 {
 				m.cursor++
 				// Scroll down if needed
@@ -146,19 +154,19 @@ func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd) {
 			}
 			return m, nil
 
-		case tea.KeyHome:
+		case "home":
 			m.cursor = 0
 			m.offset = 0
 			return m, nil
 
-		case tea.KeyEnd:
+		case "end":
 			m.cursor = len(m.filtered) - 1
 			if m.cursor >= m.height {
 				m.offset = m.cursor - m.height + 1
 			}
 			return m, nil
 
-		case tea.KeyPgUp:
+		case "pgup":
 			m.cursor -= m.height
 			if m.cursor < 0 {
 				m.cursor = 0
@@ -166,7 +174,7 @@ func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd) {
 			m.offset = m.cursor
 			return m, nil
 
-		case tea.KeyPgDown:
+		case "pgdown":
 			m.cursor += m.height
 			if m.cursor >= len(m.filtered) {
 				m.cursor = len(m.filtered) - 1
@@ -176,7 +184,7 @@ func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd) {
 			}
 			return m, nil
 
-		case tea.KeyEnter:
+		case "enter":
 			if len(m.filtered) > 0 && m.cursor < len(m.filtered) {
 				m.submitted = true
 				item := m.items[m.filtered[m.cursor]]
@@ -184,7 +192,7 @@ func (m PickerModel) Update(msg tea.Msg) (PickerModel, tea.Cmd) {
 			}
 			return m, nil
 
-		case tea.KeyEscape, tea.KeyCtrlC:
+		case "esc", "ctrl+c":
 			m.cancelled = true
 			return m, func() tea.Msg { return PickerCancelMsg{} }
 		}
@@ -282,8 +290,9 @@ func (m *PickerModel) filter() {
 }
 
 // View renders the picker.
-func (m PickerModel) View() string {
+func (m PickerModel) View() tea.View {
 	var sb strings.Builder
+	var searchView tea.View
 
 	// Title
 	if m.title != "" {
@@ -293,7 +302,8 @@ func (m PickerModel) View() string {
 
 	// Search input
 	if m.showSearch {
-		sb.WriteString(m.search.View())
+		searchView = tea.NewView(m.search.View())
+		sb.WriteString(searchView.Content)
 		sb.WriteString("\n\n")
 	}
 
@@ -368,7 +378,15 @@ func (m PickerModel) View() string {
 	sb.WriteString(m.styles.HelpDesc.Render(" cancel"))
 	sb.WriteString("\n")
 
-	return sb.String()
+	view := tea.NewView(sb.String())
+	if searchView.Cursor != nil {
+		cursor := *searchView.Cursor
+		if m.title != "" {
+			cursor.Y++
+		}
+		view.Cursor = &cursor
+	}
+	return view
 }
 
 // SelectedItem returns the currently highlighted item, or nil if none.
@@ -426,7 +444,7 @@ func (w *pickerWrapper) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return w, cmd
 }
 
-func (w *pickerWrapper) View() string {
+func (w *pickerWrapper) View() tea.View {
 	return w.model.View()
 }
 
