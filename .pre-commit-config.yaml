@@ -29,7 +29,7 @@ repos:
       - id: go-build
       - id: gomarkdoc
   - repo: https://github.com/golangci/golangci-lint
-    rev: v2.11.3
+    rev: v2.11.4
     hooks:
       - id: golangci-lint-full
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
