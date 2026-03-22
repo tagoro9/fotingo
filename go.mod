@@ -8,7 +8,7 @@ require (
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/cli/oauth v1.2.2
 	github.com/dgraph-io/badger/v4 v4.9.1
-	github.com/go-git/go-git/v5 v5.16.5
+	github.com/go-git/go-git/v5 v5.17.0
 	github.com/google/go-github/v84 v84.0.0
 	github.com/kubescape/go-git-url v0.0.31
 	github.com/kyokomi/emoji/v2 v2.2.13
