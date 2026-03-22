@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/tagoro9/fotingo/internal/auth"
 	"github.com/tagoro9/fotingo/internal/commandruntime"
 	"github.com/tagoro9/fotingo/internal/i18n"
@@ -44,7 +44,7 @@ func runInteractiveProcessWithControllerHandoff(controller terminalController, r
 // If the work function returns an error, it is displayed with a boom emoji
 // and returned after the spinner program exits.
 func runWithSpinner(work func(out commandruntime.LocalizedEmitter) error) error {
-	if ShouldSuppressOutput() || !isInputTerminalFn() || !commandruntime.IsInputTerminal() {
+	if ShouldSuppressOutput() || !isInputTerminalFn() || !commandruntime.IsInputTerminal() || !commandruntime.IsOutputTerminal() {
 		return runWithoutSpinner(work)
 	}
 
@@ -54,9 +54,7 @@ func runWithSpinner(work func(out commandruntime.LocalizedEmitter) error) error 
 	model := commandruntime.NewStatusModel(commandruntime.StatusModelOptions{
 		SuppressOutput: ShouldSuppressOutput,
 	})
-	// Spinner views don't need interactive input. Using an inert reader avoids
-	// Bubble Tea cancel-reader failures in non-interactive CI environments.
-	p := tea.NewProgram(model, tea.WithInput(strings.NewReader("")))
+	p := tea.NewProgram(model)
 	out := commandruntime.NewLocalizedEmitter(statusCh, shouldEmitCommandLevel, localizer.T)
 	workDone := make(chan error, 1)
 	forwardDone := make(chan struct{})
@@ -95,7 +93,6 @@ func runWithSpinner(work func(out commandruntime.LocalizedEmitter) error) error 
 
 	return workErr
 }
-
 func runWithoutSpinner(work func(out commandruntime.LocalizedEmitter) error) error {
 	statusCh := make(chan string, 32)
 	out := commandruntime.NewLocalizedEmitter(statusCh, shouldEmitCommandLevel, localizer.T)
