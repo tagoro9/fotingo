@@ -5,6 +5,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"github.com/stretchr/testify/assert"
+	teatest "github.com/tagoro9/fotingo/internal/testutil"
 )
 
 func createTestItems() []PickerItem {
@@ -96,10 +97,10 @@ func TestPickerUpdate(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
 
-		updated, _ := p.Update(ctrlKey('n'))
+		updated, _ := p.Update(teatest.CtrlKey('n'))
 		assert.Equal(t, 1, updated.cursor)
 
-		updated, _ = updated.Update(ctrlKey('p'))
+		updated, _ = updated.Update(teatest.CtrlKey('p'))
 		assert.Equal(t, 0, updated.cursor)
 	})
 
@@ -168,7 +169,7 @@ func TestPickerUpdate(t *testing.T) {
 		t.Parallel()
 		p := NewPicker(WithPickerItems(createTestItems()))
 
-		updated, cmd := p.Update(ctrlKey('c'))
+		updated, cmd := p.Update(teatest.CtrlKey('c'))
 		assert.True(t, updated.Cancelled())
 		assert.NotNil(t, cmd)
 	})
@@ -274,7 +275,7 @@ func TestPickerViewShowsFullPlaceholder(t *testing.T) {
 		WithPickerItems(createTestItems()),
 	)
 
-	assert.Contains(t, viewString(p.View()), "Type to filter...")
+	assert.Contains(t, teatest.ViewString(p.View()), "Type to filter...")
 }
 
 func TestPickerView(t *testing.T) {
@@ -283,7 +284,7 @@ func TestPickerView(t *testing.T) {
 	t.Run("renders title", func(t *testing.T) {
 		t.Parallel()
 		p := NewPicker(WithPickerTitle("Select Item"))
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, "Select Item")
 	})
 
@@ -291,21 +292,21 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, "Fix login bug")
 	})
 
 	t.Run("renders empty state", func(t *testing.T) {
 		t.Parallel()
 		p := NewPicker()
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, "No matching items")
 	})
 
 	t.Run("renders help text", func(t *testing.T) {
 		t.Parallel()
 		p := NewPicker()
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, "navigate")
 		assert.Contains(t, view, "select")
 		assert.Contains(t, view, "cancel")
@@ -315,7 +316,7 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, Icons.Bug)
 	})
 
@@ -323,7 +324,7 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items))
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, "High priority")
 	})
 
@@ -331,7 +332,7 @@ func TestPickerView(t *testing.T) {
 		t.Parallel()
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, "more items below")
 	})
 }
@@ -545,7 +546,7 @@ func TestPickerWrapper(t *testing.T) {
 		t.Parallel()
 		m := NewPicker(WithPickerTitle("Test"))
 		w := &pickerWrapper{model: m}
-		view := viewString(w.View())
+		view := teatest.ViewString(w.View())
 		assert.Contains(t, view, "Test")
 	})
 }
@@ -605,7 +606,7 @@ func TestPickerViewScrollIndicators(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 		p.offset = 2
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.Contains(t, view, "more items above")
 	})
 
@@ -614,7 +615,7 @@ func TestPickerViewScrollIndicators(t *testing.T) {
 		items := createTestItems()
 		p := NewPicker(WithPickerItems(items), WithPickerHeight(2))
 		p.offset = 0
-		view := viewString(p.View())
+		view := teatest.ViewString(p.View())
 		assert.NotContains(t, view, "more items above")
 	})
 }
