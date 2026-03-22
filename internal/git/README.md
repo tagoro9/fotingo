@@ -42,7 +42,7 @@ var IssueType = "ISSUE_TYPE"
 ```
 
 <a name="Commit"></a>
-## type [Commit](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L32-L38>)
+## type [Commit](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L38-L44>)
 
 Commit represents a git commit with its metadata
 
@@ -57,7 +57,7 @@ type Commit struct {
 ```
 
 <a name="CredentialProvider"></a>
-## type [CredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L73-L75>)
+## type [CredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L79-L81>)
 
 CredentialProvider abstracts git credential retrieval for testability.
 
@@ -68,7 +68,7 @@ type CredentialProvider interface {
 ```
 
 <a name="Git"></a>
-## type [Git](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L40-L70>)
+## type [Git](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L46-L76>)
 
 
 
@@ -107,16 +107,16 @@ type Git interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1203>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1386>)
 
 ```go
 func New(cfg *viper.Viper, messages *chan string) (Git, error)
 ```
 
-New returns a new instance of a Git client in the current working directory
+New returns a new instance of a Git client in the current working directory. It supports linked worktrees and keeps credential helper lookups rooted at the active worktree, including repositories that enable extensions.worktreeConfig.
 
 <a name="NewWithCredentialProvider"></a>
-### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1235>)
+### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1418>)
 
 ```go
 func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp CredentialProvider) (Git, error)
@@ -125,7 +125,7 @@ func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp Crede
 NewWithCredentialProvider returns a new Git client with a custom credential provider. This is useful for testing functions that require credentials without invoking git credential fill.
 
 <a name="RemoteConfigurable"></a>
-## type [RemoteConfigurable](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L80-L82>)
+## type [RemoteConfigurable](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L86-L88>)
 
 RemoteConfigurable allows reconfiguring a remote URL on a Git client. This is used in tests to point the remote to a local bare repo for operations while keeping the original URL for display purposes.
 
@@ -136,7 +136,7 @@ type RemoteConfigurable interface {
 ```
 
 <a name="TemplateIssue"></a>
-## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L173-L178>)
+## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L179-L184>)
 
 TODO Is this needed now that we have the issue struct?
 

@@ -5,23 +5,29 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"strings"
 	"text/template"
+	"unsafe"
 
 	"github.com/go-git/go-billy/v5"
 	"github.com/go-git/go-billy/v5/osfs"
 	gogit "github.com/go-git/go-git/v5"
 	gogitConfig "github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/cache"
 	"github.com/go-git/go-git/v5/plumbing/format/gitignore"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/storer"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
+	"github.com/go-git/go-git/v5/storage/filesystem"
+	storagefsdotgit "github.com/go-git/go-git/v5/storage/filesystem/dotgit"
 	giturl "github.com/kubescape/go-git-url"
 	"github.com/spf13/viper"
 	"github.com/tagoro9/fotingo/internal/config"
@@ -1172,6 +1178,175 @@ func repoWorkingDir(repo *gogit.Repository) (string, error) {
 	return worktree.Filesystem.Root(), nil
 }
 
+const gitDirName = ".git"
+
+func isUnsupportedWorktreeConfigError(err error) bool {
+	return strings.Contains(strings.ToLower(err.Error()), "worktreeconfig") &&
+		(errors.Is(err, gogit.ErrUnknownExtension) ||
+			errors.Is(err, gogit.ErrUnsupportedExtensionRepositoryFormatVersion))
+}
+
+func setRepositoryField(repo *gogit.Repository, name string, value any) {
+	field := reflect.ValueOf(repo).Elem().FieldByName(name)
+	reflect.NewAt(field.Type(), unsafe.Pointer(field.UnsafeAddr())).Elem().Set(reflect.ValueOf(value))
+}
+
+// go-git v5.17.0 rejects repositories that enable extensions.worktreeConfig.
+// Build the repository directly so linked worktrees remain usable until upstream supports it.
+func openRepositorySkippingWorktreeConfigValidation(path string, detect bool) (*gogit.Repository, error) {
+	dot, wt, err := dotGitToFilesystems(path, detect)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := dot.Stat(""); err != nil {
+		if os.IsNotExist(err) {
+			return nil, gogit.ErrRepositoryNotExists
+		}
+
+		return nil, err
+	}
+
+	repositoryFS := billy.Filesystem(dot)
+	commonDir, err := dotGitCommonDirectory(dot)
+	if err != nil {
+		return nil, err
+	}
+	if commonDir != nil {
+		repositoryFS = storagefsdotgit.NewRepositoryFilesystem(dot, commonDir)
+	}
+
+	st := filesystem.NewStorage(repositoryFS, cache.NewObjectLRUDefault())
+	if _, err := st.Reference(plumbing.HEAD); err == plumbing.ErrReferenceNotFound {
+		return nil, gogit.ErrRepositoryNotExists
+	} else if err != nil {
+		return nil, err
+	}
+
+	repo := &gogit.Repository{Storer: st}
+	setRepositoryField(repo, "wt", wt)
+	setRepositoryField(repo, "r", make(map[string]*gogit.Remote))
+
+	return repo, nil
+}
+
+func dotGitToFilesystems(path string, detect bool) (dot, wt billy.Filesystem, err error) {
+	if path, err = filepath.Abs(path); err != nil {
+		return nil, nil, err
+	}
+
+	var fs billy.Filesystem
+	var fi os.FileInfo
+	for {
+		fs = osfs.New(path)
+
+		pathInfo, err := fs.Stat("/")
+		if !os.IsNotExist(err) {
+			if pathInfo == nil {
+				return nil, nil, err
+			}
+			if !pathInfo.IsDir() && detect {
+				fs = osfs.New(filepath.Dir(path))
+			}
+		}
+
+		fi, err = fs.Stat(gitDirName)
+		if err == nil {
+			break
+		}
+		if !os.IsNotExist(err) {
+			return nil, nil, err
+		}
+		if detect {
+			if parentDir := filepath.Dir(path); parentDir != path {
+				path = parentDir
+				continue
+			}
+		}
+
+		return fs, nil, nil
+	}
+
+	if fi.IsDir() {
+		dot, err = fs.Chroot(gitDirName)
+		return dot, fs, err
+	}
+
+	dot, err = dotGitFileToFilesystem(path, fs)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return dot, fs, nil
+}
+
+func dotGitFileToFilesystem(path string, fs billy.Filesystem) (billy.Filesystem, error) {
+	f, err := fs.Open(gitDirName)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = f.Close()
+	}()
+
+	b, err := io.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+
+	line := string(b)
+	const prefix = "gitdir: "
+	if !strings.HasPrefix(line, prefix) {
+		return nil, fmt.Errorf(".git file has no %s prefix", prefix)
+	}
+
+	gitDir := strings.Split(line[len(prefix):], "\n")[0]
+	gitDir = strings.TrimSpace(gitDir)
+	if filepath.IsAbs(gitDir) {
+		return osfs.New(gitDir), nil
+	}
+
+	return osfs.New(fs.Join(path, gitDir)), nil
+}
+
+func dotGitCommonDirectory(dot billy.Filesystem) (billy.Filesystem, error) {
+	f, err := dot.Open("commondir")
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = f.Close()
+	}()
+
+	b, err := io.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+	if len(b) == 0 {
+		return nil, nil
+	}
+
+	path := strings.TrimSpace(string(b))
+	var commonDir billy.Filesystem
+	if filepath.IsAbs(path) {
+		commonDir = osfs.New(path)
+	} else {
+		commonDir = osfs.New(filepath.Join(dot.Root(), path))
+	}
+	if _, err := commonDir.Stat(""); err != nil {
+		if os.IsNotExist(err) {
+			return nil, gogit.ErrRepositoryIncomplete
+		}
+
+		return nil, err
+	}
+
+	return commonDir, nil
+}
+
 // findClosestRepository finds the closest Git repository to the given path and returns a Repository instance
 // of it
 func findClosestRepository(path string) (*gogit.Repository, error) {
@@ -1188,6 +1363,12 @@ func findClosestRepository(path string) (*gogit.Repository, error) {
 		if err == nil {
 			return repo, nil
 		}
+		if isUnsupportedWorktreeConfigError(err) {
+			return openRepositorySkippingWorktreeConfigValidation(absPath, true)
+		}
+		if !errors.Is(err, gogit.ErrRepositoryNotExists) {
+			return nil, err
+		}
 
 		// Move up one directory
 		parentDir := filepath.Dir(absPath)
@@ -1199,7 +1380,9 @@ func findClosestRepository(path string) (*gogit.Repository, error) {
 	}
 }
 
-// New returns a new instance of a Git client in the current working directory
+// New returns a new instance of a Git client in the current working directory.
+// It supports linked worktrees and keeps credential helper lookups rooted at the
+// active worktree, including repositories that enable extensions.worktreeConfig.
 func New(cfg *viper.Viper, messages *chan string) (Git, error) {
 	if cfg == nil {
 		return nil, fmt.Errorf("config cannot be nil")
