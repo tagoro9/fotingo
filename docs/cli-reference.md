@@ -119,21 +119,36 @@ fotingo review --simple
 # Add labels/reviewers/assignees
 fotingo review -l bug -r alice -a bob
 
-# Custom title/body
-fotingo review --title "Fix auth bug" --description "Details..."
+# Fill the default Summary and Description sections
+fotingo review --template-summary "Fix auth bug" --template-description "Why: clearer auth failures.\n\nWhat changed:\n- improve copy\n- add telemetry"
+
+# Replace the full PR body from stdin
+printf '## Summary\n\nFix auth bug\n\n## Description\n\nCustom reviewer notes.\n' | fotingo review --description -
+
+# Custom title
+fotingo review --title "Fix auth bug"
 ```
+
+Notes:
+
+- Use `--template-summary` and `--template-description` to fill the default PR template sections.
+- `--template-description` expands escaped `\n`, `\r\n`, and `\t`, which makes multiline scripted descriptions reliable.
+- Use `--description` when you want to replace the entire PR body instead of filling template placeholders.
+- Resolve reviewers, assignees, and labels ahead of time with `fotingo search ... --json` when scripting review creation.
 
 Flags:
 
-| Flag            | Short | Description                          |
-| --------------- | ----- | ------------------------------------ |
-| `--draft`       | `-d`  | Create a draft pull request          |
-| `--labels`      | `-l`  | Labels to add (repeatable)           |
-| `--reviewers`   | `-r`  | Reviewers to request (repeatable)    |
-| `--assignee`    | `-a`  | Assignees to add (repeatable)        |
-| `--simple`      | `-s`  | Skip Jira integration                |
-| `--title`       |       | Override PR title                    |
-| `--description` |       | Override PR body (`-` to read stdin) |
+| Flag                     | Short | Description                                                          |
+| ------------------------ | ----- | -------------------------------------------------------------------- |
+| `--draft`                | `-d`  | Create a draft pull request                                          |
+| `--labels`               | `-l`  | Labels to add (repeatable)                                           |
+| `--reviewers`            | `-r`  | Reviewers to request (repeatable)                                    |
+| `--assignee`             | `-a`  | Assignees to add (repeatable)                                        |
+| `--simple`               | `-s`  | Skip Jira integration and create a GitHub-only PR                    |
+| `--title`                |       | Override the generated PR title                                      |
+| `--description`          |       | Override the entire PR body (`-` to read stdin)                      |
+| `--template-summary`     |       | Override the default `Summary` section placeholder                   |
+| `--template-description` |       | Override the default `Description` section; expands escaped newlines |
 
 ### `open`
 

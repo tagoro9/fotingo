@@ -4,7 +4,7 @@ The review command will:
 1. Push the current branch to the remote if not already pushed
 2. Check if a PR already exists for the branch
 3. Create a PR with title from the Jira issue summary (or branch name if --simple)
-4. Use a template for the PR body with placeholders
+4. Use a template for the PR body with Summary and Description placeholders
 5. Optionally update the Jira issue status to "In Review" and add a comment with the PR link
 
 Examples:
@@ -20,14 +20,14 @@ Examples:
   # Create a PR with reviewers (users or teams) and assignees
   fotingo review -r alice -r acme/platform -a bob -l bug -l priority
 
-  # Create a PR with template placeholder overrides
-  fotingo review --template-summary "PROJ-123: Improve login" --template-description "Details for reviewers"
+  # Fill the default Summary and Description sections
+  fotingo review --template-summary "PROJ-123: Improve login" --template-description "Why: clearer auth failures.\n\nWhat changed:\n- improve copy\n- add telemetry"
 
   # Create a PR with a custom title
   fotingo review --title "Fix critical bug in auth module"
 
-  # Create a PR with full body content from stdin
-  echo "Custom description" | fotingo review --description -
+  # Replace the full PR body from stdin
+  printf '## Summary\n\nCustom summary\n\n## Description\n\nCustom description\n' | fotingo review --description -
 
   # Get JSON output for scripting
   fotingo review --json -y
@@ -37,14 +37,14 @@ Usage:
 
 Flags:
   -a, --assignee strings              Assignees to add to the pull request (can be specified multiple times)
-      --description string            Override entire pull request body (use '-' for stdin)
+      --description string            Override the entire pull request body (use '-' for stdin)
   -d, --draft                         Create a draft pull request
   -h, --help                          help for review
   -l, --labels strings                Labels to add to the pull request (can be specified multiple times)
   -r, --reviewers strings             Reviewers to request (users or teams, can be specified multiple times)
   -s, --simple                        Skip Jira integration (just create PR)
-      --template-description string   Override template placeholder {description}
-      --template-summary string       Override template placeholder {summary}
+      --template-description string   Override the default Description section ({description}); expands escaped \n, \r\n, and \t
+      --template-summary string       Override the default Summary section ({summary})
       --title string                  Override pull request title
 
 Global Flags:

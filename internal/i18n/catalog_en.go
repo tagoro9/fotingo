@@ -123,19 +123,51 @@ var catalogs = map[string]map[Key]string{
 		StartWrapCreateBranch:              "failed to create issue branch",
 		StartWrapStashChanges:              "failed to stash changes",
 
-		ReviewUse:                          "review",
-		ReviewShort:                        "Create a pull request for the current branch",
-		ReviewLong:                         "Create a pull request for the current branch on GitHub.\n\nThe review command will:\n1. Push the current branch to the remote if not already pushed\n2. Check if a PR already exists for the branch\n3. Create a PR with title from the Jira issue summary (or branch name if --simple)\n4. Use a template for the PR body with placeholders\n5. Optionally update the Jira issue status to \"In Review\" and add a comment with the PR link\n\nExamples:\n  # Create a PR with Jira integration\n  fotingo review\n\n  # Create a draft PR\n  fotingo review --draft\n\n  # Create a PR without Jira integration\n  fotingo review --simple\n\n  # Create a PR with reviewers (users or teams) and assignees\n  fotingo review -r alice -r acme/platform -a bob -l bug -l priority\n\n  # Create a PR with template placeholder overrides\n  fotingo review --template-summary \"PROJ-123: Improve login\" --template-description \"Details for reviewers\"\n\n  # Create a PR with a custom title\n  fotingo review --title \"Fix critical bug in auth module\"\n\n  # Create a PR with full body content from stdin\n  echo \"Custom description\" | fotingo review --description -\n\n  # Get JSON output for scripting\n  fotingo review --json -y",
+		ReviewUse:   "review",
+		ReviewShort: "Create a pull request for the current branch",
+		ReviewLong: `Create a pull request for the current branch on GitHub.
+
+The review command will:
+1. Push the current branch to the remote if not already pushed
+2. Check if a PR already exists for the branch
+3. Create a PR with title from the Jira issue summary (or branch name if --simple)
+4. Use a template for the PR body with Summary and Description placeholders
+5. Optionally update the Jira issue status to "In Review" and add a comment with the PR link
+
+Examples:
+  # Create a PR with Jira integration
+  fotingo review
+
+  # Create a draft PR
+  fotingo review --draft
+
+  # Create a PR without Jira integration
+  fotingo review --simple
+
+  # Create a PR with reviewers (users or teams) and assignees
+  fotingo review -r alice -r acme/platform -a bob -l bug -l priority
+
+  # Fill the default Summary and Description sections
+  fotingo review --template-summary "PROJ-123: Improve login" --template-description "Why: clearer auth failures.\n\nWhat changed:\n- improve copy\n- add telemetry"
+
+  # Create a PR with a custom title
+  fotingo review --title "Fix critical bug in auth module"
+
+  # Replace the full PR body from stdin
+  printf '## Summary\n\nCustom summary\n\n## Description\n\nCustom description\n' | fotingo review --description -
+
+  # Get JSON output for scripting
+  fotingo review --json -y`,
 		ReviewFlagDraft:                    "Create a draft pull request",
 		ReviewFlagLabels:                   "Labels to add to the pull request (can be specified multiple times)",
 		ReviewFlagReviewers:                "Reviewers to request (users or teams, can be specified multiple times)",
 		ReviewFlagAssignees:                "Assignees to add to the pull request (can be specified multiple times)",
 		ReviewFlagSimple:                   "Skip Jira integration (just create PR)",
 		ReviewFlagTitle:                    "Override pull request title",
-		ReviewFlagDescription:              "Override entire pull request body (use '-' for stdin)",
-		ReviewFlagTemplateSummary:          "Override template placeholder {summary}",
-		ReviewFlagTemplateDescription:      "Override template placeholder {description}",
-		ReviewDefaultTemplate:              "{summary}\n\n**Description**\n\n{description}\n\n{fixedIssues}\n\n**Changes**\n\n{changes}\n\n{fotingo.banner}",
+		ReviewFlagDescription:              "Override the entire pull request body (use '-' for stdin)",
+		ReviewFlagTemplateSummary:          "Override the default Summary section ({summary})",
+		ReviewFlagTemplateDescription:      "Override the default Description section ({description}); expands escaped \\n, \\r\\n, and \\t",
+		ReviewDefaultTemplate:              "**Summary**\n\n{summary}\n\n**Description**\n\n{description}\n\n{fixedIssues}\n\n**Changes**\n\n{changes}\n\n{fotingo.banner}",
 		ReviewInitialCreating:              "Starting pull request creation...",
 		ReviewStatusInitGit:                "Initializing Git client...",
 		ReviewStatusGitInit:                "Git client initialized",

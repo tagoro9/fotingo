@@ -29,6 +29,22 @@ fotingo inspect
 | `--quiet`      | Reduce non-essential output |
 | `--no-color`   | Disable ANSI color codes    |
 
+## Review Body Overrides In Automation
+
+Use template placeholder overrides when you want to keep the default PR body layout but fill its sections from a script:
+
+```bash
+fotingo review -y \
+  --template-summary "Fix auth bug" \
+  --template-description "Why: clearer auth failures.\n\nWhat changed:\n- improve copy\n- add telemetry"
+```
+
+Use `--description -` when the automation needs to replace the entire PR body:
+
+```bash
+printf '## Summary\n\nFix auth bug\n\n## Description\n\nCustom reviewer notes.\n' | fotingo review -y --description -
+```
+
 ## JSON Schemas
 
 ### `start` success
