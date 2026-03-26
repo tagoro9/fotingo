@@ -138,6 +138,33 @@ func TestSearchReviewMetadata_FallsBackToCollaboratorsAfterOrgMiss(t *testing.T)
 	assert.Contains(t, gh.calls, "get_collaborators")
 }
 
+func TestSearchReviewMetadata_UsesTeamMatchesBeforeCollaborators(t *testing.T) {
+	origFactory := newSearchGitHubClient
+	defer func() { newSearchGitHubClient = origFactory }()
+
+	gh := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "bob", Name: "Bob Member"},
+		},
+		teams: []github.Team{
+			{Organization: "acme", Slug: "platform", Name: "Platform Team"},
+		},
+		collaborators: []github.User{
+			{Login: "platform-dev", Name: "Platform Developer"},
+		},
+	}
+	newSearchGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	results, err := searchReviewMetadata(searchDomainReviewers, "plat", nil)
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	assert.Equal(t, "acme/platform", results[0].Resolved)
+	assert.Equal(t, reviewMatchKindTeam, results[0].Kind)
+	assert.NotContains(t, gh.calls, "get_collaborators")
+}
+
 func TestSearchReviewMetadata_ProgressCallbackReceivesMetadataMessages(t *testing.T) {
 	origFactory := newSearchGitHubClient
 	defer func() { newSearchGitHubClient = origFactory }()

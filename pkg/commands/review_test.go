@@ -808,6 +808,75 @@ func TestResolveReviewReviewers_DisplayNamePrefixMatchesDifferentLogin(t *testin
 	assert.Empty(t, warnings)
 }
 
+func TestResolveReviewReviewers_UsesOrgMembersBeforeCollaborators(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+
+	ghClient := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "alice", Name: "Alice Developer"},
+		},
+		collaborators: []github.User{
+			{Login: "alice-collab", Name: "Alice Collaborator"},
+		},
+	}
+
+	resolved, teamResolved, warnings, err := resolveReviewReviewers(ghClient, []string{"alice"})
+	require.NoError(t, err)
+	assert.Equal(t, []string{"alice"}, resolved)
+	assert.Empty(t, teamResolved)
+	assert.Empty(t, warnings)
+	assert.NotContains(t, ghClient.calls, "get_collaborators")
+}
+
+func TestResolveReviewReviewers_FetchesCollaboratorsAfterOrgMemberMiss(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+
+	ghClient := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "bob", Name: "Bob Member"},
+		},
+		collaborators: []github.User{
+			{Login: "alice", Name: "Alice Developer"},
+		},
+		teams: []github.Team{
+			{Organization: "acme", Slug: "platform", Name: "Platform Team", Description: "Core platform"},
+		},
+	}
+
+	users, teams, warnings, err := resolveReviewReviewers(ghClient, []string{"alice", "acme/platform"})
+	require.NoError(t, err)
+	assert.Equal(t, []string{"alice"}, users)
+	assert.Equal(t, []string{"acme/platform"}, teams)
+	assert.Empty(t, warnings)
+	assert.Contains(t, ghClient.calls, "get_collaborators")
+}
+
+func TestResolveReviewReviewers_UsesTeamMatchesBeforeCollaborators(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+
+	ghClient := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "bob", Name: "Bob Member"},
+		},
+		teams: []github.Team{
+			{Organization: "acme", Slug: "platform", Name: "Platform Team", Description: "Core platform"},
+		},
+		collaborators: []github.User{
+			{Login: "platform-dev", Name: "Platform Developer"},
+		},
+	}
+
+	users, teams, warnings, err := resolveReviewReviewers(ghClient, []string{"plat"})
+	require.NoError(t, err)
+	assert.Empty(t, users)
+	assert.Equal(t, []string{"acme/platform"}, teams)
+	assert.Empty(t, warnings)
+	assert.NotContains(t, ghClient.calls, "get_collaborators")
+}
+
 func TestBuildReviewParticipantOptions_PrefersNamedDuplicateUser(t *testing.T) {
 	ghClient := &mockGitHub{
 		collaborators: []github.User{
