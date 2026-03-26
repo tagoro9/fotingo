@@ -159,6 +159,7 @@ type mockGitHub struct {
 	createRelease              *github.Release
 	createReleaseErr           error
 	calls                      []string
+	metadataFetchInfoLogger    func(string)
 }
 
 func (m *mockGitHub) GetPullRequestUrl() (string, error) {
@@ -188,17 +189,27 @@ func (m *mockGitHub) AddLabelsToPR(_ int, labels []string) error {
 
 func (m *mockGitHub) GetCollaborators() ([]github.User, error) {
 	m.calls = append(m.calls, "get_collaborators")
+	if m.metadataFetchInfoLogger != nil {
+		m.metadataFetchInfoLogger("Fetching GitHub repository collaborators for testowner/testrepo")
+	}
 	return m.collaborators, m.collaboratorsErr
 }
 
 func (m *mockGitHub) GetOrgMembers() ([]github.User, error) {
 	m.calls = append(m.calls, "get_org_members")
+	if m.metadataFetchInfoLogger != nil {
+		m.metadataFetchInfoLogger("Fetching GitHub organization members for testowner")
+	}
 	return m.orgMembers, m.orgMembersErr
 }
 
 func (m *mockGitHub) GetTeams() ([]github.Team, error) {
 	m.calls = append(m.calls, "get_teams")
 	return m.teams, m.teamsErr
+}
+
+func (m *mockGitHub) SetMetadataFetchInfoLogger(logf func(string)) {
+	m.metadataFetchInfoLogger = logf
 }
 
 func (m *mockGitHub) RequestReviewers(_ int, reviewers []string, teamReviewers []string) error {

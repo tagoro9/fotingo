@@ -64,7 +64,7 @@ func completeReviewReviewersFlag(
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	options, _, err := internalreview.BuildParticipantOptions(ghClient)
+	options, _, err := internalreview.BuildParticipantOptionsForQuery(ghClient, toComplete, true)
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -82,7 +82,7 @@ func completeReviewAssigneesFlag(
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
 
-	options, _, err := internalreview.BuildParticipantOptions(ghClient)
+	options, _, err := internalreview.BuildParticipantOptionsForQuery(ghClient, toComplete, false)
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
