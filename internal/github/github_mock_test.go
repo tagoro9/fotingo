@@ -445,6 +445,43 @@ func (suite *MockServerTestSuite) TestGetTeams_Success() {
 	assert.Equal(suite.T(), "frontend", teams[1].Slug)
 }
 
+func (suite *MockServerTestSuite) TestSupportsOrganizationMetadata_UserOwner() {
+	repository := testutil.DefaultRepository()
+	suite.server.AddRepository(repository)
+
+	checker, ok := suite.client.(interface {
+		SupportsOrganizationMetadata() (bool, error)
+	})
+	require.True(suite.T(), ok)
+
+	supported, err := checker.SupportsOrganizationMetadata()
+
+	require.NoError(suite.T(), err)
+	assert.False(suite.T(), supported)
+}
+
+func (suite *MockServerTestSuite) TestSupportsOrganizationMetadata_OrganizationOwnerUsesCache() {
+	repository := testutil.DefaultRepository()
+	repository.Owner.Type = "Organization"
+	suite.server.AddRepository(repository)
+
+	checker, ok := suite.client.(interface {
+		SupportsOrganizationMetadata() (bool, error)
+	})
+	require.True(suite.T(), ok)
+
+	first, err := checker.SupportsOrganizationMetadata()
+	require.NoError(suite.T(), err)
+	assert.True(suite.T(), first)
+
+	second, err := checker.SupportsOrganizationMetadata()
+	require.NoError(suite.T(), err)
+	assert.True(suite.T(), second)
+
+	requests := countRequests(suite.server.GetRequestLog(), http.MethodGet, "/repos/testowner/testrepo")
+	assert.Equal(suite.T(), 1, requests)
+}
+
 // -----------------------------------------------------------------------
 // RequestReviewers
 // -----------------------------------------------------------------------

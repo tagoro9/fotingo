@@ -3,6 +3,7 @@ package commands
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"testing"
 
@@ -136,6 +137,50 @@ func TestSearchReviewMetadata_FallsBackToCollaboratorsAfterOrgMiss(t *testing.T)
 	assert.Equal(t, "alice", results[0].Resolved)
 	assert.Contains(t, gh.calls, "get_org_members")
 	assert.Contains(t, gh.calls, "get_collaborators")
+}
+
+func TestSearchReviewMetadata_FallsBackToCollaboratorsForNonOrgRepositories(t *testing.T) {
+	origFactory := newSearchGitHubClient
+	defer func() { newSearchGitHubClient = origFactory }()
+
+	supportsOrganizationMetadata := false
+	gh := &mockGitHub{
+		supportsOrganizationMetadata: &supportsOrganizationMetadata,
+		collaborators: []github.User{
+			{Login: "alice", Name: "Alice Collaborator"},
+		},
+	}
+	newSearchGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	results, err := searchReviewMetadata(searchDomainReviewers, "ali", nil)
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	assert.Equal(t, "alice", results[0].Resolved)
+	assert.Contains(t, gh.calls, "get_collaborators")
+	assert.NotContains(t, gh.calls, "get_org_members")
+	assert.NotContains(t, gh.calls, "get_teams")
+}
+
+func TestSearchReviewMetadata_NonOrgCollaboratorFailureReturnsCollaboratorError(t *testing.T) {
+	origFactory := newSearchGitHubClient
+	defer func() { newSearchGitHubClient = origFactory }()
+
+	supportsOrganizationMetadata := false
+	gh := &mockGitHub{
+		supportsOrganizationMetadata: &supportsOrganizationMetadata,
+		collaboratorsErr:             errors.New("collaborators unavailable"),
+	}
+	newSearchGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	results, err := searchReviewMetadata(searchDomainReviewers, "ali", nil)
+	require.Error(t, err)
+	assert.Nil(t, results)
+	assert.Contains(t, err.Error(), "failed to load repository collaborators")
+	assert.NotContains(t, err.Error(), "organization members and teams")
 }
 
 func TestSearchReviewMetadata_UsesTeamMatchesBeforeCollaborators(t *testing.T) {
