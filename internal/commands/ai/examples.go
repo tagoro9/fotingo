@@ -11,6 +11,7 @@ type CommandExamples struct {
 	SearchLabels            string
 	ReviewDefault           string
 	ReviewTemplateOverrides string
+	ReviewBodyFromStdin     string
 	ReviewWithParticipants  string
 }
 
@@ -24,7 +25,8 @@ func DefaultCommandExamples() CommandExamples {
 		SearchAssignees:         "fotingo search assignees bob --json",
 		SearchLabels:            "fotingo search labels bug --json",
 		ReviewDefault:           "fotingo review -y",
-		ReviewTemplateOverrides: `fotingo review -y --template-summary "Improve checkout decline handling" --template-description "Why: reduce support tickets from unclear payment errors. What: clearer decline copy, structured telemetry, and test coverage for decline scenarios."`,
+		ReviewTemplateOverrides: `fotingo review -y --template-summary "Improve checkout decline handling" --template-description "Why: reduce support tickets from unclear payment errors.\n\nWhat changed:\n- clearer decline copy\n- structured telemetry\n- regression coverage"`,
+		ReviewBodyFromStdin:     `printf '## Summary\n\nImprove checkout decline handling\n\n## Description\n\nDetailed reviewer notes.\n' | fotingo review -y --description -`,
 		ReviewWithParticipants:  "fotingo review -y -r alice -r team/platform --assignee bob --labels bug",
 	}
 }

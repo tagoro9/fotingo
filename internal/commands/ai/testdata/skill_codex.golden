@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires fotingo CLI.
 metadata:
   author: fotingo
-  version: "1.1.0"
+  version: "1.2.0"
   generatedBy: "dev"
 ---
 
@@ -47,24 +47,18 @@ fotingo start -p PROJ -k Task -t "Improve checkout decline error handling" -d "P
 
 ## Review Workflows
 
-Create a pull request with defaults:
-
-```bash
-fotingo review -y
-```
-
-Create with template overrides:
-
-```bash
-fotingo review -y --template-summary "Improve checkout decline handling" --template-description "Why: reduce support tickets from unclear payment errors. What: clearer decline copy, structured telemetry, and test coverage for decline scenarios."
-```
-
-Search reviewers, assignees, and labels before review:
+Resolve reviewers, assignees, and labels before review:
 
 ```bash
 fotingo search reviewers ali --json
 fotingo search assignees bob --json
 fotingo search labels bug --json
+```
+
+Create a pull request with defaults:
+
+```bash
+fotingo review -y
 ```
 
 Create with reviewers/assignees:
@@ -73,16 +67,34 @@ Create with reviewers/assignees:
 fotingo review -y -r alice -r team/platform --assignee bob --labels bug
 ```
 
+Fill the default Summary and Description sections with template overrides:
+
+```bash
+fotingo review -y --template-summary "Improve checkout decline handling" --template-description "Why: reduce support tickets from unclear payment errors.\n\nWhat changed:\n- clearer decline copy\n- structured telemetry\n- regression coverage"
+```
+
+Replace the entire PR body from stdin when you need full control:
+
+```bash
+printf '## Summary\n\nImprove checkout decline handling\n\n## Description\n\nDetailed reviewer notes.\n' | fotingo review -y --description -
+```
+
 ## Supporting Commands
 
 - `fotingo open issue` to open current-branch issue URL.
 - `fotingo open pr` to open current-branch PR URL.
 
-## Guidance
+## Workflow Guide
 
+- Start from `fotingo inspect --json` when branch or issue context is unclear.
+- Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
+- Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
+- Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.
+- Use `--description -` when you need to replace the entire PR body instead of filling template placeholders.
+- Use `--title` only when the generated PR title is wrong or incomplete.
 - Use `fotingo --help` (and `<command> --help`) to discover additional workflow actions.
 - If required data is missing, run inspect and retry with explicit values.
 

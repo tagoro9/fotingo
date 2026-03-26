@@ -91,7 +91,7 @@ func SupportedProviderValues() []string
 SupportedProviderValues returns supported provider string values.
 
 <a name="CommandExamples"></a>
-## type [CommandExamples](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/ai/examples.go#L5-L15>)
+## type [CommandExamples](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/ai/examples.go#L5-L16>)
 
 CommandExamples defines reusable command snippets that can be shared between help text and generated skill content.
 
@@ -105,12 +105,13 @@ type CommandExamples struct {
     SearchLabels            string
     ReviewDefault           string
     ReviewTemplateOverrides string
+    ReviewBodyFromStdin     string
     ReviewWithParticipants  string
 }
 ```
 
 <a name="DefaultCommandExamples"></a>
-### func [DefaultCommandExamples](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/ai/examples.go#L18>)
+### func [DefaultCommandExamples](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/ai/examples.go#L19>)
 
 ```go
 func DefaultCommandExamples() CommandExamples
