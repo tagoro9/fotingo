@@ -36,3 +36,21 @@ func TestFormatChangesIncludesLineStats(t *testing.T) {
 		FormatChanges(commits),
 	)
 }
+
+func TestCollectLinkedIssueIDs_PreservesBranchIssueAndDeduplicates(t *testing.T) {
+	issue := &jira.Issue{Key: "FOTINGO-10"}
+
+	assert.Equal(
+		t,
+		[]string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"},
+		CollectLinkedIssueIDs(issue, []string{"FOTINGO-1", "FOTINGO-2", "FOTINGO-1"}),
+	)
+}
+
+func TestFormatFixedIssues_RendersOneLinePerIssue(t *testing.T) {
+	assert.Equal(
+		t,
+		"Fixes FOTINGO-1\nFixes FOTINGO-2",
+		FormatFixedIssues([]string{"FOTINGO-1", "FOTINGO-2"}, nil),
+	)
+}

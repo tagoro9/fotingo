@@ -65,9 +65,14 @@ func ResolveReviewers(
 	canPrompt bool,
 	pick PickMatchFunc,
 ) ([]string, []string, []string, error) {
-	options, warnings, err := BuildParticipantOptions(ghClient)
-	if err != nil {
-		return nil, nil, warnings, err
+	options, warnings, err := BuildOrgScopedParticipantOptions(ghClient, true)
+	if err != nil || !participantOptionsMatchTokens(requested, options) {
+		fallbackOptions, fallbackWarnings, fallbackErr := BuildParticipantOptions(ghClient)
+		warnings = append(warnings, fallbackWarnings...)
+		if fallbackErr != nil {
+			return nil, nil, warnings, fallbackErr
+		}
+		options = fallbackOptions
 	}
 
 	selected, err := ResolveTokenMatches("reviewer", requested, options, canPrompt, pick)
@@ -96,9 +101,14 @@ func ResolveAssignees(
 	canPrompt bool,
 	pick PickMatchFunc,
 ) ([]string, []string, error) {
-	options, warnings, err := BuildParticipantOptions(ghClient)
-	if err != nil {
-		return nil, warnings, err
+	options, warnings, err := BuildOrgScopedParticipantOptions(ghClient, true)
+	if err != nil || !participantOptionsMatchTokens(requested, options) {
+		fallbackOptions, fallbackWarnings, fallbackErr := BuildParticipantOptions(ghClient)
+		warnings = append(warnings, fallbackWarnings...)
+		if fallbackErr != nil {
+			return nil, warnings, fallbackErr
+		}
+		options = fallbackOptions
 	}
 
 	selected, err := ResolveTokenMatches("assignee", requested, options, canPrompt, pick)

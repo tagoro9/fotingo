@@ -15,6 +15,7 @@ type TemplateOptions struct {
 	TemplateSummary       string
 	TemplateDescription   string
 	EmptyPlaceholderValue string
+	LinkedIssueIDs        []string
 }
 
 // BuildTemplateData returns template placeholder values for review PR bodies.
@@ -39,18 +40,15 @@ func BuildTemplateData(
 		data[template.PlaceholderIssueKey] = issue.Key
 		data[template.PlaceholderIssueSummary] = issue.Summary
 		data[template.PlaceholderIssueDescription] = issue.Description
+		data[template.PlaceholderIssueURL] = jiraIssueURL(jiraClient, issue.Key)
+	}
 
-		issueReference := issue.Key
-		if jiraClient != nil {
-			issueURL := jiraClient.GetIssueURL(issue.Key)
-			data[template.PlaceholderIssueURL] = issueURL
-			if issueURL != "" {
-				issueReference = fmt.Sprintf("[%s](%s)", issue.Key, issueURL)
-			}
-		}
-		if issueReference != "" {
-			data[template.PlaceholderFixedIssues] = "Fixes " + issueReference
-		}
+	linkedIssueIDs := opts.LinkedIssueIDs
+	if len(linkedIssueIDs) == 0 && issue != nil && strings.TrimSpace(issue.Key) != "" {
+		linkedIssueIDs = []string{issue.Key}
+	}
+	if fixedIssues := FormatFixedIssues(linkedIssueIDs, jiraClient); fixedIssues != "" {
+		data[template.PlaceholderFixedIssues] = fixedIssues
 	}
 
 	if opts.TemplateSummary != "" {
@@ -61,6 +59,49 @@ func BuildTemplateData(
 	}
 
 	return data
+}
+
+// CollectLinkedIssueIDs keeps the branch issue first and appends commit-linked
+// issues in first-seen order without duplicates.
+func CollectLinkedIssueIDs(issue *jira.Issue, commitIssueIDs []string) []string {
+	linked := make([]string, 0, len(commitIssueIDs)+1)
+	if issue != nil && strings.TrimSpace(issue.Key) != "" {
+		linked = append(linked, strings.TrimSpace(issue.Key))
+	}
+	for _, issueID := range commitIssueIDs {
+		issueID = strings.TrimSpace(issueID)
+		if issueID == "" {
+			continue
+		}
+		linked = append(linked, issueID)
+	}
+	return DedupeStringsPreserveOrder(linked)
+}
+
+// FormatFixedIssues renders the fixed-issues template content for one or more issues.
+func FormatFixedIssues(issueIDs []string, jiraClient jira.Jira) string {
+	lines := make([]string, 0, len(issueIDs))
+	for _, issueID := range DedupeStringsPreserveOrder(issueIDs) {
+		issueID = strings.TrimSpace(issueID)
+		if issueID == "" {
+			continue
+		}
+
+		issueReference := issueID
+		if issueURL := jiraIssueURL(jiraClient, issueID); issueURL != "" {
+			issueReference = fmt.Sprintf("[%s](%s)", issueID, issueURL)
+		}
+		lines = append(lines, "Fixes "+issueReference)
+	}
+
+	return strings.Join(lines, "\n")
+}
+
+func jiraIssueURL(jiraClient jira.Jira, issueID string) string {
+	if jiraClient == nil {
+		return ""
+	}
+	return jiraClient.GetIssueURL(issueID)
 }
 
 // BuildDefaultTitle derives the default PR title for a branch and optional issue.

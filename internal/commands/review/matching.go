@@ -56,78 +56,197 @@ func BuildLabelOptions(ghClient github.Github) ([]MatchOption, error) {
 
 // BuildParticipantOptions loads collaborator/member/team options for reviewer/assignee matching.
 func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, error) {
-	userByLogin := map[string]github.User{}
-	teamsByCanonical := map[string]github.Team{}
-	warnings := make([]string, 0)
-
-	collaborators, err := ghClient.GetCollaborators()
-	if err != nil {
-		warnings = append(warnings, fmt.Sprintf("failed to load repository collaborators: %v", err))
-	} else {
-		for _, collaborator := range collaborators {
-			login := strings.TrimSpace(collaborator.Login)
-			if login == "" {
-				continue
-			}
-			collaborator.Login = login
-			if existing, exists := userByLogin[login]; exists {
-				userByLogin[login] = PreferParticipantUser(existing, collaborator)
-				continue
-			}
-			userByLogin[login] = collaborator
-		}
+	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, true)
+	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
+	if collaboratorErr != nil {
+		warnings = append(warnings, fmt.Sprintf("failed to load repository collaborators: %v", collaboratorErr))
 	}
+
+	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
+	if len(options) == 0 {
+		if orgErr != nil && collaboratorErr != nil {
+			return nil, warnings, fmt.Errorf(
+				"failed to load review participants from collaborators, organization members, and teams",
+			)
+		}
+		if orgErr != nil {
+			return nil, warnings, orgErr
+		}
+		if collaboratorErr != nil {
+			return nil, warnings, collaboratorErr
+		}
+		return nil, warnings, fmt.Errorf(
+			"failed to load review participants from collaborators, organization members, and teams",
+		)
+	}
+
+	return options, warnings, nil
+}
+
+// BuildOrgScopedParticipantOptions loads organization members and optional teams.
+func BuildOrgScopedParticipantOptions(
+	ghClient github.Github,
+	includeTeams bool,
+) ([]MatchOption, []string, error) {
+	builder := newParticipantOptionBuilder()
+	warnings := make([]string, 0)
 
 	members, err := ghClient.GetOrgMembers()
 	if err != nil {
 		warnings = append(warnings, fmt.Sprintf("failed to load organization members: %v", err))
 	} else {
-		for _, member := range members {
-			login := strings.TrimSpace(member.Login)
-			if login == "" {
-				continue
-			}
-			member.Login = login
-			if existing, exists := userByLogin[login]; exists {
-				userByLogin[login] = PreferParticipantUser(existing, member)
-				continue
-			}
-			userByLogin[login] = member
+		builder.addUsers(members)
+	}
+
+	if includeTeams {
+		teams, err := ghClient.GetTeams()
+		if err != nil {
+			warnings = append(warnings, fmt.Sprintf("failed to load organization teams: %v", err))
+		} else {
+			builder.addTeams(teams)
 		}
 	}
 
-	teams, err := ghClient.GetTeams()
-	if err != nil {
-		warnings = append(warnings, fmt.Sprintf("failed to load organization teams: %v", err))
-	} else {
-		for _, team := range teams {
-			canonical := team.Canonical()
-			if canonical == "" {
-				continue
-			}
-			teamsByCanonical[canonical] = team
+	options := builder.options()
+	if len(options) == 0 {
+		if includeTeams {
+			return nil, warnings, fmt.Errorf("failed to load review participants from organization members and teams")
 		}
+		return nil, warnings, fmt.Errorf("failed to load review participants from organization members")
 	}
 
-	if len(userByLogin) == 0 && len(teamsByCanonical) == 0 {
-		return nil, warnings, fmt.Errorf("failed to load review participants from collaborators, organization members, and teams")
+	return options, warnings, nil
+}
+
+// BuildParticipantOptionsForQuery loads org-scoped participants first and only
+// falls back to collaborators when the query has no usable org-scoped matches.
+func BuildParticipantOptionsForQuery(
+	ghClient github.Github,
+	query string,
+	includeTeams bool,
+) ([]MatchOption, []string, error) {
+	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
+	if orgErr == nil && participantOptionsMatchQuery(query, orgOptions) {
+		return orgOptions, warnings, nil
 	}
 
-	userKeys := make([]string, 0, len(userByLogin))
-	for login := range userByLogin {
+	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
+	if collaboratorErr != nil {
+		if orgErr != nil {
+			return nil, warnings, fmt.Errorf(
+				"failed to load review participants from organization members, teams, and collaborators",
+			)
+		}
+		return orgOptions, warnings, collaboratorErr
+	}
+
+	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
+	if len(options) == 0 {
+		if orgErr != nil {
+			return nil, warnings, orgErr
+		}
+		return nil, warnings, fmt.Errorf("failed to load review participants")
+	}
+
+	return options, warnings, nil
+}
+
+// BuildParticipantOptionsForTokens loads org-scoped participants first and only
+// falls back to collaborators when the provided tokens cannot be satisfied.
+func BuildParticipantOptionsForTokens(
+	ghClient github.Github,
+	requested []string,
+	includeTeams bool,
+) ([]MatchOption, []string, error) {
+	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
+	if orgErr == nil && participantOptionsMatchTokens(requested, orgOptions) {
+		return orgOptions, warnings, nil
+	}
+
+	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
+	if collaboratorErr != nil {
+		if orgErr != nil {
+			return nil, warnings, fmt.Errorf(
+				"failed to load review participants from organization members, teams, and collaborators",
+			)
+		}
+		return orgOptions, warnings, collaboratorErr
+	}
+
+	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
+	if len(options) == 0 {
+		if orgErr != nil {
+			return nil, warnings, orgErr
+		}
+		return nil, warnings, fmt.Errorf("failed to load review participants")
+	}
+
+	return options, warnings, nil
+}
+
+// PreferParticipantUser prefers candidates that provide a richer name field.
+func PreferParticipantUser(current github.User, candidate github.User) github.User {
+	currentName := strings.TrimSpace(current.Name)
+	candidateName := strings.TrimSpace(candidate.Name)
+	if currentName == "" && candidateName != "" {
+		return candidate
+	}
+	return current
+}
+
+type participantOptionBuilder struct {
+	userByLogin      map[string]github.User
+	teamsByCanonical map[string]github.Team
+}
+
+func newParticipantOptionBuilder() participantOptionBuilder {
+	return participantOptionBuilder{
+		userByLogin:      map[string]github.User{},
+		teamsByCanonical: map[string]github.Team{},
+	}
+}
+
+func (b *participantOptionBuilder) addUsers(users []github.User) {
+	for _, user := range users {
+		login := strings.TrimSpace(user.Login)
+		if login == "" {
+			continue
+		}
+		user.Login = login
+		if existing, exists := b.userByLogin[login]; exists {
+			b.userByLogin[login] = PreferParticipantUser(existing, user)
+			continue
+		}
+		b.userByLogin[login] = user
+	}
+}
+
+func (b *participantOptionBuilder) addTeams(teams []github.Team) {
+	for _, team := range teams {
+		canonical := team.Canonical()
+		if canonical == "" {
+			continue
+		}
+		b.teamsByCanonical[canonical] = team
+	}
+}
+
+func (b participantOptionBuilder) options() []MatchOption {
+	userKeys := make([]string, 0, len(b.userByLogin))
+	for login := range b.userByLogin {
 		userKeys = append(userKeys, login)
 	}
 	sort.Strings(userKeys)
 
-	teamKeys := make([]string, 0, len(teamsByCanonical))
-	for canonical := range teamsByCanonical {
+	teamKeys := make([]string, 0, len(b.teamsByCanonical))
+	for canonical := range b.teamsByCanonical {
 		teamKeys = append(teamKeys, canonical)
 	}
 	sort.Strings(teamKeys)
 
 	options := make([]MatchOption, 0, len(userKeys)+len(teamKeys))
 	for _, login := range userKeys {
-		user := userByLogin[login]
+		user := b.userByLogin[login]
 		options = append(options, MatchOption{
 			Resolved: user.Login,
 			Label:    user.Login,
@@ -140,7 +259,7 @@ func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, e
 		})
 	}
 	for _, canonical := range teamKeys {
-		team := teamsByCanonical[canonical]
+		team := b.teamsByCanonical[canonical]
 		options = append(options, MatchOption{
 			Resolved: canonical,
 			Label:    canonical,
@@ -155,17 +274,67 @@ func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, e
 		})
 	}
 
-	return options, warnings, nil
+	return options
 }
 
-// PreferParticipantUser prefers candidates that provide a richer name field.
-func PreferParticipantUser(current github.User, candidate github.User) github.User {
-	currentName := strings.TrimSpace(current.Name)
-	candidateName := strings.TrimSpace(candidate.Name)
-	if currentName == "" && candidateName != "" {
-		return candidate
+func buildCollaboratorParticipantOptions(ghClient github.Github) ([]MatchOption, error) {
+	collaborators, err := ghClient.GetCollaborators()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load repository collaborators: %w", err)
 	}
-	return current
+
+	builder := newParticipantOptionBuilder()
+	builder.addUsers(collaborators)
+	return builder.options(), nil
+}
+
+func mergeParticipantOptions(base []MatchOption, extras []MatchOption) []MatchOption {
+	builder := newParticipantOptionBuilder()
+	addParticipantMatchOptions(&builder, base)
+	addParticipantMatchOptions(&builder, extras)
+	return builder.options()
+}
+
+func addParticipantMatchOptions(builder *participantOptionBuilder, options []MatchOption) {
+	for _, option := range options {
+		switch option.Kind {
+		case MatchKindTeam:
+			parts := strings.SplitN(strings.TrimSpace(option.Resolved), "/", 2)
+			team := github.Team{
+				Name: option.Detail,
+				Slug: strings.TrimSpace(option.Resolved),
+			}
+			if len(parts) == 2 {
+				team.Organization = strings.TrimSpace(parts[0])
+				team.Slug = strings.TrimSpace(parts[1])
+			}
+			builder.addTeams([]github.Team{team})
+		default:
+			builder.addUsers([]github.User{{
+				Login: strings.TrimSpace(option.Resolved),
+				Name:  strings.TrimSpace(option.Detail),
+			}})
+		}
+	}
+}
+
+func participantOptionsMatchQuery(query string, options []MatchOption) bool {
+	return len(FindTokenMatchesForCompletion(query, options)) > 0
+}
+
+func participantOptionsMatchTokens(requested []string, options []MatchOption) bool {
+	tokens := NormalizeTokens(requested)
+	if len(tokens) == 0 {
+		return len(options) > 0
+	}
+
+	for _, token := range tokens {
+		if len(FindTokenMatches(token, options)) == 0 {
+			return false
+		}
+	}
+
+	return true
 }
 
 // ResolveTokenMatches resolves requested tokens with optional interactive disambiguation.
