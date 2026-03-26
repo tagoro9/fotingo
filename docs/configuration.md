@@ -42,6 +42,8 @@ jira:
 | `github.token`                  | GitHub OAuth token or classic PAT              |
 | `github.cache.labelsTTL`        | Labels cache TTL                               |
 | `github.cache.collaboratorsTTL` | Collaborators cache TTL                        |
+| `github.cache.orgMembersTTL`    | Organization members cache TTL                 |
+| `github.cache.teamsTTL`         | Organization teams cache TTL                   |
 | `jira.root`                     | Jira server URL                                |
 | `jira.user.login`               | Jira username                                  |
 | `jira.user.token`               | Jira API token                                 |

@@ -77,9 +77,9 @@ func (suite *ConfigTestSuite) TestNewDefaultConfig() {
 	assert.Equal(suite.T(), "origin", config.GetString("git.remote"))
 	assert.Equal(suite.T(), "{{.Issue.ShortName}}/{{.Issue.Info}}_{{.Issue.SanitizedSummary}}", config.GetString("git.branchTemplate"))
 	assert.Equal(suite.T(), "30m", config.GetString("github.cache.labelsTTL"))
-	assert.Equal(suite.T(), "336h", config.GetString("github.cache.collaboratorsTTL"))
-	assert.Equal(suite.T(), "336h", config.GetString("github.cache.orgMembersTTL"))
-	assert.Equal(suite.T(), "30m", config.GetString("github.cache.teamsTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.collaboratorsTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.orgMembersTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.teamsTTL"))
 	assert.True(suite.T(), config.GetBool("telemetry.enabled"))
 }
 
@@ -143,9 +143,9 @@ func (suite *ConfigTestSuite) TestNewConfig() {
 	assert.Equal(suite.T(), "origin", config.GetString("git.remote"))
 	assert.Equal(suite.T(), "{{.Issue.ShortName}}/{{.Issue.Info}}_{{.Issue.SanitizedSummary}}", config.GetString("git.branchTemplate"))
 	assert.Equal(suite.T(), "30m", config.GetString("github.cache.labelsTTL"))
-	assert.Equal(suite.T(), "336h", config.GetString("github.cache.collaboratorsTTL"))
-	assert.Equal(suite.T(), "336h", config.GetString("github.cache.orgMembersTTL"))
-	assert.Equal(suite.T(), "30m", config.GetString("github.cache.teamsTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.collaboratorsTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.orgMembersTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.teamsTTL"))
 	assert.True(suite.T(), config.GetBool("telemetry.enabled"))
 
 	// Verify the config file exists

@@ -95,9 +95,9 @@ func NewDefaultConfig() *viper.Viper {
 	config.SetDefault("git.remote", "origin")
 	config.SetDefault("git.branchTemplate", "{{.Issue.ShortName}}/{{.Issue.Info}}_{{.Issue.SanitizedSummary}}")
 	config.SetDefault("github.cache.labelsTTL", "30m")
-	config.SetDefault("github.cache.collaboratorsTTL", "336h")
-	config.SetDefault("github.cache.orgMembersTTL", "336h")
-	config.SetDefault("github.cache.teamsTTL", "30m")
+	config.SetDefault("github.cache.collaboratorsTTL", "720h")
+	config.SetDefault("github.cache.orgMembersTTL", "720h")
+	config.SetDefault("github.cache.teamsTTL", "720h")
 	config.SetDefault("locale", i18n.DefaultLocale)
 	config.SetDefault("telemetry.enabled", true)
 	return config

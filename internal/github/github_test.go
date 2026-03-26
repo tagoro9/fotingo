@@ -824,7 +824,7 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesAllMembersBeyondLegacyLo
 	}
 }
 
-func (suite *GithubTestSuite) TestGetCollaborators_DefaultCacheTTLIsTwoWeeks() {
+func (suite *GithubTestSuite) TestGetCollaborators_DefaultCacheTTLIsThirtyDays() {
 	store, err := cache.New(cache.WithPath(filepath.Join(suite.T().TempDir(), "cache.db")), cache.WithLogger(nil))
 	assert.NoError(suite.T(), err)
 	defer func() { _ = store.Close() }()
@@ -858,12 +858,12 @@ func (suite *GithubTestSuite) TestGetCollaborators_DefaultCacheTTLIsTwoWeeks() {
 	require.NotNil(suite.T(), entries[0].ExpiresAt)
 
 	ttl := entries[0].ExpiresAt.Sub(start)
-	expectedTTL := 14 * 24 * time.Hour
+	expectedTTL := 30 * 24 * time.Hour
 	assert.GreaterOrEqual(suite.T(), ttl, expectedTTL-time.Hour)
 	assert.LessOrEqual(suite.T(), ttl, expectedTTL+time.Hour)
 }
 
-func (suite *GithubTestSuite) TestGetOrgMembers_DefaultCacheTTLIsTwoWeeks() {
+func (suite *GithubTestSuite) TestGetOrgMembers_DefaultCacheTTLIsThirtyDays() {
 	store, err := cache.New(cache.WithPath(filepath.Join(suite.T().TempDir(), "cache.db")), cache.WithLogger(nil))
 	assert.NoError(suite.T(), err)
 	defer func() { _ = store.Close() }()
@@ -897,9 +897,53 @@ func (suite *GithubTestSuite) TestGetOrgMembers_DefaultCacheTTLIsTwoWeeks() {
 	require.NotNil(suite.T(), entries[0].ExpiresAt)
 
 	ttl := entries[0].ExpiresAt.Sub(start)
-	expectedTTL := 14 * 24 * time.Hour
+	expectedTTL := 30 * 24 * time.Hour
 	assert.GreaterOrEqual(suite.T(), ttl, expectedTTL-time.Hour)
 	assert.LessOrEqual(suite.T(), ttl, expectedTTL+time.Hour)
+}
+
+func (suite *GithubTestSuite) TestGetOrgMembers_ReusesOwnerScopedCacheAcrossRepos() {
+	store, err := cache.New(cache.WithPath(filepath.Join(suite.T().TempDir(), "cache.db")), cache.WithLogger(nil))
+	assert.NoError(suite.T(), err)
+	defer func() { _ = store.Close() }()
+
+	cfg := viper.New()
+	cfg.Set("github.cache.orgMembersTTL", "720h")
+	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
+	suite.client.metadataCache = store
+	suite.client.cacheInitErr = nil
+
+	orgMemberListCalls := 0
+	suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/api/v3/orgs/testowner/members" && r.Method == http.MethodGet:
+			orgMemberListCalls++
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode([]map[string]any{
+				mockUser("member1", "Member One", "https://avatars.githubusercontent.com/u/1"),
+			})
+			return
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	})
+
+	otherRepoClient := *suite.client
+	otherRepoClient.repo = "otherrepo"
+
+	first, err := suite.client.GetOrgMembers()
+	assert.NoError(suite.T(), err)
+	require.Len(suite.T(), first, 1)
+
+	second, err := otherRepoClient.GetOrgMembers()
+	assert.NoError(suite.T(), err)
+	require.Len(suite.T(), second, 1)
+
+	assert.Equal(suite.T(), 1, orgMemberListCalls)
+	entries, err := store.List(suite.client.metadataOwnerCacheKey("org-members"))
+	assert.NoError(suite.T(), err)
+	require.Len(suite.T(), entries, 1)
+	assert.Equal(suite.T(), suite.client.metadataOwnerCacheKey("org-members"), entries[0].Key)
 }
 
 func (suite *GithubTestSuite) TestGetCollaborators_EmitsFetchLogsOnlyOnCacheMiss() {
@@ -908,7 +952,7 @@ func (suite *GithubTestSuite) TestGetCollaborators_EmitsFetchLogsOnlyOnCacheMiss
 	defer func() { _ = store.Close() }()
 
 	cfg := viper.New()
-	cfg.Set("github.cache.collaboratorsTTL", "336h")
+	cfg.Set("github.cache.collaboratorsTTL", "720h")
 	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
 	suite.client.metadataCache = store
 	suite.client.cacheInitErr = nil
@@ -953,7 +997,7 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EmitsFetchLogsOnlyOnCacheMiss() 
 	defer func() { _ = store.Close() }()
 
 	cfg := viper.New()
-	cfg.Set("github.cache.orgMembersTTL", "336h")
+	cfg.Set("github.cache.orgMembersTTL", "720h")
 	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
 	suite.client.metadataCache = store
 	suite.client.cacheInitErr = nil
