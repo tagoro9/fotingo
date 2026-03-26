@@ -131,35 +131,37 @@ func (m *mockGit) SaveConfig(_ string, _ interface{}) error {
 // ---------------------------------------------------------------------------
 
 type mockGitHub struct {
-	prURL                      string
-	prURLErr                   error
-	currentUser                *hub.User
-	currentUserErr             error
-	lastCreatePROptions        github.CreatePROptions
-	createPR                   *github.PullRequest
-	createPRErr                error
-	lastAddedLabels            []string
-	labels                     []github.Label
-	labelsErr                  error
-	addLabelsErr               error
-	lastRequestedReviewers     []string
-	lastRequestedTeamReviewers []string
-	lastAssignedUsers          []string
-	collaborators              []github.User
-	orgMembers                 []github.User
-	teams                      []github.Team
-	collaboratorsErr           error
-	orgMembersErr              error
-	teamsErr                   error
-	requestReviewersErr        error
-	assignUsersErr             error
-	doesPRExist                bool
-	existingPR                 *github.PullRequest
-	doesPRExistErr             error
-	createRelease              *github.Release
-	createReleaseErr           error
-	calls                      []string
-	metadataFetchInfoLogger    func(string)
+	prURL                           string
+	prURLErr                        error
+	currentUser                     *hub.User
+	currentUserErr                  error
+	lastCreatePROptions             github.CreatePROptions
+	createPR                        *github.PullRequest
+	createPRErr                     error
+	lastAddedLabels                 []string
+	labels                          []github.Label
+	labelsErr                       error
+	addLabelsErr                    error
+	lastRequestedReviewers          []string
+	lastRequestedTeamReviewers      []string
+	lastAssignedUsers               []string
+	collaborators                   []github.User
+	orgMembers                      []github.User
+	teams                           []github.Team
+	collaboratorsErr                error
+	orgMembersErr                   error
+	teamsErr                        error
+	supportsOrganizationMetadata    *bool
+	supportsOrganizationMetadataErr error
+	requestReviewersErr             error
+	assignUsersErr                  error
+	doesPRExist                     bool
+	existingPR                      *github.PullRequest
+	doesPRExistErr                  error
+	createRelease                   *github.Release
+	createReleaseErr                error
+	calls                           []string
+	metadataFetchInfoLogger         func(string)
 }
 
 func (m *mockGitHub) GetPullRequestUrl() (string, error) {
@@ -206,6 +208,18 @@ func (m *mockGitHub) GetOrgMembers() ([]github.User, error) {
 func (m *mockGitHub) GetTeams() ([]github.Team, error) {
 	m.calls = append(m.calls, "get_teams")
 	return m.teams, m.teamsErr
+}
+
+// SupportsOrganizationMetadata reports whether the mock repository owner should
+// behave like a GitHub organization for participant lookups.
+func (m *mockGitHub) SupportsOrganizationMetadata() (bool, error) {
+	if m.supportsOrganizationMetadataErr != nil {
+		return false, m.supportsOrganizationMetadataErr
+	}
+	if m.supportsOrganizationMetadata != nil {
+		return *m.supportsOrganizationMetadata, nil
+	}
+	return true, nil
 }
 
 func (m *mockGitHub) SetMetadataFetchInfoLogger(logf func(string)) {

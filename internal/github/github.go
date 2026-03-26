@@ -556,6 +556,57 @@ func (g *github) fetchTeams() ([]Team, error) {
 	return allTeams, nil
 }
 
+// SupportsOrganizationMetadata reports whether the current repository owner is
+// a GitHub organization, which determines whether organization members and
+// teams can be queried for participant resolution.
+func (g *github) SupportsOrganizationMetadata() (bool, error) {
+	cacheKey := g.metadataOwnerCacheKey("org-metadata-supported")
+	var cacheErr error
+	if g.cacheInitErr != nil {
+		cacheErr = errors.Join(cacheErr, fmt.Errorf("failed to initialize metadata cache: %w", g.cacheInitErr))
+	}
+
+	if g.metadataCache != nil {
+		var cachedSupported bool
+		hit, err := g.metadataCache.Get(cacheKey, &cachedSupported)
+		if err != nil {
+			cacheErr = errors.Join(cacheErr, fmt.Errorf("failed to read owner metadata support cache: %w", err))
+		} else if hit {
+			return cachedSupported, nil
+		}
+	}
+
+	supported, err := g.fetchOrganizationMetadataSupport()
+	if err != nil {
+		if cacheErr != nil {
+			return false, errors.Join(cacheErr, err)
+		}
+		return false, err
+	}
+
+	if g.metadataCache != nil {
+		ttl := g.metadataTTL("cache.orgMembersTTL", defaultOrgMembersCacheTTL)
+		_ = g.metadataCache.SetWithTTL(cacheKey, supported, ttl)
+	}
+
+	return supported, nil
+}
+
+func (g *github) fetchOrganizationMetadataSupport() (bool, error) {
+	repository, _, err := g.hub.Repositories.Get(context.Background(), g.owner, g.repo)
+	if err != nil {
+		return false, fmt.Errorf("failed to inspect repository owner type: %w", err)
+	}
+
+	owner := repository.GetOwner()
+	ownerType := strings.TrimSpace(owner.GetType())
+	if ownerType == "" {
+		return false, fmt.Errorf("failed to determine repository owner type for %s/%s", g.owner, g.repo)
+	}
+
+	return strings.EqualFold(ownerType, "Organization"), nil
+}
+
 func (g *github) metadataCacheKey(kind string) string {
 	return fmt.Sprintf("github:%s:%s/%s", kind, g.owner, g.repo)
 }

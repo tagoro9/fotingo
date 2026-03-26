@@ -853,6 +853,28 @@ func TestResolveReviewReviewers_FetchesCollaboratorsAfterOrgMemberMiss(t *testin
 	assert.Contains(t, ghClient.calls, "get_collaborators")
 }
 
+func TestResolveReviewReviewers_FallsBackToCollaboratorsForNonOrgRepositories(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+
+	supportsOrganizationMetadata := false
+	ghClient := &mockGitHub{
+		supportsOrganizationMetadata: &supportsOrganizationMetadata,
+		collaborators: []github.User{
+			{Login: "alice", Name: "Alice Developer"},
+		},
+	}
+
+	users, teams, warnings, err := resolveReviewReviewers(ghClient, []string{"alice"})
+	require.NoError(t, err)
+	assert.Equal(t, []string{"alice"}, users)
+	assert.Empty(t, teams)
+	assert.Empty(t, warnings)
+	assert.Contains(t, ghClient.calls, "get_collaborators")
+	assert.NotContains(t, ghClient.calls, "get_org_members")
+	assert.NotContains(t, ghClient.calls, "get_teams")
+}
+
 func TestResolveReviewReviewers_UsesTeamMatchesBeforeCollaborators(t *testing.T) {
 	restoreFlags := saveGlobalFlags()
 	defer restoreFlags()

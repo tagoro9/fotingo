@@ -1,6 +1,7 @@
 package review
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -31,6 +32,10 @@ const (
 	strongTokenMatchScoreCutoff = 300
 )
 
+var errOrganizationMetadataUnsupported = errors.New(
+	"organization-scoped participant metadata is unsupported for the repository owner",
+)
+
 // BuildLabelOptions loads repository label options for review metadata matching.
 func BuildLabelOptions(ghClient github.Github) ([]MatchOption, error) {
 	labels, err := ghClient.GetLabels()
@@ -57,11 +62,11 @@ func BuildLabelOptions(ghClient github.Github) ([]MatchOption, error) {
 }
 
 // BuildParticipantOptions loads organization-scoped participant options and,
-// unless built with `-tags=fotingo_org_only_participants`, supplements them
-// with repository collaborators.
+// unless collaborator fallback is disabled for the current owner, supplements
+// them with repository collaborators.
 func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, error) {
 	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, true)
-	if !collaboratorFallbackEnabled() {
+	if !shouldAllowCollaboratorFallback(orgErr) {
 		return orgOptions, warnings, orgErr
 	}
 
@@ -72,6 +77,12 @@ func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, e
 
 	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
 	if len(options) == 0 {
+		if isOrganizationMetadataUnsupported(orgErr) {
+			if collaboratorErr != nil {
+				return nil, warnings, collaboratorErr
+			}
+			return options, warnings, nil
+		}
 		if orgErr != nil && collaboratorErr != nil {
 			return nil, warnings, fmt.Errorf(
 				"failed to load review participants from collaborators, organization members, and teams",
@@ -91,13 +102,25 @@ func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, e
 	return options, warnings, nil
 }
 
-// BuildOrgScopedParticipantOptions loads organization members and optional teams.
+// BuildOrgScopedParticipantOptions loads organization members and optional teams
+// when the current repository owner supports organization metadata.
 func BuildOrgScopedParticipantOptions(
 	ghClient github.Github,
 	includeTeams bool,
 ) ([]MatchOption, []string, error) {
 	builder := newParticipantOptionBuilder()
 	warnings := make([]string, 0)
+
+	supported, err := repositoryOwnerSupportsOrganizationMetadata(ghClient)
+	if err != nil {
+		return nil, warnings, fmt.Errorf(
+			"failed to determine whether the repository owner supports organization metadata: %w",
+			err,
+		)
+	}
+	if !supported {
+		return nil, warnings, errOrganizationMetadataUnsupported
+	}
 
 	members, err := ghClient.GetOrgMembers()
 	if err != nil {
@@ -128,15 +151,15 @@ func BuildOrgScopedParticipantOptions(
 
 // BuildParticipantOptionsForQuery loads organization-scoped participants first
 // and only falls back to collaborators when neither organization members nor
-// teams produce a usable match for the query. Builds with
-// `-tags=fotingo_org_only_participants` disable collaborator fallback.
+// teams produce a usable match for the query, or when the repository owner does
+// not support organization metadata.
 func BuildParticipantOptionsForQuery(
 	ghClient github.Github,
 	query string,
 	includeTeams bool,
 ) ([]MatchOption, []string, error) {
 	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
-	if !collaboratorFallbackEnabled() {
+	if !shouldAllowCollaboratorFallback(orgErr) {
 		return orgOptions, warnings, orgErr
 	}
 
@@ -146,6 +169,9 @@ func BuildParticipantOptionsForQuery(
 
 	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
 	if collaboratorErr != nil {
+		if isOrganizationMetadataUnsupported(orgErr) {
+			return nil, warnings, collaboratorErr
+		}
 		if orgErr != nil {
 			return nil, warnings, fmt.Errorf(
 				"failed to load review participants from organization members, teams, and collaborators",
@@ -156,6 +182,9 @@ func BuildParticipantOptionsForQuery(
 
 	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
 	if len(options) == 0 {
+		if isOrganizationMetadataUnsupported(orgErr) {
+			return options, warnings, nil
+		}
 		if orgErr != nil {
 			return nil, warnings, orgErr
 		}
@@ -167,15 +196,15 @@ func BuildParticipantOptionsForQuery(
 
 // BuildParticipantOptionsForTokens loads organization-scoped participants first
 // and only falls back to collaborators when neither organization members nor
-// teams satisfy the requested tokens. Builds with
-// `-tags=fotingo_org_only_participants` disable collaborator fallback.
+// teams satisfy the requested tokens, or when the repository owner does not
+// support organization metadata.
 func BuildParticipantOptionsForTokens(
 	ghClient github.Github,
 	requested []string,
 	includeTeams bool,
 ) ([]MatchOption, []string, error) {
 	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
-	if !collaboratorFallbackEnabled() {
+	if !shouldAllowCollaboratorFallback(orgErr) {
 		return orgOptions, warnings, orgErr
 	}
 
@@ -185,6 +214,9 @@ func BuildParticipantOptionsForTokens(
 
 	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
 	if collaboratorErr != nil {
+		if isOrganizationMetadataUnsupported(orgErr) {
+			return nil, warnings, collaboratorErr
+		}
 		if orgErr != nil {
 			return nil, warnings, fmt.Errorf(
 				"failed to load review participants from organization members, teams, and collaborators",
@@ -195,6 +227,9 @@ func BuildParticipantOptionsForTokens(
 
 	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
 	if len(options) == 0 {
+		if isOrganizationMetadataUnsupported(orgErr) {
+			return options, warnings, nil
+		}
 		if orgErr != nil {
 			return nil, warnings, orgErr
 		}
@@ -202,6 +237,28 @@ func BuildParticipantOptionsForTokens(
 	}
 
 	return options, warnings, nil
+}
+
+// organizationMetadataSupporter reports whether the repository owner can expose
+// organization member and team metadata.
+type organizationMetadataSupporter interface {
+	SupportsOrganizationMetadata() (bool, error)
+}
+
+func repositoryOwnerSupportsOrganizationMetadata(ghClient github.Github) (bool, error) {
+	checker, ok := ghClient.(organizationMetadataSupporter)
+	if !ok {
+		return true, nil
+	}
+	return checker.SupportsOrganizationMetadata()
+}
+
+func shouldAllowCollaboratorFallback(orgErr error) bool {
+	return collaboratorFallbackEnabled() || isOrganizationMetadataUnsupported(orgErr)
+}
+
+func isOrganizationMetadataUnsupported(err error) bool {
+	return errors.Is(err, errOrganizationMetadataUnsupported)
 }
 
 // PreferParticipantUser prefers candidates that provide a richer name field.
