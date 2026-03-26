@@ -27,6 +27,8 @@ const (
 	MatchKindUser  MatchKind = "user"
 	MatchKindTeam  MatchKind = "team"
 	MatchKindLabel MatchKind = "label"
+
+	strongTokenMatchScoreCutoff = 300
 )
 
 // BuildLabelOptions loads repository label options for review metadata matching.
@@ -54,9 +56,15 @@ func BuildLabelOptions(ghClient github.Github) ([]MatchOption, error) {
 	return options, nil
 }
 
-// BuildParticipantOptions loads collaborator/member/team options for reviewer/assignee matching.
+// BuildParticipantOptions loads organization-scoped participant options and,
+// unless built with `-tags=fotingo_org_only_participants`, supplements them
+// with repository collaborators.
 func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, error) {
 	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, true)
+	if !collaboratorFallbackEnabled() {
+		return orgOptions, warnings, orgErr
+	}
+
 	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
 	if collaboratorErr != nil {
 		warnings = append(warnings, fmt.Sprintf("failed to load repository collaborators: %v", collaboratorErr))
@@ -118,15 +126,21 @@ func BuildOrgScopedParticipantOptions(
 	return options, warnings, nil
 }
 
-// BuildParticipantOptionsForQuery loads org-scoped participants first and only
-// falls back to collaborators when the query has no usable org-scoped matches.
+// BuildParticipantOptionsForQuery loads organization-scoped participants first
+// and only falls back to collaborators when neither organization members nor
+// teams produce a usable match for the query. Builds with
+// `-tags=fotingo_org_only_participants` disable collaborator fallback.
 func BuildParticipantOptionsForQuery(
 	ghClient github.Github,
 	query string,
 	includeTeams bool,
 ) ([]MatchOption, []string, error) {
 	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
-	if orgErr == nil && participantOptionsMatchQuery(query, orgOptions) {
+	if !collaboratorFallbackEnabled() {
+		return orgOptions, warnings, orgErr
+	}
+
+	if orgErr == nil && !participantOptionsNeedCollaboratorFallbackForQuery(query, orgOptions) {
 		return orgOptions, warnings, nil
 	}
 
@@ -151,15 +165,21 @@ func BuildParticipantOptionsForQuery(
 	return options, warnings, nil
 }
 
-// BuildParticipantOptionsForTokens loads org-scoped participants first and only
-// falls back to collaborators when the provided tokens cannot be satisfied.
+// BuildParticipantOptionsForTokens loads organization-scoped participants first
+// and only falls back to collaborators when neither organization members nor
+// teams satisfy the requested tokens. Builds with
+// `-tags=fotingo_org_only_participants` disable collaborator fallback.
 func BuildParticipantOptionsForTokens(
 	ghClient github.Github,
 	requested []string,
 	includeTeams bool,
 ) ([]MatchOption, []string, error) {
 	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
-	if orgErr == nil && participantOptionsMatchTokens(requested, orgOptions) {
+	if !collaboratorFallbackEnabled() {
+		return orgOptions, warnings, orgErr
+	}
+
+	if orgErr == nil && !participantOptionsNeedCollaboratorFallbackForTokens(requested, orgOptions) {
 		return orgOptions, warnings, nil
 	}
 
@@ -318,23 +338,37 @@ func addParticipantMatchOptions(builder *participantOptionBuilder, options []Mat
 	}
 }
 
-func participantOptionsMatchQuery(query string, options []MatchOption) bool {
-	return len(FindTokenMatchesForCompletion(query, options)) > 0
+func participantOptionsNeedCollaboratorFallbackForQuery(query string, options []MatchOption) bool {
+	return !participantOptionsHaveStrongMatch(query, options)
 }
 
-func participantOptionsMatchTokens(requested []string, options []MatchOption) bool {
+func participantOptionsNeedCollaboratorFallbackForTokens(requested []string, options []MatchOption) bool {
 	tokens := NormalizeTokens(requested)
 	if len(tokens) == 0 {
-		return len(options) > 0
+		return len(options) == 0
 	}
 
 	for _, token := range tokens {
-		if len(FindTokenMatches(token, options)) == 0 {
-			return false
+		if !participantOptionsHaveStrongMatch(token, options) {
+			return true
 		}
 	}
 
-	return true
+	return false
+}
+
+func participantOptionsHaveStrongMatch(token string, options []MatchOption) bool {
+	for _, option := range options {
+		score, matched := ScoreTokenMatch(token, option.Fields)
+		if !matched {
+			continue
+		}
+		if score < strongTokenMatchScoreCutoff {
+			return true
+		}
+	}
+
+	return false
 }
 
 // ResolveTokenMatches resolves requested tokens with optional interactive disambiguation.

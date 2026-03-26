@@ -56,6 +56,72 @@ func TestCompleteReviewReviewersFlag_IncludesUsersAndTeams(t *testing.T) {
 	assert.Contains(t, completionValues(teamCompletions), "acme/platform")
 }
 
+func TestCompleteReviewReviewersFlag_UsesOrgMembersBeforeCollaborators(t *testing.T) {
+	origFactory := newCompletionGitHubClient
+	defer func() { newCompletionGitHubClient = origFactory }()
+
+	gh := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "alice", Name: "Alice Member"},
+		},
+		collaborators: []github.User{
+			{Login: "alice-collab", Name: "Alice Collaborator"},
+		},
+	}
+	newCompletionGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	completions, _ := completeReviewReviewersFlag(nil, nil, "ali")
+	assert.Contains(t, completionValues(completions), "alice")
+	assert.NotContains(t, gh.calls, "get_collaborators")
+}
+
+func TestCompleteReviewReviewersFlag_FetchesCollaboratorsAfterOrgMemberMiss(t *testing.T) {
+	origFactory := newCompletionGitHubClient
+	defer func() { newCompletionGitHubClient = origFactory }()
+
+	gh := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "bob", Name: "Bob Member"},
+		},
+		collaborators: []github.User{
+			{Login: "alice", Name: "Alice Collaborator"},
+		},
+	}
+	newCompletionGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	completions, _ := completeReviewReviewersFlag(nil, nil, "ali")
+	assert.Contains(t, completionValues(completions), "alice")
+	assert.Contains(t, gh.calls, "get_collaborators")
+}
+
+func TestCompleteReviewReviewersFlag_UsesTeamMatchesBeforeCollaborators(t *testing.T) {
+	origFactory := newCompletionGitHubClient
+	defer func() { newCompletionGitHubClient = origFactory }()
+
+	gh := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "bob", Name: "Bob Member"},
+		},
+		teams: []github.Team{
+			{Organization: "acme", Slug: "platform", Name: "Platform Team"},
+		},
+		collaborators: []github.User{
+			{Login: "platform-dev", Name: "Platform Developer"},
+		},
+	}
+	newCompletionGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	completions, _ := completeReviewReviewersFlag(nil, nil, "plat")
+	assert.Contains(t, completionValues(completions), "acme/platform")
+	assert.NotContains(t, gh.calls, "get_collaborators")
+}
+
 func TestCompleteReviewAssigneesFlag_ExcludesTeams(t *testing.T) {
 	origFactory := newCompletionGitHubClient
 	defer func() { newCompletionGitHubClient = origFactory }()
