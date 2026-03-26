@@ -15,7 +15,7 @@ type reviewExecutorDeps struct {
 	newGitHubClient  func(git.Git, *viper.Viper) (github.Github, error)
 	newJiraClient    func(*viper.Viper) (jira.Jira, error)
 	fetchBranchIssue func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error)
-	resolvePRBody    func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, bool) (string, error)
+	resolvePRBody    func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error)
 	resolveLabels    func(github.Github, []string) ([]string, []string, error)
 	resolveReviewers func(github.Github, []string) ([]string, []string, []string, error)
 	resolveAssignees func(github.Github, []string) ([]string, []string, error)

@@ -198,18 +198,25 @@ func outputReviewJSON(result reviewResult) error {
 // buildPRBody constructs the PR body using the template
 func buildPRBody(branch string, issue *jira.Issue, jiraClient jira.Jira, commits ...git.Commit) string {
 	tmpl := template.New(resolveReviewTemplate())
-	return tmpl.Render(buildReviewTemplateData(branch, issue, jiraClient, commits))
+	return tmpl.Render(buildReviewTemplateData(branch, issue, jiraClient, commits, nil))
 }
 
 func resolveReviewTemplate() string {
 	return resolveReviewTemplateFn()
 }
 
-func buildReviewTemplateData(branch string, issue *jira.Issue, jiraClient jira.Jira, commits []git.Commit) map[string]string {
+func buildReviewTemplateData(
+	branch string,
+	issue *jira.Issue,
+	jiraClient jira.Jira,
+	commits []git.Commit,
+	linkedIssueIDs []string,
+) map[string]string {
 	return internalreview.BuildTemplateData(branch, issue, jiraClient, commits, internalreview.TemplateOptions{
 		TemplateSummary:       reviewCmdFlags.templateSummary,
 		TemplateDescription:   reviewCmdFlags.templateDescription,
 		EmptyPlaceholderValue: localizer.T(i18n.ReviewPlaceholderEmpty),
+		LinkedIssueIDs:        linkedIssueIDs,
 	})
 }
 
@@ -239,6 +246,7 @@ func resolveReviewPRBody(
 	issue *jira.Issue,
 	jiraClient jira.Jira,
 	commits []git.Commit,
+	linkedIssueIDs []string,
 	allowEditor bool,
 ) (string, error) {
 	if reviewCmdFlags.description != "" {
@@ -259,7 +267,9 @@ func resolveReviewPRBody(
 		return strings.Join(lines, "\n"), nil
 	}
 
-	body := buildPRBody(branch, issue, jiraClient, commits...)
+	body := template.New(resolveReviewTemplate()).Render(
+		buildReviewTemplateData(branch, issue, jiraClient, commits, linkedIssueIDs),
+	)
 	if shouldOpenReviewEditor(allowEditor) {
 		out := commandruntime.NewLocalizedEmitter(*statusCh, shouldEmitCommandLevel, localizer.T)
 		out.Info(commandruntime.LogEmojiPrompt, i18n.ReviewStatusOpenEditor)

@@ -57,7 +57,7 @@ func TestWorkflowRunnerRun_WrapsGitInitError(t *testing.T) {
 			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
 				return nil, nil
 			},
-			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, bool) (string, error) {
+			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error) {
 				return "", nil
 			},
 			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
@@ -251,7 +251,7 @@ func TestWorkflowRunnerRun_LogsPRURLOnlyOnce(t *testing.T) {
 			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
 				return nil, nil
 			},
-			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, bool) (string, error) {
+			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error) {
 				return "body", nil
 			},
 			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
@@ -290,4 +290,98 @@ func TestWorkflowRunnerRun_LogsPRURLOnlyOnce(t *testing.T) {
 
 	assert.Equal(t, 1, createdCount)
 	assert.Zero(t, successCount)
+}
+
+type workflowLinkedIssuesGit struct {
+	workflowSuccessMockGit
+}
+
+func (workflowLinkedIssuesGit) GetCommitsSinceDefaultBranch() ([]git.Commit, error) {
+	return []git.Commit{
+		{Message: "feat: update workflow\n\nFixes FOTINGO-1, FOTINGO-2"},
+	}, nil
+}
+
+func (workflowLinkedIssuesGit) GetIssuesFromCommits([]git.Commit) []string {
+	return []string{"FOTINGO-1", "FOTINGO-2", "FOTINGO-1"}
+}
+
+type workflowRecordingJira struct {
+	workflowSuccessMockJira
+	statusCalls  []string
+	commentCalls []string
+}
+
+func (j *workflowRecordingJira) SetJiraIssueStatus(issueID string, _ jira.IssueStatus) (*jira.Issue, error) {
+	j.statusCalls = append(j.statusCalls, issueID)
+	return &jira.Issue{Key: issueID, Status: "In Review"}, nil
+}
+
+func (j *workflowRecordingJira) AddComment(issueID string, _ string) error {
+	j.commentCalls = append(j.commentCalls, issueID)
+	return nil
+}
+
+func TestWorkflowRunnerRun_UpdatesAllLinkedIssues(t *testing.T) {
+	emitter := &reviewCollectingEmitter{}
+	recordingJira := &workflowRecordingJira{}
+	pr := &github.PullRequest{
+		Number:  42,
+		HTMLURL: "https://github.com/tagoro9/fotingo/pull/42",
+	}
+
+	var receivedLinkedIssues []string
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Simple: false},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return workflowLinkedIssuesGit{}, nil
+			},
+			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+				return workflowSuccessMockGitHub{pr: pr}, nil
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return recordingJira, nil
+			},
+			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+				return &jira.Issue{Key: "FOTINGO-10", Summary: "Linked issue branch"}, nil
+			},
+			ResolvePRBody: func(
+				_ *chan string,
+				_ string,
+				_ *jira.Issue,
+				_ jira.Jira,
+				_ []git.Commit,
+				linkedIssueIDs []string,
+				_ bool,
+			) (string, error) {
+				receivedLinkedIssues = append([]string{}, linkedIssueIDs...)
+				return "body", nil
+			},
+			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			ResolveReviewers: func(github.Github, []string) ([]string, []string, []string, error) {
+				return nil, nil, nil, nil
+			},
+			ResolveAssignees: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			SplitEditorContent:     SplitEditorContent,
+			DerivePRTitle:          func(string, *jira.Issue, string, bool) string { return "title" },
+			ToTeamSlugs:            ToTeamSlugs,
+			FormatReviewersWarning: func(err error) string { return err.Error() },
+			ShouldOpenReviewEditor: func(bool) bool { return false },
+		},
+	}
+
+	statusCh := make(chan string, 1)
+	result := runner.Run(&statusCh, emitter, false)
+	require.NoError(t, result.Err)
+	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, receivedLinkedIssues)
+	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, recordingJira.statusCalls)
+	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, recordingJira.commentCalls)
+	require.NotNil(t, result.Issue)
+	assert.Equal(t, "FOTINGO-10", result.Issue.Key)
 }

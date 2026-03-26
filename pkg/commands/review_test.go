@@ -159,7 +159,7 @@ func TestResolveReviewPRBody_OpensEditorWhenInteractive(t *testing.T) {
 	}
 
 	statusCh := make(chan string, 4)
-	body, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, true)
+	body, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, nil, true)
 	require.NoError(t, err)
 	assert.Equal(t, "edited body", body)
 	assert.True(t, opened)
@@ -180,7 +180,7 @@ func TestResolveReviewPRBody_SkipsEditorInNonInteractiveMode(t *testing.T) {
 	}
 
 	statusCh := make(chan string, 4)
-	body, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, true)
+	body, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, nil, true)
 	require.NoError(t, err)
 	assert.Contains(t, body, "**Changes**")
 }
@@ -196,7 +196,7 @@ func TestResolveReviewPRBody_DescriptionOverrideTakesPrecedenceOverTemplateOverr
 	reviewCmdFlags.templateDescription = "Custom template description"
 
 	statusCh := make(chan string, 4)
-	body, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, true)
+	body, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, nil, true)
 	require.NoError(t, err)
 	assert.Equal(t, "Raw body override", body)
 }
@@ -222,7 +222,7 @@ func TestResolveReviewPRBody_EditorFailure(t *testing.T) {
 	}
 
 	statusCh := make(chan string, 4)
-	_, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, true)
+	_, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, nil, true)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "failed to edit pull request description")
 }
@@ -255,7 +255,7 @@ func TestResolveReviewPRBody_InteractivePathUsesRuntimeHandoff(t *testing.T) {
 	var body string
 	err := withActiveTerminal(controller, func() error {
 		var runErr error
-		body, runErr = resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, true)
+		body, runErr = resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, nil, true)
 		return runErr
 	})
 
@@ -300,7 +300,7 @@ func TestBuildReviewTemplateData_IssueSummaryIsKeyPrefixedAndTruncated(t *testin
 		Description: "Issue description",
 	}
 
-	data := buildReviewTemplateData("feature/branch", issue, nil, nil)
+	data := buildReviewTemplateData("feature/branch", issue, nil, nil, nil)
 	expected := internalreview.TakePrefix("PROJ-123: "+longSummary, 100)
 
 	assert.Equal(t, expected, data["summary"])
@@ -313,7 +313,7 @@ func TestBuildReviewTemplateData_CommitFallbackSummaryDescriptionAndChanges(t *t
 		{Message: "feat: oldest work\n\noldest body", Additions: 5, Deletions: 1},
 	}
 
-	data := buildReviewTemplateData("feature/branch", nil, nil, commits)
+	data := buildReviewTemplateData("feature/branch", nil, nil, commits, nil)
 
 	assert.Equal(t, "feat: oldest work", data["summary"])
 	assert.Equal(t, "oldest body", data["description"])
@@ -325,7 +325,7 @@ func TestBuildReviewTemplateData_CommitFallbackSummaryDescriptionAndChanges(t *t
 }
 
 func TestBuildReviewTemplateData_BranchFallbackSummaryAndEmptyDescription(t *testing.T) {
-	data := buildReviewTemplateData("feature/fallback", nil, nil, nil)
+	data := buildReviewTemplateData("feature/fallback", nil, nil, nil, nil)
 
 	assert.Equal(t, "feature/fallback", data["summary"])
 	assert.Equal(t, "", data["description"])
@@ -339,7 +339,7 @@ func TestBuildReviewTemplateData_NormalizesIssueDescriptionLineEndings(t *testin
 		Description: "line1\r\nline2\r\nline3",
 	}
 
-	data := buildReviewTemplateData("feature/branch", issue, nil, nil)
+	data := buildReviewTemplateData("feature/branch", issue, nil, nil, nil)
 	assert.Equal(t, "line1\nline2\nline3", data["description"])
 }
 
@@ -353,7 +353,7 @@ func TestBuildReviewTemplateData_AppliesTemplateSummaryOverride(t *testing.T) {
 		Description: "Issue description",
 	}
 
-	data := buildReviewTemplateData("feature/branch", issue, nil, nil)
+	data := buildReviewTemplateData("feature/branch", issue, nil, nil, nil)
 	assert.Equal(t, "Custom summary", data["summary"])
 	assert.Equal(t, "Issue description", data["description"])
 }
@@ -368,9 +368,27 @@ func TestBuildReviewTemplateData_AppliesTemplateDescriptionOverride(t *testing.T
 		Description: "Issue description",
 	}
 
-	data := buildReviewTemplateData("feature/branch", issue, nil, nil)
+	data := buildReviewTemplateData("feature/branch", issue, nil, nil, nil)
 	assert.Equal(t, "PROJ-1: Issue summary", data["summary"])
 	assert.Equal(t, "line1\nline2", data["description"])
+}
+
+func TestBuildReviewTemplateData_RendersAllLinkedIssues(t *testing.T) {
+	issue := &jira.Issue{
+		Key:         "FOTINGO-10",
+		Summary:     "Issue summary",
+		Description: "Issue description",
+	}
+
+	data := buildReviewTemplateData(
+		"feature/branch",
+		issue,
+		nil,
+		nil,
+		[]string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"},
+	)
+
+	assert.Equal(t, "Fixes FOTINGO-10\nFixes FOTINGO-1\nFixes FOTINGO-2", data["fixedIssues"])
 }
 
 func TestDeriveEditorPRTitle_FirstLineOnly(t *testing.T) {
@@ -1091,7 +1109,7 @@ func TestResolveReviewReviewers_ResolvesTeamTargets(t *testing.T) {
 	defer restoreFlags()
 
 	ghClient := &mockGitHub{
-		collaborators: []github.User{
+		orgMembers: []github.User{
 			{Login: "alice", Name: "Alice Developer"},
 		},
 		teams: []github.Team{

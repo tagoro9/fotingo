@@ -57,7 +57,7 @@ type WorkflowDeps struct {
 	NewGitHubClient        func(git.Git, *viper.Viper) (github.Github, error)
 	NewJiraClient          func(*viper.Viper) (jira.Jira, error)
 	FetchBranchIssue       func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error)
-	ResolvePRBody          func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, bool) (string, error)
+	ResolvePRBody          func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error)
 	ResolveLabels          func(github.Github, []string) ([]string, []string, error)
 	ResolveReviewers       func(github.Github, []string) ([]string, []string, []string, error)
 	ResolveAssignees       func(github.Github, []string) ([]string, []string, error)
@@ -168,6 +168,7 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	var issue *jira.Issue
 	var jiraClient jira.Jira
 	var commits []git.Commit
+	var linkedIssueIDs []string
 	var resolvedLabels []string
 	var resolvedReviewers []string
 	var resolvedTeamReviewers []string
@@ -255,15 +256,20 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 			out.Debugf("review commits unavailable: %v", commitErr)
 		} else {
 			commits = loadedCommits
+			linkedIssueIDs = CollectLinkedIssueIDs(issue, gitClient.GetIssuesFromCommits(commits))
 			out.Debugf("review commits loaded=%d", len(commits))
+			out.Debugf("review linked issues=%d", len(linkedIssueIDs))
 		}
 	} else {
 		out.Debugf("review commits skipped: description override provided")
 	}
+	if len(linkedIssueIDs) == 0 {
+		linkedIssueIDs = CollectLinkedIssueIDs(issue, nil)
+	}
 
 	editorMode := r.Options.Description == "" && r.Deps.ShouldOpenReviewEditor(allowEditor)
 	resolvePRBodyStart := time.Now()
-	prBody, err = r.Deps.ResolvePRBody(statusCh, branch, issue, jiraClient, commits, allowEditor)
+	prBody, err = r.Deps.ResolvePRBody(statusCh, branch, issue, jiraClient, commits, linkedIssueIDs, allowEditor)
 	logReviewPhaseTiming(out, "resolve_pr_body", resolvePRBodyStart)
 	if err != nil {
 		result.Err = err
@@ -345,22 +351,26 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 		}
 	}
 
-	if !r.Options.Simple && issue != nil && jiraClient != nil {
-		out.Verbose(i18n.ReviewStatusSetInReview, issue.Key)
-		updatedIssue, err := jiraClient.SetJiraIssueStatus(issue.Key, jira.StatusInReview)
-		if err != nil {
-			out.Info("warning", i18n.ReviewStatusSetInReviewWarn, err)
-		} else {
-			result.Issue = updatedIssue
-			out.Verbose(i18n.ReviewStatusSetInReviewDone, issue.Key)
-		}
-
-		out.Verbose(i18n.ReviewStatusAddComment, issue.Key)
+	if !r.Options.Simple && jiraClient != nil {
 		comment := t(i18n.ReviewCommentCreated, pr.HTMLURL)
-		if err := jiraClient.AddComment(issue.Key, comment); err != nil {
-			out.Info("warning", i18n.ReviewStatusAddCommentWarn, err)
-		} else {
-			out.Verbose(i18n.ReviewStatusAddCommentDone, issue.Key)
+		for _, issueID := range linkedIssueIDs {
+			out.Verbose(i18n.ReviewStatusSetInReview, issueID)
+			updatedIssue, err := jiraClient.SetJiraIssueStatus(issueID, jira.StatusInReview)
+			if err != nil {
+				out.Info("warning", i18n.ReviewStatusSetInReviewWarn, err)
+			} else {
+				if issue != nil && strings.EqualFold(issue.Key, issueID) {
+					result.Issue = updatedIssue
+				}
+				out.Verbose(i18n.ReviewStatusSetInReviewDone, issueID)
+			}
+
+			out.Verbose(i18n.ReviewStatusAddComment, issueID)
+			if err := jiraClient.AddComment(issueID, comment); err != nil {
+				out.Info("warning", i18n.ReviewStatusAddCommentWarn, err)
+			} else {
+				out.Verbose(i18n.ReviewStatusAddCommentDone, issueID)
+			}
 		}
 	}
 
