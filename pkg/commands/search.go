@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/tagoro9/fotingo/internal/commandruntime"
 	internalreview "github.com/tagoro9/fotingo/internal/commands/review"
 	"github.com/tagoro9/fotingo/internal/github"
 )
@@ -55,6 +56,10 @@ var searchCmd = &cobra.Command{
 		"and fuzzy ranking used by `fotingo review`.",
 }
 
+type metadataFetchInfoLoggerSetter interface {
+	SetMetadataFetchInfoLogger(func(string))
+}
+
 func newSearchMetadataCommand(
 	domain searchDomain,
 	short string,
@@ -69,18 +74,35 @@ func newSearchMetadataCommand(
 		DisableFlagsInUseLine: true,
 		Args:                  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runSearchMetadataCommand(cmd.OutOrStdout(), domain, args)
+			if ShouldOutputJSON() {
+				return runSearchMetadataCommand(cmd.OutOrStdout(), domain, args, nil)
+			}
+
+			return runWithSharedShell(func(out commandruntime.LocalizedEmitter) error {
+				query := strings.TrimSpace(strings.Join(args, " "))
+				if query != "" {
+					out.InfoRaw(commandruntime.LogEmojiProgress, fmt.Sprintf("Searching %s for %q", domain, query))
+				}
+				return runSearchMetadataCommand(cmd.OutOrStdout(), domain, args, func(message string) {
+					out.InfoRaw(commandruntime.LogEmojiProgress, strings.TrimSpace(message))
+				})
+			})
 		},
 	}
 }
 
-func runSearchMetadataCommand(writer io.Writer, domain searchDomain, args []string) error {
+func runSearchMetadataCommand(
+	writer io.Writer,
+	domain searchDomain,
+	args []string,
+	progress func(string),
+) error {
 	query := strings.TrimSpace(strings.Join(args, " "))
 	if query == "" {
 		return errors.New("search query is required")
 	}
 
-	results, err := searchReviewMetadata(domain, query)
+	results, err := searchReviewMetadata(domain, query, progress)
 	if err != nil {
 		return err
 	}
@@ -94,13 +116,22 @@ func runSearchMetadataCommand(writer io.Writer, domain searchDomain, args []stri
 	return nil
 }
 
-func searchReviewMetadata(domain searchDomain, query string) ([]reviewMatchOption, error) {
+func searchReviewMetadata(
+	domain searchDomain,
+	query string,
+	progress func(string),
+) ([]reviewMatchOption, error) {
 	ghClient, err := newSearchGitHubClient()
 	if err != nil {
 		return nil, err
 	}
+	if progress != nil {
+		if setter, ok := ghClient.(metadataFetchInfoLoggerSetter); ok {
+			setter.SetMetadataFetchInfoLogger(progress)
+		}
+	}
 
-	options, err := loadSearchOptions(ghClient, domain)
+	options, err := loadSearchOptions(ghClient, domain, query)
 	if err != nil {
 		return nil, err
 	}
@@ -113,13 +144,17 @@ func searchReviewMetadata(domain searchDomain, query string) ([]reviewMatchOptio
 	return matches, nil
 }
 
-func loadSearchOptions(ghClient github.Github, domain searchDomain) ([]reviewMatchOption, error) {
+func loadSearchOptions(
+	ghClient github.Github,
+	domain searchDomain,
+	query string,
+) ([]reviewMatchOption, error) {
 	switch domain {
 	case searchDomainReviewers:
-		options, _, err := internalreview.BuildParticipantOptions(ghClient)
+		options, _, err := internalreview.BuildParticipantOptionsForQuery(ghClient, query, true)
 		return options, err
 	case searchDomainAssignees:
-		options, _, err := internalreview.BuildParticipantOptions(ghClient)
+		options, _, err := internalreview.BuildParticipantOptionsForQuery(ghClient, query, false)
 		if err != nil {
 			return nil, err
 		}

@@ -34,11 +34,11 @@ func TestSearchReviewMetadata_AssigneesExcludeTeams(t *testing.T) {
 		}, nil
 	}
 
-	results, err := searchReviewMetadata(searchDomainAssignees, "plat")
+	results, err := searchReviewMetadata(searchDomainAssignees, "plat", nil)
 	require.NoError(t, err)
 	assert.Empty(t, results)
 
-	results, err = searchReviewMetadata(searchDomainAssignees, "ali")
+	results, err = searchReviewMetadata(searchDomainAssignees, "ali", nil)
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	assert.Equal(t, "alice", results[0].Resolved)
@@ -60,7 +60,7 @@ func TestSearchReviewMetadata_ReviewersIncludeTeams(t *testing.T) {
 		}, nil
 	}
 
-	results, err := searchReviewMetadata(searchDomainReviewers, "plat")
+	results, err := searchReviewMetadata(searchDomainReviewers, "plat", nil)
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	assert.Equal(t, "acme/platform", results[0].Resolved)
@@ -84,11 +84,80 @@ func TestSearchReviewMetadata_LimitsResultsToTopFive(t *testing.T) {
 		}, nil
 	}
 
-	results, err := searchReviewMetadata(searchDomainLabels, "bug")
+	results, err := searchReviewMetadata(searchDomainLabels, "bug", nil)
 	require.NoError(t, err)
 	require.Len(t, results, 5)
 	assert.Equal(t, "bug-1", results[0].Resolved)
 	assert.Equal(t, "bug-5", results[4].Resolved)
+}
+
+func TestSearchReviewMetadata_PrefersOrgScopedMatchesBeforeCollaborators(t *testing.T) {
+	origFactory := newSearchGitHubClient
+	defer func() { newSearchGitHubClient = origFactory }()
+
+	gh := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "alice", Name: "Alice Member"},
+		},
+		collaborators: []github.User{
+			{Login: "alice-collab", Name: "Alice Collaborator"},
+		},
+	}
+	newSearchGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	results, err := searchReviewMetadata(searchDomainReviewers, "ali", nil)
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	assert.Equal(t, "alice", results[0].Resolved)
+	assert.NotContains(t, gh.calls, "get_collaborators")
+}
+
+func TestSearchReviewMetadata_FallsBackToCollaboratorsAfterOrgMiss(t *testing.T) {
+	origFactory := newSearchGitHubClient
+	defer func() { newSearchGitHubClient = origFactory }()
+
+	gh := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "bob", Name: "Bob Member"},
+		},
+		collaborators: []github.User{
+			{Login: "alice", Name: "Alice Collaborator"},
+		},
+	}
+	newSearchGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	results, err := searchReviewMetadata(searchDomainAssignees, "ali", nil)
+	require.NoError(t, err)
+	require.Len(t, results, 1)
+	assert.Equal(t, "alice", results[0].Resolved)
+	assert.Contains(t, gh.calls, "get_org_members")
+	assert.Contains(t, gh.calls, "get_collaborators")
+}
+
+func TestSearchReviewMetadata_ProgressCallbackReceivesMetadataMessages(t *testing.T) {
+	origFactory := newSearchGitHubClient
+	defer func() { newSearchGitHubClient = origFactory }()
+
+	gh := &mockGitHub{
+		orgMembers: []github.User{
+			{Login: "alice", Name: "Alice Member"},
+		},
+	}
+	newSearchGitHubClient = func() (github.Github, error) {
+		return gh, nil
+	}
+
+	var progress []string
+	_, err := searchReviewMetadata(searchDomainReviewers, "ali", func(message string) {
+		progress = append(progress, message)
+	})
+	require.NoError(t, err)
+	require.NotEmpty(t, progress)
+	assert.Contains(t, progress[0], "Fetching GitHub organization members")
 }
 
 func TestRunSearchMetadataCommand_JSONOutput(t *testing.T) {
@@ -111,7 +180,7 @@ func TestRunSearchMetadataCommand_JSONOutput(t *testing.T) {
 	}
 
 	output := captureStdout(t, func() {
-		err := runSearchMetadataCommand(io.Discard, searchDomainReviewers, []string{"ali"})
+		err := runSearchMetadataCommand(io.Discard, searchDomainReviewers, []string{"ali"}, nil)
 		require.NoError(t, err)
 	})
 
@@ -142,13 +211,13 @@ func TestRunSearchMetadataCommand_TextOutputNoMatches(t *testing.T) {
 	}
 
 	var output bytes.Buffer
-	err := runSearchMetadataCommand(&output, searchDomainLabels, []string{"bug"})
+	err := runSearchMetadataCommand(&output, searchDomainLabels, []string{"bug"}, nil)
 	require.NoError(t, err)
 	assert.Contains(t, output.String(), `No labels matches found for "bug".`)
 }
 
 func TestRunSearchMetadataCommand_RequiresQuery(t *testing.T) {
-	err := runSearchMetadataCommand(io.Discard, searchDomainLabels, []string{"   "})
+	err := runSearchMetadataCommand(io.Discard, searchDomainLabels, []string{"   "}, nil)
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "search query is required")
 }
