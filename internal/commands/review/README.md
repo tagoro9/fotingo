@@ -532,7 +532,7 @@ type TemplateOptions struct {
 ```
 
 <a name="WorkflowDeps"></a>
-## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L55-L69>)
+## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L57-L71>)
 
 WorkflowDeps defines external dependencies used by the review workflow.
 
@@ -555,7 +555,7 @@ type WorkflowDeps struct {
 ```
 
 <a name="WorkflowEmitter"></a>
-## type [WorkflowEmitter](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L43-L48>)
+## type [WorkflowEmitter](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L45-L50>)
 
 WorkflowEmitter is the logging contract used by the review workflow.
 
@@ -569,7 +569,7 @@ type WorkflowEmitter interface {
 ```
 
 <a name="WorkflowOptions"></a>
-## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L18-L27>)
+## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L20-L29>)
 
 WorkflowOptions carries review flags required by the orchestration workflow.
 
@@ -587,7 +587,7 @@ type WorkflowOptions struct {
 ```
 
 <a name="WorkflowResult"></a>
-## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L30-L40>)
+## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L32-L42>)
 
 WorkflowResult contains the review execution output.
 
@@ -606,7 +606,7 @@ type WorkflowResult struct {
 ```
 
 <a name="WorkflowRunner"></a>
-## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L72-L77>)
+## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L74-L79>)
 
 WorkflowRunner executes the review command workflow.
 
@@ -620,7 +620,7 @@ type WorkflowRunner struct {
 ```
 
 <a name="WorkflowRunner.Run"></a>
-### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L80>)
+### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L82>)
 
 ```go
 func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEditor bool) WorkflowResult
