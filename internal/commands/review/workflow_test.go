@@ -306,6 +306,22 @@ func (workflowLinkedIssuesGit) GetIssuesFromCommits([]git.Commit) []string {
 	return []string{"FOTINGO-1", "FOTINGO-2", "FOTINGO-1"}
 }
 
+type workflowCommitOnlyIssuesGit struct {
+	workflowLinkedIssuesGit
+}
+
+func (workflowCommitOnlyIssuesGit) GetIssueId() (string, error) {
+	return "", errors.New("no issue id found in branch name: feature/no-jira")
+}
+
+type workflowNoIssuesGit struct {
+	workflowSuccessMockGit
+}
+
+func (workflowNoIssuesGit) GetIssueId() (string, error) {
+	return "", errors.New("no issue id found in branch name: feature/no-jira")
+}
+
 type workflowRecordingJira struct {
 	workflowSuccessMockJira
 	statusCalls  []string
@@ -384,4 +400,141 @@ func TestWorkflowRunnerRun_UpdatesAllLinkedIssues(t *testing.T) {
 	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, recordingJira.commentCalls)
 	require.NotNil(t, result.Issue)
 	assert.Equal(t, "FOTINGO-10", result.Issue.Key)
+}
+
+func TestWorkflowRunnerRun_UsesCommitLinkedIssuesWithoutBranchIssue(t *testing.T) {
+	emitter := &reviewCollectingEmitter{}
+	recordingJira := &workflowRecordingJira{}
+	pr := &github.PullRequest{
+		Number:  42,
+		HTMLURL: "https://github.com/tagoro9/fotingo/pull/42",
+	}
+
+	var receivedLinkedIssues []string
+	var fetchBranchIssueCalls int
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Simple: false},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return workflowCommitOnlyIssuesGit{}, nil
+			},
+			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+				return workflowSuccessMockGitHub{pr: pr}, nil
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return recordingJira, nil
+			},
+			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+				fetchBranchIssueCalls++
+				return nil, fmt.Errorf("branch issue should not be fetched")
+			},
+			ResolvePRBody: func(
+				_ *chan string,
+				_ string,
+				_ *jira.Issue,
+				_ jira.Jira,
+				_ []git.Commit,
+				linkedIssueIDs []string,
+				_ bool,
+			) (string, error) {
+				receivedLinkedIssues = append([]string{}, linkedIssueIDs...)
+				return "body", nil
+			},
+			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			ResolveReviewers: func(github.Github, []string) ([]string, []string, []string, error) {
+				return nil, nil, nil, nil
+			},
+			ResolveAssignees: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			SplitEditorContent:     SplitEditorContent,
+			DerivePRTitle:          func(string, *jira.Issue, string, bool) string { return "title" },
+			ToTeamSlugs:            ToTeamSlugs,
+			FormatReviewersWarning: func(err error) string { return err.Error() },
+			ShouldOpenReviewEditor: func(bool) bool { return false },
+		},
+	}
+
+	statusCh := make(chan string, 1)
+	result := runner.Run(&statusCh, emitter, false)
+	require.NoError(t, result.Err)
+	assert.Equal(t, []string{"FOTINGO-1", "FOTINGO-2"}, receivedLinkedIssues)
+	assert.Equal(t, []string{"FOTINGO-1", "FOTINGO-2"}, recordingJira.statusCalls)
+	assert.Equal(t, []string{"FOTINGO-1", "FOTINGO-2"}, recordingJira.commentCalls)
+	assert.Zero(t, fetchBranchIssueCalls)
+	assert.Nil(t, result.Issue)
+}
+
+func TestWorkflowRunnerRun_SkipsJiraWhenNoIssuesExist(t *testing.T) {
+	emitter := &reviewCollectingEmitter{}
+	pr := &github.PullRequest{
+		Number:  42,
+		HTMLURL: "https://github.com/tagoro9/fotingo/pull/42",
+	}
+
+	var jiraInitCalls int
+	var fetchBranchIssueCalls int
+	var receivedLinkedIssues []string
+	var receivedJiraClient jira.Jira
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Simple: false},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return workflowNoIssuesGit{}, nil
+			},
+			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+				return workflowSuccessMockGitHub{pr: pr}, nil
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				jiraInitCalls++
+				return workflowSuccessMockJira{}, nil
+			},
+			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+				fetchBranchIssueCalls++
+				return nil, fmt.Errorf("branch issue should not be fetched")
+			},
+			ResolvePRBody: func(
+				_ *chan string,
+				_ string,
+				_ *jira.Issue,
+				jiraClient jira.Jira,
+				_ []git.Commit,
+				linkedIssueIDs []string,
+				_ bool,
+			) (string, error) {
+				receivedJiraClient = jiraClient
+				receivedLinkedIssues = append([]string{}, linkedIssueIDs...)
+				return "body", nil
+			},
+			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			ResolveReviewers: func(github.Github, []string) ([]string, []string, []string, error) {
+				return nil, nil, nil, nil
+			},
+			ResolveAssignees: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			SplitEditorContent: SplitEditorContent,
+			DerivePRTitle: func(branch string, issue *jira.Issue, _ string, _ bool) string {
+				return BuildDefaultTitle(branch, issue)
+			},
+			ToTeamSlugs:            ToTeamSlugs,
+			FormatReviewersWarning: func(err error) string { return err.Error() },
+			ShouldOpenReviewEditor: func(bool) bool { return false },
+		},
+	}
+
+	statusCh := make(chan string, 1)
+	result := runner.Run(&statusCh, emitter, false)
+	require.NoError(t, result.Err)
+	assert.Zero(t, jiraInitCalls)
+	assert.Zero(t, fetchBranchIssueCalls)
+	assert.Nil(t, receivedJiraClient)
+	assert.Empty(t, receivedLinkedIssues)
+	assert.Nil(t, result.Issue)
 }

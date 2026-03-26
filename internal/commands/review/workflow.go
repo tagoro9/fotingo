@@ -14,6 +14,8 @@ import (
 	"github.com/tagoro9/fotingo/internal/jira"
 )
 
+const reviewMissingBranchIssueMessage = "no issue id found in branch name"
+
 // WorkflowOptions carries review flags required by the orchestration workflow.
 type WorkflowOptions struct {
 	Draft                       bool
@@ -167,6 +169,7 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	var prTitle, prBody string
 	var issue *jira.Issue
 	var jiraClient jira.Jira
+	var branchIssueID string
 	var commits []git.Commit
 	var linkedIssueIDs []string
 	var resolvedLabels []string
@@ -175,35 +178,37 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	var resolvedAssignees []string
 
 	if !r.Options.Simple {
-		out.Verbose(i18n.ReviewStatusInitJira)
-		initJiraStart := time.Now()
-		jiraClient, err = r.Deps.NewJiraClient(r.Config)
-		logReviewPhaseTiming(out, "init_jira", initJiraStart)
-		if err != nil {
-			result.Err = fterrors.WrapJiraError(t(i18n.ReviewWrapInitJira), err)
-			return result
-		}
-		out.Verbose(i18n.ReviewStatusJiraInit)
-
 		out.Verbose(i18n.ReviewStatusExtractIssue)
-		issueID, err := gitClient.GetIssueId()
+		branchIssueID, err = gitClient.GetIssueId()
 		if err != nil {
-			result.Err = fterrors.WrapGitError(t(i18n.ReviewWrapIssueFromBranch), err)
-			return result
+			if !isMissingBranchIssueIDError(err) {
+				result.Err = fterrors.WrapGitError(t(i18n.ReviewWrapIssueFromBranch), err)
+				return result
+			}
+			out.Debugf("review branch issue unavailable: %v", err)
+			branchIssueID = ""
 		}
-		out.Verbose(i18n.ReviewStatusFoundIssue, issueID)
 
-		out.Verbose(i18n.ReviewStatusFetchingIssue, issueID)
-		fetchIssueStart := time.Now()
-		issue, err = r.Deps.FetchBranchIssue(jiraClient, issueID, out.Debugf)
-		logReviewPhaseTiming(out, "fetch_issue", fetchIssueStart)
-		if err != nil {
-			result.Err = fterrors.WrapJiraError(t(i18n.ReviewWrapGetIssue), err)
-			return result
+		if branchIssueID != "" {
+			out.Verbose(i18n.ReviewStatusFoundIssue, branchIssueID)
+			jiraClient, err = initReviewJiraClient(r, out, t)
+			if err != nil {
+				result.Err = err
+				return result
+			}
+
+			out.Verbose(i18n.ReviewStatusFetchingIssue, branchIssueID)
+			fetchIssueStart := time.Now()
+			issue, err = r.Deps.FetchBranchIssue(jiraClient, branchIssueID, out.Debugf)
+			logReviewPhaseTiming(out, "fetch_issue", fetchIssueStart)
+			if err != nil {
+				result.Err = fterrors.WrapJiraError(t(i18n.ReviewWrapGetIssue), err)
+				return result
+			}
+			result.Issue = issue
+			result.JiraURL = jiraClient.GetIssueURL(issue.Key)
+			out.Verbose(i18n.ReviewStatusIssueSummary, issue.Key, issue.Summary)
 		}
-		result.Issue = issue
-		result.JiraURL = jiraClient.GetIssueURL(issue.Key)
-		out.Verbose(i18n.ReviewStatusIssueSummary, issue.Key, issue.Summary)
 	}
 
 	if len(r.Options.Labels) > 0 {
@@ -265,6 +270,13 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	}
 	if len(linkedIssueIDs) == 0 {
 		linkedIssueIDs = CollectLinkedIssueIDs(issue, nil)
+	}
+	if !r.Options.Simple && jiraClient == nil && len(linkedIssueIDs) > 0 {
+		jiraClient, err = initReviewJiraClient(r, out, t)
+		if err != nil {
+			result.Err = err
+			return result
+		}
 	}
 
 	editorMode := r.Options.Description == "" && r.Deps.ShouldOpenReviewEditor(allowEditor)
@@ -376,6 +388,33 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 
 	logReviewPhaseTiming(out, "total", totalStart)
 	return result
+}
+
+// initReviewJiraClient initializes Jira lazily so review can avoid Jira
+// interactions entirely when no linked issues are discovered.
+func initReviewJiraClient(
+	r WorkflowRunner,
+	out WorkflowEmitter,
+	t func(i18n.Key, ...any) string,
+) (jira.Jira, error) {
+	out.Verbose(i18n.ReviewStatusInitJira)
+	initJiraStart := time.Now()
+	jiraClient, err := r.Deps.NewJiraClient(r.Config)
+	logReviewPhaseTiming(out, "init_jira", initJiraStart)
+	if err != nil {
+		return nil, fterrors.WrapJiraError(t(i18n.ReviewWrapInitJira), err)
+	}
+	out.Verbose(i18n.ReviewStatusJiraInit)
+	return jiraClient, nil
+}
+
+// isMissingBranchIssueIDError reports whether branch issue extraction simply
+// found no Jira key, which review treats as a non-fatal fallback condition.
+func isMissingBranchIssueIDError(err error) bool {
+	if err == nil {
+		return false
+	}
+	return strings.Contains(strings.ToLower(err.Error()), reviewMissingBranchIssueMessage)
 }
 
 func shouldCollectReviewCommits(description string) bool {
