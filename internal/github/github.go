@@ -147,9 +147,9 @@ type github struct {
 
 const (
 	defaultLabelsCacheTTL        = 30 * time.Minute
-	defaultCollaboratorsCacheTTL = 14 * 24 * time.Hour
-	defaultOrgMembersCacheTTL    = 14 * 24 * time.Hour
-	defaultTeamsCacheTTL         = 30 * time.Minute
+	defaultCollaboratorsCacheTTL = 720 * time.Hour
+	defaultOrgMembersCacheTTL    = 720 * time.Hour
+	defaultTeamsCacheTTL         = 720 * time.Hour
 	maxNameLookupPerFetch        = 500
 )
 
