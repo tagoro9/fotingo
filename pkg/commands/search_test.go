@@ -288,6 +288,28 @@ func TestRunSearchMetadataCommand_TextOutputNoMatches(t *testing.T) {
 	assert.Contains(t, output.String(), `No labels matches found for "bug".`)
 }
 
+func TestRunSearchMetadataCommand_TextOutputUsesSingleLineResults(t *testing.T) {
+	restore := saveGlobalFlags()
+	defer restore()
+
+	origFactory := newSearchGitHubClient
+	defer func() { newSearchGitHubClient = origFactory }()
+
+	newSearchGitHubClient = func() (github.Github, error) {
+		return &mockGitHub{
+			collaborators: []github.User{
+				{Login: "Toolo", Name: "Esau Suarez"},
+			},
+		}, nil
+	}
+
+	var output bytes.Buffer
+	err := runSearchMetadataCommand(&output, searchDomainReviewers, []string{"Esau"}, nil)
+	require.NoError(t, err)
+	assert.Contains(t, output.String(), `Top reviewers matches for "Esau":`)
+	assert.Contains(t, output.String(), "1. Toolo (user)  resolved: Toolo  detail: Esau Suarez")
+}
+
 func TestRunSearchMetadataCommand_RequiresQuery(t *testing.T) {
 	err := runSearchMetadataCommand(io.Discard, searchDomainLabels, []string{"   "}, nil)
 	require.Error(t, err)

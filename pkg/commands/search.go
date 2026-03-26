@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/tagoro9/fotingo/internal/commandruntime"
 	internalreview "github.com/tagoro9/fotingo/internal/commands/review"
 	"github.com/tagoro9/fotingo/internal/github"
 )
@@ -78,15 +77,11 @@ func newSearchMetadataCommand(
 				return runSearchMetadataCommand(cmd.OutOrStdout(), domain, args, nil)
 			}
 
-			return runWithSharedShell(func(out commandruntime.LocalizedEmitter) error {
-				query := strings.TrimSpace(strings.Join(args, " "))
-				if query != "" {
-					out.InfoRaw(commandruntime.LogEmojiProgress, fmt.Sprintf("Searching %s for %q", domain, query))
-				}
-				return runSearchMetadataCommand(cmd.OutOrStdout(), domain, args, func(message string) {
-					out.InfoRaw(commandruntime.LogEmojiProgress, strings.TrimSpace(message))
-				})
-			})
+			if shouldUseInteractiveSearchUIFn() {
+				return runInteractiveSearchMetadataCommandFn(cmd.OutOrStdout(), domain, args)
+			}
+
+			return runSearchMetadataCommand(cmd.OutOrStdout(), domain, args, nil)
 		},
 	}
 }
@@ -195,24 +190,33 @@ func buildSearchOutput(domain searchDomain, query string, results []reviewMatchO
 }
 
 func printSearchResults(writer io.Writer, domain searchDomain, query string, results []reviewMatchOption) {
+	for _, line := range renderSearchResultLines(domain, query, results) {
+		_, _ = fmt.Fprintln(writer, line)
+	}
+}
+
+// renderSearchResultLines normalizes search results into reusable display lines
+// for both the plain-text CLI path and the interactive search TUI.
+func renderSearchResultLines(domain searchDomain, query string, results []reviewMatchOption) []string {
 	if len(results) == 0 {
-		_, _ = fmt.Fprintf(writer, "No %s matches found for %q.\n", domain, query)
-		return
+		return []string{fmt.Sprintf("No %s matches found for %q.", domain, query)}
 	}
 
-	_, _ = fmt.Fprintf(writer, "Top %s matches for %q:\n", domain, query)
+	lines := []string{fmt.Sprintf("Top %s matches for %q:", domain, query)}
 	for idx, result := range results {
 		label := searchMatchLabel(result)
-		_, _ = fmt.Fprintf(writer, "%d. %s", idx+1, label)
+		line := fmt.Sprintf("%d. %s", idx+1, label)
 		if kind := strings.TrimSpace(string(result.Kind)); kind != "" {
-			_, _ = fmt.Fprintf(writer, " (%s)", kind)
+			line = fmt.Sprintf("%s (%s)", line, kind)
 		}
-		_, _ = fmt.Fprintln(writer)
-		_, _ = fmt.Fprintf(writer, "   resolved: %s\n", strings.TrimSpace(result.Resolved))
+		line = fmt.Sprintf("%s  resolved: %s", line, strings.TrimSpace(result.Resolved))
 		if detail := strings.TrimSpace(result.Detail); detail != "" && !strings.EqualFold(detail, label) {
-			_, _ = fmt.Fprintf(writer, "   detail: %s\n", detail)
+			line = fmt.Sprintf("%s  detail: %s", line, detail)
 		}
+		lines = append(lines, line)
 	}
+
+	return lines
 }
 
 func searchMatchLabel(result reviewMatchOption) string {
