@@ -703,6 +703,7 @@ func TestBuildPRBody_Default(t *testing.T) {
 	}
 
 	body := buildPRBody("f/TEST-1_fix_the_thing", issue, nil)
+	assert.Contains(t, body, "**Summary**")
 	assert.Contains(t, body, "Fix the thing")
 	assert.Contains(t, body, "**Description**")
 	assert.Contains(t, body, "Detailed description")
@@ -742,6 +743,7 @@ func TestDefaultPRTemplate_ContainsRequiredSections(t *testing.T) {
 	t.Parallel()
 
 	assert.Contains(t, defaultPRTemplate, "{summary}")
+	assert.Contains(t, defaultPRTemplate, "**Summary**")
 	assert.Contains(t, defaultPRTemplate, "{description}")
 	assert.Contains(t, defaultPRTemplate, "{fixedIssues}")
 	assert.Contains(t, defaultPRTemplate, "**Description**")

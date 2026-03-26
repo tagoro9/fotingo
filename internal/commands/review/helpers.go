@@ -52,13 +52,57 @@ func BuildTemplateData(
 	}
 
 	if opts.TemplateSummary != "" {
-		data[template.PlaceholderSummary] = opts.TemplateSummary
+		data[template.PlaceholderSummary] = NormalizeTemplateOverride(opts.TemplateSummary)
 	}
 	if opts.TemplateDescription != "" {
-		data[template.PlaceholderDescription] = NormalizeLineEndings(opts.TemplateDescription)
+		data[template.PlaceholderDescription] = NormalizeTemplateOverride(opts.TemplateDescription)
 	}
 
 	return data
+}
+
+// NormalizeTemplateOverride expands escaped formatting sequences used in CLI
+// flag values and normalizes the final content to LF line endings.
+func NormalizeTemplateOverride(content string) string {
+	if content == "" {
+		return ""
+	}
+
+	var builder strings.Builder
+	builder.Grow(len(content))
+
+	for index := 0; index < len(content); index++ {
+		current := content[index]
+		if current != '\\' || index == len(content)-1 {
+			builder.WriteByte(current)
+			continue
+		}
+
+		next := content[index+1]
+		switch next {
+		case '\\':
+			builder.WriteByte('\\')
+			index++
+		case 'n':
+			builder.WriteByte('\n')
+			index++
+		case 'r':
+			if index+2 < len(content) && content[index+2] == 'n' {
+				builder.WriteByte('\n')
+				index += 2
+				continue
+			}
+			builder.WriteByte('\n')
+			index++
+		case 't':
+			builder.WriteByte('\t')
+			index++
+		default:
+			builder.WriteByte(current)
+		}
+	}
+
+	return NormalizeLineEndings(builder.String())
 }
 
 // CollectLinkedIssueIDs keeps the branch issue first and appends commit-linked

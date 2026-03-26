@@ -82,6 +82,7 @@ func TestDefaultPRTemplate(t *testing.T) {
 
 	// Verify the default PR template contains expected placeholders
 	assert.Contains(t, defaultPRTemplate, "{summary}")
+	assert.Contains(t, defaultPRTemplate, "**Summary**")
 	assert.Contains(t, defaultPRTemplate, "{description}")
 	assert.Contains(t, defaultPRTemplate, "{fixedIssues}")
 	assert.Contains(t, defaultPRTemplate, "{changes}")
@@ -358,6 +359,14 @@ func TestBuildReviewTemplateData_AppliesTemplateSummaryOverride(t *testing.T) {
 	assert.Equal(t, "Issue description", data["description"])
 }
 
+func TestBuildReviewTemplateData_ExpandsEscapedTemplateSummaryOverride(t *testing.T) {
+	defer resetReviewFlags()
+	reviewCmdFlags.templateSummary = "Custom\\nsummary"
+
+	data := buildReviewTemplateData("feature/branch", nil, nil, nil, nil)
+	assert.Equal(t, "Custom\nsummary", data["summary"])
+}
+
 func TestBuildReviewTemplateData_AppliesTemplateDescriptionOverride(t *testing.T) {
 	defer resetReviewFlags()
 	reviewCmdFlags.templateDescription = "line1\r\nline2"
@@ -371,6 +380,28 @@ func TestBuildReviewTemplateData_AppliesTemplateDescriptionOverride(t *testing.T
 	data := buildReviewTemplateData("feature/branch", issue, nil, nil, nil)
 	assert.Equal(t, "PROJ-1: Issue summary", data["summary"])
 	assert.Equal(t, "line1\nline2", data["description"])
+}
+
+func TestBuildReviewTemplateData_ExpandsEscapedTemplateDescriptionOverride(t *testing.T) {
+	defer resetReviewFlags()
+	reviewCmdFlags.templateDescription = "line1\\nline2\\tindent"
+
+	issue := &jira.Issue{
+		Key:         "PROJ-1",
+		Summary:     "Issue summary",
+		Description: "Issue description",
+	}
+
+	data := buildReviewTemplateData("feature/branch", issue, nil, nil, nil)
+	assert.Equal(t, "line1\nline2\tindent", data["description"])
+}
+
+func TestBuildReviewTemplateData_PreservesEscapedBackslashesInTemplateDescriptionOverride(t *testing.T) {
+	defer resetReviewFlags()
+	reviewCmdFlags.templateDescription = `path\\name`
+
+	data := buildReviewTemplateData("feature/branch", nil, nil, nil, nil)
+	assert.Equal(t, `path\name`, data["description"])
 }
 
 func TestBuildReviewTemplateData_RendersAllLinkedIssues(t *testing.T) {
