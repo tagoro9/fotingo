@@ -23,6 +23,14 @@ Fotingo helps you:
 go install github.com/tagoro9/fotingo@latest
 ```
 
+Official release binaries are built with the `fotingo_org_only_participants`
+tag, which disables repository collaborator lookups and uses only organization
+members and teams for participant resolution. To build the same mode locally:
+
+```bash
+go build -tags fotingo_org_only_participants ./cmd/fotingo
+```
+
 ### From binary
 
 Download the latest release from the [releases page](https://github.com/tagoro9/fotingo/releases).
