@@ -24,6 +24,13 @@ func TestSplitEditorContent(t *testing.T) {
 	assert.Equal(t, "Body line", body)
 }
 
+func TestBuildEditorSeedContent(t *testing.T) {
+	assert.Equal(t, "PR title\n\nBody line", BuildEditorSeedContent("PR title", "Body line"))
+	assert.Equal(t, "PR title", BuildEditorSeedContent("PR title", ""))
+	assert.Equal(t, "Body line", BuildEditorSeedContent("", "Body line"))
+	assert.Equal(t, "PR title\n\nBody line", BuildEditorSeedContent("PR title\r\n", "Body line"))
+}
+
 func TestFormatChangesIncludesLineStats(t *testing.T) {
 	commits := []git.Commit{
 		{Message: "feat: newest", Additions: 7, Deletions: 2},

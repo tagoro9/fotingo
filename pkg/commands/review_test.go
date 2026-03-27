@@ -155,6 +155,8 @@ func TestResolveReviewPRBody_OpensEditorWhenInteractive(t *testing.T) {
 	opened := false
 	openEditorFn = func(initialContent string) (string, error) {
 		opened = true
+		assert.True(t, strings.HasPrefix(initialContent, "feature/test\n\n"))
+		assert.Contains(t, initialContent, "**Summary**")
 		assert.Contains(t, initialContent, "**Description**")
 		return "edited body", nil
 	}
@@ -164,6 +166,35 @@ func TestResolveReviewPRBody_OpensEditorWhenInteractive(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "edited body", body)
 	assert.True(t, opened)
+}
+
+func TestResolveReviewPRBody_SeedsEditorWithExplicitTitleOverride(t *testing.T) {
+	restore := saveGlobalFlags()
+	defer restore()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origTTY := isInputTerminalFn
+	origEditor := openEditorFn
+	defer func() {
+		isInputTerminalFn = origTTY
+		openEditorFn = origEditor
+	}()
+
+	Global.JSON = false
+	Global.Yes = false
+	isInputTerminalFn = func() bool { return true }
+	reviewCmdFlags.title = "Custom PR title"
+
+	openEditorFn = func(initialContent string) (string, error) {
+		assert.True(t, strings.HasPrefix(initialContent, "Custom PR title\n\n"))
+		assert.Contains(t, initialContent, "**Summary**")
+		return initialContent, nil
+	}
+
+	statusCh := make(chan string, 4)
+	_, err := resolveReviewPRBody(&statusCh, "feature/test", nil, nil, nil, nil, true)
+	require.NoError(t, err)
 }
 
 func TestResolveReviewPRBody_SkipsEditorInNonInteractiveMode(t *testing.T) {
@@ -741,6 +772,63 @@ func TestRunReviewWithOptions_UsesGitDefaultBranchAsPRBase(t *testing.T) {
 	require.NoError(t, result.err)
 	assert.Equal(t, "release", githubClient.lastCreatePROptions.Base)
 	assert.Equal(t, "feature/default-base", githubClient.lastCreatePROptions.Head)
+}
+
+func TestRunReviewWithOptions_SeedsEditorTitleAndKeepsBodySections(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	origTTY := isInputTerminalFn
+	origEditor := openEditorFn
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+		isInputTerminalFn = origTTY
+		openEditorFn = origEditor
+	}()
+
+	Global.JSON = false
+	Global.Yes = false
+	isInputTerminalFn = func() bool { return true }
+
+	reviewCmdFlags.simple = true
+
+	gitClient := &mockGit{
+		currentBranch:     "feature/default-title",
+		branchExistRemote: true,
+		defaultBranch:     "main",
+	}
+	githubClient := &mockGitHub{
+		createPR: &github.PullRequest{
+			Number:  1,
+			HTMLURL: "https://github.com/test/repo/pull/1",
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+	openEditorFn = func(initialContent string) (string, error) {
+		assert.True(t, strings.HasPrefix(initialContent, "feature/default-title\n\n"))
+		assert.Contains(t, initialContent, "**Summary**")
+		return initialContent, nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewWithResultWithOptions(&statusCh, true)
+
+	require.NoError(t, result.err)
+	assert.Equal(t, "feature/default-title", githubClient.lastCreatePROptions.Title)
+	assert.True(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "**Summary**\n\n"))
+	assert.Contains(t, githubClient.lastCreatePROptions.Body, "**Summary**")
+	assert.False(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "feature/default-title\n\n"))
 }
 
 func TestRunReviewWithOptions_FailsWhenDefaultBranchResolutionFails(t *testing.T) {
