@@ -273,7 +273,11 @@ func resolveReviewPRBody(
 	if shouldOpenReviewEditor(allowEditor) {
 		out := commandruntime.NewLocalizedEmitter(*statusCh, shouldEmitCommandLevel, localizer.T)
 		out.Info(commandruntime.LogEmojiPrompt, i18n.ReviewStatusOpenEditor)
-		editedBody, err := openEditorFn(body)
+		editorSeed := internalreview.BuildEditorSeedContent(
+			deriveReviewPRTitle(branch, issue, "", false),
+			body,
+		)
+		editedBody, err := openEditorFn(editorSeed)
 		if err != nil {
 			return "", fmt.Errorf(localizer.T(i18n.ReviewErrOpenEditor), err)
 		}

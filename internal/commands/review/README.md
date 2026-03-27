@@ -15,6 +15,7 @@ Package review contains shared review\-command workflow helpers.
 
 - [Variables](<#variables>)
 - [func BuildDefaultTitle\(branch string, issue \*jira.Issue\) string](<#BuildDefaultTitle>)
+- [func BuildEditorSeedContent\(title string, body string\) string](<#BuildEditorSeedContent>)
 - [func BuildTemplateData\(branch string, issue \*jira.Issue, jiraClient jira.Jira, commits \[\]git.Commit, opts TemplateOptions\) map\[string\]string](<#BuildTemplateData>)
 - [func CollectLinkedIssueIDs\(issue \*jira.Issue, commitIssueIDs \[\]string\) \[\]string](<#CollectLinkedIssueIDs>)
 - [func DedupeStringsPreserveOrder\(values \[\]string\) \[\]string](<#DedupeStringsPreserveOrder>)
@@ -97,6 +98,15 @@ func BuildDefaultTitle(branch string, issue *jira.Issue) string
 
 BuildDefaultTitle derives the default PR title for a branch and optional issue.
 
+<a name="BuildEditorSeedContent"></a>
+## func [BuildEditorSeedContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L202>)
+
+```go
+func BuildEditorSeedContent(title string, body string) string
+```
+
+BuildEditorSeedContent formats the interactive editor input so line 1 is the editable PR title and the remaining content is the PR body.
+
 <a name="BuildTemplateData"></a>
 ## func [BuildTemplateData](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L22-L28>)
 
@@ -125,7 +135,7 @@ func DedupeStringsPreserveOrder(values []string) []string
 DedupeStringsPreserveOrder deduplicates strings while keeping first\-seen order.
 
 <a name="DeriveDescription"></a>
-## func [DeriveDescription](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L215>)
+## func [DeriveDescription](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L231>)
 
 ```go
 func DeriveDescription(issue *jira.Issue, commits []git.Commit, emptyPlaceholder string) string
@@ -152,7 +162,7 @@ func DerivePRTitle(titleOverride string, branch string, issue *jira.Issue, edito
 DerivePRTitle returns the final PR title after applying overrides and editor content.
 
 <a name="DeriveSummary"></a>
-## func [DeriveSummary](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L201>)
+## func [DeriveSummary](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L217>)
 
 ```go
 func DeriveSummary(branch string, issue *jira.Issue, commits []git.Commit) string
@@ -179,7 +189,7 @@ func FindRepositoryRoot() (string, error)
 FindRepositoryRoot walks parent directories until a git repository root is found.
 
 <a name="FormatChanges"></a>
-## func [FormatChanges](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L229>)
+## func [FormatChanges](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L245>)
 
 ```go
 func FormatChanges(commits []git.Commit) string
@@ -224,7 +234,7 @@ func LoadRepositoryTemplate(repositoryRoot string, searchOrder []string) (string
 LoadRepositoryTemplate loads the first template file found in searchOrder.
 
 <a name="NormalizeLineEndings"></a>
-## func [NormalizeLineEndings](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L276>)
+## func [NormalizeLineEndings](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L292>)
 
 ```go
 func NormalizeLineEndings(content string) string
@@ -251,7 +261,7 @@ func NormalizeTokens(tokens []string) []string
 NormalizeTokens trims and drops empty requested tokens.
 
 <a name="OldestCommitHeaderAndBody"></a>
-## func [OldestCommitHeaderAndBody](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L251>)
+## func [OldestCommitHeaderAndBody](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L267>)
 
 ```go
 func OldestCommitHeaderAndBody(commits []git.Commit) (string, string)
@@ -341,7 +351,7 @@ func ScoreTokenMatch(token string, fields []string) (int, bool)
 ScoreTokenMatch returns match score and whether token matched any fields.
 
 <a name="SplitCommitMessage"></a>
-## func [SplitCommitMessage](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L260>)
+## func [SplitCommitMessage](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L276>)
 
 ```go
 func SplitCommitMessage(message string) (string, string)
@@ -359,7 +369,7 @@ func SplitEditorContent(content string) (string, string)
 SplitEditorContent returns title/body parts from editor content.
 
 <a name="TakePrefix"></a>
-## func [TakePrefix](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L281>)
+## func [TakePrefix](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L297>)
 
 ```go
 func TakePrefix(content string, n int) string

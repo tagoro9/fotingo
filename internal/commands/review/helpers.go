@@ -197,6 +197,22 @@ func SplitEditorContent(content string) (string, string) {
 	return title, strings.TrimLeft(rest, "\n")
 }
 
+// BuildEditorSeedContent formats the interactive editor input so line 1 is the
+// editable PR title and the remaining content is the PR body.
+func BuildEditorSeedContent(title string, body string) string {
+	title = strings.TrimSpace(NormalizeLineEndings(title))
+	body = NormalizeLineEndings(body)
+
+	switch {
+	case title == "":
+		return body
+	case body == "":
+		return title
+	default:
+		return title + "\n\n" + body
+	}
+}
+
 // DeriveSummary computes the PR summary placeholder value.
 func DeriveSummary(branch string, issue *jira.Issue, commits []git.Commit) string {
 	if issue != nil {
