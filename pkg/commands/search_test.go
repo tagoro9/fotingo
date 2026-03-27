@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -110,9 +111,10 @@ func TestSearchReviewMetadata_PrefersOrgScopedMatchesBeforeCollaborators(t *test
 
 	results, err := searchReviewMetadata(searchDomainReviewers, "ali", nil)
 	require.NoError(t, err)
-	require.Len(t, results, 1)
+	require.Len(t, results, 2)
 	assert.Equal(t, "alice", results[0].Resolved)
-	assert.NotContains(t, gh.calls, "get_collaborators")
+	assert.Equal(t, "alice-collab", results[1].Resolved)
+	assert.Contains(t, gh.calls, "get_collaborators")
 }
 
 func TestSearchReviewMetadata_FallsBackToCollaboratorsAfterOrgMiss(t *testing.T) {
@@ -204,10 +206,11 @@ func TestSearchReviewMetadata_UsesTeamMatchesBeforeCollaborators(t *testing.T) {
 
 	results, err := searchReviewMetadata(searchDomainReviewers, "plat", nil)
 	require.NoError(t, err)
-	require.Len(t, results, 1)
+	require.Len(t, results, 2)
 	assert.Equal(t, "acme/platform", results[0].Resolved)
 	assert.Equal(t, reviewMatchKindTeam, results[0].Kind)
-	assert.NotContains(t, gh.calls, "get_collaborators")
+	assert.Equal(t, "platform-dev", results[1].Resolved)
+	assert.Contains(t, gh.calls, "get_collaborators")
 }
 
 func TestSearchReviewMetadata_ProgressCallbackReceivesMetadataMessages(t *testing.T) {
@@ -229,7 +232,25 @@ func TestSearchReviewMetadata_ProgressCallbackReceivesMetadataMessages(t *testin
 	})
 	require.NoError(t, err)
 	require.NotEmpty(t, progress)
-	assert.Contains(t, progress[0], "Fetching GitHub organization members")
+	assert.Contains(t, progress[0], "Initializing GitHub metadata client")
+	assert.Contains(t, strings.Join(progress, "\n"), "Loaded 1 GitHub organization members for testowner from cache")
+	assert.Contains(t, strings.Join(progress, "\n"), "Loaded 1 reviewers candidates")
+	assert.Contains(t, strings.Join(progress, "\n"), "Ranked 1 reviewers matches")
+}
+
+func TestBuildSearchProgressLogger_UsesDebugOutput(t *testing.T) {
+	restore := saveGlobalFlags()
+	defer restore()
+
+	Global.Debug = true
+
+	var output bytes.Buffer
+	logger := buildSearchProgressLogger(&output, nil)
+	require.NotNil(t, logger)
+
+	logger("Loaded 1 GitHub organization members for testowner from cache in 1ms")
+
+	assert.Contains(t, output.String(), "Loaded 1 GitHub organization members for testowner from cache in 1ms")
 }
 
 func TestRunSearchMetadataCommand_JSONOutput(t *testing.T) {

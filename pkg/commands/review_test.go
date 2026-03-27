@@ -857,7 +857,7 @@ func TestResolveReviewReviewers_UsesOrgMembersBeforeCollaborators(t *testing.T) 
 	assert.Equal(t, []string{"alice"}, resolved)
 	assert.Empty(t, teamResolved)
 	assert.Empty(t, warnings)
-	assert.NotContains(t, ghClient.calls, "get_collaborators")
+	assert.Contains(t, ghClient.calls, "get_collaborators")
 }
 
 func TestResolveReviewReviewers_FetchesCollaboratorsAfterOrgMemberMiss(t *testing.T) {
@@ -927,7 +927,7 @@ func TestResolveReviewReviewers_UsesTeamMatchesBeforeCollaborators(t *testing.T)
 	assert.Empty(t, users)
 	assert.Equal(t, []string{"acme/platform"}, teams)
 	assert.Empty(t, warnings)
-	assert.NotContains(t, ghClient.calls, "get_collaborators")
+	assert.Contains(t, ghClient.calls, "get_collaborators")
 }
 
 func TestBuildReviewParticipantOptions_PrefersNamedDuplicateUser(t *testing.T) {

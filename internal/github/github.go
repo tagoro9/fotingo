@@ -153,6 +153,18 @@ const (
 	maxNameLookupPerFetch        = 500
 )
 
+type cachedUserProfileName struct {
+	Resolved bool   `json:"resolved"`
+	Name     string `json:"name,omitempty"`
+}
+
+type userNameEnrichmentStats struct {
+	Changed        bool
+	CacheHits      int
+	NetworkLookups int
+	RemainingEmpty int
+}
+
 var newMetadataCacheStore = func(cfg *viper.Viper) (cache.Store, error) {
 	path := ""
 	if cfg != nil {
@@ -290,6 +302,7 @@ func (g *github) AddLabelsToPR(prNumber int, labels []string) error {
 
 // GetCollaborators returns repository collaborators for reviewer selection
 func (g *github) GetCollaborators() ([]User, error) {
+	startedAt := time.Now()
 	cacheKey := g.metadataCacheKey("collaborators")
 	var cacheErr error
 	if g.cacheInitErr != nil {
@@ -302,11 +315,26 @@ func (g *github) GetCollaborators() ([]User, error) {
 		if err != nil {
 			cacheErr = errors.Join(cacheErr, fmt.Errorf("failed to read collaborators cache: %w", err))
 		} else if hit {
-			enrichedCollaborators, changed := g.enrichUsersWithProfileNames(cachedCollaborators, maxNameLookupPerFetch)
-			if changed {
+			enrichedCollaborators, stats := g.enrichUsersWithProfileNames(cachedCollaborators, maxNameLookupPerFetch, false)
+			if stats.Changed {
 				ttl := g.metadataTTL("cache.collaboratorsTTL", defaultCollaboratorsCacheTTL)
 				_ = g.metadataCache.SetWithTTL(cacheKey, enrichedCollaborators, ttl)
 			}
+			g.logCachedMetadataLoad(
+				fmt.Sprintf(
+					"Loaded %d GitHub repository collaborators for %s/%s from cache",
+					len(enrichedCollaborators),
+					g.owner,
+					g.repo,
+				),
+				time.Since(startedAt),
+			)
+			g.logUserNameEnrichment(
+				"repository collaborators",
+				fmt.Sprintf("%s/%s", g.owner, g.repo),
+				stats,
+				false,
+			)
 			return enrichedCollaborators, nil
 		}
 	}
@@ -328,6 +356,7 @@ func (g *github) GetCollaborators() ([]User, error) {
 }
 
 func (g *github) fetchCollaborators() ([]User, error) {
+	startedAt := time.Now()
 	g.logMetadataFetchInfo(
 		fmt.Sprintf("Fetching GitHub repository collaborators for %s/%s (cache miss or expired)", g.owner, g.repo),
 	)
@@ -356,9 +385,21 @@ func (g *github) fetchCollaborators() ([]User, error) {
 		opts.Page = resp.NextPage
 	}
 
-	allCollaborators, _ = g.enrichUsersWithProfileNames(allCollaborators, len(allCollaborators))
+	allCollaborators, stats := g.enrichUsersWithProfileNames(allCollaborators, maxNameLookupPerFetch, true)
+	g.logUserNameEnrichment(
+		"repository collaborators",
+		fmt.Sprintf("%s/%s", g.owner, g.repo),
+		stats,
+		true,
+	)
 	g.logMetadataFetchInfo(
-		fmt.Sprintf("Fetched %d GitHub repository collaborators for %s/%s", len(allCollaborators), g.owner, g.repo),
+		fmt.Sprintf(
+			"Fetched %d GitHub repository collaborators for %s/%s in %s",
+			len(allCollaborators),
+			g.owner,
+			g.repo,
+			formatMetadataDuration(time.Since(startedAt)),
+		),
 	)
 
 	return allCollaborators, nil
@@ -366,6 +407,7 @@ func (g *github) fetchCollaborators() ([]User, error) {
 
 // GetOrgMembers returns organization members for reviewer selection.
 func (g *github) GetOrgMembers() ([]User, error) {
+	startedAt := time.Now()
 	cacheKey := g.metadataOwnerCacheKey("org-members")
 	var cacheErr error
 	if g.cacheInitErr != nil {
@@ -378,11 +420,20 @@ func (g *github) GetOrgMembers() ([]User, error) {
 		if err != nil {
 			cacheErr = errors.Join(cacheErr, fmt.Errorf("failed to read org members cache: %w", err))
 		} else if hit {
-			enrichedMembers, changed := g.enrichUsersWithProfileNames(cachedMembers, maxNameLookupPerFetch)
-			if changed {
+			enrichedMembers, stats := g.enrichUsersWithProfileNames(cachedMembers, maxNameLookupPerFetch, false)
+			if stats.Changed {
 				ttl := g.metadataTTL("cache.orgMembersTTL", defaultOrgMembersCacheTTL)
 				_ = g.metadataCache.SetWithTTL(cacheKey, enrichedMembers, ttl)
 			}
+			g.logCachedMetadataLoad(
+				fmt.Sprintf(
+					"Loaded %d GitHub organization members for %s from cache",
+					len(enrichedMembers),
+					g.owner,
+				),
+				time.Since(startedAt),
+			)
+			g.logUserNameEnrichment("organization members", g.owner, stats, false)
 			return enrichedMembers, nil
 		}
 	}
@@ -404,6 +455,7 @@ func (g *github) GetOrgMembers() ([]User, error) {
 }
 
 func (g *github) fetchOrgMembers() ([]User, error) {
+	startedAt := time.Now()
 	g.logMetadataFetchInfo(
 		fmt.Sprintf("Fetching GitHub organization members for %s (cache miss or expired)", g.owner),
 	)
@@ -432,9 +484,15 @@ func (g *github) fetchOrgMembers() ([]User, error) {
 		opts.Page = resp.NextPage
 	}
 
-	allMembers, _ = g.enrichUsersWithProfileNames(allMembers, len(allMembers))
+	allMembers, stats := g.enrichUsersWithProfileNames(allMembers, maxNameLookupPerFetch, true)
+	g.logUserNameEnrichment("organization members", g.owner, stats, true)
 	g.logMetadataFetchInfo(
-		fmt.Sprintf("Fetched %d GitHub organization members for %s", len(allMembers), g.owner),
+		fmt.Sprintf(
+			"Fetched %d GitHub organization members for %s in %s",
+			len(allMembers),
+			g.owner,
+			formatMetadataDuration(time.Since(startedAt)),
+		),
 	)
 
 	return allMembers, nil
@@ -452,38 +510,56 @@ func (g *github) logMetadataFetchInfo(message string) {
 	g.metadataFetchInfoLogger(strings.TrimSpace(message))
 }
 
-func (g *github) enrichUsersWithProfileNames(users []User, maxLookups int) ([]User, bool) {
+func (g *github) enrichUsersWithProfileNames(
+	users []User,
+	maxLookups int,
+	allowNetworkLookup bool,
+) ([]User, userNameEnrichmentStats) {
+	stats := userNameEnrichmentStats{}
 	if maxLookups <= 0 {
-		return users, false
+		stats.RemainingEmpty = countUsersMissingNames(users)
+		return users, stats
 	}
 
-	enriched := false
 	remainingLookups := maxLookups
 	for index := range users {
-		if remainingLookups == 0 {
-			break
-		}
-
 		login := strings.TrimSpace(users[index].Login)
 		if login == "" || strings.TrimSpace(users[index].Name) != "" {
 			continue
 		}
 
+		if resolvedName, hit := g.cachedUserProfileName(login); hit {
+			stats.CacheHits++
+			if strings.TrimSpace(resolvedName) == "" {
+				continue
+			}
+			users[index].Name = strings.TrimSpace(resolvedName)
+			stats.Changed = true
+			continue
+		}
+
+		if !allowNetworkLookup || remainingLookups == 0 {
+			continue
+		}
+
 		remainingLookups--
+		stats.NetworkLookups++
 		resolvedName, err := g.fetchUserProfileName(login)
 		if err != nil {
 			continue
 		}
 		resolvedName = strings.TrimSpace(resolvedName)
+		g.cacheUserProfileName(login, resolvedName)
 		if resolvedName == "" {
 			continue
 		}
 
 		users[index].Name = resolvedName
-		enriched = true
+		stats.Changed = true
 	}
 
-	return users, enriched
+	stats.RemainingEmpty = countUsersMissingNames(users)
+	return users, stats
 }
 
 func (g *github) fetchUserProfileName(login string) (string, error) {
@@ -496,6 +572,7 @@ func (g *github) fetchUserProfileName(login string) (string, error) {
 
 // GetTeams returns organization teams for team reviewer selection.
 func (g *github) GetTeams() ([]Team, error) {
+	startedAt := time.Now()
 	cacheKey := g.metadataOwnerCacheKey("teams")
 	var cacheErr error
 	if g.cacheInitErr != nil {
@@ -508,6 +585,10 @@ func (g *github) GetTeams() ([]Team, error) {
 		if err != nil {
 			cacheErr = errors.Join(cacheErr, fmt.Errorf("failed to read teams cache: %w", err))
 		} else if hit {
+			g.logCachedMetadataLoad(
+				fmt.Sprintf("Loaded %d GitHub organization teams for %s from cache", len(cachedTeams), g.owner),
+				time.Since(startedAt),
+			)
 			return cachedTeams, nil
 		}
 	}
@@ -529,6 +610,11 @@ func (g *github) GetTeams() ([]Team, error) {
 }
 
 func (g *github) fetchTeams() ([]Team, error) {
+	startedAt := time.Now()
+	g.logMetadataFetchInfo(
+		fmt.Sprintf("Fetching GitHub organization teams for %s (cache miss or expired)", g.owner),
+	)
+
 	var allTeams []Team
 	opts := &hub.ListOptions{PerPage: 100}
 
@@ -553,6 +639,14 @@ func (g *github) fetchTeams() ([]Team, error) {
 		opts.Page = resp.NextPage
 	}
 
+	g.logMetadataFetchInfo(
+		fmt.Sprintf(
+			"Fetched %d GitHub organization teams for %s in %s",
+			len(allTeams),
+			g.owner,
+			formatMetadataDuration(time.Since(startedAt)),
+		),
+	)
 	return allTeams, nil
 }
 
@@ -613,6 +707,102 @@ func (g *github) metadataCacheKey(kind string) string {
 
 func (g *github) metadataOwnerCacheKey(kind string) string {
 	return fmt.Sprintf("github:%s:%s", kind, g.owner)
+}
+
+func (g *github) metadataGlobalCacheKey(kind string) string {
+	return fmt.Sprintf("github:%s", kind)
+}
+
+func (g *github) metadataUserProfileCacheKey(login string) string {
+	return fmt.Sprintf("%s:%s", g.metadataGlobalCacheKey("user-profile-name"), strings.ToLower(strings.TrimSpace(login)))
+}
+
+func (g *github) cachedUserProfileName(login string) (string, bool) {
+	if g == nil || g.metadataCache == nil {
+		return "", false
+	}
+
+	var cached cachedUserProfileName
+	hit, err := g.metadataCache.Get(g.metadataUserProfileCacheKey(login), &cached)
+	if err != nil || !hit || !cached.Resolved {
+		return "", false
+	}
+
+	return cached.Name, true
+}
+
+func (g *github) cacheUserProfileName(login string, name string) {
+	if g == nil || g.metadataCache == nil {
+		return
+	}
+
+	ttl := g.metadataTTL("cache.orgMembersTTL", defaultOrgMembersCacheTTL)
+	_ = g.metadataCache.SetWithTTL(
+		g.metadataUserProfileCacheKey(login),
+		cachedUserProfileName{Resolved: true, Name: strings.TrimSpace(name)},
+		ttl,
+	)
+}
+
+func (g *github) logCachedMetadataLoad(message string, duration time.Duration) {
+	g.logMetadataFetchInfo(fmt.Sprintf("%s in %s", strings.TrimSpace(message), formatMetadataDuration(duration)))
+}
+
+func (g *github) logUserNameEnrichment(
+	kind string,
+	scope string,
+	stats userNameEnrichmentStats,
+	allowNetworkLookup bool,
+) {
+	if stats.CacheHits > 0 {
+		g.logMetadataFetchInfo(
+			fmt.Sprintf(
+				"Applied %d cached GitHub profile names to %s for %s",
+				stats.CacheHits,
+				kind,
+				scope,
+			),
+		)
+	}
+
+	if allowNetworkLookup && stats.NetworkLookups > 0 {
+		g.logMetadataFetchInfo(
+			fmt.Sprintf(
+				"Fetched %d GitHub user profiles to enrich %s for %s",
+				stats.NetworkLookups,
+				kind,
+				scope,
+			),
+		)
+	}
+
+	if !allowNetworkLookup && stats.RemainingEmpty > 0 {
+		g.logMetadataFetchInfo(
+			fmt.Sprintf(
+				"Skipped fresh GitHub profile lookups for %d cached %s without names",
+				stats.RemainingEmpty,
+				kind,
+			),
+		)
+	}
+}
+
+func countUsersMissingNames(users []User) int {
+	total := 0
+	for _, user := range users {
+		if strings.TrimSpace(user.Login) == "" || strings.TrimSpace(user.Name) != "" {
+			continue
+		}
+		total++
+	}
+	return total
+}
+
+func formatMetadataDuration(duration time.Duration) string {
+	if duration < time.Millisecond {
+		return duration.Round(time.Microsecond).String()
+	}
+	return duration.Round(time.Millisecond).String()
 }
 
 func (g *github) metadataTTL(configKey string, fallback time.Duration) time.Duration {

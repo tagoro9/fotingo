@@ -116,7 +116,7 @@ func CollectLinkedIssueIDs(issue *jira.Issue, commitIssueIDs []string) []string
 CollectLinkedIssueIDs keeps the branch issue first and appends commit\-linked issues in first\-seen order without duplicates.
 
 <a name="DedupeStringsPreserveOrder"></a>
-## func [DedupeStringsPreserveOrder](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L726>)
+## func [DedupeStringsPreserveOrder](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L619>)
 
 ```go
 func DedupeStringsPreserveOrder(values []string) []string
@@ -161,7 +161,7 @@ func DeriveSummary(branch string, issue *jira.Issue, commits []git.Commit) strin
 DeriveSummary computes the PR summary placeholder value.
 
 <a name="FieldTokenCandidates"></a>
-## func [FieldTokenCandidates](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L705>)
+## func [FieldTokenCandidates](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L598>)
 
 ```go
 func FieldTokenCandidates(field string) []string
@@ -197,7 +197,7 @@ func FormatFixedIssues(issueIDs []string, jiraClient jira.Jira) string
 FormatFixedIssues renders the fixed\-issues template content for one or more issues.
 
 <a name="FormatMatchList"></a>
-## func [FormatMatchList](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L765>)
+## func [FormatMatchList](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L658>)
 
 ```go
 func FormatMatchList(matches []MatchOption) string
@@ -206,7 +206,7 @@ func FormatMatchList(matches []MatchOption) string
 FormatMatchList formats a match\-option slice for error messages.
 
 <a name="FormatMatchOption"></a>
-## func [FormatMatchOption](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L775>)
+## func [FormatMatchOption](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L668>)
 
 ```go
 func FormatMatchOption(match MatchOption) string
@@ -242,7 +242,7 @@ func NormalizeTemplateOverride(content string) string
 NormalizeTemplateOverride expands escaped formatting sequences used in CLI flag values and normalizes the final content to LF line endings.
 
 <a name="NormalizeTokens"></a>
-## func [NormalizeTokens](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L713>)
+## func [NormalizeTokens](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L606>)
 
 ```go
 func NormalizeTokens(tokens []string) []string
@@ -269,7 +269,7 @@ func PickMatchWithPicker(kind string, token string, matches []MatchOption, runPi
 PickMatchWithPicker maps review match options to picker items and returns a selected value.
 
 <a name="PreferParticipantUser"></a>
-## func [PreferParticipantUser](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L265>)
+## func [PreferParticipantUser](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L191>)
 
 ```go
 func PreferParticipantUser(current github.User, candidate github.User) github.User
@@ -323,7 +323,7 @@ func ResolveTokens(kind string, requested []string, options []MatchOption, canPr
 ResolveTokens resolves tokens and returns the resolved values only.
 
 <a name="ScoreTokenDistance"></a>
-## func [ScoreTokenDistance](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L659>)
+## func [ScoreTokenDistance](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L552>)
 
 ```go
 func ScoreTokenDistance(token string, fields []string) (int, bool)
@@ -332,7 +332,7 @@ func ScoreTokenDistance(token string, fields []string) (int, bool)
 ScoreTokenDistance returns distance score for fuzzy alternatives.
 
 <a name="ScoreTokenMatch"></a>
-## func [ScoreTokenMatch](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L585>)
+## func [ScoreTokenMatch](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L478>)
 
 ```go
 func ScoreTokenMatch(token string, fields []string) (int, bool)
@@ -411,7 +411,7 @@ type MatchOption struct {
 ```
 
 <a name="BuildLabelOptions"></a>
-### func [BuildLabelOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L40>)
+### func [BuildLabelOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L38>)
 
 ```go
 func BuildLabelOptions(ghClient github.Github) ([]MatchOption, error)
@@ -420,7 +420,7 @@ func BuildLabelOptions(ghClient github.Github) ([]MatchOption, error)
 BuildLabelOptions loads repository label options for review metadata matching.
 
 <a name="BuildOrgScopedParticipantOptions"></a>
-### func [BuildOrgScopedParticipantOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L107-L110>)
+### func [BuildOrgScopedParticipantOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L70-L73>)
 
 ```go
 func BuildOrgScopedParticipantOptions(ghClient github.Github, includeTeams bool) ([]MatchOption, []string, error)
@@ -429,34 +429,34 @@ func BuildOrgScopedParticipantOptions(ghClient github.Github, includeTeams bool)
 BuildOrgScopedParticipantOptions loads organization members and optional teams when the current repository owner supports organization metadata.
 
 <a name="BuildParticipantOptions"></a>
-### func [BuildParticipantOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L67>)
+### func [BuildParticipantOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L64>)
 
 ```go
 func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, error)
 ```
 
-BuildParticipantOptions loads organization\-scoped participant options and, unless collaborator fallback is disabled for the current owner, supplements them with repository collaborators.
+BuildParticipantOptions loads organization\-scoped participant options and supplements them with repository collaborators.
 
 <a name="BuildParticipantOptionsForQuery"></a>
-### func [BuildParticipantOptionsForQuery](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L156-L160>)
+### func [BuildParticipantOptionsForQuery](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L117-L121>)
 
 ```go
 func BuildParticipantOptionsForQuery(ghClient github.Github, query string, includeTeams bool) ([]MatchOption, []string, error)
 ```
 
-BuildParticipantOptionsForQuery loads organization\-scoped participants first and only falls back to collaborators when neither organization members nor teams produce a usable match for the query, or when the repository owner does not support organization metadata.
+BuildParticipantOptionsForQuery loads participant options for query\-based reviewer and assignee search.
 
 <a name="BuildParticipantOptionsForTokens"></a>
-### func [BuildParticipantOptionsForTokens](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L201-L205>)
+### func [BuildParticipantOptionsForTokens](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L128-L132>)
 
 ```go
 func BuildParticipantOptionsForTokens(ghClient github.Github, requested []string, includeTeams bool) ([]MatchOption, []string, error)
 ```
 
-BuildParticipantOptionsForTokens loads organization\-scoped participants first and only falls back to collaborators when neither organization members nor teams satisfy the requested tokens, or when the repository owner does not support organization metadata.
+BuildParticipantOptionsForTokens loads participant options for token\-based reviewer and assignee resolution.
 
 <a name="DedupeMatchesPreserveOrder"></a>
-### func [DedupeMatchesPreserveOrder](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L740>)
+### func [DedupeMatchesPreserveOrder](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L633>)
 
 ```go
 func DedupeMatchesPreserveOrder(values []MatchOption) []MatchOption
@@ -465,7 +465,7 @@ func DedupeMatchesPreserveOrder(values []MatchOption) []MatchOption
 DedupeMatchesPreserveOrder deduplicates match options by kind\+resolved key.
 
 <a name="FindOptionByResolved"></a>
-### func [FindOptionByResolved](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L755>)
+### func [FindOptionByResolved](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L648>)
 
 ```go
 func FindOptionByResolved(options []MatchOption, resolved string) (MatchOption, bool)
@@ -474,7 +474,7 @@ func FindOptionByResolved(options []MatchOption, resolved string) (MatchOption, 
 FindOptionByResolved finds a specific option by resolved value.
 
 <a name="FindTokenAlternatives"></a>
-### func [FindTokenAlternatives](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L548>)
+### func [FindTokenAlternatives](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L441>)
 
 ```go
 func FindTokenAlternatives(token string, options []MatchOption, limit int) []MatchOption
@@ -483,7 +483,7 @@ func FindTokenAlternatives(token string, options []MatchOption, limit int) []Mat
 FindTokenAlternatives returns fallback alternatives when no direct match exists.
 
 <a name="FindTokenMatches"></a>
-### func [FindTokenMatches](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L485>)
+### func [FindTokenMatches](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L378>)
 
 ```go
 func FindTokenMatches(token string, options []MatchOption) []MatchOption
@@ -492,7 +492,7 @@ func FindTokenMatches(token string, options []MatchOption) []MatchOption
 FindTokenMatches returns the best\-scored matches for a token.
 
 <a name="FindTokenMatchesForCompletion"></a>
-### func [FindTokenMatchesForCompletion](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L519>)
+### func [FindTokenMatchesForCompletion](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L412>)
 
 ```go
 func FindTokenMatchesForCompletion(token string, options []MatchOption) []MatchOption
@@ -501,7 +501,7 @@ func FindTokenMatchesForCompletion(token string, options []MatchOption) []MatchO
 FindTokenMatchesForCompletion returns ordered matches used for completion candidates.
 
 <a name="ResolveTokenMatches"></a>
-### func [ResolveTokenMatches](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L432-L438>)
+### func [ResolveTokenMatches](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L325-L331>)
 
 ```go
 func ResolveTokenMatches(kind string, requested []string, options []MatchOption, canPrompt bool, pick func(kind string, token string, matches []MatchOption) (string, error)) ([]MatchOption, error)

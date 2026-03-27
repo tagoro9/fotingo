@@ -28,8 +28,6 @@ const (
 	MatchKindUser  MatchKind = "user"
 	MatchKindTeam  MatchKind = "team"
 	MatchKindLabel MatchKind = "label"
-
-	strongTokenMatchScoreCutoff = 300
 )
 
 var errOrganizationMetadataUnsupported = errors.New(
@@ -61,45 +59,10 @@ func BuildLabelOptions(ghClient github.Github) ([]MatchOption, error) {
 	return options, nil
 }
 
-// BuildParticipantOptions loads organization-scoped participant options and,
-// unless collaborator fallback is disabled for the current owner, supplements
-// them with repository collaborators.
+// BuildParticipantOptions loads organization-scoped participant options and
+// supplements them with repository collaborators.
 func BuildParticipantOptions(ghClient github.Github) ([]MatchOption, []string, error) {
-	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, true)
-	if !shouldAllowCollaboratorFallback(orgErr) {
-		return orgOptions, warnings, orgErr
-	}
-
-	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
-	if collaboratorErr != nil {
-		warnings = append(warnings, fmt.Sprintf("failed to load repository collaborators: %v", collaboratorErr))
-	}
-
-	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
-	if len(options) == 0 {
-		if isOrganizationMetadataUnsupported(orgErr) {
-			if collaboratorErr != nil {
-				return nil, warnings, collaboratorErr
-			}
-			return options, warnings, nil
-		}
-		if orgErr != nil && collaboratorErr != nil {
-			return nil, warnings, fmt.Errorf(
-				"failed to load review participants from collaborators, organization members, and teams",
-			)
-		}
-		if orgErr != nil {
-			return nil, warnings, orgErr
-		}
-		if collaboratorErr != nil {
-			return nil, warnings, collaboratorErr
-		}
-		return nil, warnings, fmt.Errorf(
-			"failed to load review participants from collaborators, organization members, and teams",
-		)
-	}
-
-	return options, warnings, nil
+	return buildParticipantOptions(ghClient, true)
 }
 
 // BuildOrgScopedParticipantOptions loads organization members and optional teams
@@ -149,94 +112,61 @@ func BuildOrgScopedParticipantOptions(
 	return options, warnings, nil
 }
 
-// BuildParticipantOptionsForQuery loads organization-scoped participants first
-// and only falls back to collaborators when neither organization members nor
-// teams produce a usable match for the query, or when the repository owner does
-// not support organization metadata.
+// BuildParticipantOptionsForQuery loads participant options for query-based
+// reviewer and assignee search.
 func BuildParticipantOptionsForQuery(
 	ghClient github.Github,
 	query string,
 	includeTeams bool,
 ) ([]MatchOption, []string, error) {
-	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
-	if !shouldAllowCollaboratorFallback(orgErr) {
-		return orgOptions, warnings, orgErr
-	}
-
-	if orgErr == nil && !participantOptionsNeedCollaboratorFallbackForQuery(query, orgOptions) {
-		return orgOptions, warnings, nil
-	}
-
-	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
-	if collaboratorErr != nil {
-		if isOrganizationMetadataUnsupported(orgErr) {
-			return nil, warnings, collaboratorErr
-		}
-		if orgErr != nil {
-			return nil, warnings, fmt.Errorf(
-				"failed to load review participants from organization members, teams, and collaborators",
-			)
-		}
-		return orgOptions, warnings, collaboratorErr
-	}
-
-	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
-	if len(options) == 0 {
-		if isOrganizationMetadataUnsupported(orgErr) {
-			return options, warnings, nil
-		}
-		if orgErr != nil {
-			return nil, warnings, orgErr
-		}
-		return nil, warnings, fmt.Errorf("failed to load review participants")
-	}
-
-	return options, warnings, nil
+	_ = query
+	return buildParticipantOptions(ghClient, includeTeams)
 }
 
-// BuildParticipantOptionsForTokens loads organization-scoped participants first
-// and only falls back to collaborators when neither organization members nor
-// teams satisfy the requested tokens, or when the repository owner does not
-// support organization metadata.
+// BuildParticipantOptionsForTokens loads participant options for token-based
+// reviewer and assignee resolution.
 func BuildParticipantOptionsForTokens(
 	ghClient github.Github,
 	requested []string,
 	includeTeams bool,
 ) ([]MatchOption, []string, error) {
-	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
-	if !shouldAllowCollaboratorFallback(orgErr) {
-		return orgOptions, warnings, orgErr
-	}
+	_ = requested
+	return buildParticipantOptions(ghClient, includeTeams)
+}
 
-	if orgErr == nil && !participantOptionsNeedCollaboratorFallbackForTokens(requested, orgOptions) {
-		return orgOptions, warnings, nil
-	}
+func buildParticipantOptions(ghClient github.Github, includeTeams bool) ([]MatchOption, []string, error) {
+	orgOptions, warnings, orgErr := BuildOrgScopedParticipantOptions(ghClient, includeTeams)
 
 	collaboratorOptions, collaboratorErr := buildCollaboratorParticipantOptions(ghClient)
 	if collaboratorErr != nil {
-		if isOrganizationMetadataUnsupported(orgErr) {
-			return nil, warnings, collaboratorErr
-		}
-		if orgErr != nil {
-			return nil, warnings, fmt.Errorf(
-				"failed to load review participants from organization members, teams, and collaborators",
-			)
-		}
-		return orgOptions, warnings, collaboratorErr
+		warnings = append(warnings, fmt.Sprintf("failed to load repository collaborators: %v", collaboratorErr))
 	}
 
 	options := mergeParticipantOptions(orgOptions, collaboratorOptions)
-	if len(options) == 0 {
-		if isOrganizationMetadataUnsupported(orgErr) {
-			return options, warnings, nil
-		}
-		if orgErr != nil {
-			return nil, warnings, orgErr
-		}
-		return nil, warnings, fmt.Errorf("failed to load review participants")
+	if len(options) > 0 {
+		return options, warnings, nil
 	}
 
-	return options, warnings, nil
+	if isOrganizationMetadataUnsupported(orgErr) {
+		if collaboratorErr != nil {
+			return nil, warnings, collaboratorErr
+		}
+		return nil, warnings, fmt.Errorf("failed to load review participants from repository collaborators")
+	}
+	if orgErr != nil && collaboratorErr != nil {
+		return nil, warnings, fmt.Errorf(
+			"failed to load review participants from collaborators, organization members, and teams",
+		)
+	}
+	if orgErr != nil {
+		return nil, warnings, orgErr
+	}
+	if collaboratorErr != nil {
+		return nil, warnings, collaboratorErr
+	}
+	return nil, warnings, fmt.Errorf(
+		"failed to load review participants from collaborators, organization members, and teams",
+	)
 }
 
 // organizationMetadataSupporter reports whether the repository owner can expose
@@ -251,10 +181,6 @@ func repositoryOwnerSupportsOrganizationMetadata(ghClient github.Github) (bool, 
 		return true, nil
 	}
 	return checker.SupportsOrganizationMetadata()
-}
-
-func shouldAllowCollaboratorFallback(orgErr error) bool {
-	return collaboratorFallbackEnabled() || isOrganizationMetadataUnsupported(orgErr)
 }
 
 func isOrganizationMetadataUnsupported(err error) bool {
@@ -393,39 +319,6 @@ func addParticipantMatchOptions(builder *participantOptionBuilder, options []Mat
 			}})
 		}
 	}
-}
-
-func participantOptionsNeedCollaboratorFallbackForQuery(query string, options []MatchOption) bool {
-	return !participantOptionsHaveStrongMatch(query, options)
-}
-
-func participantOptionsNeedCollaboratorFallbackForTokens(requested []string, options []MatchOption) bool {
-	tokens := NormalizeTokens(requested)
-	if len(tokens) == 0 {
-		return len(options) == 0
-	}
-
-	for _, token := range tokens {
-		if !participantOptionsHaveStrongMatch(token, options) {
-			return true
-		}
-	}
-
-	return false
-}
-
-func participantOptionsHaveStrongMatch(token string, options []MatchOption) bool {
-	for _, option := range options {
-		score, matched := ScoreTokenMatch(token, option.Fields)
-		if !matched {
-			continue
-		}
-		if score < strongTokenMatchScoreCutoff {
-			return true
-		}
-	}
-
-	return false
 }
 
 // ResolveTokenMatches resolves requested tokens with optional interactive disambiguation.
