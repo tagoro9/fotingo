@@ -75,7 +75,7 @@ Package testutil provides mock HTTP server utilities for testing GitHub client c
 
 
 <a name="ErrorResponse"></a>
-## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L46-L50>)
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
 
 ErrorResponse configures an error response for a specific endpoint.
 
@@ -88,7 +88,7 @@ type ErrorResponse struct {
 ```
 
 <a name="MockGitHubServer"></a>
-## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L16-L35>)
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
 
 MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
 
@@ -107,7 +107,7 @@ type MockGitHubServer struct {
 ```
 
 <a name="NewMockGitHubServer"></a>
-### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L54>)
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
 
 ```go
 func NewMockGitHubServer() *MockGitHubServer
@@ -116,7 +116,7 @@ func NewMockGitHubServer() *MockGitHubServer
 NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
 
 <a name="MockGitHubServer.AddCollaborator"></a>
-### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L140>)
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
 
 ```go
 func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
@@ -125,7 +125,7 @@ func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
 AddCollaborator adds a collaborator to a repository.
 
 <a name="MockGitHubServer.AddCollaborators"></a>
-### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L148>)
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
 
 ```go
 func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
@@ -134,7 +134,7 @@ func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUs
 AddCollaborators adds multiple collaborators to a repository.
 
 <a name="MockGitHubServer.AddLabel"></a>
-### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L205>)
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
 
 ```go
 func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
@@ -143,7 +143,7 @@ func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
 AddLabel adds a label to a repository.
 
 <a name="MockGitHubServer.AddLabels"></a>
-### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L213>)
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
 
 ```go
 func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
@@ -152,7 +152,7 @@ func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
 AddLabels adds multiple labels to a repository.
 
 <a name="MockGitHubServer.AddOrgMember"></a>
-### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L163>)
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
 
 ```go
 func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
@@ -161,7 +161,7 @@ func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
 AddOrgMember adds an organization member.
 
 <a name="MockGitHubServer.AddOrgMembers"></a>
-### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L170>)
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
 
 ```go
 func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
@@ -170,7 +170,7 @@ func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
 AddOrgMembers adds multiple organization members.
 
 <a name="MockGitHubServer.AddPullRequest"></a>
-### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L117>)
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
 
 ```go
 func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
@@ -179,7 +179,7 @@ func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullReques
 AddPullRequest adds a pull request to a repository.
 
 <a name="MockGitHubServer.AddPullRequests"></a>
-### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L125>)
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
 
 ```go
 func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
@@ -188,7 +188,7 @@ func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullR
 AddPullRequests adds multiple pull requests to a repository.
 
 <a name="MockGitHubServer.AddRelease"></a>
-### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L228>)
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
 
 ```go
 func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
@@ -197,7 +197,7 @@ func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
 AddRelease adds a release to a repository.
 
 <a name="MockGitHubServer.AddRepository"></a>
-### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L110>)
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
 
 ```go
 func (m *MockGitHubServer) AddRepository(repo *MockRepository)
@@ -206,7 +206,7 @@ func (m *MockGitHubServer) AddRepository(repo *MockRepository)
 AddRepository adds a repository to the mock server.
 
 <a name="MockGitHubServer.AddTeam"></a>
-### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L184>)
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
 
 ```go
 func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
@@ -215,7 +215,7 @@ func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
 AddTeam adds an organization team.
 
 <a name="MockGitHubServer.AddTeams"></a>
-### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L191>)
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
 
 ```go
 func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
@@ -224,7 +224,7 @@ func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
 AddTeams adds multiple organization teams.
 
 <a name="MockGitHubServer.ClearErrorResponse"></a>
-### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L252>)
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
 
 ```go
 func (m *MockGitHubServer) ClearErrorResponse(key string)
@@ -233,7 +233,7 @@ func (m *MockGitHubServer) ClearErrorResponse(key string)
 ClearErrorResponse removes an error response configuration.
 
 <a name="MockGitHubServer.Close"></a>
-### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L77>)
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
 
 ```go
 func (m *MockGitHubServer) Close()
@@ -242,7 +242,7 @@ func (m *MockGitHubServer) Close()
 Close shuts down the mock server.
 
 <a name="MockGitHubServer.GetPullRequest"></a>
-### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L268>)
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
 
 ```go
 func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
@@ -251,7 +251,7 @@ func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockP
 GetPullRequest retrieves a pull request by number for inspection in tests.
 
 <a name="MockGitHubServer.GetRequestLog"></a>
-### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L259>)
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
 
 ```go
 func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
@@ -260,7 +260,7 @@ func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
 GetRequestLog returns a copy of the request log.
 
 <a name="MockGitHubServer.Reset"></a>
-### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L82>)
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
 
 ```go
 func (m *MockGitHubServer) Reset()
@@ -269,7 +269,7 @@ func (m *MockGitHubServer) Reset()
 Reset clears all configured data and request log.
 
 <a name="MockGitHubServer.SetCollaborators"></a>
-### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L155>)
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
 
 ```go
 func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
@@ -278,7 +278,7 @@ func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUse
 SetCollaborators sets all collaborators for a repository \(replaces existing\).
 
 <a name="MockGitHubServer.SetCurrentUser"></a>
-### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L103>)
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
 
 ```go
 func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
@@ -287,7 +287,7 @@ func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
 SetCurrentUser configures the authenticated user returned by GET /user.
 
 <a name="MockGitHubServer.SetErrorResponse"></a>
-### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L245>)
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
 
 ```go
 func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
@@ -296,7 +296,7 @@ func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
 SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
 
 <a name="MockGitHubServer.SetLabels"></a>
-### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L220>)
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
 
 ```go
 func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
@@ -305,7 +305,7 @@ func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
 SetLabels sets all labels for a repository \(replaces existing\).
 
 <a name="MockGitHubServer.SetOrgMembers"></a>
-### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L177>)
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
 
 ```go
 func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
@@ -314,7 +314,7 @@ func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
 SetOrgMembers sets all members for an organization \(replaces existing\).
 
 <a name="MockGitHubServer.SetPullRequests"></a>
-### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L132>)
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
 
 ```go
 func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
@@ -323,7 +323,7 @@ func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRe
 SetPullRequests sets all pull requests for a repository \(replaces existing\).
 
 <a name="MockGitHubServer.SetReleases"></a>
-### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L236>)
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
 
 ```go
 func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
@@ -332,7 +332,7 @@ func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelea
 SetReleases sets all releases for a repository \(replaces existing\).
 
 <a name="MockGitHubServer.SetTeams"></a>
-### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L198>)
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
 
 ```go
 func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
@@ -341,7 +341,7 @@ func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
 SetTeams sets all teams for an organization \(replaces existing\).
 
 <a name="MockGitHubServer.URL"></a>
-### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L72>)
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
 
 ```go
 func (m *MockGitHubServer) URL() string
@@ -661,7 +661,7 @@ func (u *MockUser) ToAPIResponse() map[string]interface{}
 ToAPIResponse converts the MockUser to a GitHub API response format.
 
 <a name="RecordedRequest"></a>
-## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L38-L43>)
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
 
 RecordedRequest stores information about a request made to the mock server.
 
@@ -678,3 +678,23021 @@ Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
 
 
 <!-- gomarkdoc:embed:end -->
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
+
+
+<!-- Code generated by gomarkdoc. DO NOT EDIT -->
+
+# testutil
+
+```go
+import "github.com/tagoro9/fotingo/internal/github/testutil"
+```
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+Package testutil provides mock HTTP server utilities for testing GitHub client code.
+
+## Index
+
+- [type ErrorResponse](<#ErrorResponse>)
+- [type MockGitHubServer](<#MockGitHubServer>)
+  - [func NewMockGitHubServer\(\) \*MockGitHubServer](<#NewMockGitHubServer>)
+  - [func \(m \*MockGitHubServer\) AddCollaborator\(owner, repo string, user \*MockUser\)](<#MockGitHubServer.AddCollaborator>)
+  - [func \(m \*MockGitHubServer\) AddCollaborators\(owner, repo string, users ...\*MockUser\)](<#MockGitHubServer.AddCollaborators>)
+  - [func \(m \*MockGitHubServer\) AddLabel\(owner, repo string, label \*MockLabel\)](<#MockGitHubServer.AddLabel>)
+  - [func \(m \*MockGitHubServer\) AddLabels\(owner, repo string, labels ...\*MockLabel\)](<#MockGitHubServer.AddLabels>)
+  - [func \(m \*MockGitHubServer\) AddOrgMember\(org string, user \*MockUser\)](<#MockGitHubServer.AddOrgMember>)
+  - [func \(m \*MockGitHubServer\) AddOrgMembers\(org string, users ...\*MockUser\)](<#MockGitHubServer.AddOrgMembers>)
+  - [func \(m \*MockGitHubServer\) AddPullRequest\(owner, repo string, pr \*MockPullRequest\)](<#MockGitHubServer.AddPullRequest>)
+  - [func \(m \*MockGitHubServer\) AddPullRequests\(owner, repo string, prs ...\*MockPullRequest\)](<#MockGitHubServer.AddPullRequests>)
+  - [func \(m \*MockGitHubServer\) AddRelease\(owner, repo string, release \*MockRelease\)](<#MockGitHubServer.AddRelease>)
+  - [func \(m \*MockGitHubServer\) AddRepository\(repo \*MockRepository\)](<#MockGitHubServer.AddRepository>)
+  - [func \(m \*MockGitHubServer\) AddTeam\(org string, team \*MockTeam\)](<#MockGitHubServer.AddTeam>)
+  - [func \(m \*MockGitHubServer\) AddTeams\(org string, teams ...\*MockTeam\)](<#MockGitHubServer.AddTeams>)
+  - [func \(m \*MockGitHubServer\) ClearErrorResponse\(key string\)](<#MockGitHubServer.ClearErrorResponse>)
+  - [func \(m \*MockGitHubServer\) Close\(\)](<#MockGitHubServer.Close>)
+  - [func \(m \*MockGitHubServer\) GetPullRequest\(owner, repo string, number int\) \*MockPullRequest](<#MockGitHubServer.GetPullRequest>)
+  - [func \(m \*MockGitHubServer\) GetRequestLog\(\) \[\]RecordedRequest](<#MockGitHubServer.GetRequestLog>)
+  - [func \(m \*MockGitHubServer\) Reset\(\)](<#MockGitHubServer.Reset>)
+  - [func \(m \*MockGitHubServer\) SetCollaborators\(owner, repo string, users \[\]\*MockUser\)](<#MockGitHubServer.SetCollaborators>)
+  - [func \(m \*MockGitHubServer\) SetCurrentUser\(user \*MockUser\)](<#MockGitHubServer.SetCurrentUser>)
+  - [func \(m \*MockGitHubServer\) SetErrorResponse\(key string, err \*ErrorResponse\)](<#MockGitHubServer.SetErrorResponse>)
+  - [func \(m \*MockGitHubServer\) SetLabels\(owner, repo string, labels \[\]\*MockLabel\)](<#MockGitHubServer.SetLabels>)
+  - [func \(m \*MockGitHubServer\) SetOrgMembers\(org string, users \[\]\*MockUser\)](<#MockGitHubServer.SetOrgMembers>)
+  - [func \(m \*MockGitHubServer\) SetPullRequests\(owner, repo string, prs \[\]\*MockPullRequest\)](<#MockGitHubServer.SetPullRequests>)
+  - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
+  - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
+  - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockLabel](<#MockLabel>)
+  - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
+  - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
+  - [func \(l \*MockLabel\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockLabel.ToAPIResponse>)
+- [type MockPRRef](<#MockPRRef>)
+- [type MockPullRequest](<#MockPullRequest>)
+  - [func NewDraftPullRequest\(number int, title, head, base string\) \*MockPullRequest](<#NewDraftPullRequest>)
+  - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
+  - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
+  - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockRelease](<#MockRelease>)
+  - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
+  - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
+  - [func \(r \*MockRelease\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRelease.ToAPIResponse>)
+- [type MockRepository](<#MockRepository>)
+  - [func DefaultRepository\(\) \*MockRepository](<#DefaultRepository>)
+  - [func NewRepository\(id int64, owner, name string\) \*MockRepository](<#NewRepository>)
+  - [func \(r \*MockRepository\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockRepository.ToAPIResponse>)
+- [type MockTeam](<#MockTeam>)
+  - [func NewTeam\(id int64, organization, slug, name, description string\) \*MockTeam](<#NewTeam>)
+  - [func SampleTeams\(org string\) \[\]\*MockTeam](<#SampleTeams>)
+  - [func \(t \*MockTeam\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockTeam.ToAPIResponse>)
+- [type MockUser](<#MockUser>)
+  - [func DefaultUser\(\) \*MockUser](<#DefaultUser>)
+  - [func NewUser\(id int64, login, name string\) \*MockUser](<#NewUser>)
+  - [func SampleCollaborators\(\) \[\]\*MockUser](<#SampleCollaborators>)
+  - [func SampleUsers\(\) \[\]\*MockUser](<#SampleUsers>)
+  - [func \(u \*MockUser\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockUser.ToAPIResponse>)
+- [type RecordedRequest](<#RecordedRequest>)
+
+
+<a name="ErrorResponse"></a>
+## type [ErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L47-L51>)
+
+ErrorResponse configures an error response for a specific endpoint.
+
+```go
+type ErrorResponse struct {
+    StatusCode int
+    Message    string
+    Errors     []map[string]interface{}
+}
+```
+
+<a name="MockGitHubServer"></a>
+## type [MockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L17-L36>)
+
+MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses. It supports configuring users, repositories, pull requests, collaborators, labels, and releases.
+
+```go
+type MockGitHubServer struct {
+    *httptest.Server
+
+    // ErrorResponses allows configuring specific endpoints to return errors.
+    // Info format: "METHOD /path" (e.g., "GET /user" or "POST /repos/owner/repo/pulls")
+    ErrorResponses map[string]*ErrorResponse
+
+    // RequestLog records all requests made to the server.
+    RequestLog []RecordedRequest
+    // contains filtered or unexported fields
+}
+```
+
+<a name="NewMockGitHubServer"></a>
+### func [NewMockGitHubServer](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L55>)
+
+```go
+func NewMockGitHubServer() *MockGitHubServer
+```
+
+NewMockGitHubServer creates a new mock GitHub server with default configuration. The server starts automatically and should be closed with Close\(\) when done.
+
+<a name="MockGitHubServer.AddCollaborator"></a>
+### func \(\*MockGitHubServer\) [AddCollaborator](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L141>)
+
+```go
+func (m *MockGitHubServer) AddCollaborator(owner, repo string, user *MockUser)
+```
+
+AddCollaborator adds a collaborator to a repository.
+
+<a name="MockGitHubServer.AddCollaborators"></a>
+### func \(\*MockGitHubServer\) [AddCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L149>)
+
+```go
+func (m *MockGitHubServer) AddCollaborators(owner, repo string, users ...*MockUser)
+```
+
+AddCollaborators adds multiple collaborators to a repository.
+
+<a name="MockGitHubServer.AddLabel"></a>
+### func \(\*MockGitHubServer\) [AddLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L206>)
+
+```go
+func (m *MockGitHubServer) AddLabel(owner, repo string, label *MockLabel)
+```
+
+AddLabel adds a label to a repository.
+
+<a name="MockGitHubServer.AddLabels"></a>
+### func \(\*MockGitHubServer\) [AddLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L214>)
+
+```go
+func (m *MockGitHubServer) AddLabels(owner, repo string, labels ...*MockLabel)
+```
+
+AddLabels adds multiple labels to a repository.
+
+<a name="MockGitHubServer.AddOrgMember"></a>
+### func \(\*MockGitHubServer\) [AddOrgMember](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L164>)
+
+```go
+func (m *MockGitHubServer) AddOrgMember(org string, user *MockUser)
+```
+
+AddOrgMember adds an organization member.
+
+<a name="MockGitHubServer.AddOrgMembers"></a>
+### func \(\*MockGitHubServer\) [AddOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L171>)
+
+```go
+func (m *MockGitHubServer) AddOrgMembers(org string, users ...*MockUser)
+```
+
+AddOrgMembers adds multiple organization members.
+
+<a name="MockGitHubServer.AddPullRequest"></a>
+### func \(\*MockGitHubServer\) [AddPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L118>)
+
+```go
+func (m *MockGitHubServer) AddPullRequest(owner, repo string, pr *MockPullRequest)
+```
+
+AddPullRequest adds a pull request to a repository.
+
+<a name="MockGitHubServer.AddPullRequests"></a>
+### func \(\*MockGitHubServer\) [AddPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L126>)
+
+```go
+func (m *MockGitHubServer) AddPullRequests(owner, repo string, prs ...*MockPullRequest)
+```
+
+AddPullRequests adds multiple pull requests to a repository.
+
+<a name="MockGitHubServer.AddRelease"></a>
+### func \(\*MockGitHubServer\) [AddRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L229>)
+
+```go
+func (m *MockGitHubServer) AddRelease(owner, repo string, release *MockRelease)
+```
+
+AddRelease adds a release to a repository.
+
+<a name="MockGitHubServer.AddRepository"></a>
+### func \(\*MockGitHubServer\) [AddRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L111>)
+
+```go
+func (m *MockGitHubServer) AddRepository(repo *MockRepository)
+```
+
+AddRepository adds a repository to the mock server.
+
+<a name="MockGitHubServer.AddTeam"></a>
+### func \(\*MockGitHubServer\) [AddTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L185>)
+
+```go
+func (m *MockGitHubServer) AddTeam(org string, team *MockTeam)
+```
+
+AddTeam adds an organization team.
+
+<a name="MockGitHubServer.AddTeams"></a>
+### func \(\*MockGitHubServer\) [AddTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L192>)
+
+```go
+func (m *MockGitHubServer) AddTeams(org string, teams ...*MockTeam)
+```
+
+AddTeams adds multiple organization teams.
+
+<a name="MockGitHubServer.ClearErrorResponse"></a>
+### func \(\*MockGitHubServer\) [ClearErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L253>)
+
+```go
+func (m *MockGitHubServer) ClearErrorResponse(key string)
+```
+
+ClearErrorResponse removes an error response configuration.
+
+<a name="MockGitHubServer.Close"></a>
+### func \(\*MockGitHubServer\) [Close](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L78>)
+
+```go
+func (m *MockGitHubServer) Close()
+```
+
+Close shuts down the mock server.
+
+<a name="MockGitHubServer.GetPullRequest"></a>
+### func \(\*MockGitHubServer\) [GetPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L269>)
+
+```go
+func (m *MockGitHubServer) GetPullRequest(owner, repo string, number int) *MockPullRequest
+```
+
+GetPullRequest retrieves a pull request by number for inspection in tests.
+
+<a name="MockGitHubServer.GetRequestLog"></a>
+### func \(\*MockGitHubServer\) [GetRequestLog](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L260>)
+
+```go
+func (m *MockGitHubServer) GetRequestLog() []RecordedRequest
+```
+
+GetRequestLog returns a copy of the request log.
+
+<a name="MockGitHubServer.Reset"></a>
+### func \(\*MockGitHubServer\) [Reset](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L83>)
+
+```go
+func (m *MockGitHubServer) Reset()
+```
+
+Reset clears all configured data and request log.
+
+<a name="MockGitHubServer.SetCollaborators"></a>
+### func \(\*MockGitHubServer\) [SetCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L156>)
+
+```go
+func (m *MockGitHubServer) SetCollaborators(owner, repo string, users []*MockUser)
+```
+
+SetCollaborators sets all collaborators for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetCurrentUser"></a>
+### func \(\*MockGitHubServer\) [SetCurrentUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L104>)
+
+```go
+func (m *MockGitHubServer) SetCurrentUser(user *MockUser)
+```
+
+SetCurrentUser configures the authenticated user returned by GET /user.
+
+<a name="MockGitHubServer.SetErrorResponse"></a>
+### func \(\*MockGitHubServer\) [SetErrorResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L246>)
+
+```go
+func (m *MockGitHubServer) SetErrorResponse(key string, err *ErrorResponse)
+```
+
+SetErrorResponse configures an error response for a specific endpoint. The key format is "METHOD /path" \(e.g., "GET /user" or "POST /repos/owner/repo/pulls"\).
+
+<a name="MockGitHubServer.SetLabels"></a>
+### func \(\*MockGitHubServer\) [SetLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L221>)
+
+```go
+func (m *MockGitHubServer) SetLabels(owner, repo string, labels []*MockLabel)
+```
+
+SetLabels sets all labels for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetOrgMembers"></a>
+### func \(\*MockGitHubServer\) [SetOrgMembers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L178>)
+
+```go
+func (m *MockGitHubServer) SetOrgMembers(org string, users []*MockUser)
+```
+
+SetOrgMembers sets all members for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.SetPullRequests"></a>
+### func \(\*MockGitHubServer\) [SetPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L133>)
+
+```go
+func (m *MockGitHubServer) SetPullRequests(owner, repo string, prs []*MockPullRequest)
+```
+
+SetPullRequests sets all pull requests for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetReleases"></a>
+### func \(\*MockGitHubServer\) [SetReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L237>)
+
+```go
+func (m *MockGitHubServer) SetReleases(owner, repo string, releases []*MockRelease)
+```
+
+SetReleases sets all releases for a repository \(replaces existing\).
+
+<a name="MockGitHubServer.SetTeams"></a>
+### func \(\*MockGitHubServer\) [SetTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L199>)
+
+```go
+func (m *MockGitHubServer) SetTeams(org string, teams []*MockTeam)
+```
+
+SetTeams sets all teams for an organization \(replaces existing\).
+
+<a name="MockGitHubServer.URL"></a>
+### func \(\*MockGitHubServer\) [URL](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L73>)
+
+```go
+func (m *MockGitHubServer) URL() string
+```
+
+URL returns the base URL of the mock server.
+
+<a name="MockLabel"></a>
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L126-L131>)
+
+MockLabel represents a GitHub label for testing.
+
+```go
+type MockLabel struct {
+    ID          int64
+    Name        string
+    Description string
+    Color       string
+}
+```
+
+<a name="NewLabel"></a>
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L285>)
+
+```go
+func NewLabel(id int64, name, description, color string) *MockLabel
+```
+
+NewLabel creates a new MockLabel with the given parameters.
+
+<a name="SampleLabels"></a>
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L345>)
+
+```go
+func SampleLabels() []*MockLabel
+```
+
+SampleLabels returns a set of sample labels for testing.
+
+<a name="MockLabel.ToAPIResponse"></a>
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L156>)
+
+```go
+func (l *MockLabel) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockLabel to a GitHub API response format.
+
+<a name="MockPRRef"></a>
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L83-L86>)
+
+MockPRRef represents a pull request head/base reference.
+
+```go
+type MockPRRef struct {
+    Ref string
+    SHA string
+}
+```
+
+<a name="MockPullRequest"></a>
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L80>)
+
+MockPullRequest represents a GitHub pull request for testing.
+
+```go
+type MockPullRequest struct {
+    ID        int64
+    Number    int
+    Title     string
+    Body      string
+    State     string
+    HTMLURL   string
+    URL       string
+    Head      MockPRRef
+    Base      MockPRRef
+    Draft     bool
+    Mergeable bool
+    User      *MockUser
+    Assignees []*MockUser
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+```
+
+<a name="NewDraftPullRequest"></a>
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L278>)
+
+```go
+func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
+```
+
+NewDraftPullRequest creates a new draft MockPullRequest.
+
+<a name="NewPullRequest"></a>
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L257>)
+
+```go
+func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
+```
+
+NewPullRequest creates a new MockPullRequest with the given parameters.
+
+<a name="SamplePullRequests"></a>
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L366>)
+
+```go
+func SamplePullRequests() []*MockPullRequest
+```
+
+SamplePullRequests returns a set of sample pull requests for testing.
+
+<a name="MockPullRequest.ToAPIResponse"></a>
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L89>)
+
+```go
+func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequest to a GitHub API response format.
+
+<a name="MockRelease"></a>
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L166-L177>)
+
+MockRelease represents a GitHub release for testing.
+
+```go
+type MockRelease struct {
+    ID              int64
+    TagName         string
+    Name            string
+    Body            string
+    Draft           bool
+    Prerelease      bool
+    TargetCommitish string
+    URL             string
+    HTMLURL         string
+    CreatedAt       time.Time
+}
+```
+
+<a name="NewRelease"></a>
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L306>)
+
+```go
+func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
+```
+
+NewRelease creates a new MockRelease with the given parameters.
+
+<a name="SampleReleases"></a>
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L391>)
+
+```go
+func SampleReleases() []*MockRelease
+```
+
+SampleReleases returns a set of sample releases for testing.
+
+<a name="MockRelease.ToAPIResponse"></a>
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L180>)
+
+```go
+func (r *MockRelease) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRelease to a GitHub API response format.
+
+<a name="MockRepository"></a>
+## type [MockRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L31-L41>)
+
+MockRepository represents a GitHub repository for testing.
+
+```go
+type MockRepository struct {
+    ID            int64
+    Name          string
+    FullName      string
+    Description   string
+    Private       bool
+    HTMLURL       string
+    CloneURL      string
+    DefaultBranch string
+    Owner         *MockUser
+}
+```
+
+<a name="DefaultRepository"></a>
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L213>)
+
+```go
+func DefaultRepository() *MockRepository
+```
+
+DefaultRepository returns a default test repository.
+
+<a name="NewRepository"></a>
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L242>)
+
+```go
+func NewRepository(id int64, owner, name string) *MockRepository
+```
+
+NewRepository creates a new MockRepository with the given parameters.
+
+<a name="MockRepository.ToAPIResponse"></a>
+### func \(\*MockRepository\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L44>)
+
+```go
+func (r *MockRepository) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockRepository to a GitHub API response format.
+
+<a name="MockTeam"></a>
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L134-L140>)
+
+MockTeam represents a GitHub organization team for testing.
+
+```go
+type MockTeam struct {
+    ID           int64
+    Organization string
+    Slug         string
+    Name         string
+    Description  string
+}
+```
+
+<a name="NewTeam"></a>
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L295>)
+
+```go
+func NewTeam(id int64, organization, slug, name, description string) *MockTeam
+```
+
+NewTeam creates a new MockTeam with the given parameters.
+
+<a name="SampleTeams"></a>
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L358>)
+
+```go
+func SampleTeams(org string) []*MockTeam
+```
+
+SampleTeams returns a set of sample teams for testing.
+
+<a name="MockTeam.ToAPIResponse"></a>
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L143>)
+
+```go
+func (t *MockTeam) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockTeam to a GitHub API response format.
+
+<a name="MockUser"></a>
+## type [MockUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L7-L15>)
+
+MockUser represents a GitHub user for testing.
+
+```go
+type MockUser struct {
+    ID        int64
+    Login     string
+    Name      string
+    Email     string
+    AvatarURL string
+    HTMLURL   string
+    Type      string
+}
+```
+
+<a name="DefaultUser"></a>
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L200>)
+
+```go
+func DefaultUser() *MockUser
+```
+
+DefaultUser returns a default test user.
+
+<a name="NewUser"></a>
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L229>)
+
+```go
+func NewUser(id int64, login, name string) *MockUser
+```
+
+NewUser creates a new MockUser with the given parameters.
+
+<a name="SampleCollaborators"></a>
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L336>)
+
+```go
+func SampleCollaborators() []*MockUser
+```
+
+SampleCollaborators returns a set of sample collaborators for testing.
+
+<a name="SampleUsers"></a>
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L326>)
+
+```go
+func SampleUsers() []*MockUser
+```
+
+SampleUsers returns a set of sample users for testing.
+
+<a name="MockUser.ToAPIResponse"></a>
+### func \(\*MockUser\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L18>)
+
+```go
+func (u *MockUser) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockUser to a GitHub API response format.
+
+<a name="RecordedRequest"></a>
+## type [RecordedRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/server.go#L39-L44>)
+
+RecordedRequest stores information about a request made to the mock server.
+
+```go
+type RecordedRequest struct {
+    Method      string
+    Path        string
+    QueryParams map[string]string
+    Body        string
+}
+```
+
+Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

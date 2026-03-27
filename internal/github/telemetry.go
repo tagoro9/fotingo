@@ -40,6 +40,8 @@ func resolveGitHubOperation(req *http.Request) string {
 		return "list_pull_requests"
 	case method == http.MethodPost && strings.HasPrefix(path, "/repos/") && strings.HasSuffix(path, "/pulls"):
 		return "create_pull_request"
+	case method == http.MethodPatch && strings.HasPrefix(path, "/repos/") && strings.Contains(path, "/pulls/"):
+		return "update_pull_request"
 	case method == http.MethodGet && strings.HasPrefix(path, "/repos/") && strings.HasSuffix(path, "/labels"):
 		return "list_labels"
 	case method == http.MethodPost && strings.HasPrefix(path, "/repos/") && strings.Contains(path, "/issues/") && strings.HasSuffix(path, "/labels"):

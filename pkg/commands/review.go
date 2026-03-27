@@ -159,7 +159,7 @@ func outputReviewJSON(result reviewResult) error {
 		output.PullRequest = &PullRequestInfo{
 			Number: result.pr.Number,
 			URL:    result.pr.HTMLURL,
-			Title:  localizer.T(i18n.ReviewPlaceholderEmpty), // Title not available from PullRequest struct
+			Title:  result.pr.Title,
 			Draft:  reviewCmdFlags.draft,
 			State:  state,
 		}
@@ -197,8 +197,15 @@ func outputReviewJSON(result reviewResult) error {
 
 // buildPRBody constructs the PR body using the template
 func buildPRBody(branch string, issue *jira.Issue, jiraClient jira.Jira, commits ...git.Commit) string {
-	tmpl := template.New(resolveReviewTemplate())
-	return tmpl.Render(buildReviewTemplateData(branch, issue, jiraClient, commits, nil))
+	return renderReviewTemplateBodyWithOverrides(
+		branch,
+		issue,
+		jiraClient,
+		commits,
+		nil,
+		reviewCmdFlags.templateSummary,
+		reviewCmdFlags.templateDescription,
+	)
 }
 
 func resolveReviewTemplate() string {
@@ -212,12 +219,53 @@ func buildReviewTemplateData(
 	commits []git.Commit,
 	linkedIssueIDs []string,
 ) map[string]string {
+	return buildReviewTemplateDataWithOverrides(
+		branch,
+		issue,
+		jiraClient,
+		commits,
+		linkedIssueIDs,
+		reviewCmdFlags.templateSummary,
+		reviewCmdFlags.templateDescription,
+	)
+}
+
+func buildReviewTemplateDataWithOverrides(
+	branch string,
+	issue *jira.Issue,
+	jiraClient jira.Jira,
+	commits []git.Commit,
+	linkedIssueIDs []string,
+	templateSummary string,
+	templateDescription string,
+) map[string]string {
 	return internalreview.BuildTemplateData(branch, issue, jiraClient, commits, internalreview.TemplateOptions{
-		TemplateSummary:       reviewCmdFlags.templateSummary,
-		TemplateDescription:   reviewCmdFlags.templateDescription,
+		TemplateSummary:       templateSummary,
+		TemplateDescription:   templateDescription,
 		EmptyPlaceholderValue: localizer.T(i18n.ReviewPlaceholderEmpty),
 		LinkedIssueIDs:        linkedIssueIDs,
 	})
+}
+
+func renderReviewTemplateBodyWithOverrides(
+	branch string,
+	issue *jira.Issue,
+	jiraClient jira.Jira,
+	commits []git.Commit,
+	linkedIssueIDs []string,
+	templateSummary string,
+	templateDescription string,
+) string {
+	tmpl := template.New(resolveReviewTemplate())
+	return tmpl.Render(buildReviewTemplateDataWithOverrides(
+		branch,
+		issue,
+		jiraClient,
+		commits,
+		linkedIssueIDs,
+		templateSummary,
+		templateDescription,
+	))
 }
 
 func deriveReviewPRTitle(branch string, issue *jira.Issue, editorTitle string, editorMode bool) string {

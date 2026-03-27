@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 )
 
 // MockGitHubServer provides a configurable HTTP test server that mimics GitHub API responses.
@@ -333,6 +334,11 @@ func (m *MockGitHubServer) handleRequest(w http.ResponseWriter, r *http.Request)
 		owner, repo, number := extractOwnerRepoNumber(path)
 		m.handleGetPullRequest(w, owner, repo, number)
 
+	// PATCH /repos/{owner}/{repo}/pulls/{number} - edit PR
+	case matchPathWithNumber(path, "/repos/{owner}/{repo}/pulls/{number}") && r.Method == http.MethodPatch:
+		owner, repo, number := extractOwnerRepoNumber(path)
+		m.handleEditPullRequest(w, r, owner, repo, number)
+
 	// POST /repos/{owner}/{repo}/pulls/{number}/requested_reviewers - request reviewers
 	case matchPath(path, "/repos/{owner}/{repo}/pulls/{number}/requested_reviewers") && r.Method == http.MethodPost:
 		owner, repo, number := extractOwnerRepoNumber(strings.TrimSuffix(path, "/requested_reviewers"))
@@ -538,6 +544,45 @@ func (m *MockGitHubServer) handleGetPullRequest(w http.ResponseWriter, owner, re
 			m.writeJSON(w, http.StatusOK, pr.ToAPIResponse())
 			return
 		}
+	}
+
+	m.writeErrorResponse(w, &ErrorResponse{
+		StatusCode: http.StatusNotFound,
+		Message:    "Pull request not found",
+	})
+}
+
+func (m *MockGitHubServer) handleEditPullRequest(w http.ResponseWriter, r *http.Request, owner, repo string, number int) {
+	var editRequest struct {
+		Title *string `json:"title"`
+		Body  *string `json:"body"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&editRequest); err != nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid request body",
+		})
+		return
+	}
+
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	key := owner + "/" + repo
+	for _, pr := range m.pullRequests[key] {
+		if pr.Number != number {
+			continue
+		}
+		if editRequest.Title != nil {
+			pr.Title = *editRequest.Title
+		}
+		if editRequest.Body != nil {
+			pr.Body = *editRequest.Body
+		}
+		pr.UpdatedAt = time.Now()
+		m.writeJSON(w, http.StatusOK, pr.ToAPIResponse())
+		return
 	}
 
 	m.writeErrorResponse(w, &ErrorResponse{

@@ -136,8 +136,11 @@ type mockGitHub struct {
 	currentUser                     *hub.User
 	currentUserErr                  error
 	lastCreatePROptions             github.CreatePROptions
+	lastUpdatePROptions             github.UpdatePROptions
 	createPR                        *github.PullRequest
 	createPRErr                     error
+	updatePR                        *github.PullRequest
+	updatePRErr                     error
 	lastAddedLabels                 []string
 	labels                          []github.Label
 	labelsErr                       error
@@ -176,6 +179,12 @@ func (m *mockGitHub) CreatePullRequest(options github.CreatePROptions) (*github.
 	m.calls = append(m.calls, "create_pr")
 	m.lastCreatePROptions = options
 	return m.createPR, m.createPRErr
+}
+
+func (m *mockGitHub) UpdatePullRequest(_ int, options github.UpdatePROptions) (*github.PullRequest, error) {
+	m.calls = append(m.calls, "update_pr")
+	m.lastUpdatePROptions = options
+	return m.updatePR, m.updatePRErr
 }
 
 func (m *mockGitHub) GetLabels() ([]github.Label, error) {

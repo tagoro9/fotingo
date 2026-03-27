@@ -153,6 +153,10 @@ func mockRelease(id int64, tagName, name, url, htmlURL string) map[string]interf
 	}
 }
 
+func ptr(value string) *string {
+	return &value
+}
+
 func (suite *GithubTestSuite) SetupTest() {
 	// Create a new mock HTTP server for each test
 	suite.server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -293,6 +297,75 @@ func (suite *GithubTestSuite) TestCreatePullRequest() {
 				assert.Equal(suite.T(), tt.wantPR.URL, pr.URL)
 				assert.Equal(suite.T(), tt.wantPR.HTMLURL, pr.HTMLURL)
 			}
+		})
+	}
+}
+
+func (suite *GithubTestSuite) TestUpdatePullRequest() {
+	tests := []struct {
+		name           string
+		prNumber       int
+		opts           UpdatePROptions
+		mockResponse   map[string]interface{}
+		mockStatusCode int
+		wantErr        bool
+		wantPR         *PullRequest
+	}{
+		{
+			name:     "success - update title and body",
+			prNumber: 3,
+			opts: UpdatePROptions{
+				Title: ptr("Updated title"),
+				Body:  ptr("Updated body"),
+			},
+			mockResponse:   mockPullRequest(3, "Updated title", "https://api.github.com/repos/testowner/testrepo/pulls/3", "https://github.com/testowner/testrepo/pull/3", "feature-branch", "main", "open"),
+			mockStatusCode: http.StatusOK,
+			wantPR: &PullRequest{
+				Title:   "Updated title",
+				Body:    "Updated body",
+				Number:  3,
+				URL:     "https://api.github.com/repos/testowner/testrepo/pulls/3",
+				HTMLURL: "https://github.com/testowner/testrepo/pull/3",
+			},
+		},
+		{
+			name:     "error - not found",
+			prNumber: 9,
+			opts: UpdatePROptions{
+				Body: ptr("Updated body"),
+			},
+			mockResponse:   map[string]interface{}{"message": "Not Found"},
+			mockStatusCode: http.StatusNotFound,
+			wantErr:        true,
+		},
+	}
+
+	for _, tt := range tests {
+		suite.Run(tt.name, func() {
+			suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
+				expectedPath := fmt.Sprintf("/api/v3/repos/testowner/testrepo/pulls/%d", tt.prNumber)
+				if r.URL.Path == expectedPath && r.Method == http.MethodPatch {
+					w.WriteHeader(tt.mockStatusCode)
+					_ = json.NewEncoder(w).Encode(tt.mockResponse)
+					return
+				}
+				w.WriteHeader(http.StatusNotFound)
+			})
+
+			pr, err := suite.client.UpdatePullRequest(tt.prNumber, tt.opts)
+
+			if tt.wantErr {
+				assert.Error(suite.T(), err)
+				assert.Nil(suite.T(), pr)
+				return
+			}
+
+			require.NoError(suite.T(), err)
+			require.NotNil(suite.T(), pr)
+			assert.Equal(suite.T(), tt.wantPR.Title, pr.Title)
+			assert.Equal(suite.T(), tt.wantPR.Number, pr.Number)
+			assert.Equal(suite.T(), tt.wantPR.URL, pr.URL)
+			assert.Equal(suite.T(), tt.wantPR.HTMLURL, pr.HTMLURL)
 		})
 	}
 }
