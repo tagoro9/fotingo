@@ -163,6 +163,9 @@ func (m workflowSuccessMockGitHub) GetCurrentUser() (*hub.User, error) { return 
 func (m workflowSuccessMockGitHub) CreatePullRequest(github.CreatePROptions) (*github.PullRequest, error) {
 	return m.pr, nil
 }
+func (m workflowSuccessMockGitHub) UpdatePullRequest(int, github.UpdatePROptions) (*github.PullRequest, error) {
+	return m.pr, nil
+}
 func (m workflowSuccessMockGitHub) GetLabels() ([]github.Label, error) { return nil, nil }
 func (m workflowSuccessMockGitHub) AddLabelsToPR(int, []string) error  { return nil }
 func (m workflowSuccessMockGitHub) GetCollaborators() ([]github.User, error) {

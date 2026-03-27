@@ -250,6 +250,39 @@ func (suite *MockServerTestSuite) TestCreatePullRequest_APIError() {
 	assert.Nil(suite.T(), pr)
 }
 
+func (suite *MockServerTestSuite) TestUpdatePullRequest_Success() {
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(1, "Original title", "feature-branch", "main", "open"),
+	)
+
+	body := "Updated body"
+	title := "Updated title"
+	pr, err := suite.client.UpdatePullRequest(1, UpdatePROptions{
+		Title: &title,
+		Body:  &body,
+	})
+
+	require.NoError(suite.T(), err)
+	require.NotNil(suite.T(), pr)
+	assert.Equal(suite.T(), "Updated title", pr.Title)
+	assert.Equal(suite.T(), "Updated body", pr.Body)
+
+	fetched, fetchedPR, err := suite.client.DoesPRExistForBranch("feature-branch")
+	require.NoError(suite.T(), err)
+	assert.True(suite.T(), fetched)
+	require.NotNil(suite.T(), fetchedPR)
+	assert.Equal(suite.T(), "Updated title", fetchedPR.Title)
+	assert.Equal(suite.T(), "Updated body", fetchedPR.Body)
+}
+
+func (suite *MockServerTestSuite) TestUpdatePullRequest_NotFound() {
+	body := "Updated body"
+	pr, err := suite.client.UpdatePullRequest(99, UpdatePROptions{Body: &body})
+
+	assert.Error(suite.T(), err)
+	assert.Nil(suite.T(), pr)
+}
+
 // -----------------------------------------------------------------------
 // GetLabels
 // -----------------------------------------------------------------------

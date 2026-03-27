@@ -13,6 +13,7 @@ Package review contains shared review\-command workflow helpers.
 
 ## Index
 
+- [Constants](<#constants>)
 - [Variables](<#variables>)
 - [func BuildDefaultTitle\(branch string, issue \*jira.Issue\) string](<#BuildDefaultTitle>)
 - [func BuildEditorSeedContent\(title string, body string\) string](<#BuildEditorSeedContent>)
@@ -23,6 +24,7 @@ Package review contains shared review\-command workflow helpers.
 - [func DeriveEditorTitle\(content string\) string](<#DeriveEditorTitle>)
 - [func DerivePRTitle\(titleOverride string, branch string, issue \*jira.Issue, editorTitle string, editorMode bool\) string](<#DerivePRTitle>)
 - [func DeriveSummary\(branch string, issue \*jira.Issue, commits \[\]git.Commit\) string](<#DeriveSummary>)
+- [func ExtractManagedSectionContent\(body string, section string\) \(string, error\)](<#ExtractManagedSectionContent>)
 - [func FieldTokenCandidates\(field string\) \[\]string](<#FieldTokenCandidates>)
 - [func FindRepositoryRoot\(\) \(string, error\)](<#FindRepositoryRoot>)
 - [func FormatChanges\(commits \[\]git.Commit\) string](<#FormatChanges>)
@@ -30,12 +32,16 @@ Package review contains shared review\-command workflow helpers.
 - [func FormatMatchList\(matches \[\]MatchOption\) string](<#FormatMatchList>)
 - [func FormatMatchOption\(match MatchOption\) string](<#FormatMatchOption>)
 - [func LoadRepositoryTemplate\(repositoryRoot string, searchOrder \[\]string\) \(string, bool\)](<#LoadRepositoryTemplate>)
+- [func ManagedSectionMarkers\(section string\) \(string, string\)](<#ManagedSectionMarkers>)
+- [func ManagedSections\(\) \[\]string](<#ManagedSections>)
 - [func NormalizeLineEndings\(content string\) string](<#NormalizeLineEndings>)
+- [func NormalizeManagedSections\(requested \[\]string\) \(\[\]string, error\)](<#NormalizeManagedSections>)
 - [func NormalizeTemplateOverride\(content string\) string](<#NormalizeTemplateOverride>)
 - [func NormalizeTokens\(tokens \[\]string\) \[\]string](<#NormalizeTokens>)
 - [func OldestCommitHeaderAndBody\(commits \[\]git.Commit\) \(string, string\)](<#OldestCommitHeaderAndBody>)
 - [func PickMatchWithPicker\(kind string, token string, matches \[\]MatchOption, runPicker RunPickerFunc\) \(string, error\)](<#PickMatchWithPicker>)
 - [func PreferParticipantUser\(current github.User, candidate github.User\) github.User](<#PreferParticipantUser>)
+- [func ReplaceManagedSectionContent\(body string, section string, replacement string\) \(string, error\)](<#ReplaceManagedSectionContent>)
 - [func ResolveAssignees\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, error\)](<#ResolveAssignees>)
 - [func ResolveLabels\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, error\)](<#ResolveLabels>)
 - [func ResolveReviewers\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, \[\]string, error\)](<#ResolveReviewers>)
@@ -70,6 +76,19 @@ Package review contains shared review\-command workflow helpers.
 - [type WorkflowRunner](<#WorkflowRunner>)
   - [func \(r WorkflowRunner\) Run\(statusCh \*chan string, out WorkflowEmitter, allowEditor bool\) WorkflowResult](<#WorkflowRunner.Run>)
 
+
+## Constants
+
+<a name="ManagedSectionSummary"></a>
+
+```go
+const (
+    ManagedSectionSummary     = "summary"
+    ManagedSectionDescription = "description"
+    ManagedSectionFixedIssues = "fixed-issues"
+    ManagedSectionChanges     = "changes"
+)
+```
 
 ## Variables
 
@@ -170,6 +189,15 @@ func DeriveSummary(branch string, issue *jira.Issue, commits []git.Commit) strin
 
 DeriveSummary computes the PR summary placeholder value.
 
+<a name="ExtractManagedSectionContent"></a>
+## func [ExtractManagedSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/sync_markers.go#L82>)
+
+```go
+func ExtractManagedSectionContent(body string, section string) (string, error)
+```
+
+ExtractManagedSectionContent returns the content between the marker pair for a section.
+
 <a name="FieldTokenCandidates"></a>
 ## func [FieldTokenCandidates](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L598>)
 
@@ -233,6 +261,24 @@ func LoadRepositoryTemplate(repositoryRoot string, searchOrder []string) (string
 
 LoadRepositoryTemplate loads the first template file found in searchOrder.
 
+<a name="ManagedSectionMarkers"></a>
+## func [ManagedSectionMarkers](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/sync_markers.go#L68>)
+
+```go
+func ManagedSectionMarkers(section string) (string, string)
+```
+
+ManagedSectionMarkers returns the start/end marker pair for a section.
+
+<a name="ManagedSections"></a>
+## func [ManagedSections](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/sync_markers.go#L23>)
+
+```go
+func ManagedSections() []string
+```
+
+ManagedSections returns the supported fotingo\-managed PR section ids.
+
 <a name="NormalizeLineEndings"></a>
 ## func [NormalizeLineEndings](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L292>)
 
@@ -241,6 +287,15 @@ func NormalizeLineEndings(content string) string
 ```
 
 NormalizeLineEndings normalizes CRLF content to LF.
+
+<a name="NormalizeManagedSections"></a>
+## func [NormalizeManagedSections](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/sync_markers.go#L29>)
+
+```go
+func NormalizeManagedSections(requested []string) ([]string, error)
+```
+
+NormalizeManagedSections validates and normalizes requested managed section ids. When no sections are requested, all known sections are returned.
 
 <a name="NormalizeTemplateOverride"></a>
 ## func [NormalizeTemplateOverride](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L66>)
@@ -286,6 +341,15 @@ func PreferParticipantUser(current github.User, candidate github.User) github.Us
 ```
 
 PreferParticipantUser prefers candidates that provide a richer name field.
+
+<a name="ReplaceManagedSectionContent"></a>
+## func [ReplaceManagedSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/sync_markers.go#L92>)
+
+```go
+func ReplaceManagedSectionContent(body string, section string, replacement string) (string, error)
+```
+
+ReplaceManagedSectionContent replaces the content between a section's markers.
 
 <a name="ResolveAssignees"></a>
 ## func [ResolveAssignees](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/resolver.go#L93-L98>)

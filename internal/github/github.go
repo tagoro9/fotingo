@@ -29,8 +29,16 @@ type CreatePROptions struct {
 	Draft bool
 }
 
+// UpdatePROptions contains optional fields for editing an existing pull request.
+type UpdatePROptions struct {
+	Title *string
+	Body  *string
+}
+
 // PullRequest represents a GitHub pull request
 type PullRequest struct {
+	Title   string
+	Body    string
 	Number  int
 	URL     string
 	HTMLURL string
@@ -95,6 +103,8 @@ type Github interface {
 	GetCurrentUser() (*hub.User, error)
 	// CreatePullRequest creates a new pull request
 	CreatePullRequest(opts CreatePROptions) (*PullRequest, error)
+	// UpdatePullRequest updates an existing pull request
+	UpdatePullRequest(prNumber int, opts UpdatePROptions) (*PullRequest, error)
 	// GetLabels returns all labels from the repository
 	GetLabels() ([]Label, error)
 	// AddLabelsToPR adds labels to a pull request
@@ -230,6 +240,32 @@ func (g *github) CreatePullRequest(opts CreatePROptions) (*PullRequest, error) {
 	}
 
 	return &PullRequest{
+		Title:   pr.GetTitle(),
+		Body:    pr.GetBody(),
+		Number:  pr.GetNumber(),
+		URL:     pr.GetURL(),
+		HTMLURL: pr.GetHTMLURL(),
+	}, nil
+}
+
+// UpdatePullRequest updates an existing pull request with the provided fields.
+func (g *github) UpdatePullRequest(prNumber int, opts UpdatePROptions) (*PullRequest, error) {
+	edit := &hub.PullRequest{}
+	if opts.Title != nil {
+		edit.Title = opts.Title
+	}
+	if opts.Body != nil {
+		edit.Body = opts.Body
+	}
+
+	pr, _, err := g.hub.PullRequests.Edit(context.Background(), g.owner, g.repo, prNumber, edit)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update pull request: %w", err)
+	}
+
+	return &PullRequest{
+		Title:   pr.GetTitle(),
+		Body:    pr.GetBody(),
 		Number:  pr.GetNumber(),
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),
@@ -997,6 +1033,8 @@ func (g *github) DoesPRExistForBranch(branch string) (bool, *PullRequest, error)
 
 	pr := list[0]
 	return true, &PullRequest{
+		Title:   pr.GetTitle(),
+		Body:    pr.GetBody(),
 		Number:  pr.GetNumber(),
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),

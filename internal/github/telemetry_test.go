@@ -18,6 +18,7 @@ func TestResolveGitHubOperation(t *testing.T) {
 	}{
 		{name: "list collaborators", method: http.MethodGet, path: "/repos/acme/fotingo/collaborators", operation: "list_collaborators"},
 		{name: "request reviewers", method: http.MethodPost, path: "/repos/acme/fotingo/pulls/12/requested_reviewers", operation: "request_reviewers"},
+		{name: "update pull request", method: http.MethodPatch, path: "/repos/acme/fotingo/pulls/12", operation: "update_pull_request"},
 		{name: "latest release", method: http.MethodGet, path: "/api/v3/repos/acme/fotingo/releases/latest", operation: "get_latest_release"},
 		{name: "unknown", method: http.MethodDelete, path: "/repos/acme/fotingo/labels", operation: "other"},
 	}
