@@ -699,6 +699,10 @@ func (suite *GithubTestSuite) TestGetCollaborators_EnrichesMissingNameFromCacheH
 			"avatar_url": "https://avatars.githubusercontent.com/u/1",
 		},
 	}, time.Hour))
+	assert.NoError(suite.T(), store.SetWithTTL(suite.client.metadataUserProfileCacheKey("yprk"), map[string]any{
+		"resolved": true,
+		"name":     "YoungJun Park",
+	}, time.Hour))
 
 	collaboratorListCalls := 0
 	profileLookupCalls := 0
@@ -725,7 +729,7 @@ func (suite *GithubTestSuite) TestGetCollaborators_EnrichesMissingNameFromCacheH
 	assert.Equal(suite.T(), "yprk", collaborators[0].Login)
 	assert.Equal(suite.T(), "YoungJun Park", collaborators[0].Name)
 	assert.Equal(suite.T(), 0, collaboratorListCalls)
-	assert.Equal(suite.T(), 1, profileLookupCalls)
+	assert.Equal(suite.T(), 0, profileLookupCalls)
 
 	entries, err := store.List(cacheKey)
 	assert.NoError(suite.T(), err)
@@ -751,6 +755,10 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromCacheHit(
 			"name":       "",
 			"avatar_url": "https://avatars.githubusercontent.com/u/1",
 		},
+	}, time.Hour))
+	assert.NoError(suite.T(), store.SetWithTTL(suite.client.metadataUserProfileCacheKey("yprk"), map[string]any{
+		"resolved": true,
+		"name":     "YoungJun Park",
 	}, time.Hour))
 
 	orgMemberListCalls := 0
@@ -778,7 +786,7 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromCacheHit(
 	assert.Equal(suite.T(), "yprk", members[0].Login)
 	assert.Equal(suite.T(), "YoungJun Park", members[0].Name)
 	assert.Equal(suite.T(), 0, orgMemberListCalls)
-	assert.Equal(suite.T(), 1, profileLookupCalls)
+	assert.Equal(suite.T(), 0, profileLookupCalls)
 
 	entries, err := store.List(cacheKey)
 	assert.NoError(suite.T(), err)
@@ -786,8 +794,8 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromCacheHit(
 	assert.NotContains(suite.T(), strings.ToLower(string(entries[0].Value)), "avatar")
 }
 
-func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesAllMembersBeyondLegacyLookupCap() {
-	const totalMembers = 60
+func (suite *GithubTestSuite) TestGetOrgMembers_LimitsColdFetchProfileLookups() {
+	const totalMembers = maxNameLookupPerFetch + 20
 
 	profileLookupCalls := 0
 	suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
@@ -818,9 +826,13 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesAllMembersBeyondLegacyLo
 	members, err := suite.client.GetOrgMembers()
 	assert.NoError(suite.T(), err)
 	assert.Len(suite.T(), members, totalMembers)
-	assert.Equal(suite.T(), totalMembers, profileLookupCalls)
-	for _, member := range members {
-		assert.Equal(suite.T(), fmt.Sprintf("Name %s", member.Login), member.Name)
+	assert.Equal(suite.T(), maxNameLookupPerFetch, profileLookupCalls)
+	for index, member := range members {
+		if index < maxNameLookupPerFetch {
+			assert.Equal(suite.T(), fmt.Sprintf("Name %s", member.Login), member.Name)
+			continue
+		}
+		assert.Empty(suite.T(), member.Name)
 	}
 }
 
@@ -986,9 +998,10 @@ func (suite *GithubTestSuite) TestGetCollaborators_EmitsFetchLogsOnlyOnCacheMiss
 	require.Len(suite.T(), second, 1)
 
 	assert.Equal(suite.T(), 1, collaboratorListCalls)
-	require.Len(suite.T(), logs, 2)
+	require.Len(suite.T(), logs, 3)
 	assert.Contains(suite.T(), logs[0], "Fetching GitHub repository collaborators for testowner/testrepo")
 	assert.Contains(suite.T(), logs[1], "Fetched 1 GitHub repository collaborators for testowner/testrepo")
+	assert.Contains(suite.T(), logs[2], "Loaded 1 GitHub repository collaborators for testowner/testrepo from cache")
 }
 
 func (suite *GithubTestSuite) TestGetOrgMembers_EmitsFetchLogsOnlyOnCacheMiss() {
@@ -1031,9 +1044,10 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EmitsFetchLogsOnlyOnCacheMiss() 
 	require.Len(suite.T(), second, 1)
 
 	assert.Equal(suite.T(), 1, orgMemberListCalls)
-	require.Len(suite.T(), logs, 2)
+	require.Len(suite.T(), logs, 3)
 	assert.Contains(suite.T(), logs[0], "Fetching GitHub organization members for testowner")
 	assert.Contains(suite.T(), logs[1], "Fetched 1 GitHub organization members for testowner")
+	assert.Contains(suite.T(), logs[2], "Loaded 1 GitHub organization members for testowner from cache")
 }
 
 // TestRequestReviewers tests requesting reviewers on a pull request

@@ -37,8 +37,7 @@ script/build
 ```
 
 GoReleaser publishes a single `fotingo` CLI artifact compiled with
-`-tags fotingo_org_only_participants`, so participant resolution uses only
-organization members and teams by default in release binaries.
+the default build configuration used in this repository.
 
 ## Release Triggers
 

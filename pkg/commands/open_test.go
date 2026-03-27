@@ -192,7 +192,7 @@ func (m *mockGitHub) AddLabelsToPR(_ int, labels []string) error {
 func (m *mockGitHub) GetCollaborators() ([]github.User, error) {
 	m.calls = append(m.calls, "get_collaborators")
 	if m.metadataFetchInfoLogger != nil {
-		m.metadataFetchInfoLogger("Fetching GitHub repository collaborators for testowner/testrepo")
+		m.metadataFetchInfoLogger("Loaded 1 GitHub repository collaborators for testowner/testrepo from cache in 1ms")
 	}
 	return m.collaborators, m.collaboratorsErr
 }
@@ -200,13 +200,16 @@ func (m *mockGitHub) GetCollaborators() ([]github.User, error) {
 func (m *mockGitHub) GetOrgMembers() ([]github.User, error) {
 	m.calls = append(m.calls, "get_org_members")
 	if m.metadataFetchInfoLogger != nil {
-		m.metadataFetchInfoLogger("Fetching GitHub organization members for testowner")
+		m.metadataFetchInfoLogger("Loaded 1 GitHub organization members for testowner from cache in 1ms")
 	}
 	return m.orgMembers, m.orgMembersErr
 }
 
 func (m *mockGitHub) GetTeams() ([]github.Team, error) {
 	m.calls = append(m.calls, "get_teams")
+	if m.metadataFetchInfoLogger != nil {
+		m.metadataFetchInfoLogger("Loaded 1 GitHub organization teams for testowner from cache in 1ms")
+	}
 	return m.teams, m.teamsErr
 }
 

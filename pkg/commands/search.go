@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 	internalreview "github.com/tagoro9/fotingo/internal/commands/review"
@@ -81,7 +82,12 @@ func newSearchMetadataCommand(
 				return runInteractiveSearchMetadataCommandFn(cmd.OutOrStdout(), domain, args)
 			}
 
-			return runSearchMetadataCommand(cmd.OutOrStdout(), domain, args, nil)
+			return runSearchMetadataCommand(
+				cmd.OutOrStdout(),
+				domain,
+				args,
+				buildSearchProgressLogger(cmd.ErrOrStderr(), nil),
+			)
 		},
 	}
 }
@@ -116,25 +122,50 @@ func searchReviewMetadata(
 	query string,
 	progress func(string),
 ) ([]reviewMatchOption, error) {
+	searchStartedAt := time.Now()
+	logSearchProgress(progress, "Initializing GitHub metadata client...")
+	clientStartedAt := time.Now()
 	ghClient, err := newSearchGitHubClient()
 	if err != nil {
 		return nil, err
 	}
+	logSearchProgress(progress, "Initialized GitHub metadata client in %s", time.Since(clientStartedAt).Round(time.Millisecond))
 	if progress != nil {
 		if setter, ok := ghClient.(metadataFetchInfoLoggerSetter); ok {
 			setter.SetMetadataFetchInfoLogger(progress)
 		}
 	}
 
-	options, err := loadSearchOptions(ghClient, domain, query)
+	loadStartedAt := time.Now()
+	options, warnings, err := loadSearchOptions(ghClient, domain, query)
 	if err != nil {
 		return nil, err
 	}
+	logSearchProgress(
+		progress,
+		"Loaded %d %s candidates in %s",
+		len(options),
+		domain,
+		time.Since(loadStartedAt).Round(time.Millisecond),
+	)
+	for _, warning := range warnings {
+		logSearchProgress(progress, "Lookup warning: %s", warning)
+	}
 
+	matchStartedAt := time.Now()
 	matches := internalreview.FindTokenMatchesForCompletion(query, options)
 	if len(matches) > searchResultsLimit {
 		matches = matches[:searchResultsLimit]
 	}
+	logSearchProgress(
+		progress,
+		"Ranked %d %s matches for %q in %s (total %s)",
+		len(matches),
+		domain,
+		query,
+		time.Since(matchStartedAt).Round(time.Millisecond),
+		time.Since(searchStartedAt).Round(time.Millisecond),
+	)
 
 	return matches, nil
 }
@@ -143,15 +174,15 @@ func loadSearchOptions(
 	ghClient github.Github,
 	domain searchDomain,
 	query string,
-) ([]reviewMatchOption, error) {
+) ([]reviewMatchOption, []string, error) {
 	switch domain {
 	case searchDomainReviewers:
-		options, _, err := internalreview.BuildParticipantOptionsForQuery(ghClient, query, true)
-		return options, err
+		options, warnings, err := internalreview.BuildParticipantOptionsForQuery(ghClient, query, true)
+		return options, warnings, err
 	case searchDomainAssignees:
-		options, _, err := internalreview.BuildParticipantOptionsForQuery(ghClient, query, false)
+		options, warnings, err := internalreview.BuildParticipantOptionsForQuery(ghClient, query, false)
 		if err != nil {
-			return nil, err
+			return nil, warnings, err
 		}
 
 		userOptions := make([]reviewMatchOption, 0, len(options))
@@ -161,12 +192,36 @@ func loadSearchOptions(
 			}
 			userOptions = append(userOptions, option)
 		}
-		return userOptions, nil
+		return userOptions, warnings, nil
 	case searchDomainLabels:
-		return internalreview.BuildLabelOptions(ghClient)
+		options, err := internalreview.BuildLabelOptions(ghClient)
+		return options, nil, err
 	default:
-		return nil, fmt.Errorf("unsupported search domain %q", domain)
+		return nil, nil, fmt.Errorf("unsupported search domain %q", domain)
 	}
+}
+
+func buildSearchProgressLogger(writer io.Writer, progress func(string)) func(string) {
+	if progress != nil {
+		return progress
+	}
+	if ShouldOutputJSON() || ShouldSuppressOutput() || (!Global.Debug && !Global.Verbose) {
+		return nil
+	}
+
+	return func(message string) {
+		if strings.TrimSpace(message) == "" {
+			return
+		}
+		_, _ = fmt.Fprintln(writer, message)
+	}
+}
+
+func logSearchProgress(progress func(string), format string, args ...any) {
+	if progress == nil {
+		return
+	}
+	progress(fmt.Sprintf(format, args...))
 }
 
 func buildSearchOutput(domain searchDomain, query string, results []reviewMatchOption) SearchOutput {

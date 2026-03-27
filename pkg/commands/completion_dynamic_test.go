@@ -74,7 +74,7 @@ func TestCompleteReviewReviewersFlag_UsesOrgMembersBeforeCollaborators(t *testin
 
 	completions, _ := completeReviewReviewersFlag(nil, nil, "ali")
 	assert.Contains(t, completionValues(completions), "alice")
-	assert.NotContains(t, gh.calls, "get_collaborators")
+	assert.Contains(t, gh.calls, "get_collaborators")
 }
 
 func TestCompleteReviewReviewersFlag_FetchesCollaboratorsAfterOrgMemberMiss(t *testing.T) {
@@ -119,7 +119,7 @@ func TestCompleteReviewReviewersFlag_UsesTeamMatchesBeforeCollaborators(t *testi
 
 	completions, _ := completeReviewReviewersFlag(nil, nil, "plat")
 	assert.Contains(t, completionValues(completions), "acme/platform")
-	assert.NotContains(t, gh.calls, "get_collaborators")
+	assert.Contains(t, gh.calls, "get_collaborators")
 }
 
 func TestCompleteReviewAssigneesFlag_ExcludesTeams(t *testing.T) {
