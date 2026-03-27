@@ -1,0 +1,21 @@
+Refresh fotingo-managed pull request sections for the current branch using marker-delimited ownership in the PR body.
+
+Usage:
+  fotingo review sync [flags]
+
+Flags:
+  -h, --help                          help for sync
+      --section strings               Sync only the specified fotingo-managed section (repeatable)
+      --sync-title                    Refresh the pull request title using fotingo's derived title rules
+      --template-description string   Override the synced Description section content; expands escaped \n, \r\n, and \t
+      --template-summary string       Override the synced Summary section content
+      --title string                  Override the pull request title during sync
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting

@@ -34,6 +34,10 @@ Examples:
 
 Usage:
   fotingo review [flags]
+  fotingo review [command]
+
+Available Commands:
+  sync        Refresh fotingo-managed sections in the current pull request
 
 Flags:
   -a, --assignee strings              Assignees to add to the pull request (can be specified multiple times)
@@ -55,3 +59,5 @@ Global Flags:
       --quiet           Suppress non-essential output
   -v, --verbose         Show step-level progress output
   -y, --yes             Accept defaults without prompting
+
+Use "fotingo review [command] --help" for more information about a command.

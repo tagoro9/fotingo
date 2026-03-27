@@ -82,6 +82,8 @@ func TestDefaultPRTemplate(t *testing.T) {
 
 	// Verify the default PR template contains expected placeholders
 	assert.Contains(t, defaultPRTemplate, "{summary}")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start summary -->")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:end changes -->")
 	assert.Contains(t, defaultPRTemplate, "**Summary**")
 	assert.Contains(t, defaultPRTemplate, "{description}")
 	assert.Contains(t, defaultPRTemplate, "{fixedIssues}")
@@ -89,6 +91,29 @@ func TestDefaultPRTemplate(t *testing.T) {
 	assert.Contains(t, defaultPRTemplate, "{fotingo.banner}")
 	assert.Contains(t, defaultPRTemplate, "**Description**")
 	assert.Contains(t, defaultPRTemplate, "**Changes**")
+}
+
+func TestBuildPRBody_PreservesMarkersInCustomTemplate(t *testing.T) {
+	t.Parallel()
+
+	originalResolver := resolveReviewTemplateFn
+	resolveReviewTemplateFn = func() string {
+		return "Before\n<!-- fotingo:start changes -->\n## Delta\n\n{changes}\n<!-- fotingo:end changes -->\nAfter"
+	}
+	t.Cleanup(func() {
+		resolveReviewTemplateFn = originalResolver
+	})
+
+	body := buildPRBody("feature/custom-template", nil, nil, git.Commit{
+		Message:   "feat: preserve markers",
+		Additions: 3,
+		Deletions: 1,
+	})
+
+	assert.Contains(t, body, "<!-- fotingo:start changes -->")
+	assert.Contains(t, body, "<!-- fotingo:end changes -->")
+	assert.Contains(t, body, "## Delta")
+	assert.Contains(t, body, "* feat: preserve markers (+3/-1)")
 }
 
 func TestReviewResultStruct(t *testing.T) {
@@ -299,6 +324,7 @@ func TestResolveReviewPRBody_InteractivePathUsesRuntimeHandoff(t *testing.T) {
 
 func resetReviewFlags() {
 	reviewCmdFlags = reviewFlags{}
+	reviewSyncCmdFlags = reviewSyncFlags{}
 }
 
 func mockGitHubCallIndex(calls []string, target string) int {
@@ -826,7 +852,7 @@ func TestRunReviewWithOptions_SeedsEditorTitleAndKeepsBodySections(t *testing.T)
 
 	require.NoError(t, result.err)
 	assert.Equal(t, "feature/default-title", githubClient.lastCreatePROptions.Title)
-	assert.True(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "**Summary**\n\n"))
+	assert.True(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "<!-- fotingo:start summary -->\n**Summary**\n\n"))
 	assert.Contains(t, githubClient.lastCreatePROptions.Body, "**Summary**")
 	assert.False(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "feature/default-title\n\n"))
 }
