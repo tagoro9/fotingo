@@ -687,6 +687,7 @@ func (suite *GithubTestSuite) TestGetCollaborators_EnrichesMissingNameFromCacheH
 
 	cfg := viper.New()
 	cfg.Set("github.cache.collaboratorsTTL", "1h")
+	cfg.Set("github.cache.userProfilesTTL", "1h")
 	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
 	suite.client.metadataCache = store
 	suite.client.cacheInitErr = nil
@@ -701,7 +702,10 @@ func (suite *GithubTestSuite) TestGetCollaborators_EnrichesMissingNameFromCacheH
 	}, time.Hour))
 	assert.NoError(suite.T(), store.SetWithTTL(suite.client.metadataUserProfileCacheKey("yprk"), map[string]any{
 		"resolved": true,
-		"name":     "YoungJun Park",
+		"user": map[string]any{
+			"login": "yprk",
+			"name":  "YoungJun Park",
+		},
 	}, time.Hour))
 
 	collaboratorListCalls := 0
@@ -737,6 +741,65 @@ func (suite *GithubTestSuite) TestGetCollaborators_EnrichesMissingNameFromCacheH
 	assert.NotContains(suite.T(), strings.ToLower(string(entries[0].Value)), "avatar")
 }
 
+func (suite *GithubTestSuite) TestGetCollaborators_EnrichesMissingNameFromLegacyCacheHit() {
+	store, err := cache.New(cache.WithPath(filepath.Join(suite.T().TempDir(), "cache.db")), cache.WithLogger(nil))
+	assert.NoError(suite.T(), err)
+	defer func() { _ = store.Close() }()
+
+	cfg := viper.New()
+	cfg.Set("github.cache.collaboratorsTTL", "1h")
+	cfg.Set("github.cache.userProfilesTTL", "1h")
+	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
+	suite.client.metadataCache = store
+	suite.client.cacheInitErr = nil
+
+	cacheKey := suite.client.metadataCacheKey("collaborators")
+	assert.NoError(suite.T(), store.SetWithTTL(cacheKey, []map[string]any{
+		{
+			"login":      "yprk",
+			"name":       "",
+			"avatar_url": "https://avatars.githubusercontent.com/u/1",
+		},
+	}, time.Hour))
+	assert.NoError(suite.T(), store.SetWithTTL(suite.client.metadataLegacyUserProfileNameCacheKey("yprk"), map[string]any{
+		"resolved": true,
+		"name":     "YoungJun Park",
+	}, time.Hour))
+
+	collaboratorListCalls := 0
+	profileLookupCalls := 0
+	suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/api/v3/repos/testowner/testrepo/collaborators" && r.Method == http.MethodGet:
+			collaboratorListCalls++
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode([]map[string]any{})
+			return
+		case r.URL.Path == "/api/v3/users/yprk" && r.Method == http.MethodGet:
+			profileLookupCalls++
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode(mockUser("yprk", "YoungJun Park", "https://avatars.githubusercontent.com/u/1"))
+			return
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	})
+
+	collaborators, err := suite.client.GetCollaborators()
+	assert.NoError(suite.T(), err)
+	assert.Len(suite.T(), collaborators, 1)
+	assert.Equal(suite.T(), "yprk", collaborators[0].Login)
+	assert.Equal(suite.T(), "YoungJun Park", collaborators[0].Name)
+	assert.Equal(suite.T(), 0, collaboratorListCalls)
+	assert.Equal(suite.T(), 0, profileLookupCalls)
+
+	var cachedProfile map[string]any
+	hit, err := store.Get(suite.client.metadataUserProfileCacheKey("yprk"), &cachedProfile)
+	assert.NoError(suite.T(), err)
+	assert.True(suite.T(), hit)
+	assert.Equal(suite.T(), true, cachedProfile["resolved"])
+}
+
 func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromCacheHit() {
 	store, err := cache.New(cache.WithPath(filepath.Join(suite.T().TempDir(), "cache.db")), cache.WithLogger(nil))
 	assert.NoError(suite.T(), err)
@@ -744,6 +807,7 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromCacheHit(
 
 	cfg := viper.New()
 	cfg.Set("github.cache.orgMembersTTL", "1h")
+	cfg.Set("github.cache.userProfilesTTL", "1h")
 	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
 	suite.client.metadataCache = store
 	suite.client.cacheInitErr = nil
@@ -758,7 +822,10 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromCacheHit(
 	}, time.Hour))
 	assert.NoError(suite.T(), store.SetWithTTL(suite.client.metadataUserProfileCacheKey("yprk"), map[string]any{
 		"resolved": true,
-		"name":     "YoungJun Park",
+		"user": map[string]any{
+			"login": "yprk",
+			"name":  "YoungJun Park",
+		},
 	}, time.Hour))
 
 	orgMemberListCalls := 0
@@ -792,6 +859,65 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromCacheHit(
 	assert.NoError(suite.T(), err)
 	assert.Len(suite.T(), entries, 1)
 	assert.NotContains(suite.T(), strings.ToLower(string(entries[0].Value)), "avatar")
+}
+
+func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromLegacyCacheHit() {
+	store, err := cache.New(cache.WithPath(filepath.Join(suite.T().TempDir(), "cache.db")), cache.WithLogger(nil))
+	assert.NoError(suite.T(), err)
+	defer func() { _ = store.Close() }()
+
+	cfg := viper.New()
+	cfg.Set("github.cache.orgMembersTTL", "1h")
+	cfg.Set("github.cache.userProfilesTTL", "1h")
+	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
+	suite.client.metadataCache = store
+	suite.client.cacheInitErr = nil
+
+	cacheKey := suite.client.metadataOwnerCacheKey("org-members")
+	assert.NoError(suite.T(), store.SetWithTTL(cacheKey, []map[string]any{
+		{
+			"login":      "yprk",
+			"name":       "",
+			"avatar_url": "https://avatars.githubusercontent.com/u/1",
+		},
+	}, time.Hour))
+	assert.NoError(suite.T(), store.SetWithTTL(suite.client.metadataLegacyUserProfileNameCacheKey("yprk"), map[string]any{
+		"resolved": true,
+		"name":     "YoungJun Park",
+	}, time.Hour))
+
+	orgMemberListCalls := 0
+	profileLookupCalls := 0
+	suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/api/v3/orgs/testowner/members" && r.Method == http.MethodGet:
+			orgMemberListCalls++
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode([]map[string]any{})
+			return
+		case r.URL.Path == "/api/v3/users/yprk" && r.Method == http.MethodGet:
+			profileLookupCalls++
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode(mockUser("yprk", "YoungJun Park", "https://avatars.githubusercontent.com/u/1"))
+			return
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	})
+
+	members, err := suite.client.GetOrgMembers()
+	assert.NoError(suite.T(), err)
+	assert.Len(suite.T(), members, 1)
+	assert.Equal(suite.T(), "yprk", members[0].Login)
+	assert.Equal(suite.T(), "YoungJun Park", members[0].Name)
+	assert.Equal(suite.T(), 0, orgMemberListCalls)
+	assert.Equal(suite.T(), 0, profileLookupCalls)
+
+	var cachedProfile map[string]any
+	hit, err := store.Get(suite.client.metadataUserProfileCacheKey("yprk"), &cachedProfile)
+	assert.NoError(suite.T(), err)
+	assert.True(suite.T(), hit)
+	assert.Equal(suite.T(), true, cachedProfile["resolved"])
 }
 
 func (suite *GithubTestSuite) TestGetOrgMembers_LimitsColdFetchProfileLookups() {
@@ -912,6 +1038,55 @@ func (suite *GithubTestSuite) TestGetOrgMembers_DefaultCacheTTLIsThirtyDays() {
 	expectedTTL := 30 * 24 * time.Hour
 	assert.GreaterOrEqual(suite.T(), ttl, expectedTTL-time.Hour)
 	assert.LessOrEqual(suite.T(), ttl, expectedTTL+time.Hour)
+}
+
+func (suite *GithubTestSuite) TestGetCollaborators_CachesFetchedUserProfilesWithConfiguredTTL() {
+	store, err := cache.New(cache.WithPath(filepath.Join(suite.T().TempDir(), "cache.db")), cache.WithLogger(nil))
+	assert.NoError(suite.T(), err)
+	defer func() { _ = store.Close() }()
+
+	cfg := viper.New()
+	cfg.Set("github.cache.collaboratorsTTL", "1h")
+	cfg.Set("github.cache.userProfilesTTL", "2h")
+	suite.client.ViperConfigurableService = &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
+	suite.client.metadataCache = store
+	suite.client.cacheInitErr = nil
+
+	suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/api/v3/repos/testowner/testrepo/collaborators" && r.Method == http.MethodGet:
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode([]map[string]any{
+				{
+					"login":      "yprk",
+					"name":       "",
+					"avatar_url": "https://avatars.githubusercontent.com/u/1",
+				},
+			})
+			return
+		case r.URL.Path == "/api/v3/users/yprk" && r.Method == http.MethodGet:
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode(mockUser("yprk", "YoungJun Park", "https://avatars.githubusercontent.com/u/1"))
+			return
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	})
+
+	start := time.Now().UTC()
+	collaborators, err := suite.client.GetCollaborators()
+	assert.NoError(suite.T(), err)
+	require.Len(suite.T(), collaborators, 1)
+
+	entries, err := store.List(suite.client.metadataUserProfileCacheKey("yprk"))
+	assert.NoError(suite.T(), err)
+	require.Len(suite.T(), entries, 1)
+	require.NotNil(suite.T(), entries[0].ExpiresAt)
+
+	ttl := entries[0].ExpiresAt.Sub(start)
+	expectedTTL := 2 * time.Hour
+	assert.GreaterOrEqual(suite.T(), ttl, expectedTTL-time.Minute)
+	assert.LessOrEqual(suite.T(), ttl, expectedTTL+time.Minute)
 }
 
 func (suite *GithubTestSuite) TestGetOrgMembers_ReusesOwnerScopedCacheAcrossRepos() {

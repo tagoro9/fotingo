@@ -98,6 +98,7 @@ func NewDefaultConfig() *viper.Viper {
 	config.SetDefault("github.cache.collaboratorsTTL", "720h")
 	config.SetDefault("github.cache.orgMembersTTL", "720h")
 	config.SetDefault("github.cache.teamsTTL", "720h")
+	config.SetDefault("github.cache.userProfilesTTL", "720h")
 	config.SetDefault("locale", i18n.DefaultLocale)
 	config.SetDefault("telemetry.enabled", true)
 	return config

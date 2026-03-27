@@ -21,6 +21,15 @@ func TestLookupConfigKeySpec(t *testing.T) {
 	assert.False(t, spec.Sensitive)
 }
 
+func TestLookupConfigKeySpec_GitHubUserProfilesTTL(t *testing.T) {
+	t.Parallel()
+
+	spec, ok := lookupConfigKeySpec("github.cache.userProfilesTTL")
+	require.True(t, ok)
+	assert.Equal(t, configValueTypeDuration, spec.ValueType)
+	assert.Equal(t, "TTL for GitHub user profile cache", spec.Description)
+}
+
 func TestParseConfigKeyValue_Duration(t *testing.T) {
 	t.Parallel()
 

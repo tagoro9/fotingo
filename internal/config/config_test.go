@@ -80,6 +80,7 @@ func (suite *ConfigTestSuite) TestNewDefaultConfig() {
 	assert.Equal(suite.T(), "720h", config.GetString("github.cache.collaboratorsTTL"))
 	assert.Equal(suite.T(), "720h", config.GetString("github.cache.orgMembersTTL"))
 	assert.Equal(suite.T(), "720h", config.GetString("github.cache.teamsTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.userProfilesTTL"))
 	assert.True(suite.T(), config.GetBool("telemetry.enabled"))
 }
 
@@ -146,6 +147,7 @@ func (suite *ConfigTestSuite) TestNewConfig() {
 	assert.Equal(suite.T(), "720h", config.GetString("github.cache.collaboratorsTTL"))
 	assert.Equal(suite.T(), "720h", config.GetString("github.cache.orgMembersTTL"))
 	assert.Equal(suite.T(), "720h", config.GetString("github.cache.teamsTTL"))
+	assert.Equal(suite.T(), "720h", config.GetString("github.cache.userProfilesTTL"))
 	assert.True(suite.T(), config.GetBool("telemetry.enabled"))
 
 	// Verify the config file exists
