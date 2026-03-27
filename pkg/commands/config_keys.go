@@ -45,6 +45,11 @@ var configKeySpecs = []configKeySpec{
 		ValueType:   configValueTypeDuration,
 		Description: "TTL for GitHub teams cache",
 	},
+	{
+		Key:         "github.cache.userProfilesTTL",
+		ValueType:   configValueTypeDuration,
+		Description: "TTL for GitHub user profile cache",
+	},
 	{Key: "github.releaseTemplate", ValueType: configValueTypeString, Description: "Release body template"},
 	{Key: "github.token", ValueType: configValueTypeString, Description: "GitHub token (OAuth or PAT)", Sensitive: true},
 	{

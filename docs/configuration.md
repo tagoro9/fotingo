@@ -44,6 +44,7 @@ jira:
 | `github.cache.collaboratorsTTL` | Collaborators cache TTL                        |
 | `github.cache.orgMembersTTL`    | Organization members cache TTL                 |
 | `github.cache.teamsTTL`         | Organization teams cache TTL                   |
+| `github.cache.userProfilesTTL`  | GitHub user profile cache TTL                  |
 | `jira.root`                     | Jira server URL                                |
 | `jira.user.login`               | Jira username                                  |
 | `jira.user.token`               | Jira API token                                 |

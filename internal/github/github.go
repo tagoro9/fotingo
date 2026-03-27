@@ -150,8 +150,14 @@ const (
 	defaultCollaboratorsCacheTTL = 720 * time.Hour
 	defaultOrgMembersCacheTTL    = 720 * time.Hour
 	defaultTeamsCacheTTL         = 720 * time.Hour
+	defaultUserProfilesCacheTTL  = 720 * time.Hour
 	maxNameLookupPerFetch        = 500
 )
+
+type cachedUserProfile struct {
+	Resolved bool `json:"resolved"`
+	User     User `json:"user"`
+}
 
 type cachedUserProfileName struct {
 	Resolved bool   `json:"resolved"`
@@ -549,7 +555,6 @@ func (g *github) enrichUsersWithProfileNames(
 			continue
 		}
 		resolvedName = strings.TrimSpace(resolvedName)
-		g.cacheUserProfileName(login, resolvedName)
 		if resolvedName == "" {
 			continue
 		}
@@ -563,11 +568,39 @@ func (g *github) enrichUsersWithProfileNames(
 }
 
 func (g *github) fetchUserProfileName(login string) (string, error) {
-	user, _, err := g.hub.Users.Get(context.Background(), login)
+	profile, err := g.fetchUserProfile(login)
 	if err != nil {
 		return "", err
 	}
-	return user.GetName(), nil
+
+	return profile.Name, nil
+}
+
+func (g *github) fetchUserProfile(login string) (User, error) {
+	trimmedLogin := strings.TrimSpace(login)
+	if trimmedLogin == "" {
+		return User{}, fmt.Errorf("login is required")
+	}
+
+	if cachedProfile, hit := g.cachedUserProfile(trimmedLogin); hit {
+		return cachedProfile, nil
+	}
+
+	user, _, err := g.hub.Users.Get(context.Background(), trimmedLogin)
+	if err != nil {
+		return User{}, err
+	}
+
+	profile := User{
+		Login: strings.TrimSpace(user.GetLogin()),
+		Name:  strings.TrimSpace(user.GetName()),
+	}
+	if profile.Login == "" {
+		profile.Login = trimmedLogin
+	}
+	g.cacheUserProfile(profile)
+
+	return profile, nil
 }
 
 // GetTeams returns organization teams for team reviewer selection.
@@ -714,32 +747,81 @@ func (g *github) metadataGlobalCacheKey(kind string) string {
 }
 
 func (g *github) metadataUserProfileCacheKey(login string) string {
-	return fmt.Sprintf("%s:%s", g.metadataGlobalCacheKey("user-profile-name"), strings.ToLower(strings.TrimSpace(login)))
+	return fmt.Sprintf("%s:%s", g.metadataGlobalCacheKey("user-profile"), normalizeMetadataLogin(login))
+}
+
+func (g *github) metadataLegacyUserProfileNameCacheKey(login string) string {
+	return fmt.Sprintf("%s:%s", g.metadataGlobalCacheKey("user-profile-name"), normalizeMetadataLogin(login))
+}
+
+func normalizeMetadataLogin(login string) string {
+	return strings.ToLower(strings.TrimSpace(login))
+}
+
+func (g *github) cachedUserProfile(login string) (User, bool) {
+	if g == nil || g.metadataCache == nil {
+		return User{}, false
+	}
+
+	trimmedLogin := strings.TrimSpace(login)
+	if trimmedLogin == "" {
+		return User{}, false
+	}
+
+	var cached cachedUserProfile
+	hit, err := g.metadataCache.Get(g.metadataUserProfileCacheKey(trimmedLogin), &cached)
+	if err == nil && hit && cached.Resolved {
+		profile := cached.User
+		if strings.TrimSpace(profile.Login) == "" {
+			profile.Login = trimmedLogin
+		}
+		profile.Name = strings.TrimSpace(profile.Name)
+		return profile, true
+	}
+
+	var legacy cachedUserProfileName
+	legacyHit, legacyErr := g.metadataCache.Get(g.metadataLegacyUserProfileNameCacheKey(trimmedLogin), &legacy)
+	if legacyErr != nil || !legacyHit || !legacy.Resolved {
+		return User{}, false
+	}
+
+	profile := User{
+		Login: trimmedLogin,
+		Name:  strings.TrimSpace(legacy.Name),
+	}
+	g.cacheUserProfile(profile)
+	return profile, true
 }
 
 func (g *github) cachedUserProfileName(login string) (string, bool) {
-	if g == nil || g.metadataCache == nil {
+	profile, hit := g.cachedUserProfile(login)
+	if !hit {
 		return "", false
 	}
 
-	var cached cachedUserProfileName
-	hit, err := g.metadataCache.Get(g.metadataUserProfileCacheKey(login), &cached)
-	if err != nil || !hit || !cached.Resolved {
-		return "", false
-	}
-
-	return cached.Name, true
+	return profile.Name, true
 }
 
-func (g *github) cacheUserProfileName(login string, name string) {
+func (g *github) cacheUserProfile(profile User) {
 	if g == nil || g.metadataCache == nil {
 		return
 	}
 
-	ttl := g.metadataTTL("cache.orgMembersTTL", defaultOrgMembersCacheTTL)
+	login := strings.TrimSpace(profile.Login)
+	if login == "" {
+		return
+	}
+
+	ttl := g.metadataTTL("cache.userProfilesTTL", defaultUserProfilesCacheTTL)
 	_ = g.metadataCache.SetWithTTL(
 		g.metadataUserProfileCacheKey(login),
-		cachedUserProfileName{Resolved: true, Name: strings.TrimSpace(name)},
+		cachedUserProfile{
+			Resolved: true,
+			User: User{
+				Login: login,
+				Name:  strings.TrimSpace(profile.Name),
+			},
+		},
 		ttl,
 	)
 }
