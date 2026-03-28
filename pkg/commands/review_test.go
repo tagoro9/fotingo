@@ -82,6 +82,7 @@ func TestDefaultPRTemplate(t *testing.T) {
 
 	// Verify the default PR template contains expected placeholders
 	assert.Contains(t, defaultPRTemplate, "{summary}")
+	assert.Contains(t, defaultPRTemplate, "**Summary**\n\n<!-- fotingo:start summary -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start summary -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:end changes -->")
 	assert.Contains(t, defaultPRTemplate, "**Summary**")
@@ -852,7 +853,7 @@ func TestRunReviewWithOptions_SeedsEditorTitleAndKeepsBodySections(t *testing.T)
 
 	require.NoError(t, result.err)
 	assert.Equal(t, "feature/default-title", githubClient.lastCreatePROptions.Title)
-	assert.True(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "<!-- fotingo:start summary -->\n**Summary**\n\n"))
+	assert.True(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "**Summary**\n\n<!-- fotingo:start summary -->\n"))
 	assert.Contains(t, githubClient.lastCreatePROptions.Body, "**Summary**")
 	assert.False(t, strings.HasPrefix(githubClient.lastCreatePROptions.Body, "feature/default-title\n\n"))
 }

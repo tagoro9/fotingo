@@ -42,10 +42,10 @@ func TestManagedSectionMarkers(t *testing.T) {
 func TestExtractManagedSectionContent(t *testing.T) {
 	t.Parallel()
 
-	body := "<!-- fotingo:start summary -->\n**Summary**\n\nText\n<!-- fotingo:end summary -->"
+	body := "**Summary**\n\n<!-- fotingo:start summary -->\nText\n<!-- fotingo:end summary -->"
 	content, err := ExtractManagedSectionContent(body, ManagedSectionSummary)
 	require.NoError(t, err)
-	assert.Equal(t, "\n**Summary**\n\nText\n", content)
+	assert.Equal(t, "\nText\n", content)
 }
 
 func TestReplaceManagedSectionContent(t *testing.T) {
