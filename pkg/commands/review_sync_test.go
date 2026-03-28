@@ -116,7 +116,7 @@ func TestRunReviewSync_UpdatesSelectedSectionsOnly(t *testing.T) {
 	}
 
 	statusCh := make(chan string, 16)
-	result := runReviewSync(&statusCh)
+	result := runReviewSync(&statusCh, false)
 
 	require.NoError(t, result.err)
 	require.NotNil(t, githubClient.lastUpdatePROptions.Body)
@@ -168,7 +168,7 @@ func TestRunReviewSync_SyncsTitleOnlyWhenRequested(t *testing.T) {
 	}
 
 	statusCh := make(chan string, 16)
-	result := runReviewSync(&statusCh)
+	result := runReviewSync(&statusCh, false)
 
 	require.NoError(t, result.err)
 	require.NotNil(t, githubClient.lastUpdatePROptions.Title)
@@ -184,7 +184,7 @@ func TestRunReviewSync_RejectsSummaryOverrideWithoutSummarySection(t *testing.T)
 	reviewSyncCmdFlags.templateSummary = "Custom summary"
 
 	statusCh := make(chan string, 1)
-	result := runReviewSync(&statusCh)
+	result := runReviewSync(&statusCh, false)
 
 	require.Error(t, result.err)
 	assert.Contains(t, result.err.Error(), `--template-summary requires syncing the "summary" section`)
@@ -234,7 +234,7 @@ func TestRunReviewSync_FailsWhenRequestedMarkersMissing(t *testing.T) {
 	}
 
 	statusCh := make(chan string, 16)
-	result := runReviewSync(&statusCh)
+	result := runReviewSync(&statusCh, false)
 
 	require.Error(t, result.err)
 	assert.Contains(t, result.err.Error(), `missing fotingo markers for section "changes"`)
@@ -292,9 +292,240 @@ func TestRunReviewSync_SummaryOverrideDoesNotRequireJira(t *testing.T) {
 	}
 
 	statusCh := make(chan string, 16)
-	result := runReviewSync(&statusCh)
+	result := runReviewSync(&statusCh, false)
 
 	require.NoError(t, result.err)
 	require.NotNil(t, githubClient.lastUpdatePROptions.Body)
 	assert.Equal(t, expectedBody, *githubClient.lastUpdatePROptions.Body)
+}
+
+func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	origTTY := isInputTerminalFn
+	origEditor := openEditorFn
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+		isInputTerminalFn = origTTY
+		openEditorFn = origEditor
+	}()
+
+	Global.JSON = false
+	Global.Yes = false
+	isInputTerminalFn = func() bool { return true }
+
+	reviewSyncCmdFlags.sections = []string{internalreview.ManagedSectionSummary}
+
+	gitClient := &mockGit{
+		currentBranch: "feature/editor-sync",
+	}
+	existingBody := strings.Join([]string{
+		"**Summary**",
+		"",
+		"<!-- fotingo:start summary -->",
+		"old summary",
+		"<!-- fotingo:end summary -->",
+		"",
+		"**Description**",
+		"",
+		"<!-- fotingo:start description -->",
+		"manual description",
+		"<!-- fotingo:end description -->",
+	}, "\n")
+	expectedBody := strings.Join([]string{
+		"**Summary**",
+		"",
+		"<!-- fotingo:start summary -->",
+		"edited summary",
+		"<!-- fotingo:end summary -->",
+		"",
+		"**Description**",
+		"",
+		"<!-- fotingo:start description -->",
+		"manual description",
+		"<!-- fotingo:end description -->",
+	}, "\n")
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  12,
+			Title:   "Existing title",
+			Body:    existingBody,
+			HTMLURL: "https://github.com/test/repo/pull/12",
+		},
+		updatePR: &github.PullRequest{
+			Number:  12,
+			Title:   "Existing title",
+			Body:    expectedBody,
+			HTMLURL: "https://github.com/test/repo/pull/12",
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+	openEditorFn = func(initialContent string) (string, error) {
+		assert.Contains(t, initialContent, "<!-- fotingo:start summary -->\nfeature/editor-sync\n<!-- fotingo:end summary -->")
+		assert.NotContains(t, initialContent, "Existing title\n\n")
+		return strings.Replace(initialContent, "feature/editor-sync", "edited summary", 1), nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, true)
+
+	require.NoError(t, result.err)
+	require.NotNil(t, githubClient.lastUpdatePROptions.Body)
+	assert.Equal(t, expectedBody, *githubClient.lastUpdatePROptions.Body)
+	assert.Nil(t, githubClient.lastUpdatePROptions.Title)
+}
+
+func TestRunReviewSync_SkipsEditorWhenOverridesProvideManagedContent(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	origTTY := isInputTerminalFn
+	origEditor := openEditorFn
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+		isInputTerminalFn = origTTY
+		openEditorFn = origEditor
+	}()
+
+	Global.JSON = false
+	Global.Yes = false
+	isInputTerminalFn = func() bool { return true }
+
+	reviewSyncCmdFlags.sections = []string{
+		internalreview.ManagedSectionSummary,
+		internalreview.ManagedSectionDescription,
+	}
+	reviewSyncCmdFlags.templateSummary = "Custom summary"
+	reviewSyncCmdFlags.templateDescription = "Custom description"
+
+	gitClient := &mockGit{
+		currentBranch: "feature/no-editor",
+	}
+	existingBody := renderReviewTemplateBodyWithOverrides("feature/no-editor", nil, nil, nil, nil, "", "")
+	expectedBody := renderReviewTemplateBodyWithOverrides("feature/no-editor", nil, nil, nil, nil, "Custom summary", "Custom description")
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  13,
+			Title:   "Existing title",
+			Body:    existingBody,
+			HTMLURL: "https://github.com/test/repo/pull/13",
+		},
+		updatePR: &github.PullRequest{
+			Number:  13,
+			Title:   "Existing title",
+			Body:    expectedBody,
+			HTMLURL: "https://github.com/test/repo/pull/13",
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+	openEditorFn = func(initialContent string) (string, error) {
+		return "", errors.New("editor should not open")
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, true)
+
+	require.NoError(t, result.err)
+	require.NotNil(t, githubClient.lastUpdatePROptions.Body)
+	assert.Equal(t, expectedBody, *githubClient.lastUpdatePROptions.Body)
+}
+
+func TestRunReviewSync_OpensEditorForDerivedTitleWhenRequested(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	origTTY := isInputTerminalFn
+	origEditor := openEditorFn
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+		isInputTerminalFn = origTTY
+		openEditorFn = origEditor
+	}()
+
+	Global.JSON = false
+	Global.Yes = false
+	isInputTerminalFn = func() bool { return true }
+
+	reviewSyncCmdFlags.sections = []string{internalreview.ManagedSectionChanges}
+	reviewSyncCmdFlags.syncTitle = true
+
+	gitClient := &mockGit{
+		currentBranch: "feature/title-editor",
+		commitsSince: []git.Commit{
+			{Message: "feat: refresh changes", Additions: 1, Deletions: 0},
+		},
+	}
+	existingBody := renderReviewTemplateBodyWithOverrides("feature/title-editor", nil, nil, nil, nil, "", "")
+	expectedBody := renderReviewTemplateBodyWithOverrides(
+		"feature/title-editor",
+		nil,
+		nil,
+		[]git.Commit{{Message: "feat: refresh changes", Additions: 1, Deletions: 0}},
+		nil,
+		"",
+		"",
+	)
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  14,
+			Title:   "Old title",
+			Body:    existingBody,
+			HTMLURL: "https://github.com/test/repo/pull/14",
+		},
+		updatePR: &github.PullRequest{
+			Number:  14,
+			Title:   "Edited title",
+			Body:    expectedBody,
+			HTMLURL: "https://github.com/test/repo/pull/14",
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+	openEditorFn = func(initialContent string) (string, error) {
+		assert.True(t, strings.HasPrefix(initialContent, "feature/title-editor\n\n"))
+		return strings.Replace(initialContent, "feature/title-editor", "Edited title", 1), nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, true)
+
+	require.NoError(t, result.err)
+	require.NotNil(t, githubClient.lastUpdatePROptions.Title)
+	assert.Equal(t, "Edited title", *githubClient.lastUpdatePROptions.Title)
 }
