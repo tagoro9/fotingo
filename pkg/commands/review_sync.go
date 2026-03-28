@@ -233,9 +233,13 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 			}
 		}
 
+		out.InfoRaw(commandruntime.LogEmojiProgress, fmt.Sprintf(
+			"New linked issues detected during sync: %s",
+			strings.Join(newLinkedIssueIDs, ", "),
+		))
 		comment := localizer.T(i18n.ReviewCommentCreated, updatedPR.HTMLURL)
 		for _, issueID := range newLinkedIssueIDs {
-			out.Verbose(i18n.ReviewStatusSetInReview, issueID)
+			out.Info(commandruntime.LogEmojiProgress, i18n.ReviewStatusSetInReview, issueID)
 			updatedIssue, setErr := jiraClient.SetJiraIssueStatus(issueID, jira.StatusInReview)
 			if setErr != nil {
 				out.Info("warning", i18n.ReviewStatusSetInReviewWarn, setErr)
@@ -244,14 +248,14 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 					issue = updatedIssue
 					jiraURL = jiraClient.GetIssueURL(issueID)
 				}
-				out.Verbose(i18n.ReviewStatusSetInReviewDone, issueID)
+				out.Info(commandruntime.LogEmojiCheck, i18n.ReviewStatusSetInReviewDone, issueID)
 			}
 
-			out.Verbose(i18n.ReviewStatusAddComment, issueID)
+			out.Info(commandruntime.LogEmojiProgress, i18n.ReviewStatusAddComment, issueID)
 			if commentErr := jiraClient.AddComment(issueID, comment); commentErr != nil {
 				out.Info("warning", i18n.ReviewStatusAddCommentWarn, commentErr)
 			} else {
-				out.Verbose(i18n.ReviewStatusAddCommentDone, issueID)
+				out.Info(commandruntime.LogEmojiCheck, i18n.ReviewStatusAddCommentDone, issueID)
 			}
 		}
 	}
