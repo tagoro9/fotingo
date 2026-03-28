@@ -638,6 +638,8 @@ func TestRunReviewSync_OpensEditorByDefaultForChangesOnly(t *testing.T) {
 }
 
 func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
+	setDefaultOutputFlags(t)
+
 	restoreFlags := saveGlobalFlags()
 	defer restoreFlags()
 	defer resetReviewFlags()
@@ -743,4 +745,21 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 	assert.Equal(t, []string{"FOTINGO-2", "FOTINGO-3"}, jiraClient.addCommentIssueIDs)
 	require.Len(t, jiraClient.addCommentBodies, 2)
 	assert.Contains(t, jiraClient.addCommentBodies[0], "https://github.com/test/repo/pull/22")
+
+	close(statusCh)
+	messages := []string{}
+	for raw := range statusCh {
+		event, ok := decodeStatusEvent(raw)
+		require.True(t, ok)
+		messages = append(messages, event.Message)
+	}
+	assert.Contains(t, messages, "New linked issues detected during sync: FOTINGO-2, FOTINGO-3")
+	assert.Contains(t, messages, "Setting FOTINGO-2 status to In Review...")
+	assert.Contains(t, messages, "Issue FOTINGO-2 status updated to In Review")
+	assert.Contains(t, messages, "Adding PR link comment to FOTINGO-2...")
+	assert.Contains(t, messages, "Comment added to FOTINGO-2")
+	assert.Contains(t, messages, "Setting FOTINGO-3 status to In Review...")
+	assert.Contains(t, messages, "Issue FOTINGO-3 status updated to In Review")
+	assert.Contains(t, messages, "Adding PR link comment to FOTINGO-3...")
+	assert.Contains(t, messages, "Comment added to FOTINGO-3")
 }
