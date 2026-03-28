@@ -45,7 +45,7 @@ var reviewSyncCmd = &cobra.Command{
 				}
 			}()
 
-			result := runReviewSync(&statusCh)
+			result := runReviewSync(&statusCh, false)
 			close(statusCh)
 			return outputReviewJSON(result)
 		}
@@ -54,13 +54,13 @@ var reviewSyncCmd = &cobra.Command{
 			out.InfoRaw(commandruntime.LogEmojiReview, "Starting pull request sync...")
 			statusCh, done := out.BridgeChannel()
 			defer done()
-			result := runReviewSync(statusCh)
+			result := runReviewSync(statusCh, true)
 			return result.err
 		})
 	},
 }
 
-func runReviewSync(statusCh *chan string) reviewResult {
+func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 	out := commandruntime.NewLocalizedEmitter(*statusCh, shouldEmitCommandLevel, localizer.T)
 
 	sections, err := internalreview.NormalizeManagedSections(reviewSyncCmdFlags.sections)
@@ -139,9 +139,41 @@ func runReviewSync(statusCh *chan string) reviewResult {
 		reviewSyncCmdFlags.templateDescription,
 	)
 
+	bodySource := freshBody
+	editorTitle := ""
+	editorMode := false
+	if shouldOpenReviewSyncEditor(allowEditor, sections) {
+		seedBody, seedErr := buildReviewSyncEditorBody(pr.Body, freshBody, sections)
+		if seedErr != nil {
+			return reviewResult{err: seedErr}
+		}
+
+		editorSeed := seedBody
+		if reviewSyncNeedsTitleEditorInput() {
+			editorSeed = internalreview.BuildEditorSeedContent(
+				internalreview.DerivePRTitle("", branch, issue, "", false),
+				seedBody,
+			)
+		}
+
+		out.Info(commandruntime.LogEmojiPrompt, i18n.ReviewStatusOpenEditor)
+		editedContent, editErr := openEditorFn(editorSeed)
+		if editErr != nil {
+			return reviewResult{err: fmt.Errorf(localizer.T(i18n.ReviewErrOpenEditor), editErr)}
+		}
+		out.Info(commandruntime.LogEmojiCheck, i18n.ReviewStatusEditorDone)
+
+		if reviewSyncNeedsTitleEditorInput() {
+			editorMode = true
+			editorTitle, bodySource = internalreview.SplitEditorContent(editedContent)
+		} else {
+			bodySource = editedContent
+		}
+	}
+
 	updatedBody := pr.Body
 	for _, section := range sections {
-		replacement, extractErr := internalreview.ExtractManagedSectionContent(freshBody, section)
+		replacement, extractErr := internalreview.ExtractManagedSectionContent(bodySource, section)
 		if extractErr != nil {
 			return reviewResult{err: extractErr}
 		}
@@ -157,7 +189,7 @@ func runReviewSync(statusCh *chan string) reviewResult {
 		updateOpts.Body = &updatedBody
 	}
 
-	if title := reviewSyncTitleOverride(branch, issue); title != nil {
+	if title := reviewSyncTitleOverride(branch, issue, editorTitle, editorMode); title != nil {
 		updateOpts.Title = title
 	}
 
@@ -183,6 +215,23 @@ func runReviewSync(statusCh *chan string) reviewResult {
 	}
 }
 
+func buildReviewSyncEditorBody(currentBody string, freshBody string, sections []string) (string, error) {
+	updatedBody := currentBody
+	for _, section := range sections {
+		replacement, err := internalreview.ExtractManagedSectionContent(freshBody, section)
+		if err != nil {
+			return "", err
+		}
+
+		updatedBody, err = internalreview.ReplaceManagedSectionContent(updatedBody, section, replacement)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return updatedBody, nil
+}
+
 func reviewSyncNeedsIssueData(sections []string) bool {
 	for _, section := range sections {
 		switch section {
@@ -197,6 +246,39 @@ func reviewSyncNeedsIssueData(sections []string) bool {
 		}
 	}
 	return false
+}
+
+func shouldOpenReviewSyncEditor(allowEditor bool, sections []string) bool {
+	if !shouldOpenReviewEditor(allowEditor) {
+		return false
+	}
+
+	return reviewSyncNeedsEditorInput(sections)
+}
+
+func reviewSyncNeedsEditorInput(sections []string) bool {
+	if reviewSyncNeedsTitleEditorInput() {
+		return true
+	}
+
+	for _, section := range sections {
+		switch section {
+		case internalreview.ManagedSectionSummary:
+			if strings.TrimSpace(reviewSyncCmdFlags.templateSummary) == "" {
+				return true
+			}
+		case internalreview.ManagedSectionDescription:
+			if strings.TrimSpace(reviewSyncCmdFlags.templateDescription) == "" {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func reviewSyncNeedsTitleEditorInput() bool {
+	return reviewSyncCmdFlags.syncTitle && strings.TrimSpace(reviewSyncCmdFlags.title) == ""
 }
 
 func validateReviewSyncOverrides(sections []string) error {
@@ -220,7 +302,7 @@ func validateReviewSyncOverrides(sections []string) error {
 	return nil
 }
 
-func reviewSyncTitleOverride(branch string, issue *jira.Issue) *string {
+func reviewSyncTitleOverride(branch string, issue *jira.Issue, editorTitle string, editorMode bool) *string {
 	if strings.TrimSpace(reviewSyncCmdFlags.title) != "" {
 		title := strings.TrimSpace(reviewSyncCmdFlags.title)
 		return &title
@@ -230,6 +312,6 @@ func reviewSyncTitleOverride(branch string, issue *jira.Issue) *string {
 		return nil
 	}
 
-	title := internalreview.DerivePRTitle("", branch, issue, "", false)
+	title := internalreview.DerivePRTitle("", branch, issue, editorTitle, editorMode)
 	return &title
 }
