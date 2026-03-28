@@ -261,7 +261,6 @@ func TestRunReviewSync_SummaryOverrideDoesNotRequireJira(t *testing.T) {
 
 	gitClient := &mockGit{
 		currentBranch: "feature/with-issue",
-		issueId:       "FOTINGO-123",
 	}
 	existingBody := renderReviewTemplateBodyWithOverrides("feature/with-issue", nil, nil, nil, nil, "", "")
 	expectedBody := renderReviewTemplateBodyWithOverrides("feature/with-issue", nil, nil, nil, nil, "Custom summary", "")
@@ -337,6 +336,18 @@ func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T)
 		"<!-- fotingo:start description -->",
 		"manual description",
 		"<!-- fotingo:end description -->",
+		"",
+		"<!-- fotingo:start fixed-issues -->",
+		"",
+		"<!-- fotingo:end fixed-issues -->",
+		"",
+		"**Changes**",
+		"",
+		"<!-- fotingo:start changes -->",
+		"",
+		"<!-- fotingo:end changes -->",
+		"",
+		"Outside note",
 	}, "\n")
 	expectedBody := strings.Join([]string{
 		"**Summary**",
@@ -348,8 +359,20 @@ func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T)
 		"**Description**",
 		"",
 		"<!-- fotingo:start description -->",
-		"manual description",
+		"",
 		"<!-- fotingo:end description -->",
+		"",
+		"<!-- fotingo:start fixed-issues -->",
+		"",
+		"<!-- fotingo:end fixed-issues -->",
+		"",
+		"**Changes**",
+		"",
+		"<!-- fotingo:start changes -->",
+		"",
+		"<!-- fotingo:end changes -->",
+		"",
+		"Outside note",
 	}, "\n")
 	githubClient := &mockGitHub{
 		doesPRExist: true,
@@ -361,7 +384,7 @@ func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T)
 		},
 		updatePR: &github.PullRequest{
 			Number:  12,
-			Title:   "Existing title",
+			Title:   "Edited title",
 			Body:    expectedBody,
 			HTMLURL: "https://github.com/test/repo/pull/12",
 		},
@@ -374,9 +397,13 @@ func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T)
 		return githubClient, nil
 	}
 	openEditorFn = func(initialContent string) (string, error) {
+		assert.True(t, strings.HasPrefix(initialContent, "Existing title\n\n"))
 		assert.Contains(t, initialContent, "<!-- fotingo:start summary -->\nfeature/editor-sync\n<!-- fotingo:end summary -->")
-		assert.NotContains(t, initialContent, "Existing title\n\n")
-		return strings.Replace(initialContent, "feature/editor-sync", "edited summary", 1), nil
+		assert.Contains(t, initialContent, "\nOutside note")
+		edited := strings.Replace(initialContent, "Existing title", "Edited title", 1)
+		edited = strings.Replace(edited, "feature/editor-sync", "edited summary", 1)
+		edited = strings.Replace(edited, "Outside note", "Edited outside note", 1)
+		return edited, nil
 	}
 
 	statusCh := make(chan string, 16)
@@ -384,8 +411,11 @@ func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T)
 
 	require.NoError(t, result.err)
 	require.NotNil(t, githubClient.lastUpdatePROptions.Body)
+	expectedBody = strings.Replace(expectedBody, "feature/editor-sync", "edited summary", 1)
+	expectedBody = strings.Replace(expectedBody, "Outside note", "Edited outside note", 1)
+	require.NotNil(t, githubClient.lastUpdatePROptions.Title)
+	assert.Equal(t, "Edited title", *githubClient.lastUpdatePROptions.Title)
 	assert.Equal(t, expectedBody, *githubClient.lastUpdatePROptions.Body)
-	assert.Nil(t, githubClient.lastUpdatePROptions.Title)
 }
 
 func TestRunReviewSync_SkipsEditorWhenOverridesProvideManagedContent(t *testing.T) {
@@ -518,8 +548,8 @@ func TestRunReviewSync_OpensEditorForDerivedTitleWhenRequested(t *testing.T) {
 		return githubClient, nil
 	}
 	openEditorFn = func(initialContent string) (string, error) {
-		assert.True(t, strings.HasPrefix(initialContent, "feature/title-editor\n\n"))
-		return strings.Replace(initialContent, "feature/title-editor", "Edited title", 1), nil
+		assert.True(t, strings.HasPrefix(initialContent, "Old title\n\n"))
+		return strings.Replace(initialContent, "Old title", "Edited title", 1), nil
 	}
 
 	statusCh := make(chan string, 16)
@@ -528,4 +558,189 @@ func TestRunReviewSync_OpensEditorForDerivedTitleWhenRequested(t *testing.T) {
 	require.NoError(t, result.err)
 	require.NotNil(t, githubClient.lastUpdatePROptions.Title)
 	assert.Equal(t, "Edited title", *githubClient.lastUpdatePROptions.Title)
+}
+
+func TestRunReviewSync_OpensEditorByDefaultForChangesOnly(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	origTTY := isInputTerminalFn
+	origEditor := openEditorFn
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+		isInputTerminalFn = origTTY
+		openEditorFn = origEditor
+	}()
+
+	Global.JSON = false
+	Global.Yes = false
+	isInputTerminalFn = func() bool { return true }
+
+	reviewSyncCmdFlags.sections = []string{internalreview.ManagedSectionChanges}
+
+	gitClient := &mockGit{
+		currentBranch: "feature/changes-only",
+		commitsSince: []git.Commit{
+			{Message: "feat: refresh changes", Additions: 2, Deletions: 0},
+		},
+	}
+	existingBody := renderReviewTemplateBodyWithOverrides("feature/changes-only", nil, nil, nil, nil, "", "")
+	expectedBody := renderReviewTemplateBodyWithOverrides(
+		"feature/changes-only",
+		nil,
+		nil,
+		[]git.Commit{{Message: "feat: refresh changes", Additions: 2, Deletions: 0}},
+		nil,
+		"",
+		"",
+	)
+	expectedBody = strings.Replace(expectedBody, "<!-- fotingo:end changes -->", "\nExtra note\n<!-- fotingo:end changes -->", 1)
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  21,
+			Title:   "Current title",
+			Body:    existingBody,
+			HTMLURL: "https://github.com/test/repo/pull/21",
+		},
+		updatePR: &github.PullRequest{
+			Number:  21,
+			Title:   "Current title",
+			Body:    expectedBody,
+			HTMLURL: "https://github.com/test/repo/pull/21",
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+	openEditorFn = func(initialContent string) (string, error) {
+		assert.True(t, strings.HasPrefix(initialContent, "Current title\n\n"))
+		return strings.Replace(initialContent, "<!-- fotingo:end changes -->", "\nExtra note\n<!-- fotingo:end changes -->", 1), nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, true)
+
+	require.NoError(t, result.err)
+	require.NotNil(t, githubClient.lastUpdatePROptions.Body)
+	assert.Contains(t, *githubClient.lastUpdatePROptions.Body, "Extra note")
+	assert.Nil(t, githubClient.lastUpdatePROptions.Title)
+	assert.Equal(t, *githubClient.lastUpdatePROptions.Body, result.pr.Body)
+}
+
+func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	origNewJiraClient := newJiraClient
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+		newJiraClient = origNewJiraClient
+	}()
+
+	gitClient := &mockGit{
+		currentBranch:     "feature/new-issues",
+		commitsSince:      []git.Commit{{Message: "feat: add work", Additions: 1, Deletions: 0}},
+		issuesFromCommits: []string{"FOTINGO-2", "FOTINGO-3"},
+		issueId:           "FOTINGO-1",
+	}
+	existingBody := strings.Join([]string{
+		"**Summary**",
+		"",
+		"<!-- fotingo:start summary -->",
+		"FOTINGO-1: Existing",
+		"<!-- fotingo:end summary -->",
+		"",
+		"**Description**",
+		"",
+		"<!-- fotingo:start description -->",
+		"desc",
+		"<!-- fotingo:end description -->",
+		"",
+		"<!-- fotingo:start fixed-issues -->",
+		"Fixes FOTINGO-1",
+		"<!-- fotingo:end fixed-issues -->",
+		"",
+		"**Changes**",
+		"",
+		"<!-- fotingo:start changes -->",
+		"* old",
+		"<!-- fotingo:end changes -->",
+	}, "\n")
+	expectedBody := strings.Join([]string{
+		"**Summary**",
+		"",
+		"<!-- fotingo:start summary -->",
+		"FOTINGO-1: Existing",
+		"<!-- fotingo:end summary -->",
+		"",
+		"**Description**",
+		"",
+		"<!-- fotingo:start description -->",
+		"desc",
+		"<!-- fotingo:end description -->",
+		"",
+		"<!-- fotingo:start fixed-issues -->",
+		"Fixes [FOTINGO-1](https://jira.example.com/browse/FOTINGO-1)\nFixes [FOTINGO-2](https://jira.example.com/browse/FOTINGO-2)\nFixes [FOTINGO-3](https://jira.example.com/browse/FOTINGO-3)",
+		"<!-- fotingo:end fixed-issues -->",
+		"",
+		"**Changes**",
+		"",
+		"<!-- fotingo:start changes -->",
+		"* feat: add work (+1/-0)",
+		"<!-- fotingo:end changes -->",
+	}, "\n")
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  22,
+			Title:   "Existing title",
+			Body:    existingBody,
+			HTMLURL: "https://github.com/test/repo/pull/22",
+		},
+		updatePR: &github.PullRequest{
+			Number:  22,
+			Title:   "Existing title",
+			Body:    expectedBody,
+			HTMLURL: "https://github.com/test/repo/pull/22",
+		},
+	}
+	jiraClient := &mockJira{
+		issueURL:           "https://jira.example.com/browse/%s",
+		jiraIssue:          &jira.Issue{Key: "FOTINGO-1", Summary: "Existing", Description: "desc"},
+		setJiraIssueStatus: &jira.Issue{Key: "FOTINGO-2", Status: "In Review"},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+	newJiraClient = func(cfg *viper.Viper) (jira.Jira, error) {
+		return jiraClient, nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, false)
+
+	require.NoError(t, result.err)
+	assert.Equal(t, []string{"FOTINGO-2", "FOTINGO-3"}, jiraClient.setJiraIssueStatusIDs)
+	assert.Equal(t, []string{"FOTINGO-2", "FOTINGO-3"}, jiraClient.addCommentIssueIDs)
+	require.Len(t, jiraClient.addCommentBodies, 2)
+	assert.Contains(t, jiraClient.addCommentBodies[0], "https://github.com/test/repo/pull/22")
 }

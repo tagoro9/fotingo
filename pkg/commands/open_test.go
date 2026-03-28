@@ -317,6 +317,9 @@ type mockJira struct {
 	setJiraIssueStatus    *jira.Issue
 	setJiraIssueStatusErr error
 	addCommentErr         error
+	setJiraIssueStatusIDs []string
+	addCommentIssueIDs    []string
+	addCommentBodies      []string
 	createRelease         *tracker.Release
 	createReleaseErr      error
 	setFixVersionErr      error
@@ -367,7 +370,9 @@ func (m *mockJira) SetIssueStatus(_ string, _ tracker.IssueStatus) (*tracker.Iss
 	return m.setIssueStatus, m.setIssueStatusErr
 }
 
-func (m *mockJira) AddComment(_ string, _ string) error {
+func (m *mockJira) AddComment(issueID string, comment string) error {
+	m.addCommentIssueIDs = append(m.addCommentIssueIDs, issueID)
+	m.addCommentBodies = append(m.addCommentBodies, comment)
 	return m.addCommentErr
 }
 
@@ -384,6 +389,9 @@ func (m *mockJira) IsValidIssueID(id string) bool {
 }
 
 func (m *mockJira) GetIssueURL(id string) string {
+	if strings.Contains(m.issueURL, "%s") {
+		return fmt.Sprintf(m.issueURL, id)
+	}
 	return m.issueURL
 }
 
@@ -418,6 +426,7 @@ func (m *mockJira) GetJiraIssue(issueId string) (*jira.Issue, error) {
 }
 
 func (m *mockJira) SetJiraIssueStatus(issueId string, status jira.IssueStatus) (*jira.Issue, error) {
+	m.setJiraIssueStatusIDs = append(m.setJiraIssueStatusIDs, issueId)
 	return m.setJiraIssueStatus, m.setJiraIssueStatusErr
 }
 
