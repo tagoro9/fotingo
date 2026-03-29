@@ -256,16 +256,27 @@ func renderReviewTemplateBodyWithOverrides(
 	templateSummary string,
 	templateDescription string,
 ) string {
-	tmpl := template.New(resolveReviewTemplate())
-	return tmpl.Render(buildReviewTemplateDataWithOverrides(
-		branch,
-		issue,
-		jiraClient,
-		commits,
-		linkedIssueIDs,
-		templateSummary,
-		templateDescription,
-	))
+	return renderResolvedReviewTemplate(
+		resolveReviewTemplate(),
+		buildReviewTemplateDataWithOverrides(
+			branch,
+			issue,
+			jiraClient,
+			commits,
+			linkedIssueIDs,
+			templateSummary,
+			templateDescription,
+		),
+	)
+}
+
+func renderResolvedReviewTemplate(templateContent string, data map[string]string) string {
+	body, _, err := internalreview.RenderTemplate(templateContent, data)
+	if err == nil {
+		return body
+	}
+
+	return template.New(templateContent).Render(data)
 }
 
 func deriveReviewPRTitle(branch string, issue *jira.Issue, editorTitle string, editorMode bool) string {
@@ -315,7 +326,8 @@ func resolveReviewPRBody(
 		return strings.Join(lines, "\n"), nil
 	}
 
-	body := template.New(resolveReviewTemplate()).Render(
+	body := renderResolvedReviewTemplate(
+		resolveReviewTemplate(),
 		buildReviewTemplateData(branch, issue, jiraClient, commits, linkedIssueIDs),
 	)
 	if shouldOpenReviewEditor(allowEditor) {

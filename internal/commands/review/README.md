@@ -41,6 +41,7 @@ Package review contains shared review\-command workflow helpers.
 - [func OldestCommitHeaderAndBody\(commits \[\]git.Commit\) \(string, string\)](<#OldestCommitHeaderAndBody>)
 - [func PickMatchWithPicker\(kind string, token string, matches \[\]MatchOption, runPicker RunPickerFunc\) \(string, error\)](<#PickMatchWithPicker>)
 - [func PreferParticipantUser\(current github.User, candidate github.User\) github.User](<#PreferParticipantUser>)
+- [func RenderTemplate\(content string, data map\[string\]string\) \(string, bool, error\)](<#RenderTemplate>)
 - [func ReplaceManagedSectionContent\(body string, section string, replacement string\) \(string, error\)](<#ReplaceManagedSectionContent>)
 - [func ResolveAssignees\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, error\)](<#ResolveAssignees>)
 - [func ResolveLabels\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, error\)](<#ResolveLabels>)
@@ -341,6 +342,15 @@ func PreferParticipantUser(current github.User, candidate github.User) github.Us
 ```
 
 PreferParticipantUser prefers candidates that provide a richer name field.
+
+<a name="RenderTemplate"></a>
+## func [RenderTemplate](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/template_render.go#L19>)
+
+```go
+func RenderTemplate(content string, data map[string]string) (string, bool, error)
+```
+
+RenderTemplate renders a review template using marker\-only managed sections when possible, while keeping legacy managed placeholders working for backward compatibility.
 
 <a name="ReplaceManagedSectionContent"></a>
 ## func [ReplaceManagedSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/sync_markers.go#L92>)

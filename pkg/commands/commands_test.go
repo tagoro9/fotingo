@@ -742,13 +742,17 @@ func TestBuildPRBody_ContainsChangesSection(t *testing.T) {
 func TestDefaultPRTemplate_ContainsRequiredSections(t *testing.T) {
 	t.Parallel()
 
-	assert.Contains(t, defaultPRTemplate, "{summary}")
 	assert.Contains(t, defaultPRTemplate, "**Summary**")
-	assert.Contains(t, defaultPRTemplate, "{description}")
-	assert.Contains(t, defaultPRTemplate, "{fixedIssues}")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start summary -->")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start description -->")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start fixed-issues -->")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start changes -->")
+	assert.NotContains(t, defaultPRTemplate, "{summary}")
+	assert.NotContains(t, defaultPRTemplate, "{description}")
+	assert.NotContains(t, defaultPRTemplate, "{fixedIssues}")
 	assert.Contains(t, defaultPRTemplate, "**Description**")
 	assert.Contains(t, defaultPRTemplate, "**Changes**")
-	assert.Contains(t, defaultPRTemplate, "{changes}")
+	assert.NotContains(t, defaultPRTemplate, "{changes}")
 	assert.Contains(t, defaultPRTemplate, "{fotingo.banner}")
 }
 

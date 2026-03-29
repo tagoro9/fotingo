@@ -47,8 +47,8 @@ Flags:
   -l, --labels strings                Labels to add to the pull request (can be specified multiple times)
   -r, --reviewers strings             Reviewers to request (users or teams, can be specified multiple times)
   -s, --simple                        Skip Jira integration (just create PR)
-      --template-description string   Override the default Description section ({description}); expands escaped \n, \r\n, and \t
-      --template-summary string       Override the default Summary section ({summary})
+      --template-description string   Override the default Description section content; expands escaped \n, \r\n, and \t
+      --template-summary string       Override the default Summary section content
       --title string                  Override pull request title
 
 Global Flags:
