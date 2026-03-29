@@ -81,17 +81,40 @@ func TestDefaultPRTemplate(t *testing.T) {
 	t.Parallel()
 
 	// Verify the default PR template contains expected placeholders
-	assert.Contains(t, defaultPRTemplate, "{summary}")
 	assert.Contains(t, defaultPRTemplate, "**Summary**\n\n<!-- fotingo:start summary -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start summary -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:end changes -->")
 	assert.Contains(t, defaultPRTemplate, "**Summary**")
-	assert.Contains(t, defaultPRTemplate, "{description}")
-	assert.Contains(t, defaultPRTemplate, "{fixedIssues}")
-	assert.Contains(t, defaultPRTemplate, "{changes}")
+	assert.NotContains(t, defaultPRTemplate, "{summary}")
+	assert.NotContains(t, defaultPRTemplate, "{description}")
+	assert.NotContains(t, defaultPRTemplate, "{fixedIssues}")
+	assert.NotContains(t, defaultPRTemplate, "{changes}")
 	assert.Contains(t, defaultPRTemplate, "{fotingo.banner}")
 	assert.Contains(t, defaultPRTemplate, "**Description**")
 	assert.Contains(t, defaultPRTemplate, "**Changes**")
+}
+
+func TestBuildPRBody_RendersMarkerOnlyCustomTemplate(t *testing.T) {
+	t.Parallel()
+
+	originalResolver := resolveReviewTemplateFn
+	resolveReviewTemplateFn = func() string {
+		return "Before\n<!-- fotingo:start changes -->\n<!-- fotingo:end changes -->\nAfter"
+	}
+	t.Cleanup(func() {
+		resolveReviewTemplateFn = originalResolver
+	})
+
+	body := buildPRBody("feature/custom-template", nil, nil, git.Commit{
+		Message:   "feat: marker placeholder",
+		Additions: 3,
+		Deletions: 1,
+	})
+
+	assert.Contains(t, body, "<!-- fotingo:start changes -->")
+	assert.Contains(t, body, "<!-- fotingo:end changes -->")
+	assert.Contains(t, body, "* feat: marker placeholder (+3/-1)")
+	assert.NotContains(t, body, "{changes}")
 }
 
 func TestBuildPRBody_PreservesMarkersInCustomTemplate(t *testing.T) {
