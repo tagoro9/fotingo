@@ -64,6 +64,12 @@ Replace the entire PR body from stdin when you need full control:
 {{EXAMPLE_REVIEW_BODY_FROM_STDIN}}
 ```
 
+Refresh fotingo-managed sections on an existing pull request:
+
+```bash
+{{EXAMPLE_REVIEW_SYNC_DEFAULT}}
+```
+
 ## Supporting Commands
 
 - `fotingo open issue` to open current-branch issue URL.
@@ -78,6 +84,9 @@ Replace the entire PR body from stdin when you need full control:
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.
+- Use `fotingo review sync -y` after follow-up commits to refresh fotingo-managed sections while preserving manual edits outside the managed placeholders.
+- Use `fotingo review sync --section ...` to limit which managed sections are rewritten. `--template-summary` and `--template-description` only apply when those sections are included in the sync.
+- Use `fotingo review sync --sync-title` to recompute the PR title, or `fotingo review sync --title "..."` when you need an explicit title update.
 - Use `--description -` when you need to replace the entire PR body instead of filling template placeholders.
 - Use `--title` only when the generated PR title is wrong or incomplete.
 - Use `fotingo --help` (and `<command> --help`) to discover additional workflow actions.
