@@ -153,10 +153,12 @@ func aiSetupLongDescription() string {
 			"Generated skills include shared workflow snippets:\n"+
 			"  %s\n"+
 			"  %s\n"+
+			"  %s\n"+
 			"  %s\n",
 		examples.InspectJSON,
 		examples.StartExistingIssue,
 		examples.ReviewTemplateOverrides,
+		examples.ReviewSyncDefault,
 	)
 }
 
