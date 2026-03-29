@@ -91,4 +91,13 @@ PR template resolution order:
 2. Standard GitHub PR template locations (`.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE.md`, or `pull_request_template.md`)
 3. Built-in default template
 
-The default template includes `{summary}`, `{description}`, `{fixedIssues}`, `{changes}`, and `{fotingo.banner}` placeholders.
+The default template uses fotingo-managed HTML comment markers for `summary`, `description`, `fixed-issues`, and `changes`, plus the `{fotingo.banner}` placeholder.
+
+Repository templates can use the same marker pairs:
+
+- `<!-- fotingo:start summary -->` / `<!-- fotingo:end summary -->`
+- `<!-- fotingo:start description -->` / `<!-- fotingo:end description -->`
+- `<!-- fotingo:start fixed-issues -->` / `<!-- fotingo:end fixed-issues -->`
+- `<!-- fotingo:start changes -->` / `<!-- fotingo:end changes -->`
+
+Legacy managed placeholders such as `{summary}`, `{description}`, `{fixedIssues}`, and `{changes}` are still supported for backward compatibility, but they are deprecated.
