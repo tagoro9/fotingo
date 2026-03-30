@@ -359,14 +359,17 @@ func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T)
 		"**Description**",
 		"",
 		"<!-- fotingo:start description -->",
+		"manual description",
 		"<!-- fotingo:end description -->",
 		"",
 		"<!-- fotingo:start fixed-issues -->",
+		"",
 		"<!-- fotingo:end fixed-issues -->",
 		"",
 		"**Changes**",
 		"",
 		"<!-- fotingo:start changes -->",
+		"",
 		"<!-- fotingo:end changes -->",
 		"",
 		"Outside note",
@@ -396,6 +399,7 @@ func TestRunReviewSync_OpensEditorForManagedContentWhenInteractive(t *testing.T)
 	openEditorFn = func(initialContent string) (string, error) {
 		assert.True(t, strings.HasPrefix(initialContent, "Existing title\n\n"))
 		assert.Contains(t, initialContent, "<!-- fotingo:start summary -->\nfeature/editor-sync\n<!-- fotingo:end summary -->")
+		assert.Contains(t, initialContent, "<!-- fotingo:start description -->\nmanual description\n<!-- fotingo:end description -->")
 		assert.Contains(t, initialContent, "\nOutside note")
 		edited := strings.Replace(initialContent, "Existing title", "Edited title", 1)
 		edited = strings.Replace(edited, "feature/editor-sync", "edited summary", 1)
@@ -586,16 +590,56 @@ func TestRunReviewSync_OpensEditorByDefaultForChangesOnly(t *testing.T) {
 			{Message: "feat: refresh changes", Additions: 2, Deletions: 0},
 		},
 	}
-	existingBody := renderReviewTemplateBodyWithOverrides("feature/changes-only", nil, nil, nil, nil, "", "")
-	expectedBody := renderReviewTemplateBodyWithOverrides(
-		"feature/changes-only",
-		nil,
-		nil,
-		[]git.Commit{{Message: "feat: refresh changes", Additions: 2, Deletions: 0}},
-		nil,
+	existingBody := strings.Join([]string{
+		"**Summary**",
 		"",
+		"<!-- fotingo:start summary -->",
+		"manual summary",
+		"<!-- fotingo:end summary -->",
 		"",
-	)
+		"**Description**",
+		"",
+		"<!-- fotingo:start description -->",
+		"manual description",
+		"<!-- fotingo:end description -->",
+		"",
+		"<!-- fotingo:start fixed-issues -->",
+		"",
+		"<!-- fotingo:end fixed-issues -->",
+		"",
+		"**Changes**",
+		"",
+		"<!-- fotingo:start changes -->",
+		"",
+		"<!-- fotingo:end changes -->",
+		"",
+		"🚀 PR created with [fotingo](https://github.com/tagoro9/fotingo)",
+	}, "\n")
+	expectedBody := strings.Join([]string{
+		"**Summary**",
+		"",
+		"<!-- fotingo:start summary -->",
+		"manual summary",
+		"<!-- fotingo:end summary -->",
+		"",
+		"**Description**",
+		"",
+		"<!-- fotingo:start description -->",
+		"manual description",
+		"<!-- fotingo:end description -->",
+		"",
+		"<!-- fotingo:start fixed-issues -->",
+		"",
+		"<!-- fotingo:end fixed-issues -->",
+		"",
+		"**Changes**",
+		"",
+		"<!-- fotingo:start changes -->",
+		"* feat: refresh changes (+2/-0)",
+		"<!-- fotingo:end changes -->",
+		"",
+		"🚀 PR created with [fotingo](https://github.com/tagoro9/fotingo)",
+	}, "\n")
 	expectedBody = strings.Replace(expectedBody, "<!-- fotingo:end changes -->", "\nExtra note\n<!-- fotingo:end changes -->", 1)
 	githubClient := &mockGitHub{
 		doesPRExist: true,
@@ -621,6 +665,8 @@ func TestRunReviewSync_OpensEditorByDefaultForChangesOnly(t *testing.T) {
 	}
 	openEditorFn = func(initialContent string) (string, error) {
 		assert.True(t, strings.HasPrefix(initialContent, "Current title\n\n"))
+		assert.Contains(t, initialContent, "<!-- fotingo:start summary -->\nmanual summary\n<!-- fotingo:end summary -->")
+		assert.Contains(t, initialContent, "<!-- fotingo:start description -->\nmanual description\n<!-- fotingo:end description -->")
 		return strings.Replace(initialContent, "<!-- fotingo:end changes -->", "\nExtra note\n<!-- fotingo:end changes -->", 1), nil
 	}
 

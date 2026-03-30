@@ -267,9 +267,9 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 	}
 }
 
-func buildReviewSyncEditorBody(currentBody string, freshBody string, _ []string) (string, error) {
+func buildReviewSyncEditorBody(currentBody string, freshBody string, sections []string) (string, error) {
 	updatedBody := currentBody
-	for _, section := range internalreview.ManagedSections() {
+	for _, section := range sections {
 		replacement, err := internalreview.ExtractManagedSectionContent(freshBody, section)
 		if err != nil {
 			return "", err
