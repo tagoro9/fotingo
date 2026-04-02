@@ -52,6 +52,7 @@ func (e reviewExecutor) runWithOptions(statusCh *chan string, allowEditor bool) 
 			Labels:                      append([]string(nil), reviewCmdFlags.labels...),
 			Reviewers:                   append([]string(nil), reviewCmdFlags.reviewers...),
 			Assignees:                   append([]string(nil), reviewCmdFlags.assignees...),
+			BaseBranch:                  Global.Branch,
 			Simple:                      reviewCmdFlags.simple,
 			Description:                 reviewCmdFlags.description,
 			TemplateSummaryOverride:     reviewCmdFlags.templateSummary != "",

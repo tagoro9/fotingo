@@ -25,6 +25,9 @@ Examples:
   # Start an issue without creating a branch (just set status)
   fotingo start PROJ-123 --no-branch
 
+  # Start in a new sibling worktree
+  fotingo start PROJ-123 --worktree
+
   # Start with labels on a new issue
   fotingo start -t "New feature" -p PROJ -l frontend -l priority
 
@@ -42,6 +45,7 @@ Flags:
   -a, --parent string        Parent issue for sub-tasks
   -p, --project string       Project key for new issue (required with --title)
   -t, --title string         Create new issue with this title
+      --worktree             Create the issue branch in a new sibling linked worktree
 
 Global Flags:
   -b, --branch string   Base branch override (default: auto-detect)

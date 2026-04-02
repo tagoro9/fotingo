@@ -48,6 +48,10 @@ func (s *inspectGitStub) CreateIssueBranch(*jira.Issue) (string, error) {
 	return "", fmt.Errorf("not implemented")
 }
 
+func (s *inspectGitStub) CreateIssueWorktreeBranch(*jira.Issue) (string, string, error) {
+	return "", "", fmt.Errorf("not implemented")
+}
+
 func (s *inspectGitStub) Push() error { return fmt.Errorf("not implemented") }
 
 func (s *inspectGitStub) StashChanges(string) error { return fmt.Errorf("not implemented") }

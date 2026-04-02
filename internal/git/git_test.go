@@ -249,6 +249,10 @@ func (suite *GitTestSuite) TestGetIssueId_NoBranchMatch() {
 	assert.Contains(suite.T(), err.Error(), "no matches found")
 }
 
+func (suite *GitTestSuite) TestDirectoryFriendlyBranchName() {
+	assert.Equal(suite.T(), "f-test-123_fix-review-base", directoryFriendlyBranchName("f/TEST-123_fix review base"))
+}
+
 func (suite *GitTestSuite) TestGetIssueId_DetachedHead() {
 	// Get the current HEAD commit
 	head, err := suite.repo.Head()

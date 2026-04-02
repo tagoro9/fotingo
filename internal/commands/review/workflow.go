@@ -22,6 +22,7 @@ type WorkflowOptions struct {
 	Labels                      []string
 	Reviewers                   []string
 	Assignees                   []string
+	BaseBranch                  string
 	Simple                      bool
 	Description                 string
 	TemplateSummaryOverride     bool
@@ -296,14 +297,19 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 
 	prTitle = r.Deps.DerivePRTitle(branch, issue, editorTitle, editorMode)
 
-	defaultBranchStart := time.Now()
-	defaultBranch, err := gitClient.GetDefaultBranch()
-	logReviewPhaseTiming(out, "get_default_branch", defaultBranchStart)
-	if err != nil {
-		result.Err = fterrors.WrapGitError(t(i18n.ReviewWrapDefaultBranch), err)
-		return result
+	baseBranch := strings.TrimSpace(r.Options.BaseBranch)
+	if baseBranch == "" {
+		defaultBranchStart := time.Now()
+		baseBranch, err = gitClient.GetDefaultBranch()
+		logReviewPhaseTiming(out, "get_default_branch", defaultBranchStart)
+		if err != nil {
+			result.Err = fterrors.WrapGitError(t(i18n.ReviewWrapDefaultBranch), err)
+			return result
+		}
+		out.Debugf("review default base branch=%s", baseBranch)
+	} else {
+		out.Debugf("review overridden base branch=%s", baseBranch)
 	}
-	out.Debugf("review default base branch=%s", defaultBranch)
 
 	out.Info("review", i18n.ReviewStatusCreatePR)
 	createPRStart := time.Now()
@@ -311,7 +317,7 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 		Title: prTitle,
 		Body:  prBody,
 		Head:  branch,
-		Base:  defaultBranch,
+		Base:  baseBranch,
 		Draft: r.Options.Draft,
 	})
 	logReviewPhaseTiming(out, "create_pr", createPRStart)

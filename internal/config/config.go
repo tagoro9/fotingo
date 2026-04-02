@@ -20,9 +20,10 @@ const (
 // trackedDefaultValues defines keys whose default values are implicit:
 // they should not be persisted unless explicitly changed from default.
 var trackedDefaultValues = map[string]any{
-	"git.remote":        "origin",
-	"locale":            i18n.DefaultLocale,
-	"telemetry.enabled": true,
+	"git.remote":           "origin",
+	"git.worktree.enabled": false,
+	"locale":               i18n.DefaultLocale,
+	"telemetry.enabled":    true,
 }
 
 // FileSystem represents the file system operations needed by the config package
@@ -94,6 +95,7 @@ func NewDefaultConfig() *viper.Viper {
 	config.AutomaticEnv()
 	config.SetDefault("git.remote", "origin")
 	config.SetDefault("git.branchTemplate", "{{.Issue.ShortName}}/{{.Issue.Info}}_{{.Issue.SanitizedSummary}}")
+	config.SetDefault("git.worktree.enabled", false)
 	config.SetDefault("github.cache.labelsTTL", "30m")
 	config.SetDefault("github.cache.collaboratorsTTL", "720h")
 	config.SetDefault("github.cache.orgMembersTTL", "720h")

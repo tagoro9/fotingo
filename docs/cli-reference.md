@@ -78,6 +78,9 @@ fotingo start -t "Implement feature" -p PROJ -a PROJ-100
 # Start an issue without creating a branch
 fotingo start PROJ-123 --no-branch
 
+# Start in a new sibling worktree
+fotingo start PROJ-123 --worktree
+
 # Start in non-interactive mode
 fotingo start PROJ-123 -y
 ```
@@ -94,6 +97,7 @@ Flags:
 | `--epic`        | `-e`  | Epic issue key to link                              |
 | `--labels`      | `-l`  | Labels to add (repeatable)                          |
 | `--no-branch`   | `-n`  | Set issue status without creating/switching branch  |
+| `--worktree`    |       | Create the issue branch in a new sibling worktree   |
 | `--interactive` | `-i`  | Interactive create flow                             |
 
 ### `review`

@@ -124,6 +124,9 @@ func (workflowSuccessMockGit) GetIssueId() (string, error)        { return "TEST
 func (workflowSuccessMockGit) CreateIssueBranch(*jira.Issue) (string, error) {
 	return "", nil
 }
+func (workflowSuccessMockGit) CreateIssueWorktreeBranch(*jira.Issue) (string, string, error) {
+	return "", "", nil
+}
 func (workflowSuccessMockGit) Push() error { return nil }
 func (workflowSuccessMockGit) StashChanges(string) error {
 	return nil
@@ -148,7 +151,8 @@ func (workflowSuccessMockGit) GetConfig() *viper.Viper                    { retu
 func (workflowSuccessMockGit) SaveConfig(string, any) error               { return nil }
 
 type workflowSuccessMockGitHub struct {
-	pr *github.PullRequest
+	pr              *github.PullRequest
+	createPROptions github.CreatePROptions
 }
 
 func (m workflowSuccessMockGitHub) Authenticate() (*auth.AccessToken, error) {
@@ -160,7 +164,8 @@ func (m workflowSuccessMockGitHub) GetPullRequestUrl() (string, error) {
 	return "", nil
 }
 func (m workflowSuccessMockGitHub) GetCurrentUser() (*hub.User, error) { return nil, nil }
-func (m workflowSuccessMockGitHub) CreatePullRequest(github.CreatePROptions) (*github.PullRequest, error) {
+func (m *workflowSuccessMockGitHub) CreatePullRequest(opts github.CreatePROptions) (*github.PullRequest, error) {
+	m.createPROptions = opts
 	return m.pr, nil
 }
 func (m workflowSuccessMockGitHub) UpdatePullRequest(int, github.UpdatePROptions) (*github.PullRequest, error) {
@@ -227,7 +232,7 @@ func (workflowSuccessMockJira) SearchIssues(string, string, []tracker.IssueType,
 
 var (
 	_ git.Git                    = workflowSuccessMockGit{}
-	_ github.Github              = workflowSuccessMockGitHub{}
+	_ github.Github              = &workflowSuccessMockGitHub{}
 	_ jira.Jira                  = workflowSuccessMockJira{}
 	_ config.ConfigurableService = workflowSuccessMockGit{}
 )
@@ -246,7 +251,7 @@ func TestWorkflowRunnerRun_LogsPRURLOnlyOnce(t *testing.T) {
 				return workflowSuccessMockGit{}, nil
 			},
 			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
-				return workflowSuccessMockGitHub{pr: pr}, nil
+				return &workflowSuccessMockGitHub{pr: pr}, nil
 			},
 			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
 				return workflowSuccessMockJira{}, nil
@@ -293,6 +298,94 @@ func TestWorkflowRunnerRun_LogsPRURLOnlyOnce(t *testing.T) {
 
 	assert.Equal(t, 1, createdCount)
 	assert.Zero(t, successCount)
+}
+
+func TestWorkflowRunnerRun_UsesExplicitBaseBranchOverride(t *testing.T) {
+	pr := &github.PullRequest{Number: 42, HTMLURL: "https://example.com/pr/42"}
+	ghClient := &workflowSuccessMockGitHub{pr: pr}
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Simple: true, BaseBranch: "release/2026.04"},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return workflowSuccessMockGit{}, nil
+			},
+			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+				return ghClient, nil
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return workflowSuccessMockJira{}, nil
+			},
+			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+				return nil, nil
+			},
+			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error) {
+				return "body", nil
+			},
+			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			ResolveReviewers: func(github.Github, []string) ([]string, []string, []string, error) {
+				return nil, nil, nil, nil
+			},
+			ResolveAssignees: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			SplitEditorContent:     SplitEditorContent,
+			DerivePRTitle:          func(string, *jira.Issue, string, bool) string { return "title" },
+			ToTeamSlugs:            ToTeamSlugs,
+			FormatReviewersWarning: func(err error) string { return err.Error() },
+			ShouldOpenReviewEditor: func(bool) bool { return false },
+		},
+	}
+
+	result := runner.Run(nil, nil, false)
+	require.NoError(t, result.Err)
+	assert.Equal(t, "release/2026.04", ghClient.createPROptions.Base)
+}
+
+func TestWorkflowRunnerRun_UsesDefaultBaseBranchWithoutOverride(t *testing.T) {
+	pr := &github.PullRequest{Number: 42, HTMLURL: "https://example.com/pr/42"}
+	ghClient := &workflowSuccessMockGitHub{pr: pr}
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Simple: true},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return workflowSuccessMockGit{}, nil
+			},
+			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+				return ghClient, nil
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return workflowSuccessMockJira{}, nil
+			},
+			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+				return nil, nil
+			},
+			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error) {
+				return "body", nil
+			},
+			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			ResolveReviewers: func(github.Github, []string) ([]string, []string, []string, error) {
+				return nil, nil, nil, nil
+			},
+			ResolveAssignees: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			SplitEditorContent:     SplitEditorContent,
+			DerivePRTitle:          func(string, *jira.Issue, string, bool) string { return "title" },
+			ToTeamSlugs:            ToTeamSlugs,
+			FormatReviewersWarning: func(err error) string { return err.Error() },
+			ShouldOpenReviewEditor: func(bool) bool { return false },
+		},
+	}
+
+	result := runner.Run(nil, nil, false)
+	require.NoError(t, result.Err)
+	assert.Equal(t, "main", ghClient.createPROptions.Base)
 }
 
 type workflowLinkedIssuesGit struct {
@@ -358,7 +451,7 @@ func TestWorkflowRunnerRun_UpdatesAllLinkedIssues(t *testing.T) {
 				return workflowLinkedIssuesGit{}, nil
 			},
 			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
-				return workflowSuccessMockGitHub{pr: pr}, nil
+				return &workflowSuccessMockGitHub{pr: pr}, nil
 			},
 			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
 				return recordingJira, nil
@@ -423,7 +516,7 @@ func TestWorkflowRunnerRun_UsesCommitLinkedIssuesWithoutBranchIssue(t *testing.T
 				return workflowCommitOnlyIssuesGit{}, nil
 			},
 			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
-				return workflowSuccessMockGitHub{pr: pr}, nil
+				return &workflowSuccessMockGitHub{pr: pr}, nil
 			},
 			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
 				return recordingJira, nil
@@ -490,7 +583,7 @@ func TestWorkflowRunnerRun_SkipsJiraWhenNoIssuesExist(t *testing.T) {
 				return workflowNoIssuesGit{}, nil
 			},
 			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
-				return workflowSuccessMockGitHub{pr: pr}, nil
+				return &workflowSuccessMockGitHub{pr: pr}, nil
 			},
 			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
 				jiraInitCalls++

@@ -53,6 +53,8 @@ type Git interface {
 	GetIssueId() (string, error)
 	// CreateIssueBranch creates a new branch for the given issue
 	CreateIssueBranch(issue *jira.Issue) (string, error)
+	// CreateIssueWorktreeBranch creates a new linked worktree and issue branch.
+	CreateIssueWorktreeBranch(issue *jira.Issue) (string, string, error)
 	// Push pushes the current branch to the remote with upstream tracking
 	Push() error
 	// StashChanges stashes uncommitted changes with the provided message
@@ -174,6 +176,8 @@ var placeholderPatterns = map[string]struct {
 }
 
 var fallbackIssueIDPattern = regexp.MustCompile(`(?i)(^|[^a-z0-9])([a-z][a-z0-9_]+-\d+)($|[^a-z0-9])`)
+var worktreeDirUnsafePattern = regexp.MustCompile(`[^a-z0-9._-]+`)
+var worktreeDirDashPattern = regexp.MustCompile(`-+`)
 
 // TODO Is this needed now that we have the issue struct?
 type TemplateIssue struct {
@@ -686,49 +690,20 @@ func normalizeDefaultBranchName(remote, branch string) string {
 }
 
 func (g *git) CreateIssueBranch(issue *jira.Issue) (string, error) {
-	branchName, err := g.buildBranchName(issue)
+	branchName, defaultBranch, remote, err := g.prepareIssueBranch(issue)
 	if err != nil {
 		return "", err
 	}
 
-	defaultBranch, err := g.GetDefaultBranch()
-	if err != nil {
-		return "", fmt.Errorf("failed to get default branch: %w", err)
-	}
-
-	exists, err := g.branchExists(branchName)
-	if err != nil {
-		return "", fmt.Errorf("failed to check if branch exists: %w", err)
-	}
-	if exists {
-		return "", fmt.Errorf("branch %s already exists", branchName)
-	}
 	// Get the worktree to create the branch
 	worktree, err := g.repo.Worktree()
 	if err != nil {
 		return "", fmt.Errorf("failed to get worktree: %w", err)
 	}
 
-	remote := g.GetConfigString("remote")
-	remoteDefaultRef := plumbing.NewRemoteReferenceName(remote, defaultBranch)
-	branchRef, err := g.repo.Reference(remoteDefaultRef, true)
+	branchRef, err := g.resolveDefaultBranchReference(remote, defaultBranch)
 	if err != nil {
-		// Fall back to local default branch ref before hitting the network.
-		branchRef, err = g.repo.Reference(plumbing.NewBranchReferenceName(defaultBranch), true)
-		if err != nil {
-			(*g.messages) <- fmt.Sprintf("Fetching from remote %s", remote)
-			err = g.fetch(remote)
-			if err != nil {
-				(*g.messages) <- fmt.Sprintf("Failed to fetch from remote: %s", err)
-				return "", fmt.Errorf("failed to fetch from remote: %w", err)
-			}
-
-			branchRef, err = g.repo.Reference(remoteDefaultRef, true)
-			if err != nil {
-				(*g.messages) <- fmt.Sprintf("Failed to get default branch reference: %s", err)
-				return "", fmt.Errorf("failed to get default branch reference: %w", err)
-			}
-		}
+		return "", err
 	}
 
 	// TODO If there are modified files, create a stash with them
@@ -750,6 +725,52 @@ func (g *git) CreateIssueBranch(issue *jira.Issue) (string, error) {
 	return branchName, nil
 }
 
+func (g *git) CreateIssueWorktreeBranch(issue *jira.Issue) (string, string, error) {
+	branchName, defaultBranch, remote, err := g.prepareIssueBranch(issue)
+	if err != nil {
+		return "", "", err
+	}
+
+	worktreeRoot, err := g.worktreeRoot()
+	if err != nil {
+		return "", "", err
+	}
+
+	worktreePath, err := siblingWorktreePath(worktreeRoot, branchName)
+	if err != nil {
+		return "", "", err
+	}
+	if _, statErr := os.Stat(worktreePath); statErr == nil {
+		return "", "", fmt.Errorf("worktree path %s already exists", worktreePath)
+	} else if !errors.Is(statErr, os.ErrNotExist) {
+		return "", "", fmt.Errorf("failed to inspect worktree path %s: %w", worktreePath, statErr)
+	}
+
+	startPoint := fmt.Sprintf("%s/%s", remote, defaultBranch)
+	(*g.messages) <- fmt.Sprintf("Creating worktree %s for branch %s", worktreePath, branchName)
+	stdout, stderr, err := execGitCommand(
+		worktreeRoot,
+		gitNonInteractiveEnv(),
+		"worktree",
+		"add",
+		"-b",
+		branchName,
+		worktreePath,
+		startPoint,
+	)
+	if err != nil {
+		if stderr == "" {
+			stderr = stdout
+		}
+		if stderr == "" {
+			return "", "", fmt.Errorf("failed to create worktree %s: %w", worktreePath, err)
+		}
+		return "", "", fmt.Errorf("failed to create worktree %s: %s", worktreePath, stderr)
+	}
+
+	return branchName, worktreePath, nil
+}
+
 // FetchDefaultBranch refreshes remote tracking refs for the configured default branch.
 func (g *git) FetchDefaultBranch() error {
 	defaultBranch, err := g.GetDefaultBranch()
@@ -769,6 +790,88 @@ func (g *git) FetchDefaultBranch() error {
 	}
 
 	return nil
+}
+
+func (g *git) prepareIssueBranch(issue *jira.Issue) (string, string, string, error) {
+	branchName, err := g.buildBranchName(issue)
+	if err != nil {
+		return "", "", "", err
+	}
+
+	defaultBranch, err := g.GetDefaultBranch()
+	if err != nil {
+		return "", "", "", fmt.Errorf("failed to get default branch: %w", err)
+	}
+
+	exists, err := g.branchExists(branchName)
+	if err != nil {
+		return "", "", "", fmt.Errorf("failed to check if branch exists: %w", err)
+	}
+	if exists {
+		return "", "", "", fmt.Errorf("branch %s already exists", branchName)
+	}
+
+	remote := strings.TrimSpace(g.GetConfigString("remote"))
+	if remote == "" {
+		return "", "", "", fmt.Errorf("git remote is not configured")
+	}
+
+	return branchName, defaultBranch, remote, nil
+}
+
+func (g *git) resolveDefaultBranchReference(remote, defaultBranch string) (*plumbing.Reference, error) {
+	remoteDefaultRef := plumbing.NewRemoteReferenceName(remote, defaultBranch)
+	branchRef, err := g.repo.Reference(remoteDefaultRef, true)
+	if err == nil {
+		return branchRef, nil
+	}
+
+	branchRef, err = g.repo.Reference(plumbing.NewBranchReferenceName(defaultBranch), true)
+	if err == nil {
+		return branchRef, nil
+	}
+
+	(*g.messages) <- fmt.Sprintf("Fetching from remote %s", remote)
+	if err := g.fetch(remote); err != nil {
+		(*g.messages) <- fmt.Sprintf("Failed to fetch from remote: %s", err)
+		return nil, fmt.Errorf("failed to fetch from remote: %w", err)
+	}
+
+	branchRef, err = g.repo.Reference(remoteDefaultRef, true)
+	if err != nil {
+		(*g.messages) <- fmt.Sprintf("Failed to get default branch reference: %s", err)
+		return nil, fmt.Errorf("failed to get default branch reference: %w", err)
+	}
+
+	return branchRef, nil
+}
+
+func siblingWorktreePath(worktreeRoot, branchName string) (string, error) {
+	root := strings.TrimSpace(worktreeRoot)
+	if root == "" {
+		return "", fmt.Errorf("worktree root is required")
+	}
+
+	repoName := filepath.Base(root)
+	if repoName == "." || repoName == string(filepath.Separator) || strings.TrimSpace(repoName) == "" {
+		return "", fmt.Errorf("failed to derive repository name from %s", root)
+	}
+
+	friendlyBranch := directoryFriendlyBranchName(branchName)
+	if friendlyBranch == "" {
+		return "", fmt.Errorf("failed to derive worktree directory name from branch %s", branchName)
+	}
+
+	return filepath.Join(filepath.Dir(root), fmt.Sprintf("%s-%s", repoName, friendlyBranch)), nil
+}
+
+func directoryFriendlyBranchName(branchName string) string {
+	normalized := strings.ToLower(strings.TrimSpace(branchName))
+	normalized = strings.ReplaceAll(normalized, "/", "-")
+	normalized = strings.ReplaceAll(normalized, "\\", "-")
+	normalized = worktreeDirUnsafePattern.ReplaceAllString(normalized, "-")
+	normalized = worktreeDirDashPattern.ReplaceAllString(normalized, "-")
+	return strings.Trim(normalized, "-.")
 }
 
 func (g *git) buildBranchName(issue *jira.Issue) (string, error) {

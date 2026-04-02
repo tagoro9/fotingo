@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	internalstart "github.com/tagoro9/fotingo/internal/commands/start"
 	fterrors "github.com/tagoro9/fotingo/internal/errors"
 	"github.com/tagoro9/fotingo/internal/i18n"
@@ -25,6 +26,7 @@ type startFlags struct {
 	epic        string
 	labels      []string
 	noBranch    bool
+	worktree    bool
 	interactive bool
 }
 
@@ -134,6 +136,7 @@ func init() {
 	startCmd.Flags().StringVarP(&startCmdFlags.epic, "epic", "e", "", localizer.T(i18n.StartFlagEpic))
 	startCmd.Flags().StringSliceVarP(&startCmdFlags.labels, "labels", "l", []string{}, localizer.T(i18n.StartFlagLabels))
 	startCmd.Flags().BoolVarP(&startCmdFlags.noBranch, "no-branch", "n", false, localizer.T(i18n.StartFlagNoBranch))
+	startCmd.Flags().BoolVar(&startCmdFlags.worktree, "worktree", false, localizer.T(i18n.StartFlagWorktree))
 	startCmd.Flags().BoolVarP(&startCmdFlags.interactive, "interactive", "i", false, localizer.T(i18n.StartFlagInteractive))
 	_ = startCmd.RegisterFlagCompletionFunc("project", completeStartProjectFlag)
 	_ = startCmd.RegisterFlagCompletionFunc("kind", completeStartIssueTypeFlag)
@@ -383,6 +386,16 @@ func collectInteractiveCreateFlags(cmd *cobra.Command) error {
 	}
 
 	return nil
+}
+
+func startWorktreeEnabled(cfg *viper.Viper) bool {
+	if startCmdFlags.worktree {
+		return true
+	}
+	if cfg == nil {
+		return false
+	}
+	return cfg.GetBool("git.worktree.enabled")
 }
 
 func getInteractiveProjectIssueTypeNames(projectKey string) ([]string, error) {

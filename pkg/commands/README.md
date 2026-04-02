@@ -108,7 +108,7 @@ func IsShellCompletionRequest() bool
 
 
 <a name="OutputJSON"></a>
-## func [OutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L233>)
+## func [OutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L234>)
 
 ```go
 func OutputJSON(data interface{})
@@ -117,7 +117,7 @@ func OutputJSON(data interface{})
 OutputJSON outputs the data as formatted JSON to stdout. This is a convenience function that creates a new JSONOutput and writes.
 
 <a name="OutputJSONError"></a>
-## func [OutputJSONError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L242>)
+## func [OutputJSONError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L243>)
 
 ```go
 func OutputJSONError(err error)
@@ -126,7 +126,7 @@ func OutputJSONError(err error)
 OutputJSONError outputs an error as JSON to stdout.
 
 <a name="ShouldOutputDebug"></a>
-## func [ShouldOutputDebug](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L274>)
+## func [ShouldOutputDebug](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L275>)
 
 ```go
 func ShouldOutputDebug() bool
@@ -135,7 +135,7 @@ func ShouldOutputDebug() bool
 ShouldOutputDebug returns true when diagnostic output should be shown.
 
 <a name="ShouldOutputJSON"></a>
-## func [ShouldOutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L254>)
+## func [ShouldOutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L255>)
 
 ```go
 func ShouldOutputJSON() bool
@@ -144,7 +144,7 @@ func ShouldOutputJSON() bool
 ShouldOutputJSON returns true if the \-\-json flag is set. Commands should check this before outputting human\-readable text.
 
 <a name="ShouldOutputVerbose"></a>
-## func [ShouldOutputVerbose](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L266>)
+## func [ShouldOutputVerbose](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L267>)
 
 ```go
 func ShouldOutputVerbose() bool
@@ -153,7 +153,7 @@ func ShouldOutputVerbose() bool
 ShouldOutputVerbose returns true when step\-level progress should be shown.
 
 <a name="ShouldSuppressOutput"></a>
-## func [ShouldSuppressOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L261>)
+## func [ShouldSuppressOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L262>)
 
 ```go
 func ShouldSuppressOutput() bool
@@ -162,7 +162,7 @@ func ShouldSuppressOutput() bool
 ShouldSuppressOutput returns true if output should be suppressed. This is true when \-\-quiet is set or when \-\-json is set \(to avoid mixing human\-readable output with JSON\).
 
 <a name="AISetupOutput"></a>
-## type [AISetupOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L163-L171>)
+## type [AISetupOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L164-L172>)
 
 AISetupOutput represents JSON output for \`fotingo ai setup\`.
 
@@ -179,7 +179,7 @@ type AISetupOutput struct {
 ```
 
 <a name="AISetupResult"></a>
-## type [AISetupResult](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L174-L181>)
+## type [AISetupResult](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L175-L182>)
 
 AISetupResult captures one provider install outcome.
 
@@ -221,7 +221,7 @@ type CommitInfo struct {
 ```
 
 <a name="ErrorOutput"></a>
-## type [ErrorOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L192-L196>)
+## type [ErrorOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L193-L197>)
 
 ErrorOutput represents a JSON error response.
 
@@ -293,7 +293,7 @@ type IssueInfo struct {
 ```
 
 <a name="JSONOutput"></a>
-## type [JSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L199-L201>)
+## type [JSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L200-L202>)
 
 JSONOutput provides utilities for outputting JSON responses.
 
@@ -304,7 +304,7 @@ type JSONOutput struct {
 ```
 
 <a name="NewJSONOutput"></a>
-### func [NewJSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L204>)
+### func [NewJSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L205>)
 
 ```go
 func NewJSONOutput() *JSONOutput
@@ -313,7 +313,7 @@ func NewJSONOutput() *JSONOutput
 NewJSONOutput creates a new JSONOutput that writes to stdout.
 
 <a name="JSONOutput.Write"></a>
-### func \(\*JSONOutput\) [Write](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L211>)
+### func \(\*JSONOutput\) [Write](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L212>)
 
 ```go
 func (j *JSONOutput) Write(data interface{}) error
@@ -322,7 +322,7 @@ func (j *JSONOutput) Write(data interface{}) error
 Write outputs data as formatted JSON to stdout.
 
 <a name="JSONOutput.WriteError"></a>
-### func \(\*JSONOutput\) [WriteError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L216>)
+### func \(\*JSONOutput\) [WriteError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L217>)
 
 ```go
 func (j *JSONOutput) WriteError(err error) error
@@ -331,7 +331,7 @@ func (j *JSONOutput) WriteError(err error) error
 WriteError outputs an error as JSON.
 
 <a name="JSONOutput.WriteSuccess"></a>
-### func \(\*JSONOutput\) [WriteSuccess](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L227>)
+### func \(\*JSONOutput\) [WriteSuccess](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L228>)
 
 ```go
 func (j *JSONOutput) WriteSuccess(data interface{}) error
@@ -340,7 +340,7 @@ func (j *JSONOutput) WriteSuccess(data interface{}) error
 WriteSuccess outputs a generic success response.
 
 <a name="OpenOutput"></a>
-## type [OpenOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L154-L160>)
+## type [OpenOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L155-L161>)
 
 OpenOutput represents the JSON output of the open command.
 
@@ -366,7 +366,7 @@ type OpenOutput struct {
 ```
 
 <a name="PullRequestInfo"></a>
-## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L136-L142>)
+## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L137-L143>)
 
 PullRequestInfo contains information about a GitHub pull request.
 
@@ -381,7 +381,7 @@ type PullRequestInfo struct {
 ```
 
 <a name="ReviewOutput"></a>
-## type [ReviewOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L106-L116>)
+## type [ReviewOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L107-L117>)
 
 ReviewOutput represents the JSON output of the review command.
 
@@ -442,7 +442,7 @@ type ReviewOutput struct {
 ```
 
 <a name="SearchOutput"></a>
-## type [SearchOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L119-L125>)
+## type [SearchOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L120-L126>)
 
 SearchOutput represents the JSON output of the search command.
 
@@ -457,7 +457,7 @@ type SearchOutput struct {
 ```
 
 <a name="SearchResultInfo"></a>
-## type [SearchResultInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L128-L133>)
+## type [SearchResultInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L129-L134>)
 
 SearchResultInfo contains one resolved review metadata search result.
 
@@ -471,14 +471,15 @@ type SearchResultInfo struct {
 ```
 
 <a name="StartBranchInfo"></a>
-## type [StartBranchInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L62-L65>)
+## type [StartBranchInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L62-L66>)
 
 StartBranchInfo contains branch information for the start command output.
 
 ```go
 type StartBranchInfo struct {
-    Name    string `json:"name"`
-    Created bool   `json:"created"`
+    Name         string `json:"name"`
+    Created      bool   `json:"created"`
+    WorktreePath string `json:"worktreePath,omitempty"`
 }
 ```
 

@@ -203,9 +203,35 @@ func TestStartFlags(t *testing.T) {
 	assert.NotNil(t, noBranchFlag, "no-branch flag should exist")
 	assert.Equal(t, "n", noBranchFlag.Shorthand)
 
+	worktreeFlag := flags.Lookup("worktree")
+	assert.NotNil(t, worktreeFlag, "worktree flag should exist")
+	assert.Equal(t, "", worktreeFlag.Shorthand)
+	assert.Equal(t, "false", worktreeFlag.DefValue)
+
 	interactiveFlag := flags.Lookup("interactive")
 	assert.NotNil(t, interactiveFlag, "interactive flag should exist")
 	assert.Equal(t, "i", interactiveFlag.Shorthand)
+}
+
+func TestStartWorktreeEnabled(t *testing.T) {
+	origFlags := startCmdFlags
+	origConfig := fotingoConfig
+	defer func() {
+		startCmdFlags = origFlags
+		fotingoConfig = origConfig
+	}()
+
+	cfg := viper.New()
+	cfg.Set("git.worktree.enabled", true)
+
+	startCmdFlags = startFlags{}
+	assert.True(t, startWorktreeEnabled(cfg))
+
+	cfg.Set("git.worktree.enabled", false)
+	assert.False(t, startWorktreeEnabled(cfg))
+
+	startCmdFlags.worktree = true
+	assert.True(t, startWorktreeEnabled(cfg))
 }
 
 func TestStartCmdUse(t *testing.T) {

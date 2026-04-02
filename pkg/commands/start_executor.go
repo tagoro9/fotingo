@@ -85,10 +85,11 @@ func (e startExecutor) runWithResult(cmd *cobra.Command, statusCh *chan string, 
 	runner := e.newWorkflowRunner()
 	workflowResult := runner.RunWithResult(cmd, statusCh, issueID, startWorkflowEmitter{out: commandruntime.NewLocalizedEmitter(*statusCh, shouldEmitCommandLevel, localizer.T)})
 	return startResult{
-		issue:      workflowResult.Issue,
-		branchName: workflowResult.BranchName,
-		created:    workflowResult.Created,
-		err:        workflowResult.Err,
+		issue:        workflowResult.Issue,
+		branchName:   workflowResult.BranchName,
+		worktreePath: workflowResult.WorktreePath,
+		created:      workflowResult.Created,
+		err:          workflowResult.Err,
 	}
 }
 
@@ -99,6 +100,7 @@ func (e startExecutor) newWorkflowRunner() internalstart.WorkflowRunner {
 		Options: internalstart.WorkflowOptions{
 			Title:    startCmdFlags.title,
 			NoBranch: startCmdFlags.noBranch,
+			Worktree: startWorktreeEnabled(fotingoConfig),
 		},
 		Deps: internalstart.WorkflowDeps{
 			NormalizeFlags: e.deps.normalizeFlags,
