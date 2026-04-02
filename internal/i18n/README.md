@@ -137,6 +137,7 @@ const (
     StartStatusCreateBranch            Key = "start.status.create_branch"
     StartStatusBranchDone              Key = "start.status.branch_done"
     StartStatusWorktreeDone            Key = "start.status.worktree_done"
+    StartStatusWorktreeReady           Key = "start.status.worktree_ready"
     StartStatusSuccess                 Key = "start.status.success"
     StartPromptStash                   Key = "start.prompt.stash"
     StartErrCancelled                  Key = "start.error.cancelled"

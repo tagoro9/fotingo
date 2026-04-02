@@ -450,8 +450,9 @@ func TestOutputStartJSON_SuccessStruct(t *testing.T) {
 			URL:     "https://jira.example.com/browse/TEST-1",
 		},
 		Branch: &StartBranchInfo{
-			Name:    "b/TEST-1_fix_bug",
-			Created: true,
+			Name:         "b/TEST-1_fix_bug",
+			Created:      true,
+			WorktreePath: "/tmp/fotingo-b-test-1_fix_bug",
 		},
 	}
 
@@ -465,6 +466,7 @@ func TestOutputStartJSON_SuccessStruct(t *testing.T) {
 	assert.Equal(t, "TEST-1", decoded.Issue.Key)
 	assert.Equal(t, "b/TEST-1_fix_bug", decoded.Branch.Name)
 	assert.True(t, decoded.Branch.Created)
+	assert.Equal(t, "/tmp/fotingo-b-test-1_fix_bug", decoded.Branch.WorktreePath)
 }
 
 func TestOutputStartJSON_Error(t *testing.T) {

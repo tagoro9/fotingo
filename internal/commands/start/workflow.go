@@ -396,6 +396,7 @@ func (r WorkflowRunner) createIssueBranch(out WorkflowEmitter, gitClient git.Git
 		}
 		out.Info("check", i18n.StartStatusBranchDone, branchName)
 		out.Info("branch", i18n.StartStatusWorktreeDone, worktreePath)
+		out.Info("success", i18n.StartStatusWorktreeReady, branchName, worktreePath)
 		return branchName, worktreePath, nil
 	}
 
