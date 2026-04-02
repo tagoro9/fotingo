@@ -100,6 +100,10 @@ Flags:
 | `--worktree`    |       | Create the issue branch in a new sibling worktree   |
 | `--interactive` | `-i`  | Interactive create flow                             |
 
+Notes:
+
+- In worktree mode, `start` prints the created branch name and worktree folder, and JSON output includes `branch.name` plus `branch.worktreePath`.
+
 ### `review`
 
 Create a pull request for the current branch.
@@ -131,10 +135,14 @@ printf '## Summary\n\nFix auth bug\n\n## Description\n\nCustom reviewer notes.\n
 
 # Custom title
 fotingo review --title "Fix auth bug"
+
+# Target a non-default base branch
+fotingo review --branch release/2026.04
 ```
 
 Notes:
 
+- Use the global `--branch` / `-b` flag to override the pull request base branch when the PR should target something other than the repository default branch.
 - Use `--template-summary` and `--template-description` to fill the default PR template sections.
 - `--template-description` expands escaped `\n`, `\r\n`, and `\t`, which makes multiline scripted descriptions reliable.
 - Use `--description` when you want to replace the entire PR body instead of filling template placeholders.

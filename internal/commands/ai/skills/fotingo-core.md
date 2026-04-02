@@ -30,6 +30,12 @@ Create and start a new issue:
 {{EXAMPLE_START_CREATE_ISSUE}}
 ```
 
+Create the branch in a sibling worktree and capture the machine-readable path:
+
+```bash
+{{EXAMPLE_START_WORKTREE}}
+```
+
 ## Review Workflows
 
 Resolve reviewers, assignees, and labels before review:
@@ -44,6 +50,12 @@ Create a pull request with defaults:
 
 ```bash
 {{EXAMPLE_REVIEW_DEFAULT}}
+```
+
+Create a pull request against a non-default base branch:
+
+```bash
+{{EXAMPLE_REVIEW_BASE_BRANCH}}
 ```
 
 Create with reviewers/assignees:
@@ -79,10 +91,12 @@ Refresh fotingo-managed sections on an existing pull request:
 
 - Start from `fotingo inspect --json` when branch or issue context is unclear.
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
+- Use `fotingo start --worktree ... --json` when you want an isolated sibling checkout; automation should read `branch.name` and `branch.worktreePath` from the JSON result.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
+- Use `fotingo review --branch ...` when the pull request should target a non-default base branch.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.
 - Use `fotingo review sync -y` after follow-up commits to refresh fotingo-managed sections while preserving manual edits outside the managed placeholders.
 - Use `fotingo review sync --section ...` to limit which managed sections are rewritten. `--template-summary` and `--template-description` only apply when those sections are included in the sync.

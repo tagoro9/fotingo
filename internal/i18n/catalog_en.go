@@ -156,6 +156,9 @@ Examples:
   # Create a PR with a custom title
   fotingo review --title "Fix critical bug in auth module"
 
+  # Target a non-default base branch
+  fotingo review --branch release/2026.04
+
   # Replace the full PR body from stdin
   printf '## Summary\n\nCustom summary\n\n## Description\n\nCustom description\n' | fotingo review --description -
 
