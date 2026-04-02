@@ -56,6 +56,7 @@ var catalogs = map[string]map[Key]string{
 		StartStatusCreateBranch:            "Creating branch for issue %s...",
 		StartStatusBranchDone:              "Branch '%s' created and checked out",
 		StartStatusWorktreeDone:            "Worktree created at %s",
+		StartStatusWorktreeReady:           "Worktree ready: branch '%s' at %s",
 		StartStatusSuccess:                 "Successfully started work on %s",
 		StartPromptStash:                   "You have uncommitted changes. Stash them before switching branches?",
 		StartErrCancelled:                  "operation cancelled by user",

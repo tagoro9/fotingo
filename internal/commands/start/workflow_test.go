@@ -31,6 +31,23 @@ func (e *startTimingEmitter) DebugRaw(message string) {
 	e.debugRaw = append(e.debugRaw, strings.TrimSpace(message))
 }
 
+type startEvent struct {
+	key  i18n.Key
+	args []any
+}
+
+type startCollectingEmitter struct {
+	events []startEvent
+}
+
+func (e *startCollectingEmitter) Info(_ string, key i18n.Key, args ...any) {
+	e.events = append(e.events, startEvent{key: key, args: append([]any{}, args...)})
+}
+
+func (e *startCollectingEmitter) Verbose(i18n.Key, ...any) {}
+func (e *startCollectingEmitter) Debug(i18n.Key, ...any)   {}
+func (e *startCollectingEmitter) DebugRaw(string)          {}
+
 func TestWorkflowRunnerRunWithResult_ValidatesDeps(t *testing.T) {
 	runner := WorkflowRunner{}
 	result := runner.RunWithResult(&cobra.Command{}, nil, "TEST-1", nil)
@@ -364,4 +381,48 @@ func TestWorkflowRunnerRunWithResult_UsesWorktreeBranchCreationWhenEnabled(t *te
 	assert.Equal(t, 1, gitClient.fetchDefaultCalls)
 	assert.Zero(t, gitClient.createBranchCalls)
 	assert.Equal(t, 1, gitClient.createWorktreeCalls)
+}
+
+func TestWorkflowRunnerCreateIssueBranch_EmitsBranchAndWorktreeLocation(t *testing.T) {
+	gitClient := &workflowMockGit{
+		createBranchName:   "f/test-123_fix_worktree",
+		createWorktreePath: "/tmp/fotingo-f-test-123_fix_worktree",
+	}
+	emitter := &startCollectingEmitter{}
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Worktree: true},
+		Localize: func(key i18n.Key, args ...any) string {
+			return i18n.T(key, args...)
+		},
+	}
+
+	branchName, worktreePath, err := runner.createIssueBranch(emitter, gitClient, &jira.Issue{
+		Key:     "TEST-123",
+		Summary: "Fix worktree start flow",
+		Type:    "Task",
+	})
+	require.NoError(t, err)
+	assert.Equal(t, "f/test-123_fix_worktree", branchName)
+	assert.Equal(t, "/tmp/fotingo-f-test-123_fix_worktree", worktreePath)
+
+	var sawBranchDone bool
+	var sawWorktreeDone bool
+	var sawWorktreeReady bool
+	for _, event := range emitter.events {
+		switch event.key {
+		case i18n.StartStatusBranchDone:
+			sawBranchDone = len(event.args) == 1 && event.args[0] == "f/test-123_fix_worktree"
+		case i18n.StartStatusWorktreeDone:
+			sawWorktreeDone = len(event.args) == 1 && event.args[0] == "/tmp/fotingo-f-test-123_fix_worktree"
+		case i18n.StartStatusWorktreeReady:
+			sawWorktreeReady = len(event.args) == 2 &&
+				event.args[0] == "f/test-123_fix_worktree" &&
+				event.args[1] == "/tmp/fotingo-f-test-123_fix_worktree"
+		}
+	}
+
+	assert.True(t, sawBranchDone)
+	assert.True(t, sawWorktreeDone)
+	assert.True(t, sawWorktreeReady)
 }
