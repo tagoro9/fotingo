@@ -40,8 +40,9 @@ func outputStartJSON(result startResult) error {
 
 	if result.branchName != "" {
 		output.Branch = &StartBranchInfo{
-			Name:    result.branchName,
-			Created: result.created,
+			Name:         result.branchName,
+			Created:      result.created,
+			WorktreePath: result.worktreePath,
 		}
 	}
 
@@ -51,8 +52,9 @@ func outputStartJSON(result startResult) error {
 
 // startResult holds the result of the start command for JSON output.
 type startResult struct {
-	issue      *jira.Issue
-	branchName string
-	created    bool
-	err        error
+	issue        *jira.Issue
+	branchName   string
+	worktreePath string
+	created      bool
+	err          error
 }

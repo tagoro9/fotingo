@@ -390,6 +390,7 @@ func telemetryCommandOptions(cmd *cobra.Command, invocationMode string) (map[str
 		optionFlags["has_parent"] = cmd.Flags().Changed("parent")
 		optionFlags["has_epic"] = cmd.Flags().Changed("epic")
 		optionFlags["no_branch"] = startCmdFlags.noBranch
+		optionFlags["worktree"] = startWorktreeEnabled(fotingoConfig)
 		optionFlags["interactive"] = startCmdFlags.interactive
 		optionCounts["labels"] = len(startCmdFlags.labels)
 	default:

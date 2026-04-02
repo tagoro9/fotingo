@@ -57,7 +57,7 @@ type Commit struct {
 ```
 
 <a name="CredentialProvider"></a>
-## type [CredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L79-L81>)
+## type [CredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L81-L83>)
 
 CredentialProvider abstracts git credential retrieval for testability.
 
@@ -68,7 +68,7 @@ type CredentialProvider interface {
 ```
 
 <a name="Git"></a>
-## type [Git](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L46-L76>)
+## type [Git](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L46-L78>)
 
 
 
@@ -83,6 +83,8 @@ type Git interface {
     GetIssueId() (string, error)
     // CreateIssueBranch creates a new branch for the given issue
     CreateIssueBranch(issue *jira.Issue) (string, error)
+    // CreateIssueWorktreeBranch creates a new linked worktree and issue branch.
+    CreateIssueWorktreeBranch(issue *jira.Issue) (string, string, error)
     // Push pushes the current branch to the remote with upstream tracking
     Push() error
     // StashChanges stashes uncommitted changes with the provided message
@@ -107,7 +109,7 @@ type Git interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1386>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1489>)
 
 ```go
 func New(cfg *viper.Viper, messages *chan string) (Git, error)
@@ -116,7 +118,7 @@ func New(cfg *viper.Viper, messages *chan string) (Git, error)
 New returns a new instance of a Git client in the current working directory. It supports linked worktrees and keeps credential helper lookups rooted at the active worktree, including repositories that enable extensions.worktreeConfig.
 
 <a name="NewWithCredentialProvider"></a>
-### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1418>)
+### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1521>)
 
 ```go
 func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp CredentialProvider) (Git, error)
@@ -125,7 +127,7 @@ func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp Crede
 NewWithCredentialProvider returns a new Git client with a custom credential provider. This is useful for testing functions that require credentials without invoking git credential fill.
 
 <a name="RemoteConfigurable"></a>
-## type [RemoteConfigurable](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L86-L88>)
+## type [RemoteConfigurable](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L88-L90>)
 
 RemoteConfigurable allows reconfiguring a remote URL on a Git client. This is used in tests to point the remote to a local bare repo for operations while keeping the original URL for display purposes.
 
@@ -136,7 +138,7 @@ type RemoteConfigurable interface {
 ```
 
 <a name="TemplateIssue"></a>
-## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L179-L184>)
+## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L183-L188>)
 
 TODO Is this needed now that we have the issue struct?
 

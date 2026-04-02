@@ -30,6 +30,15 @@ func TestLookupConfigKeySpec_GitHubUserProfilesTTL(t *testing.T) {
 	assert.Equal(t, "TTL for GitHub user profile cache", spec.Description)
 }
 
+func TestLookupConfigKeySpec_GitWorktreeEnabled(t *testing.T) {
+	t.Parallel()
+
+	spec, ok := lookupConfigKeySpec("git.worktree.enabled")
+	require.True(t, ok)
+	assert.Equal(t, configValueTypeBool, spec.ValueType)
+	assert.Equal(t, "Create start branches in sibling linked worktrees", spec.Description)
+}
+
 func TestParseConfigKeyValue_Duration(t *testing.T) {
 	t.Parallel()
 

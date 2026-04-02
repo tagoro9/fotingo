@@ -60,8 +60,9 @@ type StartOutput struct {
 
 // StartBranchInfo contains branch information for the start command output.
 type StartBranchInfo struct {
-	Name    string `json:"name"`
-	Created bool   `json:"created"`
+	Name         string `json:"name"`
+	Created      bool   `json:"created"`
+	WorktreePath string `json:"worktreePath,omitempty"`
 }
 
 // ReviewOutput represents the JSON output of the review command.

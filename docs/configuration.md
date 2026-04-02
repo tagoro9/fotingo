@@ -25,6 +25,8 @@ Example:
 git:
   remote: origin
   branchTemplate: "{{.Issue.ShortName}}/{{.Issue.Info}}_{{.Issue.SanitizedSummary}}"
+  worktree:
+    enabled: false
 
 github:
   token: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -39,6 +41,7 @@ jira:
 | ------------------------------- | ---------------------------------------------- |
 | `git.branchTemplate`            | Template for branch names                      |
 | `git.remote`                    | Git remote name                                |
+| `git.worktree.enabled`          | Create `start` branches in sibling worktrees   |
 | `github.token`                  | GitHub OAuth token or classic PAT              |
 | `github.cache.labelsTTL`        | Labels cache TTL                               |
 | `github.cache.collaboratorsTTL` | Collaborators cache TTL                        |

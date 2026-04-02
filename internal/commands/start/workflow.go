@@ -20,14 +20,16 @@ import (
 type WorkflowOptions struct {
 	Title    string
 	NoBranch bool
+	Worktree bool
 }
 
 // WorkflowResult contains the structured result for non-interactive execution paths.
 type WorkflowResult struct {
-	Issue      *jira.Issue
-	BranchName string
-	Created    bool
-	Err        error
+	Issue        *jira.Issue
+	BranchName   string
+	WorktreePath string
+	Created      bool
+	Err          error
 }
 
 // WorkflowEmitter defines the status logging operations used by this workflow.
@@ -197,24 +199,14 @@ func (r WorkflowRunner) RunWithResult(cmd *cobra.Command, statusCh *chan string,
 		out.Debug(i18n.StartStatusClean)
 	}
 
-	out.Info("branch", i18n.StartStatusCreateBranch, issueID)
-	fetchDefaultBranchStart := time.Now()
-	if err := gitClient.FetchDefaultBranch(); err != nil {
-		logStartPhaseTiming(out, "fetch_default_branch", fetchDefaultBranchStart)
-		result.Err = fterrors.WrapGitError(t(i18n.StartWrapCreateBranch), err)
-		return result
-	}
-	logStartPhaseTiming(out, "fetch_default_branch", fetchDefaultBranchStart)
-	createIssueBranchStart := time.Now()
-	branchName, err := gitClient.CreateIssueBranch(issue)
-	logStartPhaseTiming(out, "create_issue_branch", createIssueBranchStart)
+	branchName, worktreePath, err := r.createIssueBranch(out, gitClient, issue)
 	if err != nil {
-		result.Err = fterrors.WrapGitError(t(i18n.StartWrapCreateBranch), err)
+		result.Err = err
 		return result
 	}
 	result.BranchName = branchName
+	result.WorktreePath = worktreePath
 	result.Created = true
-	out.Info("check", i18n.StartStatusBranchDone, branchName)
 
 	logStartPhaseTiming(out, "total", totalStart)
 	out.Info("success", i18n.StartStatusSuccess, issueID)
@@ -360,20 +352,10 @@ func (r WorkflowRunner) progressStartWorkflow(jiraClient jira.Jira, issue *jira.
 			out.Debug(i18n.StartStatusClean)
 		}
 
-		out.Info("branch", i18n.StartStatusCreateBranch, issueID)
-		fetchDefaultBranchStart := time.Now()
-		if err := gitClient.FetchDefaultBranch(); err != nil {
-			logStartPhaseTiming(out, "fetch_default_branch", fetchDefaultBranchStart)
-			return fterrors.WrapGitError(r.localize(i18n.StartWrapCreateBranch), err)
-		}
-		logStartPhaseTiming(out, "fetch_default_branch", fetchDefaultBranchStart)
-		createIssueBranchStart := time.Now()
-		branchName, err := gitClient.CreateIssueBranch(issue)
-		logStartPhaseTiming(out, "create_issue_branch", createIssueBranchStart)
+		_, _, err = r.createIssueBranch(out, gitClient, issue)
 		if err != nil {
-			return fterrors.WrapGitError(r.localize(i18n.StartWrapCreateBranch), err)
+			return err
 		}
-		out.Info("check", i18n.StartStatusBranchDone, branchName)
 		logStartPhaseTiming(out, "total", totalStart)
 		out.Info("success", i18n.StartStatusSuccess, issueID)
 		return nil
@@ -394,6 +376,37 @@ func normalizeWorkflowIssueID(issueID string, cfg *viper.Viper) string {
 	}
 
 	return NormalizeIssueInput(issueID, jiraRoot)
+}
+
+func (r WorkflowRunner) createIssueBranch(out WorkflowEmitter, gitClient git.Git, issue *jira.Issue) (string, string, error) {
+	out.Info("branch", i18n.StartStatusCreateBranch, issue.Key)
+	fetchDefaultBranchStart := time.Now()
+	if err := gitClient.FetchDefaultBranch(); err != nil {
+		logStartPhaseTiming(out, "fetch_default_branch", fetchDefaultBranchStart)
+		return "", "", fterrors.WrapGitError(r.localize(i18n.StartWrapCreateBranch), err)
+	}
+	logStartPhaseTiming(out, "fetch_default_branch", fetchDefaultBranchStart)
+
+	if r.Options.Worktree {
+		createIssueWorktreeStart := time.Now()
+		branchName, worktreePath, err := gitClient.CreateIssueWorktreeBranch(issue)
+		logStartPhaseTiming(out, "create_issue_worktree_branch", createIssueWorktreeStart)
+		if err != nil {
+			return "", "", fterrors.WrapGitError(r.localize(i18n.StartWrapCreateBranch), err)
+		}
+		out.Info("check", i18n.StartStatusBranchDone, branchName)
+		out.Info("branch", i18n.StartStatusWorktreeDone, worktreePath)
+		return branchName, worktreePath, nil
+	}
+
+	createIssueBranchStart := time.Now()
+	branchName, err := gitClient.CreateIssueBranch(issue)
+	logStartPhaseTiming(out, "create_issue_branch", createIssueBranchStart)
+	if err != nil {
+		return "", "", fterrors.WrapGitError(r.localize(i18n.StartWrapCreateBranch), err)
+	}
+	out.Info("check", i18n.StartStatusBranchDone, branchName)
+	return branchName, "", nil
 }
 
 func (r WorkflowRunner) validateDeps() error {

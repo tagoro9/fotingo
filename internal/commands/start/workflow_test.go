@@ -94,11 +94,13 @@ func (e *blockingWorkflowEmitter) DebugRaw(string) {
 }
 
 type workflowMockGit struct {
-	messageCh          *chan string
-	createBranchName   string
-	fetchDefaultCalls  int
-	createBranchCalls  int
-	hasUncommitedCalls int
+	messageCh           *chan string
+	createBranchName    string
+	createWorktreePath  string
+	fetchDefaultCalls   int
+	createBranchCalls   int
+	createWorktreeCalls int
+	hasUncommitedCalls  int
 }
 
 func (m *workflowMockGit) GetRemote() (giturl.IGitURL, error) { return nil, nil }
@@ -111,6 +113,10 @@ func (m *workflowMockGit) GetIssueId() (string, error) {
 func (m *workflowMockGit) CreateIssueBranch(*jira.Issue) (string, error) {
 	m.createBranchCalls++
 	return m.createBranchName, nil
+}
+func (m *workflowMockGit) CreateIssueWorktreeBranch(*jira.Issue) (string, string, error) {
+	m.createWorktreeCalls++
+	return m.createBranchName, m.createWorktreePath, nil
 }
 func (m *workflowMockGit) Push() error { return nil }
 func (m *workflowMockGit) StashChanges(string) error {
@@ -313,4 +319,49 @@ func TestWorkflowRunnerRunWithResult_NormalizesJiraBrowseURLInput(t *testing.T) 
 	require.NoError(t, result.Err)
 	require.Len(t, jiraClient.setIssueStatusIDs, 1)
 	assert.Equal(t, "DEVOPS-13148", jiraClient.setIssueStatusIDs[0])
+}
+
+func TestWorkflowRunnerRunWithResult_UsesWorktreeBranchCreationWhenEnabled(t *testing.T) {
+	gitClient := &workflowMockGit{
+		createBranchName:   "f/test-123_fix_worktree",
+		createWorktreePath: "/tmp/fotingo-f-test-123_fix_worktree",
+	}
+	jiraClient := &workflowMockJira{
+		setIssue: &jira.Issue{
+			Key:     "TEST-123",
+			Summary: "Fix worktree start flow",
+			Type:    "Task",
+			Status:  string(jira.StatusInProgress),
+		},
+	}
+
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Worktree: true},
+		Deps: WorkflowDeps{
+			NormalizeFlags: func(*cobra.Command, string) error { return nil },
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return jiraClient, nil
+			},
+			CreateNewIssue: func(WorkflowEmitter, jira.Jira) (*jira.Issue, error) { return nil, nil },
+			SelectIssueWithPicker: func([]tracker.Issue) (*tracker.Issue, error) {
+				return nil, nil
+			},
+			RunWithSpinner:       func(func(WorkflowEmitter) error) error { return nil },
+			ResolveIssueAssignee: func(WorkflowEmitter, jira.Jira, string) {},
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return gitClient, nil
+			},
+			StashChanges: func(WorkflowEmitter, git.Git) error { return nil },
+		},
+	}
+
+	statusCh := make(chan string, 8)
+	result := runner.RunWithResult(&cobra.Command{}, &statusCh, "TEST-123", nil)
+	require.NoError(t, result.Err)
+	assert.Equal(t, "f/test-123_fix_worktree", result.BranchName)
+	assert.Equal(t, "/tmp/fotingo-f-test-123_fix_worktree", result.WorktreePath)
+	assert.Equal(t, 1, gitClient.fetchDefaultCalls)
+	assert.Zero(t, gitClient.createBranchCalls)
+	assert.Equal(t, 1, gitClient.createWorktreeCalls)
 }

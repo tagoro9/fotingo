@@ -1174,6 +1174,28 @@ func (s *GitCredentialTestSuite) TestCreateIssueBranch_BranchAlreadyExists() {
 	assert.Contains(t, err.Error(), "already exists")
 }
 
+func (s *GitCredentialTestSuite) TestCreateIssueWorktreeBranch_Success() {
+	t := s.T()
+
+	err := s.gitClient.FetchDefaultBranch()
+	require.NoError(t, err)
+
+	issue := &jira.Issue{
+		Key:     "TEST-77",
+		Summary: "Worktree branch",
+		Type:    "Task",
+	}
+
+	branchName, worktreePath, err := s.gitClient.CreateIssueWorktreeBranch(issue)
+	require.NoError(t, err)
+	assert.Equal(t, "c/test-77_worktree_branch", branchName)
+	assert.Equal(t, filepath.Join(s.tmpDir, "work-c-test-77_worktree_branch"), worktreePath)
+
+	headBranch, stderr, cmdErr := execGitCommand(worktreePath, gitNonInteractiveEnv(), "branch", "--show-current")
+	require.NoError(t, cmdErr, stderr)
+	assert.Equal(t, branchName, headBranch)
+}
+
 // --- NewWithCredentialProvider tests ---
 
 func (s *GitCredentialTestSuite) TestNewWithCredentialProvider_NilConfig() {
