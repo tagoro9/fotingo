@@ -29,8 +29,10 @@ func TestRenderSkill(t *testing.T) {
 			assert.Contains(t, content, "fotingo inspect --json")
 			assert.Contains(t, content, "fotingo search reviewers ali --json")
 			assert.Contains(t, content, "fotingo review -y")
+			assert.Contains(t, content, "fotingo review -y --branch release/2026.04")
 			assert.Contains(t, content, "fotingo review sync -y")
 			assert.Contains(t, content, "fotingo start PROJ-123 -y")
+			assert.Contains(t, content, "fotingo start PROJ-123 --worktree -y --json")
 		})
 	}
 }

@@ -20,6 +20,8 @@ fotingo open pr --json
 fotingo inspect
 ```
 
+When `start` runs with `--worktree` or `git.worktree.enabled=true`, automation should read both `branch.name` and `branch.worktreePath` from the JSON result.
+
 ## Recommended Flags for Automation
 
 | Flag           | Purpose                     |
@@ -45,6 +47,12 @@ Use `--description -` when the automation needs to replace the entire PR body:
 printf '## Summary\n\nFix auth bug\n\n## Description\n\nCustom reviewer notes.\n' | fotingo review -y --description -
 ```
 
+Use the global `--branch` flag when the automation needs to target a non-default PR base branch:
+
+```bash
+fotingo review -y --branch release/2026.04
+```
+
 ## JSON Schemas
 
 ### `start` success
@@ -61,7 +69,8 @@ printf '## Summary\n\nFix auth bug\n\n## Description\n\nCustom reviewer notes.\n
   },
   "branch": {
     "name": "b/PROJ-123_fix_login_bug",
-    "created": true
+    "created": true,
+    "worktreePath": "/workspace/repo-b-proj-123_fix_login_bug"
   }
 }
 ```

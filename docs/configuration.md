@@ -86,6 +86,12 @@ Token setup references:
 | `{{.Issue.Info}}`             | Issue key (`PROJ-123`)                      |
 | `{{.Issue.SanitizedSummary}}` | Issue summary sanitized for branch names    |
 
+### Start Worktrees
+
+When `git.worktree.enabled` is `true`, `fotingo start` creates the issue branch in a sibling linked worktree instead of switching the current checkout.
+
+The command reports the created branch and worktree folder in interactive output. In JSON mode, the location is available as `branch.worktreePath`.
+
 ### Pull Request Template
 
 PR template resolution order:
