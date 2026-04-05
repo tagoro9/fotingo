@@ -40,3 +40,26 @@ func TestMapPRErrorFallback(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "wrapped")
 }
+
+func TestCollectLinkedIssueIDs_PreservesOrderAndDeduplicates(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(
+		t,
+		[]string{"FOTINGO-26", "FOTINGO-31", "FOTINGO-44"},
+		CollectLinkedIssueIDs(
+			"FOTINGO-26",
+			[]string{"FOTINGO-31", "FOTINGO-26", "", "FOTINGO-44", "FOTINGO-31"},
+		),
+	)
+}
+
+func TestCollectLinkedIssueIDs_AllowsCommitOnlyResolution(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(
+		t,
+		[]string{"FOTINGO-26"},
+		CollectLinkedIssueIDs("", []string{"FOTINGO-26"}),
+	)
+}

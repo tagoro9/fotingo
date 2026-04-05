@@ -1,8 +1,10 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -13,6 +15,8 @@ import (
 	"github.com/tagoro9/fotingo/internal/github"
 	"github.com/tagoro9/fotingo/internal/i18n"
 	"github.com/tagoro9/fotingo/internal/jira"
+	"github.com/tagoro9/fotingo/internal/tracker"
+	"github.com/tagoro9/fotingo/internal/ui"
 )
 
 func init() {
@@ -25,8 +29,17 @@ var openPRNotFoundPattern = regexp.MustCompile(`(?i)no pull request found for br
 var jiraIssueLookupMaxAttempts = 3
 var jiraIssueLookupDelay = 150 * time.Millisecond
 var jiraIssueLookupSleep = time.Sleep
+var openSelectOneFn = ui.SelectOne
 
 func getBranchDerivedJiraIssueWithRetry(
+	jiraClient jira.Jira,
+	issueID string,
+	out *commandruntime.LocalizedEmitter,
+) (*jira.Issue, error) {
+	return getJiraIssueWithRetry(jiraClient, issueID, out)
+}
+
+func getJiraIssueWithRetry(
 	jiraClient jira.Jira,
 	issueID string,
 	out *commandruntime.LocalizedEmitter,
@@ -43,6 +56,103 @@ func getBranchDerivedJiraIssueWithRetry(
 	}
 
 	return commandruntime.GetJiraIssueWithRetry(jiraClient, issueID, cfg, debugf)
+}
+
+type openIssueSelection struct {
+	Branch   string
+	IssueIDs []string
+}
+
+func resolveOpenIssueSelection(gitClient git.Git) (*openIssueSelection, error) {
+	branch, err := gitClient.GetCurrentBranch()
+	if err != nil {
+		return nil, err
+	}
+
+	branchIssueID, branchIssueErr := gitClient.GetIssueId()
+	if branchIssueErr != nil && !isOpenBranchIssueMissingErr(branchIssueErr) {
+		return nil, branchIssueErr
+	}
+
+	var commitIssueIDs []string
+	commits, commitErr := gitClient.GetCommitsSinceDefaultBranch()
+	if commitErr == nil {
+		commitIssueIDs = gitClient.GetIssuesFromCommits(commits)
+	}
+
+	issueIDs := internalopen.CollectLinkedIssueIDs(strings.TrimSpace(branchIssueID), commitIssueIDs)
+	if len(issueIDs) > 0 {
+		return &openIssueSelection{Branch: branch, IssueIDs: issueIDs}, nil
+	}
+	if commitErr != nil {
+		return nil, commitErr
+	}
+
+	return &openIssueSelection{Branch: branch}, nil
+}
+
+func isOpenBranchIssueMissingErr(err error) bool {
+	return err != nil && strings.Contains(err.Error(), "no issue id found in branch name:")
+}
+
+func shouldPromptForOpenIssueSelection() bool {
+	return !ShouldOutputJSON() &&
+		!Global.Yes &&
+		isInputTerminalFn() &&
+		commandruntime.IsInputTerminal() &&
+		commandruntime.IsOutputTerminal()
+}
+
+func selectOpenIssueID(issueIDs []string, jiraClient jira.Jira) (string, error) {
+	items := make([]ui.PickerItem, 0, len(issueIDs))
+	for _, issueID := range issueIDs {
+		if strings.TrimSpace(issueID) == "" {
+			continue
+		}
+
+		item := ui.PickerItem{
+			ID:    issueID,
+			Label: issueID,
+			Value: issueID,
+		}
+
+		issue, err := jiraClient.GetIssue(issueID)
+		if err == nil && issue != nil {
+			if strings.TrimSpace(issue.Key) != "" {
+				item.Label = issue.Key
+			}
+			item.Detail = buildOpenIssuePickerDetail(issue)
+		}
+
+		items = append(items, item)
+	}
+
+	selected, err := openSelectOneFn(localizer.T(i18n.OpenPickerIssueTitle), items)
+	if err != nil {
+		return "", fmt.Errorf(localizer.T(i18n.OpenErrPickerRun), err)
+	}
+	if selected == nil {
+		return "", errors.New(localizer.T(i18n.OpenErrSelectionCancel))
+	}
+	if value, ok := selected.Value.(string); ok && strings.TrimSpace(value) != "" {
+		return strings.TrimSpace(value), nil
+	}
+	return strings.TrimSpace(selected.ID), nil
+}
+
+func buildOpenIssuePickerDetail(issue *tracker.Issue) string {
+	if issue == nil {
+		return ""
+	}
+
+	parts := make([]string, 0, 2)
+	if strings.TrimSpace(issue.Summary) != "" {
+		parts = append(parts, strings.TrimSpace(issue.Summary))
+	}
+	if strings.TrimSpace(string(issue.Status)) != "" {
+		parts = append(parts, strings.TrimSpace(string(issue.Status)))
+	}
+	return strings.Join(parts, " | ")
 }
 
 func handleOpenRepo(git git.Git) (string, error) {
@@ -69,23 +179,36 @@ func handleOpenIssueWithMetadata(
 	jiraClient jira.Jira,
 	out *commandruntime.LocalizedEmitter,
 ) (url string, issueID string, issueStatus string, err error) {
-	_, err = git.GetCurrentBranch()
+	selection, err := resolveOpenIssueSelection(git)
 	if err != nil {
 		return "", "", "", err
 	}
-	issueId, err := git.GetIssueId()
+
+	switch len(selection.IssueIDs) {
+	case 0:
+		return "", "", "", fmt.Errorf(localizer.T(i18n.OpenErrNoLinkedIssue), selection.Branch)
+	case 1:
+		issueID = selection.IssueIDs[0]
+	default:
+		if !shouldPromptForOpenIssueSelection() {
+			return "", "", "", fmt.Errorf(
+				localizer.T(i18n.OpenErrAmbiguousIssues),
+				strings.Join(selection.IssueIDs, ", "),
+			)
+		}
+
+		issueID, err = selectOpenIssueID(selection.IssueIDs, jiraClient)
+		if err != nil {
+			return "", "", "", err
+		}
+	}
+
+	issue, err := getJiraIssueWithRetry(jiraClient, issueID, out)
 	if err != nil {
 		return "", "", "", err
 	}
-	issue, err := getBranchDerivedJiraIssueWithRetry(jiraClient, issueId, out)
-	if err != nil {
-		return "", "", "", err
-	}
-	url, err = jiraClient.GetIssueUrl(issueId)
-	if err != nil {
-		return "", "", "", err
-	}
-	return url, issueId, issue.Status, nil
+
+	return jiraClient.GetIssueURL(issueID), issueID, issue.Status, nil
 }
 
 func runOpenWithStatus(statusCh *chan string, option string, openBrowser bool) (string, error) {

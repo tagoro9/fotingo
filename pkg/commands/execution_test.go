@@ -527,6 +527,12 @@ func (s *ExecutionTestSuite) TestOpen_IssueNonJSON() {
 func (s *ExecutionTestSuite) TestOpen_IssueJSON_NoIssueInBranch() {
 	t := s.T()
 
+	savedNewOpenGitClient := newOpenGitClient
+	newOpenGitClient = newGitClient
+	t.Cleanup(func() {
+		newOpenGitClient = savedNewOpenGitClient
+	})
+
 	// On master branch, there's no issue ID to extract
 	Fotingo.SetArgs([]string{"open", "issue", "--json"})
 
@@ -542,6 +548,66 @@ func (s *ExecutionTestSuite) TestOpen_IssueJSON_NoIssueInBranch() {
 	assert.False(t, result.Success)
 	assert.Equal(t, "issue", result.Target)
 	assert.NotEmpty(t, result.Error)
+	assert.Contains(t, result.Error, "no linked Jira issue found")
+}
+
+func (s *ExecutionTestSuite) TestOpen_IssueJSON_FallsBackToCommitLinkedIssue() {
+	t := s.T()
+
+	savedNewOpenGitClient := newOpenGitClient
+	newOpenGitClient = newGitClient
+	t.Cleanup(func() {
+		newOpenGitClient = savedNewOpenGitClient
+	})
+
+	repo, err := gogit.PlainOpen(s.repoDir)
+	require.NoError(t, err)
+
+	wt, err := repo.Worktree()
+	require.NoError(t, err)
+
+	err = wt.Checkout(&gogit.CheckoutOptions{
+		Branch: plumbing.ReferenceName("refs/heads/feature/open-issue-context"),
+		Create: true,
+	})
+	require.NoError(t, err)
+
+	testFile := filepath.Join(s.repoDir, "open-issue-context.txt")
+	require.NoError(t, os.WriteFile(testFile, []byte("change\n"), 0644))
+	_, err = wt.Add("open-issue-context.txt")
+	require.NoError(t, err)
+	_, err = wt.Commit("TEST-456: link issue from commit context", &gogit.CommitOptions{
+		Author: &object.Signature{
+			Name:  "Test User",
+			Email: "test@example.com",
+			When:  time.Now(),
+		},
+	})
+	require.NoError(t, err)
+
+	t.Cleanup(func() {
+		_ = wt.Checkout(&gogit.CheckoutOptions{
+			Branch: "refs/heads/master",
+			Create: false,
+			Force:  true,
+		})
+		_ = os.Remove(testFile)
+	})
+
+	Fotingo.SetArgs([]string{"open", "issue", "--json"})
+
+	output := captureStdout(t, func() {
+		err := Fotingo.Execute()
+		assert.NoError(t, err)
+	})
+
+	var result OpenOutput
+	err = json.Unmarshal([]byte(extractJSON(output)), &result)
+	require.NoError(t, err, "output should contain valid JSON, got: %s", output)
+
+	assert.True(t, result.Success)
+	assert.Equal(t, "issue", result.Target)
+	assert.Contains(t, result.URL, "TEST-456")
 }
 
 func (s *ExecutionTestSuite) TestOpen_PrJSON_Fails() {

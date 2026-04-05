@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires fotingo CLI.
 metadata:
   author: fotingo
-  version: "1.4.0"
+  version: "1.5.0"
   generatedBy: "dev"
 ---
 
@@ -99,7 +99,7 @@ fotingo review sync -y
 
 ## Supporting Commands
 
-- `fotingo open issue` to open current-branch issue URL.
+- `fotingo open issue` to open the Jira issue linked to the current branch context.
 - `fotingo open pr` to open current-branch PR URL.
 
 ## Workflow Guide
@@ -118,6 +118,7 @@ fotingo review sync -y
 - Use `fotingo review sync --sync-title` to recompute the PR title, or `fotingo review sync --title "..."` when you need an explicit title update.
 - Use `--description -` when you need to replace the entire PR body instead of filling template placeholders.
 - Use `--title` only when the generated PR title is wrong or incomplete.
+- Use `fotingo open issue` when you need the linked Jira URL for the current branch context. Interactive runs can disambiguate between multiple linked issues; automation should prefer `--json` and handle ambiguity errors that list the candidate issue IDs.
 - Use `fotingo --help` (and `<command> --help`) to discover additional workflow actions.
 - If required data is missing, run inspect and retry with explicit values.
 

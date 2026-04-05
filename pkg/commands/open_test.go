@@ -18,8 +18,10 @@ import (
 	fterrors "github.com/tagoro9/fotingo/internal/errors"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
+	"github.com/tagoro9/fotingo/internal/i18n"
 	"github.com/tagoro9/fotingo/internal/jira"
 	"github.com/tagoro9/fotingo/internal/tracker"
+	"github.com/tagoro9/fotingo/internal/ui"
 )
 
 // ---------------------------------------------------------------------------
@@ -296,6 +298,7 @@ type mockJira struct {
 	issueURL              string
 	trackerIssue          *tracker.Issue
 	trackerIssueErr       error
+	getIssueFn            func(string) (*tracker.Issue, error)
 	currentUser           *tracker.User
 	currentUserErr        error
 	userOpenIssues        []tracker.Issue
@@ -352,6 +355,9 @@ func (m *mockJira) SearchIssues(projectKey string, query string, issueTypes []tr
 }
 
 func (m *mockJira) GetIssue(id string) (*tracker.Issue, error) {
+	if m.getIssueFn != nil {
+		return m.getIssueFn(id)
+	}
 	return m.trackerIssue, m.trackerIssueErr
 }
 
@@ -548,7 +554,7 @@ func TestHandleOpenIssue_GetBranchError(t *testing.T) {
 	assert.Contains(t, err.Error(), "HEAD is not pointing to a branch")
 }
 
-func TestHandleOpenIssue_GetIssueIdError(t *testing.T) {
+func TestHandleOpenIssue_NoLinkedIssueFound(t *testing.T) {
 	t.Parallel()
 
 	g := &mockGit{
@@ -560,7 +566,7 @@ func TestHandleOpenIssue_GetIssueIdError(t *testing.T) {
 
 	_, err := handleOpenIssue(g, j)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "no issue id found")
+	assert.Contains(t, err.Error(), "no linked Jira issue found")
 }
 
 func TestHandleOpenIssue_GetJiraIssueError(t *testing.T) {
@@ -578,6 +584,97 @@ func TestHandleOpenIssue_GetJiraIssueError(t *testing.T) {
 	_, err := handleOpenIssue(g, j)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "NOPE-999")
+}
+
+func TestHandleOpenIssue_FallsBackToCommitLinkedIssue(t *testing.T) {
+	t.Parallel()
+
+	g := &mockGit{
+		currentBranch: "feature/worktree-cleanup",
+		issueIdErr:    fmt.Errorf("no issue id found in branch name: feature/worktree-cleanup"),
+		commitsSince: []git.Commit{
+			{Message: "wire open issue fallback"},
+		},
+		issuesFromCommits: []string{"TEST-456"},
+	}
+
+	j := &mockJira{
+		jiraIssue: &jira.Issue{
+			Key:     "TEST-456",
+			Summary: "Add user dashboard",
+			Status:  "In Progress",
+			Type:    "Story",
+		},
+		issueURL: "https://jira.example.com/browse/%s",
+	}
+
+	url, err := handleOpenIssue(g, j)
+	require.NoError(t, err)
+	assert.Equal(t, "https://jira.example.com/browse/TEST-456", url)
+}
+
+func TestHandleOpenIssue_AmbiguousNonInteractive(t *testing.T) {
+	savedJSON := Global.JSON
+	Global.JSON = true
+	t.Cleanup(func() {
+		Global.JSON = savedJSON
+	})
+
+	g := &mockGit{
+		currentBranch: "feature/open-issue",
+		issueIdErr:    fmt.Errorf("no issue id found in branch name: feature/open-issue"),
+		commitsSince: []git.Commit{
+			{Message: "FOTINGO-26"},
+			{Message: "FOTINGO-31"},
+		},
+		issuesFromCommits: []string{"FOTINGO-26", "FOTINGO-31"},
+	}
+
+	j := &mockJira{}
+
+	_, err := handleOpenIssue(g, j)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "multiple linked Jira issues found")
+	assert.Contains(t, err.Error(), "FOTINGO-26, FOTINGO-31")
+}
+
+func TestSelectOpenIssueID_UsesPickerSelection(t *testing.T) {
+	savedSelectOne := openSelectOneFn
+	openSelectOneFn = func(title string, items []ui.PickerItem) (*ui.PickerItem, error) {
+		assert.Equal(t, localizer.T(i18n.OpenPickerIssueTitle), title)
+		require.Len(t, items, 2)
+		assert.Equal(t, "TEST-123", items[0].Label)
+		assert.Equal(t, "Fix login bug | InProgress", items[0].Detail)
+		return &items[1], nil
+	}
+	t.Cleanup(func() {
+		openSelectOneFn = savedSelectOne
+	})
+
+	j := &mockJira{
+		getIssueFn: func(id string) (*tracker.Issue, error) {
+			switch id {
+			case "TEST-123":
+				return &tracker.Issue{
+					Key:     "TEST-123",
+					Summary: "Fix login bug",
+					Status:  tracker.IssueStatusInProgress,
+				}, nil
+			case "TEST-456":
+				return &tracker.Issue{
+					Key:     "TEST-456",
+					Summary: "Add user dashboard",
+					Status:  tracker.IssueStatusInReview,
+				}, nil
+			default:
+				return nil, fmt.Errorf("issue %s not found", id)
+			}
+		},
+	}
+
+	issueID, err := selectOpenIssueID([]string{"TEST-123", "TEST-456"}, j)
+	require.NoError(t, err)
+	assert.Equal(t, "TEST-456", issueID)
 }
 
 // ---------------------------------------------------------------------------
