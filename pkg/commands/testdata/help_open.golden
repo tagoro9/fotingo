@@ -2,7 +2,7 @@ Open various project-related URLs in your default browser.
 
 Available targets:
   branch  - Open the current branch on GitHub
-  issue   - Open the Jira issue associated with the current branch
+  issue   - Open the Jira issue linked to the current branch context
   pr      - Open the pull request for the current branch
   repo    - Open the repository homepage on GitHub
 
@@ -10,7 +10,7 @@ Examples:
   # Open the current branch on GitHub
   fotingo open branch
 
-  # Open the Jira issue for the current branch
+  # Open the Jira issue linked to the current branch context
   fotingo open issue
 
   # Open the pull request for the current branch

@@ -12,14 +12,24 @@ Package open contains resource URL resolution and error mapping for the open com
 
 ## Index
 
+- [func CollectLinkedIssueIDs\(branchIssueID string, commitIssueIDs \[\]string\) \[\]string](<#CollectLinkedIssueIDs>)
 - [func MapPRError\(err error, noPRPattern \*regexp.Regexp, noPRForBranchErr func\(branch string, cause error\) error, wrapErr func\(cause error\) error\) error](<#MapPRError>)
 - [func ResolveBranchURL\(gitClient git.Git, unsupportedHostErr func\(host string\) error\) \(string, error\)](<#ResolveBranchURL>)
 - [func ResolvePRURL\(githubClient github.Github\) \(string, error\)](<#ResolvePRURL>)
 - [func ResolveRepoURL\(gitClient git.Git\) \(string, error\)](<#ResolveRepoURL>)
 
 
+<a name="CollectLinkedIssueIDs"></a>
+## func [CollectLinkedIssueIDs](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L73>)
+
+```go
+func CollectLinkedIssueIDs(branchIssueID string, commitIssueIDs []string) []string
+```
+
+CollectLinkedIssueIDs keeps the branch issue first and appends commit\-linked issues in first\-seen order without duplicates.
+
 <a name="MapPRError"></a>
-## func [MapPRError](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L49-L54>)
+## func [MapPRError](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L50-L55>)
 
 ```go
 func MapPRError(err error, noPRPattern *regexp.Regexp, noPRForBranchErr func(branch string, cause error) error, wrapErr func(cause error) error) error
@@ -28,7 +38,7 @@ func MapPRError(err error, noPRPattern *regexp.Regexp, noPRForBranchErr func(bra
 MapPRError translates open\-pr errors into user\-facing error variants.
 
 <a name="ResolveBranchURL"></a>
-## func [ResolveBranchURL](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L22>)
+## func [ResolveBranchURL](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L23>)
 
 ```go
 func ResolveBranchURL(gitClient git.Git, unsupportedHostErr func(host string) error) (string, error)
@@ -37,7 +47,7 @@ func ResolveBranchURL(gitClient git.Git, unsupportedHostErr func(host string) er
 ResolveBranchURL returns the hosted branch URL for open branch workflows.
 
 <a name="ResolvePRURL"></a>
-## func [ResolvePRURL](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L40>)
+## func [ResolvePRURL](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L41>)
 
 ```go
 func ResolvePRURL(githubClient github.Github) (string, error)
@@ -46,7 +56,7 @@ func ResolvePRURL(githubClient github.Github) (string, error)
 ResolvePRURL returns the pull request URL for open pr workflows.
 
 <a name="ResolveRepoURL"></a>
-## func [ResolveRepoURL](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L13>)
+## func [ResolveRepoURL](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/open/resolvers.go#L14>)
 
 ```go
 func ResolveRepoURL(gitClient git.Git) (string, error)

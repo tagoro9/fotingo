@@ -3,6 +3,7 @@ package open
 import (
 	"fmt"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/tagoro9/fotingo/internal/git"
@@ -65,4 +66,23 @@ func MapPRError(
 	}
 
 	return wrapErr(err)
+}
+
+// CollectLinkedIssueIDs keeps the branch issue first and appends commit-linked
+// issues in first-seen order without duplicates.
+func CollectLinkedIssueIDs(branchIssueID string, commitIssueIDs []string) []string {
+	linked := make([]string, 0, len(commitIssueIDs)+1)
+	if strings.TrimSpace(branchIssueID) != "" {
+		linked = append(linked, strings.TrimSpace(branchIssueID))
+	}
+
+	for _, issueID := range commitIssueIDs {
+		issueID = strings.TrimSpace(issueID)
+		if issueID == "" || slices.Contains(linked, issueID) {
+			continue
+		}
+		linked = append(linked, issueID)
+	}
+
+	return linked
 }

@@ -170,6 +170,11 @@ Open project-related URLs in your browser.
 fotingo open [branch|issue|pr|repo]
 ```
 
+`fotingo open issue` resolves Jira issues from the current branch context. If the branch
+name includes an issue key, that key is preferred first, and commit-linked issue keys from
+the branch are also considered. Interactive runs will prompt when multiple linked issues are
+found; `--json` and other non-interactive runs return an ambiguity error listing the candidates.
+
 Examples:
 
 ```bash
