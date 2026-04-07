@@ -1,12 +1,12 @@
 Output information about the current execution context as JSON.
 
 The inspect command displays detailed information about your current working state,
-including branch details, associated Jira issues, and commit history.
+including branch details, associated Jira issues, commit history, and matching pull request metadata when available.
 
 This command is useful for:
 - Debugging fotingo configuration
 - AI agents that need to understand the current context
-- Scripts that need to extract branch/issue information
+- Scripts that need to extract branch, issue, and pull request information
 
 Examples:
   # Inspect current branch context

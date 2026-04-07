@@ -29,10 +29,11 @@ func init() {
 
 // InspectOutput represents the JSON output of the inspect command
 type InspectOutput struct {
-	Branch   *BranchInfo  `json:"branch,omitempty"`
-	Issue    *IssueInfo   `json:"issue,omitempty"`
-	IssueIDs []string     `json:"issueIds,omitempty"`
-	Commits  []CommitInfo `json:"commits,omitempty"`
+	Branch      *BranchInfo    `json:"branch,omitempty"`
+	Issue       *IssueInfo     `json:"issue,omitempty"`
+	PullRequest *InspectPRInfo `json:"pullRequest,omitempty"`
+	IssueIDs    []string       `json:"issueIds,omitempty"`
+	Commits     []CommitInfo   `json:"commits,omitempty"`
 }
 
 // BranchInfo contains information about a git branch
@@ -51,6 +52,14 @@ type IssueInfo struct {
 	Type        string `json:"type"`
 	ParentKey   string `json:"parentKey,omitempty"`
 	EpicKey     string `json:"epicKey,omitempty"`
+	URL         string `json:"url"`
+}
+
+// InspectPRInfo contains information about a pull request related to branch inspect output.
+type InspectPRInfo struct {
+	Number      int    `json:"number"`
+	Title       string `json:"title"`
+	Description string `json:"description,omitempty"`
 	URL         string `json:"url"`
 }
 
@@ -73,8 +82,9 @@ var inspectCmd = &cobra.Command{
 				Issue:  inspectCmdFlags.issue,
 			},
 			Deps: internalinspect.WorkflowDeps{
-				NewGitClient:  git.New,
-				NewJiraClient: newJiraClient,
+				NewGitClient:    git.New,
+				NewGitHubClient: newGitHubClient,
+				NewJiraClient:   newJiraClient,
 				FetchBranchIssue: func(jiraClient jira.Jira, issueID string) (*jira.Issue, error) {
 					return fetchInspectBranchIssue(jiraClient, issueID)
 				},
@@ -96,6 +106,14 @@ var inspectCmd = &cobra.Command{
 				Name:          result.Branch.Name,
 				IssueID:       result.Branch.IssueID,
 				DefaultBranch: result.Branch.DefaultBranch,
+			}
+		}
+		if result.PullRequest != nil {
+			output.PullRequest = &InspectPRInfo{
+				Number:      result.PullRequest.Number,
+				Title:       result.PullRequest.Title,
+				Description: result.PullRequest.Description,
+				URL:         result.PullRequest.URL,
 			}
 		}
 		if result.Issue != nil {

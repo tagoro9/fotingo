@@ -802,6 +802,12 @@ func TestOutputJSON_InspectOutput(t *testing.T) {
 			IssueID:       "TEST-1",
 			DefaultBranch: "main",
 		},
+		PullRequest: &InspectPRInfo{
+			Number:      12,
+			Title:       "Inspect output PR",
+			Description: "Inspect output PR body",
+			URL:         "https://github.com/test/repo/pull/12",
+		},
 		IssueIDs: []string{"TEST-1"},
 	}
 
@@ -814,6 +820,9 @@ func TestOutputJSON_InspectOutput(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "f/TEST-1_my_branch", decoded.Branch.Name)
 	assert.Equal(t, "TEST-1", decoded.Branch.IssueID)
+	require.NotNil(t, decoded.PullRequest)
+	assert.Equal(t, 12, decoded.PullRequest.Number)
+	assert.Equal(t, "Inspect output PR body", decoded.PullRequest.Description)
 	assert.Equal(t, []string{"TEST-1"}, decoded.IssueIDs)
 }
 
@@ -888,6 +897,12 @@ func TestInspectOutput_JSONRoundTrip(t *testing.T) {
 			Type:        "Story",
 			URL:         "https://jira.example.com/browse/PROJ-42",
 		},
+		PullRequest: &InspectPRInfo{
+			Number:      77,
+			Title:       "Inspect PR context",
+			Description: "Inspect PR context body",
+			URL:         "https://github.com/o/r/pull/77",
+		},
 		IssueIDs: []string{"PROJ-42", "PROJ-43"},
 		Commits: []CommitInfo{
 			{Hash: "abc123", Message: "feat: PROJ-42 initial work", Author: "dev"},
@@ -906,6 +921,9 @@ func TestInspectOutput_JSONRoundTrip(t *testing.T) {
 	assert.Equal(t, original.Branch.IssueID, decoded.Branch.IssueID)
 	assert.Equal(t, original.Issue.Key, decoded.Issue.Key)
 	assert.Equal(t, original.Issue.Description, decoded.Issue.Description)
+	require.NotNil(t, decoded.PullRequest)
+	assert.Equal(t, original.PullRequest.Number, decoded.PullRequest.Number)
+	assert.Equal(t, original.PullRequest.Description, decoded.PullRequest.Description)
 	assert.Equal(t, original.IssueIDs, decoded.IssueIDs)
 	assert.Len(t, decoded.Commits, 2)
 	assert.Equal(t, "abc123", decoded.Commits[0].Hash)

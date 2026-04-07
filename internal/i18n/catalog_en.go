@@ -297,7 +297,7 @@ Examples:
 
 		InspectUse:             "inspect",
 		InspectShort:           "Output information about the current context",
-		InspectLong:            "Output information about the current execution context as JSON.\n\nThe inspect command displays detailed information about your current working state,\nincluding branch details, associated Jira issues, and commit history.\n\nThis command is useful for:\n- Debugging fotingo configuration\n- AI agents that need to understand the current context\n- Scripts that need to extract branch/issue information\n\nExamples:\n  # Inspect current branch context\n  fotingo inspect\n\n  # Inspect a specific branch\n  fotingo inspect -b feature/PROJ-123-my-feature\n\n  # Inspect a specific issue\n  fotingo inspect -i PROJ-123\n\nOutput is always JSON formatted for easy parsing.",
+		InspectLong:            "Output information about the current execution context as JSON.\n\nThe inspect command displays detailed information about your current working state,\nincluding branch details, associated Jira issues, commit history, and matching pull request metadata when available.\n\nThis command is useful for:\n- Debugging fotingo configuration\n- AI agents that need to understand the current context\n- Scripts that need to extract branch, issue, and pull request information\n\nExamples:\n  # Inspect current branch context\n  fotingo inspect\n\n  # Inspect a specific branch\n  fotingo inspect -b feature/PROJ-123-my-feature\n\n  # Inspect a specific issue\n  fotingo inspect -i PROJ-123\n\nOutput is always JSON formatted for easy parsing.",
 		InspectFlagBranch:      "Inspect a specific branch",
 		InspectFlagIssue:       "Inspect a specific issue",
 		InspectErrEncodingJSON: "Error encoding JSON: %v\n",

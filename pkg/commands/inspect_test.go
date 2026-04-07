@@ -113,6 +113,25 @@ func TestInspectOutput_IssueIDs(t *testing.T) {
 	assert.Contains(t, output.IssueIDs, "TEST-789")
 }
 
+func TestInspectOutput_PullRequestInfo(t *testing.T) {
+	t.Parallel()
+
+	output := InspectOutput{
+		PullRequest: &InspectPRInfo{
+			Number:      42,
+			Title:       "Inspect PR metadata",
+			Description: "PR body",
+			URL:         "https://github.com/testowner/testrepo/pull/42",
+		},
+	}
+
+	assert.NotNil(t, output.PullRequest)
+	assert.Equal(t, 42, output.PullRequest.Number)
+	assert.Equal(t, "Inspect PR metadata", output.PullRequest.Title)
+	assert.Equal(t, "PR body", output.PullRequest.Description)
+	assert.Equal(t, "https://github.com/testowner/testrepo/pull/42", output.PullRequest.URL)
+}
+
 func TestExtractIssueIDsFromCommits(t *testing.T) {
 	t.Parallel()
 

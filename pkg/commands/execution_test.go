@@ -303,10 +303,19 @@ func (s *ExecutionTestSuite) TestInspect_WithIssueFlag() {
 	assert.Equal(t, "Bug", result.Issue.Type)
 	assert.Equal(t, "To Do", result.Issue.Status)
 	assert.Contains(t, result.Issue.URL, "TEST-123")
+	assert.Nil(t, result.PullRequest)
 }
 
 func (s *ExecutionTestSuite) TestInspect_DefaultBranchInfo() {
 	t := s.T()
+
+	s.githubServer.SetPullRequests("testowner", "testrepo", nil)
+	s.githubServer.AddPullRequest("testowner", "testrepo",
+		ghtestutil.NewPullRequest(42, "Inspect current branch", "master", "master", "open"),
+	)
+	t.Cleanup(func() {
+		s.githubServer.SetPullRequests("testowner", "testrepo", nil)
+	})
 
 	output := captureStdout(t, func() {
 		Fotingo.SetArgs([]string{"inspect"})
@@ -320,10 +329,22 @@ func (s *ExecutionTestSuite) TestInspect_DefaultBranchInfo() {
 
 	assert.NotNil(t, result.Branch, "branch should be present")
 	assert.NotEmpty(t, result.Branch.Name)
+	require.NotNil(t, result.PullRequest)
+	assert.Equal(t, 42, result.PullRequest.Number)
+	assert.Equal(t, "Inspect current branch", result.PullRequest.Title)
+	assert.Equal(t, "Pull request body for Inspect current branch", result.PullRequest.Description)
 }
 
 func (s *ExecutionTestSuite) TestInspect_WithBranchFlag() {
 	t := s.T()
+
+	s.githubServer.SetPullRequests("testowner", "testrepo", nil)
+	s.githubServer.AddPullRequest("testowner", "testrepo",
+		ghtestutil.NewPullRequest(43, "Inspect explicit branch", "feature/TEST-999-some-feature", "master", "open"),
+	)
+	t.Cleanup(func() {
+		s.githubServer.SetPullRequests("testowner", "testrepo", nil)
+	})
 
 	output := captureStdout(t, func() {
 		Fotingo.SetArgs([]string{"inspect", "--branch", "feature/TEST-999-some-feature"})
@@ -337,6 +358,10 @@ func (s *ExecutionTestSuite) TestInspect_WithBranchFlag() {
 
 	assert.NotNil(t, result.Branch, "branch should be present")
 	assert.Equal(t, "feature/TEST-999-some-feature", result.Branch.Name)
+	require.NotNil(t, result.PullRequest)
+	assert.Equal(t, 43, result.PullRequest.Number)
+	assert.Equal(t, "Inspect explicit branch", result.PullRequest.Title)
+	assert.Equal(t, "Pull request body for Inspect explicit branch", result.PullRequest.Description)
 }
 
 func (s *ExecutionTestSuite) TestInspect_WithNonExistentIssue() {
