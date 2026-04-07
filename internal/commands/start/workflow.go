@@ -395,8 +395,7 @@ func (r WorkflowRunner) createIssueBranch(out WorkflowEmitter, gitClient git.Git
 			return "", "", fterrors.WrapGitError(r.localize(i18n.StartWrapCreateBranch), err)
 		}
 		out.Info("check", i18n.StartStatusBranchDone, branchName)
-		out.Info("branch", i18n.StartStatusWorktreeDone, worktreePath)
-		out.Info("success", i18n.StartStatusWorktreeReady, branchName, worktreePath)
+		out.Info("success", i18n.StartStatusWorktreeReady, branchName, worktreePath, worktreePath)
 		return branchName, worktreePath, nil
 	}
 

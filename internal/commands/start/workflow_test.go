@@ -407,22 +407,34 @@ func TestWorkflowRunnerCreateIssueBranch_EmitsBranchAndWorktreeLocation(t *testi
 	assert.Equal(t, "/tmp/fotingo-f-test-123_fix_worktree", worktreePath)
 
 	var sawBranchDone bool
-	var sawWorktreeDone bool
 	var sawWorktreeReady bool
 	for _, event := range emitter.events {
 		switch event.key {
 		case i18n.StartStatusBranchDone:
 			sawBranchDone = len(event.args) == 1 && event.args[0] == "f/test-123_fix_worktree"
-		case i18n.StartStatusWorktreeDone:
-			sawWorktreeDone = len(event.args) == 1 && event.args[0] == "/tmp/fotingo-f-test-123_fix_worktree"
 		case i18n.StartStatusWorktreeReady:
-			sawWorktreeReady = len(event.args) == 2 &&
+			sawWorktreeReady = len(event.args) == 3 &&
 				event.args[0] == "f/test-123_fix_worktree" &&
-				event.args[1] == "/tmp/fotingo-f-test-123_fix_worktree"
+				event.args[1] == "/tmp/fotingo-f-test-123_fix_worktree" &&
+				event.args[2] == "/tmp/fotingo-f-test-123_fix_worktree"
 		}
 	}
 
 	assert.True(t, sawBranchDone)
-	assert.True(t, sawWorktreeDone)
 	assert.True(t, sawWorktreeReady)
+}
+
+func TestWorktreeReadyMessage_IncludesExplicitCdInstruction(t *testing.T) {
+	message := i18n.T(
+		i18n.StartStatusWorktreeReady,
+		"f/test-123_fix_worktree",
+		"/tmp/fotingo-f-test-123_fix_worktree",
+		"/tmp/fotingo-f-test-123_fix_worktree",
+	)
+
+	assert.Contains(t, message, "Ready to work in the new worktree.")
+	assert.Contains(t, message, "Branch: f/test-123_fix_worktree")
+	assert.Contains(t, message, "Directory: /tmp/fotingo-f-test-123_fix_worktree")
+	assert.Contains(t, message, "Next: cd /tmp/fotingo-f-test-123_fix_worktree")
+	assert.Contains(t, message, "\n")
 }
