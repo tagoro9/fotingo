@@ -3,6 +3,7 @@ package inspect
 import (
 	"github.com/spf13/viper"
 	"github.com/tagoro9/fotingo/internal/git"
+	"github.com/tagoro9/fotingo/internal/github"
 	"github.com/tagoro9/fotingo/internal/jira"
 )
 
@@ -32,12 +33,21 @@ type IssueInfo struct {
 	URL         string
 }
 
+// PullRequestInfo represents pull-request-related inspect command output.
+type PullRequestInfo struct {
+	Number      int
+	Title       string
+	Description string
+	URL         string
+}
+
 // WorkflowResult is the internal inspect workflow result.
 type WorkflowResult struct {
-	Branch   *BranchInfo
-	Issue    *IssueInfo
-	IssueIDs []string
-	Commits  []CommitInfo
+	Branch      *BranchInfo
+	Issue       *IssueInfo
+	PullRequest *PullRequestInfo
+	IssueIDs    []string
+	Commits     []CommitInfo
 }
 
 // WorkflowOptions controls inspect workflow selection behavior.
@@ -49,6 +59,7 @@ type WorkflowOptions struct {
 // WorkflowDeps are inspect workflow dependencies.
 type WorkflowDeps struct {
 	NewGitClient     func(*viper.Viper, *chan string) (git.Git, error)
+	NewGitHubClient  func(git.Git, *viper.Viper) (github.Github, error)
 	NewJiraClient    func(*viper.Viper) (jira.Jira, error)
 	FetchBranchIssue func(jira.Jira, string) (*jira.Issue, error)
 }
@@ -143,6 +154,25 @@ func (r WorkflowRunner) Run() (WorkflowResult, error) {
 					ParentKey:   issue.ParentKey,
 					EpicKey:     issue.EpicKey,
 					URL:         jiraClient.GetIssueURL(issue.Key),
+				}
+			}
+		}
+	}
+
+	if r.Deps.NewGitHubClient != nil {
+		ghClient, err := r.Deps.NewGitHubClient(gitClient, r.Config)
+		if err == nil {
+			exists, pr, err := ghClient.DoesPRExistForBranch(branchName)
+			if err == nil && exists && pr != nil {
+				url := pr.HTMLURL
+				if url == "" {
+					url = pr.URL
+				}
+				output.PullRequest = &PullRequestInfo{
+					Number:      pr.Number,
+					Title:       pr.Title,
+					Description: pr.Body,
+					URL:         url,
 				}
 			}
 		}

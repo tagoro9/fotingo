@@ -34,6 +34,7 @@ This file defines JSON output structures for all commands to support machine\-re
 - [type ErrorOutput](<#ErrorOutput>)
 - [type GlobalFlags](<#GlobalFlags>)
 - [type InspectOutput](<#InspectOutput>)
+- [type InspectPRInfo](<#InspectPRInfo>)
 - [type IssueInfo](<#IssueInfo>)
 - [type JSONOutput](<#JSONOutput>)
   - [func NewJSONOutput\(\) \*JSONOutput](<#NewJSONOutput>)
@@ -195,7 +196,7 @@ type AISetupResult struct {
 ```
 
 <a name="BranchInfo"></a>
-## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L39-L43>)
+## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L40-L44>)
 
 BranchInfo contains information about a git branch
 
@@ -208,7 +209,7 @@ type BranchInfo struct {
 ```
 
 <a name="CommitInfo"></a>
-## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L58-L62>)
+## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L67-L71>)
 
 CommitInfo contains information about a git commit
 
@@ -261,21 +262,36 @@ type GlobalFlags struct {
 ```
 
 <a name="InspectOutput"></a>
-## type [InspectOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L31-L36>)
+## type [InspectOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L31-L37>)
 
 InspectOutput represents the JSON output of the inspect command
 
 ```go
 type InspectOutput struct {
-    Branch   *BranchInfo  `json:"branch,omitempty"`
-    Issue    *IssueInfo   `json:"issue,omitempty"`
-    IssueIDs []string     `json:"issueIds,omitempty"`
-    Commits  []CommitInfo `json:"commits,omitempty"`
+    Branch      *BranchInfo    `json:"branch,omitempty"`
+    Issue       *IssueInfo     `json:"issue,omitempty"`
+    PullRequest *InspectPRInfo `json:"pullRequest,omitempty"`
+    IssueIDs    []string       `json:"issueIds,omitempty"`
+    Commits     []CommitInfo   `json:"commits,omitempty"`
+}
+```
+
+<a name="InspectPRInfo"></a>
+## type [InspectPRInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L59-L64>)
+
+InspectPRInfo contains information about a pull request related to branch inspect output.
+
+```go
+type InspectPRInfo struct {
+    Number      int    `json:"number"`
+    Title       string `json:"title"`
+    Description string `json:"description,omitempty"`
+    URL         string `json:"url"`
 }
 ```
 
 <a name="IssueInfo"></a>
-## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L46-L55>)
+## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L47-L56>)
 
 IssueInfo contains information about a Jira issue
 

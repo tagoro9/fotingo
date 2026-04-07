@@ -90,6 +90,7 @@ Refresh fotingo-managed sections on an existing pull request:
 ## Workflow Guide
 
 - Start from `fotingo inspect --json` when branch or issue context is unclear.
+- `fotingo inspect --json` returns branch context, linked issue context, commit history, and `pullRequest` metadata including title, description, and URL when the inspected branch already has an open PR.
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
 - Use `fotingo start --worktree ... --json` when you want an isolated sibling checkout; automation should read `branch.name` and `branch.worktreePath` from the JSON result.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.

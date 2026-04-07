@@ -193,6 +193,10 @@ Output execution context as JSON.
 fotingo inspect [flags]
 ```
 
+Branch inspection now includes pull request metadata when the inspected branch already has an
+open PR, including the PR title, description, and URL, so automation can read branch, issue,
+commit, and PR context from a single JSON call.
+
 Flags:
 
 | Flag       | Short | Description               |
