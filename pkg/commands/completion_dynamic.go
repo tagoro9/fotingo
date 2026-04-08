@@ -98,6 +98,41 @@ func completeReviewAssigneesFlag(
 	return completeReviewMatchOptions(toComplete, userOptions), cobra.ShellCompDirectiveNoFileComp
 }
 
+func completeReviewSyncSectionFlag(
+	cmd *cobra.Command,
+	_ []string,
+	toComplete string,
+) ([]string, cobra.ShellCompDirective) {
+	selected := map[string]struct{}{}
+	if cmd != nil && cmd.Flags() != nil {
+		if values, err := cmd.Flags().GetStringSlice("section"); err == nil {
+			for _, value := range values {
+				candidate := strings.ToLower(strings.TrimSpace(value))
+				if candidate == "" {
+					continue
+				}
+				selected[candidate] = struct{}{}
+			}
+		}
+	}
+
+	needle := strings.ToLower(strings.TrimSpace(toComplete))
+	completions := make([]string, 0, len(reviewSyncSectionSpecs))
+	for _, spec := range reviewSyncSectionSpecs {
+		if _, ok := selected[spec.name]; ok {
+			continue
+		}
+		if needle != "" &&
+			!strings.Contains(spec.name, needle) &&
+			!strings.Contains(strings.ToLower(spec.description), needle) {
+			continue
+		}
+		completions = append(completions, spec.name+"\t"+spec.description)
+	}
+
+	return completions, cobra.ShellCompDirectiveNoFileComp
+}
+
 func completeReviewMatchOptions(toComplete string, options []reviewMatchOption) []string {
 	completionOptions := make([]internalcompletion.ReviewMatchOption, 0, len(options))
 	for _, option := range options {

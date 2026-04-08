@@ -100,7 +100,7 @@ Refresh fotingo-managed sections on an existing pull request:
 - Use `fotingo review --branch ...` when the pull request should target a non-default base branch.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.
 - Use `fotingo review sync -y` after follow-up commits to refresh fotingo-managed sections while preserving manual edits outside the managed placeholders.
-- Use `fotingo review sync --section ...` to limit which managed sections are rewritten. `--template-summary` and `--template-description` only apply when those sections are included in the sync.
+- Use `fotingo review sync --section ...` to limit which managed sections are rewritten. Supported section values are `summary`, `description`, `fixed-issues`, and `changes`, and shell completion can suggest them. `--template-summary` and `--template-description` only apply when those sections are included in the sync.
 - Use `fotingo review sync --sync-title` to recompute the PR title, or `fotingo review sync --title "..."` when you need an explicit title update.
 - Use `--description -` when you need to replace the entire PR body instead of filling template placeholders.
 - Use `--title` only when the generated PR title is wrong or incomplete.

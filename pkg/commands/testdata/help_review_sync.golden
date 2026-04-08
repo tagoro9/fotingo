@@ -1,11 +1,13 @@
 Refresh fotingo-managed pull request sections for the current branch using marker-delimited ownership in the PR body.
 
+Supported sections: summary, description, fixed-issues, changes.
+
 Usage:
   fotingo review sync [flags]
 
 Flags:
   -h, --help                          help for sync
-      --section strings               Sync only the specified fotingo-managed section (repeatable)
+      --section strings               Sync only the specified fotingo-managed section (repeatable). Supported values: summary, description, fixed-issues, changes
       --sync-title                    Refresh the pull request title using fotingo's derived title rules
       --template-description string   Override the synced Description section content; expands escaped \n, \r\n, and \t
       --template-summary string       Override the synced Summary section content

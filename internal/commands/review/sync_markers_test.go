@@ -29,6 +29,7 @@ func TestNormalizeManagedSections_RejectsUnknownSection(t *testing.T) {
 	_, err := NormalizeManagedSections([]string{"custom"})
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "unsupported review sync section")
+	assert.Contains(t, err.Error(), "summary, description, fixed-issues, changes")
 }
 
 func TestManagedSectionMarkers(t *testing.T) {

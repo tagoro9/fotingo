@@ -39,7 +39,7 @@ func NormalizeManagedSections(requested []string) ([]string, error) {
 			continue
 		}
 		if !isManagedSection(candidate) {
-			return nil, fmt.Errorf("unsupported review sync section %q", section)
+			return nil, unsupportedManagedSectionError(section)
 		}
 		if _, ok := seen[candidate]; ok {
 			continue
@@ -102,7 +102,7 @@ func ReplaceManagedSectionContent(body string, section string, replacement strin
 func managedSectionRange(body string, section string) (string, string, int, int, error) {
 	normalized := strings.ToLower(strings.TrimSpace(section))
 	if !isManagedSection(normalized) {
-		return "", "", 0, 0, fmt.Errorf("unsupported review sync section %q", section)
+		return "", "", 0, 0, unsupportedManagedSectionError(section)
 	}
 
 	start := managedSectionStartMarker(normalized)
@@ -120,4 +120,12 @@ func managedSectionRange(body string, section string) (string, string, int, int,
 
 	endIndex := searchFrom + relativeEndIndex
 	return start, end, startIndex, endIndex, nil
+}
+
+func unsupportedManagedSectionError(section string) error {
+	return fmt.Errorf(
+		"unsupported review sync section %q (supported: %s)",
+		section,
+		strings.Join(managedSectionOrder, ", "),
+	)
 }

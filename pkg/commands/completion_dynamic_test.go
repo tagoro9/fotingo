@@ -218,6 +218,28 @@ func TestCompleteStartIssueTypeFlag_UsesProjectIssueTypes(t *testing.T) {
 	assert.Equal(t, []string{"Story"}, completions)
 }
 
+func TestCompleteReviewSyncSectionFlag_ReturnsSupportedSections(t *testing.T) {
+	completions, directive := completeReviewSyncSectionFlag(nil, nil, "desc")
+
+	assert.Equal(t, cobra.ShellCompDirectiveNoFileComp, directive)
+	assert.Contains(t, completions, "description\tPR description section")
+	assert.NotContains(t, completionValues(completions), "summary")
+}
+
+func TestCompleteReviewSyncSectionFlag_ExcludesAlreadySelectedSections(t *testing.T) {
+	cmd := &cobra.Command{Use: "sync"}
+	cmd.Flags().StringSlice("section", nil, "")
+	require.NoError(t, cmd.Flags().Set("section", "summary"))
+
+	completions, directive := completeReviewSyncSectionFlag(cmd, nil, "")
+
+	assert.Equal(t, cobra.ShellCompDirectiveNoFileComp, directive)
+	assert.NotContains(t, completionValues(completions), "summary")
+	assert.Contains(t, completionValues(completions), "description")
+	assert.Contains(t, completionValues(completions), "fixed-issues")
+	assert.Contains(t, completionValues(completions), "changes")
+}
+
 func completionValues(candidates []string) []string {
 	values := make([]string, 0, len(candidates))
 	for _, candidate := range candidates {

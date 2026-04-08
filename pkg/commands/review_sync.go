@@ -22,14 +22,27 @@ type reviewSyncFlags struct {
 	templateDescription string
 }
 
+type reviewSyncSectionSpec struct {
+	name        string
+	description string
+}
+
 var reviewSyncCmdFlags = reviewSyncFlags{}
 
+var reviewSyncSectionSpecs = []reviewSyncSectionSpec{
+	{name: internalreview.ManagedSectionSummary, description: "PR summary section"},
+	{name: internalreview.ManagedSectionDescription, description: "PR description section"},
+	{name: internalreview.ManagedSectionFixedIssues, description: "Linked issue fixes section"},
+	{name: internalreview.ManagedSectionChanges, description: "Commit-based changes section"},
+}
+
 func init() {
-	reviewSyncCmd.Flags().StringSliceVar(&reviewSyncCmdFlags.sections, "section", nil, "Sync only the specified fotingo-managed section (repeatable)")
+	reviewSyncCmd.Flags().StringSliceVar(&reviewSyncCmdFlags.sections, "section", nil, reviewSyncSectionFlagHelp())
 	reviewSyncCmd.Flags().BoolVar(&reviewSyncCmdFlags.syncTitle, "sync-title", false, "Refresh the pull request title using fotingo's derived title rules")
 	reviewSyncCmd.Flags().StringVar(&reviewSyncCmdFlags.title, "title", "", "Override the pull request title during sync")
 	reviewSyncCmd.Flags().StringVar(&reviewSyncCmdFlags.templateSummary, "template-summary", "", "Override the synced Summary section content")
 	reviewSyncCmd.Flags().StringVar(&reviewSyncCmdFlags.templateDescription, "template-description", "", "Override the synced Description section content; expands escaped \\n, \\r\\n, and \\t")
+	_ = reviewSyncCmd.RegisterFlagCompletionFunc("section", completeReviewSyncSectionFlag)
 
 	reviewCmd.AddCommand(reviewSyncCmd)
 }
@@ -37,7 +50,10 @@ func init() {
 var reviewSyncCmd = &cobra.Command{
 	Use:   "sync",
 	Short: "Refresh fotingo-managed sections in the current pull request",
-	Long:  "Refresh fotingo-managed pull request sections for the current branch using marker-delimited ownership in the PR body.",
+	Long: fmt.Sprintf(
+		"Refresh fotingo-managed pull request sections for the current branch using marker-delimited ownership in the PR body.\n\nSupported sections: %s.",
+		strings.Join(reviewSyncSupportedSections(), ", "),
+	),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if ShouldOutputJSON() {
 			statusCh := make(chan string, 100)
@@ -59,6 +75,21 @@ var reviewSyncCmd = &cobra.Command{
 			return result.err
 		})
 	},
+}
+
+func reviewSyncSupportedSections() []string {
+	sections := make([]string, 0, len(reviewSyncSectionSpecs))
+	for _, spec := range reviewSyncSectionSpecs {
+		sections = append(sections, spec.name)
+	}
+	return sections
+}
+
+func reviewSyncSectionFlagHelp() string {
+	return fmt.Sprintf(
+		"Sync only the specified fotingo-managed section (repeatable). Supported values: %s",
+		strings.Join(reviewSyncSupportedSections(), ", "),
+	)
 }
 
 func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
