@@ -138,6 +138,9 @@ fotingo review --title "Fix auth bug"
 
 # Target a non-default base branch
 fotingo review --branch release/2026.04
+
+# Sync only the changes and fixed-issues sections on an existing PR
+fotingo review sync --section changes --section fixed-issues -y
 ```
 
 Notes:
@@ -146,6 +149,7 @@ Notes:
 - Use `--template-summary` and `--template-description` to fill the default PR template sections.
 - `--template-description` expands escaped `\n`, `\r\n`, and `\t`, which makes multiline scripted descriptions reliable.
 - Use `--description` when you want to replace the entire PR body instead of filling template placeholders.
+- Use `fotingo review sync --section ...` when you only want to refresh specific managed PR sections. Supported section values are `summary`, `description`, `fixed-issues`, and `changes`; shell completion suggests them.
 - Resolve reviewers, assignees, and labels ahead of time with `fotingo search ... --json` when scripting review creation.
 
 Flags:

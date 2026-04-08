@@ -14,6 +14,20 @@ import (
 	"github.com/tagoro9/fotingo/internal/jira"
 )
 
+func TestReviewSyncSectionFlagHelp_ListsSupportedSections(t *testing.T) {
+	assert.Equal(
+		t,
+		"Sync only the specified fotingo-managed section (repeatable). Supported values: summary, description, fixed-issues, changes",
+		reviewSyncSectionFlagHelp(),
+	)
+}
+
+func TestReviewSyncCommandHelp_ListsSupportedSections(t *testing.T) {
+	flag := reviewSyncCmd.Flags().Lookup("section")
+	require.NotNil(t, flag)
+	assert.Contains(t, flag.Usage, "summary, description, fixed-issues, changes")
+}
+
 func TestRunReviewSync_UpdatesSelectedSectionsOnly(t *testing.T) {
 	restoreFlags := saveGlobalFlags()
 	defer restoreFlags()
