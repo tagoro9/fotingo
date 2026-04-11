@@ -169,14 +169,14 @@ func TestBuildInspectPROutput(t *testing.T) {
 				{ID: 201, Author: "bob", State: "COMMENTED", Body: "Review body"},
 			},
 			ReviewComments: []github.PullRequestReviewComment{
-				{ID: 301, Author: "bob", Body: "Inline comment", ConversationID: "review-comment-301"},
+				{ID: 301, ReviewID: 201, Author: "bob", Body: "Inline comment", ConversationID: "review-comment-301"},
 			},
 			Conversations: []github.PullRequestConversation{
 				{
 					ID:       "review-comment-301",
 					Resolved: &resolved,
 					Comments: []github.PullRequestReviewComment{
-						{ID: 301, Author: "bob", Body: "Inline comment", ConversationID: "review-comment-301"},
+						{ID: 301, ReviewID: 201, Author: "bob", Body: "Inline comment", ConversationID: "review-comment-301"},
 					},
 				},
 			},
@@ -193,12 +193,11 @@ func TestBuildInspectPROutput(t *testing.T) {
 	require.Equal("alice", output.Comments[0].Author)
 	require.Len(output.Reviews, 1)
 	require.Equal("COMMENTED", output.Reviews[0].State)
-	require.Len(output.ReviewComments, 1)
-	require.Equal("review-comment-301", output.ReviewComments[0].ConversationID)
-	require.Len(output.Conversations, 1)
-	require.NotNil(output.Conversations[0].Resolved)
-	require.True(*output.Conversations[0].Resolved)
-	require.Len(output.Conversations[0].Comments, 1)
+	require.Len(output.Reviews[0].Conversations, 1)
+	require.NotNil(output.Reviews[0].Conversations[0].Resolved)
+	require.True(*output.Reviews[0].Conversations[0].Resolved)
+	require.Len(output.Reviews[0].Conversations[0].Comments, 1)
+	require.Equal("review-comment-301", output.Reviews[0].Conversations[0].Comments[0].ConversationID)
 }
 
 func TestExtractIssueIDsFromCommits(t *testing.T) {

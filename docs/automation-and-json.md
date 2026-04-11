@@ -160,32 +160,21 @@ fotingo review -y --branch release/2026.04
       "author": "bob",
       "state": "COMMENTED",
       "body": "Review body",
-      "submittedAt": "2026-04-11T10:05:00Z"
-    }
-  ],
-  "reviewComments": [
-    {
-      "id": 301,
-      "reviewId": 201,
-      "author": "bob",
-      "body": "Please adjust this line",
-      "path": "internal/example.go",
-      "line": 10,
-      "conversationId": "review-comment-301"
-    }
-  ],
-  "conversations": [
-    {
-      "id": "review-comment-301",
-      "comments": [
+      "submittedAt": "2026-04-11T10:05:00Z",
+      "conversations": [
         {
-          "id": 301,
-          "reviewId": 201,
-          "author": "bob",
-          "body": "Please adjust this line",
-          "path": "internal/example.go",
-          "line": 10,
-          "conversationId": "review-comment-301"
+          "id": "review-comment-301",
+          "comments": [
+            {
+              "id": 301,
+              "reviewId": 201,
+              "author": "bob",
+              "body": "Please adjust this line",
+              "path": "internal/example.go",
+              "line": 10,
+              "conversationId": "review-comment-301"
+            }
+          ]
         }
       ]
     }

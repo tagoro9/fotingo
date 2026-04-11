@@ -176,12 +176,10 @@ var inspectPrCmd = &cobra.Command{
 
 // InspectPROutput represents the JSON output of the inspect pr command.
 type InspectPROutput struct {
-	Branch         *BranchInfo                    `json:"branch,omitempty"`
-	PullRequest    *PullRequestInfo               `json:"pullRequest,omitempty"`
-	Comments       []PullRequestCommentInfo       `json:"comments"`
-	Reviews        []PullRequestReviewInfo        `json:"reviews"`
-	ReviewComments []PullRequestReviewCommentInfo `json:"reviewComments"`
-	Conversations  []PullRequestConversationInfo  `json:"conversations"`
+	Branch      *BranchInfo              `json:"branch,omitempty"`
+	PullRequest *PullRequestInfo         `json:"pullRequest,omitempty"`
+	Comments    []PullRequestCommentInfo `json:"comments"`
+	Reviews     []PullRequestReviewInfo  `json:"reviews"`
 }
 
 // PullRequestCommentInfo represents a top-level pull request comment in inspect output.
@@ -198,15 +196,16 @@ type PullRequestCommentInfo struct {
 
 // PullRequestReviewInfo represents a submitted pull request review in inspect output.
 type PullRequestReviewInfo struct {
-	ID                int64  `json:"id"`
-	Author            string `json:"author,omitempty"`
-	State             string `json:"state,omitempty"`
-	Body              string `json:"body,omitempty"`
-	CommitID          string `json:"commitId,omitempty"`
-	URL               string `json:"url,omitempty"`
-	HTMLURL           string `json:"htmlUrl,omitempty"`
-	AuthorAssociation string `json:"authorAssociation,omitempty"`
-	SubmittedAt       string `json:"submittedAt,omitempty"`
+	ID                int64                         `json:"id"`
+	Author            string                        `json:"author,omitempty"`
+	State             string                        `json:"state,omitempty"`
+	Body              string                        `json:"body,omitempty"`
+	CommitID          string                        `json:"commitId,omitempty"`
+	URL               string                        `json:"url,omitempty"`
+	HTMLURL           string                        `json:"htmlUrl,omitempty"`
+	AuthorAssociation string                        `json:"authorAssociation,omitempty"`
+	SubmittedAt       string                        `json:"submittedAt,omitempty"`
+	Conversations     []PullRequestConversationInfo `json:"conversations"`
 }
 
 // PullRequestReviewCommentInfo represents an inline pull request review comment in inspect output.
@@ -249,10 +248,8 @@ type PullRequestConversationInfo struct {
 
 func buildInspectPROutput(result internalinspect.WorkflowResult) InspectPROutput {
 	output := InspectPROutput{
-		Comments:       []PullRequestCommentInfo{},
-		Reviews:        []PullRequestReviewInfo{},
-		ReviewComments: []PullRequestReviewCommentInfo{},
-		Conversations:  []PullRequestConversationInfo{},
+		Comments: []PullRequestCommentInfo{},
+		Reviews:  []PullRequestReviewInfo{},
 	}
 	if result.Branch != nil {
 		output.Branch = &BranchInfo{Name: result.Branch.Name}
@@ -273,9 +270,7 @@ func buildInspectPROutput(result internalinspect.WorkflowResult) InspectPROutput
 	}
 
 	output.Comments = mapPullRequestCommentInfos(result.Discussion.Comments)
-	output.Reviews = mapPullRequestReviewInfos(result.Discussion.Reviews)
-	output.ReviewComments = mapPullRequestReviewCommentInfos(result.Discussion.ReviewComments)
-	output.Conversations = mapPullRequestConversationInfos(result.Discussion.Conversations)
+	output.Reviews = mapPullRequestReviewInfos(result.Discussion.Reviews, result.Discussion.Conversations)
 	return output
 }
 
@@ -296,9 +291,14 @@ func mapPullRequestCommentInfos(comments []github.PullRequestIssueComment) []Pul
 	return mapped
 }
 
-func mapPullRequestReviewInfos(reviews []github.PullRequestReview) []PullRequestReviewInfo {
+func mapPullRequestReviewInfos(
+	reviews []github.PullRequestReview,
+	conversations []github.PullRequestConversation,
+) []PullRequestReviewInfo {
 	mapped := make([]PullRequestReviewInfo, 0, len(reviews))
+	reviewIndexByID := make(map[int64]int, len(reviews))
 	for _, review := range reviews {
+		reviewIndexByID[review.ID] = len(mapped)
 		mapped = append(mapped, PullRequestReviewInfo{
 			ID:                review.ID,
 			Author:            review.Author,
@@ -309,8 +309,23 @@ func mapPullRequestReviewInfos(reviews []github.PullRequestReview) []PullRequest
 			HTMLURL:           review.HTMLURL,
 			AuthorAssociation: review.AuthorAssociation,
 			SubmittedAt:       review.SubmittedAt,
+			Conversations:     []PullRequestConversationInfo{},
 		})
 	}
+
+	for _, conversation := range conversations {
+		if len(conversation.Comments) == 0 {
+			continue
+		}
+
+		reviewID := conversation.Comments[0].ReviewID
+		idx, ok := reviewIndexByID[reviewID]
+		if !ok {
+			continue
+		}
+		mapped[idx].Conversations = append(mapped[idx].Conversations, mapPullRequestConversationInfo(conversation))
+	}
+
 	return mapped
 }
 
@@ -354,16 +369,12 @@ func mapPullRequestReviewCommentInfo(comment github.PullRequestReviewComment) Pu
 	}
 }
 
-func mapPullRequestConversationInfos(conversations []github.PullRequestConversation) []PullRequestConversationInfo {
-	mapped := make([]PullRequestConversationInfo, 0, len(conversations))
-	for _, conversation := range conversations {
-		mapped = append(mapped, PullRequestConversationInfo{
-			ID:       conversation.ID,
-			Resolved: conversation.Resolved,
-			Comments: mapPullRequestReviewCommentInfos(conversation.Comments),
-		})
+func mapPullRequestConversationInfo(conversation github.PullRequestConversation) PullRequestConversationInfo {
+	return PullRequestConversationInfo{
+		ID:       conversation.ID,
+		Resolved: conversation.Resolved,
+		Comments: mapPullRequestReviewCommentInfos(conversation.Comments),
 	}
-	return mapped
 }
 
 func fetchInspectBranchIssue(jiraClient jira.Jira, issueID string) (*jira.Issue, error) {

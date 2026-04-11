@@ -98,7 +98,7 @@ Update review metadata on an existing pull request:
 
 - `fotingo open issue` to open the Jira issue linked to the current branch context.
 - `fotingo open pr` to open current-branch PR URL.
-- `fotingo inspect pr --json` to read current-branch pull request comments, reviews, inline review comments, and grouped conversations.
+- `fotingo inspect pr --json` to read current-branch pull request comments and reviews with nested inline conversations.
 
 ## Workflow Guide
 
@@ -111,7 +111,7 @@ Update review metadata on an existing pull request:
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
 - For current-branch PR context, run `fotingo inspect --json` and read the `pullRequest` fields before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
-- For current-branch PR discussion context, run `fotingo inspect pr --json` and read `pullRequest`, `comments`, `reviews`, `reviewComments`, and `conversations` before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
+- For current-branch PR discussion context, run `fotingo inspect pr --json` and read `pullRequest`, top-level `comments`, and `reviews[].conversations[].comments` before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
 - Use `fotingo review --branch ...` when the pull request should target a non-default base branch.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.

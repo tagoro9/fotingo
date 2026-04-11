@@ -405,12 +405,11 @@ func (s *ExecutionTestSuite) TestInspectPullRequest_DiscussionJSON() {
 	assert.Equal(t, "Top-level PR comment", result.Comments[0].Body)
 	require.Len(t, result.Reviews, 1)
 	assert.Equal(t, "COMMENTED", result.Reviews[0].State)
-	require.Len(t, result.ReviewComments, 2)
-	assert.Equal(t, "review-comment-301", result.ReviewComments[0].ConversationID)
-	assert.Equal(t, int64(301), result.ReviewComments[1].InReplyToID)
-	require.Len(t, result.Conversations, 1)
-	assert.Equal(t, "review-comment-301", result.Conversations[0].ID)
-	assert.Len(t, result.Conversations[0].Comments, 2)
+	require.Len(t, result.Reviews[0].Conversations, 1)
+	assert.Equal(t, "review-comment-301", result.Reviews[0].Conversations[0].ID)
+	require.Len(t, result.Reviews[0].Conversations[0].Comments, 2)
+	assert.Equal(t, "review-comment-301", result.Reviews[0].Conversations[0].Comments[0].ConversationID)
+	assert.Equal(t, int64(301), result.Reviews[0].Conversations[0].Comments[1].InReplyToID)
 
 }
 
