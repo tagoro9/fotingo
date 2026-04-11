@@ -29,6 +29,7 @@ const (
 	StartFlagParent                    Key = "start.flag.parent"
 	StartFlagEpic                      Key = "start.flag.epic"
 	StartFlagLabels                    Key = "start.flag.labels"
+	StartFlagWorktreePath              Key = "start.flag.worktree_path"
 	StartFlagNoBranch                  Key = "start.flag.no_branch"
 	StartFlagWorktree                  Key = "start.flag.worktree"
 	StartFlagInteractive               Key = "start.flag.interactive"

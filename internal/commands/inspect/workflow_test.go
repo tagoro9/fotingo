@@ -55,7 +55,7 @@ func (s *inspectGitStub) CreateIssueBranch(*jira.Issue) (string, error) {
 	return "", fmt.Errorf("not implemented")
 }
 
-func (s *inspectGitStub) CreateIssueWorktreeBranch(*jira.Issue) (string, string, error) {
+func (s *inspectGitStub) CreateIssueWorktreeBranch(*jira.Issue, git.WorktreeOptions) (string, string, error) {
 	return "", "", fmt.Errorf("not implemented")
 }
 

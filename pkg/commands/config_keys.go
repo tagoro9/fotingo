@@ -30,6 +30,7 @@ var configKeySpecs = []configKeySpec{
 	{Key: "git.remote", ValueType: configValueTypeString, Description: "Default Git remote name"},
 	{Key: "git.branchTemplate", ValueType: configValueTypeString, Description: "Branch naming template"},
 	{Key: "git.worktree.enabled", ValueType: configValueTypeBool, Description: "Create start branches in sibling linked worktrees"},
+	{Key: "git.worktree.path", ValueType: configValueTypeString, Description: "Parent directory for start worktrees"},
 	{Key: "github.cache.labelsTTL", ValueType: configValueTypeDuration, Description: "TTL for GitHub labels cache"},
 	{
 		Key:         "github.cache.collaboratorsTTL",

@@ -73,7 +73,7 @@ func (m *mockGit) CreateIssueBranch(_ *jira.Issue) (string, error) {
 	return m.createBranchName, m.createBranchErr
 }
 
-func (m *mockGit) CreateIssueWorktreeBranch(_ *jira.Issue) (string, string, error) {
+func (m *mockGit) CreateIssueWorktreeBranch(_ *jira.Issue, _ git.WorktreeOptions) (string, string, error) {
 	m.createBranchCalls++
 	return m.createBranchName, "", m.createBranchErr
 }

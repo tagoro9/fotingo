@@ -28,6 +28,7 @@ var catalogs = map[string]map[Key]string{
 		StartFlagParent:                    "Parent issue for sub-tasks",
 		StartFlagEpic:                      "Epic issue to link the created issue to",
 		StartFlagLabels:                    "Labels to add to created issue",
+		StartFlagWorktreePath:              "Parent directory for the created linked worktree",
 		StartFlagNoBranch:                  "Set issue to In Progress without creating/switching branch",
 		StartFlagWorktree:                  "Create the issue branch in a new sibling linked worktree",
 		StartFlagInteractive:               "Interactively create a new issue before starting work",

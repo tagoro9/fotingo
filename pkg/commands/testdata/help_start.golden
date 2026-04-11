@@ -35,17 +35,18 @@ Usage:
   fotingo start [issueId] [flags]
 
 Flags:
-  -d, --description string   Description for new issue
-  -e, --epic string          Epic issue to link the created issue to
-  -h, --help                 help for start
-  -i, --interactive          Interactively create a new issue before starting work
-  -k, --kind string          Issue type: Story, Bug, Task (default: Task) (default "Task")
-  -l, --labels strings       Labels to add to created issue
-  -n, --no-branch            Set issue to In Progress without creating/switching branch
-  -a, --parent string        Parent issue for sub-tasks
-  -p, --project string       Project key for new issue (required with --title)
-  -t, --title string         Create new issue with this title
-      --worktree             Create the issue branch in a new sibling linked worktree
+  -d, --description string     Description for new issue
+  -e, --epic string            Epic issue to link the created issue to
+  -h, --help                   help for start
+  -i, --interactive            Interactively create a new issue before starting work
+  -k, --kind string            Issue type: Story, Bug, Task (default: Task) (default "Task")
+  -l, --labels strings         Labels to add to created issue
+  -n, --no-branch              Set issue to In Progress without creating/switching branch
+  -a, --parent string          Parent issue for sub-tasks
+  -p, --project string         Project key for new issue (required with --title)
+  -t, --title string           Create new issue with this title
+      --worktree               Create the issue branch in a new sibling linked worktree
+      --worktree-path string   Parent directory for the created linked worktree
 
 Global Flags:
   -b, --branch string   Base branch override (default: auto-detect)

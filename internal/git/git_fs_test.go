@@ -1186,10 +1186,34 @@ func (s *GitCredentialTestSuite) TestCreateIssueWorktreeBranch_Success() {
 		Type:    "Task",
 	}
 
-	branchName, worktreePath, err := s.gitClient.CreateIssueWorktreeBranch(issue)
+	branchName, worktreePath, err := s.gitClient.CreateIssueWorktreeBranch(issue, WorktreeOptions{})
 	require.NoError(t, err)
 	assert.Equal(t, "c/test-77_worktree_branch", branchName)
-	assert.Equal(t, filepath.Join(s.tmpDir, "work-c-test-77_worktree_branch"), worktreePath)
+	assert.Equal(t, filepath.Join(s.tmpDir, "fotingo-wt-c-test-77_worktree_branch"), worktreePath)
+
+	headBranch, stderr, cmdErr := execGitCommand(worktreePath, gitNonInteractiveEnv(), "branch", "--show-current")
+	require.NoError(t, cmdErr, stderr)
+	assert.Equal(t, branchName, headBranch)
+}
+
+func (s *GitCredentialTestSuite) TestCreateIssueWorktreeBranch_CustomParent() {
+	t := s.T()
+
+	err := s.gitClient.FetchDefaultBranch()
+	require.NoError(t, err)
+
+	issue := &jira.Issue{
+		Key:     "TEST-78",
+		Summary: "Custom worktree path",
+		Type:    "Task",
+	}
+
+	branchName, worktreePath, err := s.gitClient.CreateIssueWorktreeBranch(issue, WorktreeOptions{
+		ParentPath: ".claude/worktrees",
+	})
+	require.NoError(t, err)
+	assert.Equal(t, "c/test-78_custom_worktree_path", branchName)
+	assert.Equal(t, filepath.Join(s.workDir(), ".claude", "worktrees", "fotingo-wt-c-test-78_custom_worktree_path"), worktreePath)
 
 	headBranch, stderr, cmdErr := execGitCommand(worktreePath, gitNonInteractiveEnv(), "branch", "--show-current")
 	require.NoError(t, cmdErr, stderr)

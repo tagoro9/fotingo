@@ -36,7 +36,7 @@ Create and start a new issue:
 {{EXAMPLE_START_CREATE_ISSUE}}
 ```
 
-Create the branch in a sibling worktree and capture the machine-readable path:
+Create the branch in a linked worktree under an explicit parent and capture the machine-readable path:
 
 ```bash
 {{EXAMPLE_START_WORKTREE}}
@@ -106,7 +106,7 @@ Update review metadata on an existing pull request:
 - `fotingo inspect --json` returns branch context, linked issue context, commit history, and `pullRequest` metadata including title, description, and URL when the inspected branch already has an open PR.
 - Use `fotingo inspect pr --json` when you need pull request discussion context before editing, syncing, or responding to review feedback.
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
-- Use `fotingo start --worktree ... --json` when you want an isolated sibling checkout; automation should read `branch.name` and `branch.worktreePath` from the JSON result.
+- Use `fotingo start --worktree-path <parent> ... --json` when you want an isolated checkout under a specific parent; automation should read `branch.name` and `branch.worktreePath` from the JSON result. Worktree directory names use the hardcoded `fotingo-wt-<branch>` format.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.

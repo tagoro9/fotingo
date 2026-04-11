@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires fotingo CLI.
 metadata:
   author: fotingo
-  version: "1.10.0"
+  version: "1.11.0"
   generatedBy: "dev"
 ---
 
@@ -51,10 +51,10 @@ Create and start a new issue:
 fotingo start -p PROJ -k Task -t "Improve checkout decline error handling" -d "Problem: payment declines are hard to diagnose. Goal: clear user-facing messaging plus actionable logs. Acceptance criteria: improved copy, telemetry events, and regression tests for decline paths." -y
 ```
 
-Create the branch in a sibling worktree and capture the machine-readable path:
+Create the branch in a linked worktree under an explicit parent and capture the machine-readable path:
 
 ```bash
-fotingo start PROJ-123 --worktree -y --json
+fotingo start PROJ-123 --worktree-path .claude/worktrees -y --json
 ```
 
 ## Review Workflows
@@ -121,7 +121,7 @@ fotingo review sync -y -r alice --remove-reviewers team/platform --assignee bob 
 - `fotingo inspect --json` returns branch context, linked issue context, commit history, and `pullRequest` metadata including title, description, and URL when the inspected branch already has an open PR.
 - Use `fotingo inspect pr --json` when you need pull request discussion context before editing, syncing, or responding to review feedback.
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
-- Use `fotingo start --worktree ... --json` when you want an isolated sibling checkout; automation should read `branch.name` and `branch.worktreePath` from the JSON result.
+- Use `fotingo start --worktree-path <parent> ... --json` when you want an isolated checkout under a specific parent; automation should read `branch.name` and `branch.worktreePath` from the JSON result. Worktree directory names use the hardcoded `fotingo-wt-<branch>` format.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.

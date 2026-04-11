@@ -54,7 +54,7 @@ func (m *mockGit) CreateIssueBranch(_ *jira.Issue) (string, error) {
 	return "", nil
 }
 
-func (m *mockGit) CreateIssueWorktreeBranch(_ *jira.Issue) (string, string, error) {
+func (m *mockGit) CreateIssueWorktreeBranch(_ *jira.Issue, _ git.WorktreeOptions) (string, string, error) {
 	return "", "", nil
 }
 

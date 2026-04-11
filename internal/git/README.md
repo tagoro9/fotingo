@@ -19,6 +19,7 @@ import "github.com/tagoro9/fotingo/internal/git"
   - [func NewWithCredentialProvider\(cfg \*viper.Viper, messages \*chan string, cp CredentialProvider\) \(Git, error\)](<#NewWithCredentialProvider>)
 - [type RemoteConfigurable](<#RemoteConfigurable>)
 - [type TemplateIssue](<#TemplateIssue>)
+- [type WorktreeOptions](<#WorktreeOptions>)
 
 
 ## Variables
@@ -57,7 +58,7 @@ type Commit struct {
 ```
 
 <a name="CredentialProvider"></a>
-## type [CredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L81-L83>)
+## type [CredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L89-L91>)
 
 CredentialProvider abstracts git credential retrieval for testability.
 
@@ -84,7 +85,7 @@ type Git interface {
     // CreateIssueBranch creates a new branch for the given issue
     CreateIssueBranch(issue *jira.Issue) (string, error)
     // CreateIssueWorktreeBranch creates a new linked worktree and issue branch.
-    CreateIssueWorktreeBranch(issue *jira.Issue) (string, string, error)
+    CreateIssueWorktreeBranch(issue *jira.Issue, options WorktreeOptions) (string, string, error)
     // Push pushes the current branch to the remote with upstream tracking
     Push() error
     // StashChanges stashes uncommitted changes with the provided message
@@ -109,7 +110,7 @@ type Git interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1489>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1502>)
 
 ```go
 func New(cfg *viper.Viper, messages *chan string) (Git, error)
@@ -118,7 +119,7 @@ func New(cfg *viper.Viper, messages *chan string) (Git, error)
 New returns a new instance of a Git client in the current working directory. It supports linked worktrees and keeps credential helper lookups rooted at the active worktree, including repositories that enable extensions.worktreeConfig.
 
 <a name="NewWithCredentialProvider"></a>
-### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1521>)
+### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1534>)
 
 ```go
 func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp CredentialProvider) (Git, error)
@@ -127,7 +128,7 @@ func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp Crede
 NewWithCredentialProvider returns a new Git client with a custom credential provider. This is useful for testing functions that require credentials without invoking git credential fill.
 
 <a name="RemoteConfigurable"></a>
-## type [RemoteConfigurable](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L88-L90>)
+## type [RemoteConfigurable](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L96-L98>)
 
 RemoteConfigurable allows reconfiguring a remote URL on a Git client. This is used in tests to point the remote to a local bare repo for operations while keeping the original URL for display purposes.
 
@@ -138,7 +139,7 @@ type RemoteConfigurable interface {
 ```
 
 <a name="TemplateIssue"></a>
-## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L183-L188>)
+## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L191-L196>)
 
 TODO Is this needed now that we have the issue struct?
 
@@ -148,6 +149,18 @@ type TemplateIssue struct {
     Key              string
     Info             string
     SanitizedSummary string
+}
+```
+
+<a name="WorktreeOptions"></a>
+## type [WorktreeOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L81-L84>)
+
+WorktreeOptions controls where linked worktrees are created.
+
+```go
+type WorktreeOptions struct {
+    // ParentPath is the directory to create worktrees under. Relative paths are resolved from the active worktree root.
+    ParentPath string
 }
 ```
 

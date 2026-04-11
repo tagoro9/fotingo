@@ -208,6 +208,10 @@ func TestStartFlags(t *testing.T) {
 	assert.Equal(t, "", worktreeFlag.Shorthand)
 	assert.Equal(t, "false", worktreeFlag.DefValue)
 
+	worktreePathFlag := flags.Lookup("worktree-path")
+	assert.NotNil(t, worktreePathFlag, "worktree-path flag should exist")
+	assert.Equal(t, "", worktreePathFlag.Shorthand)
+
 	interactiveFlag := flags.Lookup("interactive")
 	assert.NotNil(t, interactiveFlag, "interactive flag should exist")
 	assert.Equal(t, "i", interactiveFlag.Shorthand)
@@ -232,6 +236,23 @@ func TestStartWorktreeEnabled(t *testing.T) {
 
 	startCmdFlags.worktree = true
 	assert.True(t, startWorktreeEnabled(cfg))
+
+	startCmdFlags = startFlags{worktreePath: ".claude/worktrees"}
+	assert.True(t, startWorktreeEnabled(cfg))
+}
+
+func TestStartWorktreeLocationConfig(t *testing.T) {
+	origFlags := startCmdFlags
+	defer func() { startCmdFlags = origFlags }()
+
+	cfg := viper.New()
+	cfg.Set("git.worktree.path", ".claude/worktrees")
+
+	startCmdFlags = startFlags{}
+	assert.Equal(t, ".claude/worktrees", startWorktreePath(cfg))
+
+	startCmdFlags.worktreePath = ".codex/worktrees"
+	assert.Equal(t, ".codex/worktrees", startWorktreePath(cfg))
 }
 
 func TestStartCmdUse(t *testing.T) {

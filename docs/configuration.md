@@ -27,6 +27,7 @@ git:
   branchTemplate: "{{.Issue.ShortName}}/{{.Issue.Info}}_{{.Issue.SanitizedSummary}}"
   worktree:
     enabled: false
+    path: ""
 
 github:
   token: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -42,6 +43,7 @@ jira:
 | `git.branchTemplate`            | Template for branch names                      |
 | `git.remote`                    | Git remote name                                |
 | `git.worktree.enabled`          | Create `start` branches in sibling worktrees   |
+| `git.worktree.path`             | Parent directory for `start` worktrees         |
 | `github.token`                  | GitHub OAuth token or classic PAT              |
 | `github.cache.labelsTTL`        | Labels cache TTL                               |
 | `github.cache.collaboratorsTTL` | Collaborators cache TTL                        |
@@ -88,7 +90,9 @@ Token setup references:
 
 ### Start Worktrees
 
-When `git.worktree.enabled` is `true`, `fotingo start` creates the issue branch in a sibling linked worktree instead of switching the current checkout.
+When `git.worktree.enabled` is `true`, `fotingo start` creates the issue branch in a linked worktree instead of switching the current checkout. Worktree directory names always use the hardcoded `fotingo-wt-<branch>` format.
+
+Set `git.worktree.path` to create worktrees under a dedicated parent directory. Relative paths are resolved from the active checkout root, so `.claude/worktrees` under `/workspace/fotingo` resolves to `/workspace/fotingo/.claude/worktrees`. For a one-off override, pass `fotingo start PROJ-123 --worktree-path .claude/worktrees`.
 
 The command reports the created branch and worktree folder in interactive output. In JSON mode, the location is available as `branch.worktreePath`.
 

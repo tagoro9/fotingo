@@ -39,7 +39,7 @@ const (
 ```
 
 <a name="NewConfig"></a>
-## func [NewConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L109>)
+## func [NewConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L111>)
 
 ```go
 func NewConfig() *viper.Viper
@@ -48,7 +48,7 @@ func NewConfig() *viper.Viper
 
 
 <a name="NewDefaultConfig"></a>
-## func [NewDefaultConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L90>)
+## func [NewDefaultConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L91>)
 
 ```go
 func NewDefaultConfig() *viper.Viper
@@ -57,7 +57,7 @@ func NewDefaultConfig() *viper.Viper
 
 
 <a name="PersistConfigValue"></a>
-## func [PersistConfigValue](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L136>)
+## func [PersistConfigValue](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L138>)
 
 ```go
 func PersistConfigValue(config *viper.Viper, key string, value any) error
@@ -66,7 +66,7 @@ func PersistConfigValue(config *viper.Viper, key string, value any) error
 PersistConfigValue writes a single full config key \(e.g. "jira.root"\) without serializing runtime defaults.
 
 <a name="ConfigurableService"></a>
-## type [ConfigurableService](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L51-L54>)
+## type [ConfigurableService](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L52-L55>)
 
 
 
@@ -78,7 +78,7 @@ type ConfigurableService interface {
 ```
 
 <a name="DefaultFileSystem"></a>
-## type [DefaultFileSystem](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L37>)
+## type [DefaultFileSystem](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L38>)
 
 DefaultFileSystem implements FileSystem using the real os package
 
@@ -87,7 +87,7 @@ type DefaultFileSystem struct{}
 ```
 
 <a name="DefaultFileSystem.MkdirAll"></a>
-### func \(\*DefaultFileSystem\) [MkdirAll](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L43>)
+### func \(\*DefaultFileSystem\) [MkdirAll](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L44>)
 
 ```go
 func (d *DefaultFileSystem) MkdirAll(path string, perm os.FileMode) error
@@ -96,7 +96,7 @@ func (d *DefaultFileSystem) MkdirAll(path string, perm os.FileMode) error
 
 
 <a name="DefaultFileSystem.Stat"></a>
-### func \(\*DefaultFileSystem\) [Stat](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L47>)
+### func \(\*DefaultFileSystem\) [Stat](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L48>)
 
 ```go
 func (d *DefaultFileSystem) Stat(name string) (os.FileInfo, error)
@@ -105,7 +105,7 @@ func (d *DefaultFileSystem) Stat(name string) (os.FileInfo, error)
 
 
 <a name="DefaultFileSystem.UserHomeDir"></a>
-### func \(\*DefaultFileSystem\) [UserHomeDir](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L39>)
+### func \(\*DefaultFileSystem\) [UserHomeDir](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L40>)
 
 ```go
 func (d *DefaultFileSystem) UserHomeDir() (string, error)
@@ -114,7 +114,7 @@ func (d *DefaultFileSystem) UserHomeDir() (string, error)
 
 
 <a name="FileSystem"></a>
-## type [FileSystem](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L30-L34>)
+## type [FileSystem](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L31-L35>)
 
 FileSystem represents the file system operations needed by the config package
 
@@ -127,7 +127,7 @@ type FileSystem interface {
 ```
 
 <a name="ViperConfigurableService"></a>
-## type [ViperConfigurableService](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L56-L59>)
+## type [ViperConfigurableService](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L57-L60>)
 
 
 
@@ -139,7 +139,7 @@ type ViperConfigurableService struct {
 ```
 
 <a name="ViperConfigurableService.GetConfig"></a>
-### func \(\*ViperConfigurableService\) [GetConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L61>)
+### func \(\*ViperConfigurableService\) [GetConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L62>)
 
 ```go
 func (v *ViperConfigurableService) GetConfig() *viper.Viper
@@ -148,7 +148,7 @@ func (v *ViperConfigurableService) GetConfig() *viper.Viper
 
 
 <a name="ViperConfigurableService.GetConfigString"></a>
-### func \(\*ViperConfigurableService\) [GetConfigString](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L65>)
+### func \(\*ViperConfigurableService\) [GetConfigString](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L66>)
 
 ```go
 func (v *ViperConfigurableService) GetConfigString(key string) string
@@ -157,7 +157,7 @@ func (v *ViperConfigurableService) GetConfigString(key string) string
 
 
 <a name="ViperConfigurableService.SaveConfig"></a>
-### func \(\*ViperConfigurableService\) [SaveConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L69>)
+### func \(\*ViperConfigurableService\) [SaveConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L70>)
 
 ```go
 func (v *ViperConfigurableService) SaveConfig(key string, value any) error
