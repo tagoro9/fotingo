@@ -62,21 +62,24 @@ func (r *MockRepository) ToAPIResponse() map[string]interface{} {
 
 // MockPullRequest represents a GitHub pull request for testing.
 type MockPullRequest struct {
-	ID        int64
-	Number    int
-	Title     string
-	Body      string
-	State     string
-	HTMLURL   string
-	URL       string
-	Head      MockPRRef
-	Base      MockPRRef
-	Draft     bool
-	Mergeable bool
-	User      *MockUser
-	Assignees []*MockUser
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID                 int64
+	NodeID             string
+	Number             int
+	Title              string
+	Body               string
+	State              string
+	HTMLURL            string
+	URL                string
+	Head               MockPRRef
+	Base               MockPRRef
+	Draft              bool
+	Mergeable          bool
+	User               *MockUser
+	Assignees          []*MockUser
+	RequestedReviewers []*MockUser
+	RequestedTeams     []*MockTeam
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
 }
 
 // MockPRRef represents a pull request head/base reference.
@@ -89,6 +92,7 @@ type MockPRRef struct {
 func (pr *MockPullRequest) ToAPIResponse() map[string]interface{} {
 	resp := map[string]interface{}{
 		"id":        pr.ID,
+		"node_id":   pr.apiNodeID(),
 		"number":    pr.Number,
 		"title":     pr.Title,
 		"body":      pr.Body,
@@ -118,8 +122,29 @@ func (pr *MockPullRequest) ToAPIResponse() map[string]interface{} {
 		}
 		resp["assignees"] = assignees
 	}
+	if len(pr.RequestedReviewers) > 0 {
+		reviewers := make([]map[string]interface{}, 0, len(pr.RequestedReviewers))
+		for _, reviewer := range pr.RequestedReviewers {
+			reviewers = append(reviewers, reviewer.ToAPIResponse())
+		}
+		resp["requested_reviewers"] = reviewers
+	}
+	if len(pr.RequestedTeams) > 0 {
+		teams := make([]map[string]interface{}, 0, len(pr.RequestedTeams))
+		for _, team := range pr.RequestedTeams {
+			teams = append(teams, team.ToAPIResponse())
+		}
+		resp["requested_teams"] = teams
+	}
 
 	return resp
+}
+
+func (pr *MockPullRequest) apiNodeID() string {
+	if pr.NodeID != "" {
+		return pr.NodeID
+	}
+	return "PR_node_" + itoa(pr.Number)
 }
 
 // MockLabel represents a GitHub label for testing.
@@ -258,6 +283,7 @@ func NewPullRequest(number int, title, head, base, state string) *MockPullReques
 	now := time.Now()
 	return &MockPullRequest{
 		ID:        int64(number * 1000),
+		NodeID:    "PR_node_" + itoa(number),
 		Number:    number,
 		Title:     title,
 		Body:      "Pull request body for " + title,

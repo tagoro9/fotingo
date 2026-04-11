@@ -154,7 +154,10 @@ type mockGitHub struct {
 	addLabelsErr                    error
 	lastRequestedReviewers          []string
 	lastRequestedTeamReviewers      []string
+	lastRemovedReviewers            []string
+	lastRemovedTeamReviewers        []string
 	lastAssignedUsers               []string
+	lastRemovedAssignees            []string
 	collaborators                   []github.User
 	orgMembers                      []github.User
 	teams                           []github.Team
@@ -165,6 +168,10 @@ type mockGitHub struct {
 	supportsOrganizationMetadataErr error
 	requestReviewersErr             error
 	assignUsersErr                  error
+	removeReviewersErr              error
+	removeAssigneesErr              error
+	markReadyErr                    error
+	markReadyNodeID                 string
 	doesPRExist                     bool
 	existingPR                      *github.PullRequest
 	doesPRExistErr                  error
@@ -252,10 +259,35 @@ func (m *mockGitHub) RequestReviewers(_ int, reviewers []string, teamReviewers [
 	return m.requestReviewersErr
 }
 
+func (m *mockGitHub) RemoveReviewers(_ int, reviewers []string, teamReviewers []string) error {
+	m.calls = append(m.calls, "remove_reviewers")
+	m.lastRemovedReviewers = append([]string{}, reviewers...)
+	m.lastRemovedTeamReviewers = append([]string{}, teamReviewers...)
+	return m.removeReviewersErr
+}
+
 func (m *mockGitHub) AssignUsersToPR(_ int, assignees []string) error {
 	m.calls = append(m.calls, "assign_users")
 	m.lastAssignedUsers = append([]string{}, assignees...)
 	return m.assignUsersErr
+}
+
+func (m *mockGitHub) RemoveAssigneesFromPR(_ int, assignees []string) error {
+	m.calls = append(m.calls, "remove_assignees")
+	m.lastRemovedAssignees = append([]string{}, assignees...)
+	return m.removeAssigneesErr
+}
+
+func (m *mockGitHub) MarkPullRequestReadyForReview(nodeID string) error {
+	m.calls = append(m.calls, "mark_ready_for_review")
+	m.markReadyNodeID = nodeID
+	if m.existingPR != nil {
+		m.existingPR.Draft = false
+	}
+	if m.updatePR != nil {
+		m.updatePR.Draft = false
+	}
+	return m.markReadyErr
 }
 
 func (m *mockGitHub) DoesPRExistForBranch(_ string) (bool, *github.PullRequest, error) {

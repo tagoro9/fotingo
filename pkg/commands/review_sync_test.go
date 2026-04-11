@@ -28,6 +28,14 @@ func TestReviewSyncCommandHelp_ListsSupportedSections(t *testing.T) {
 	assert.Contains(t, flag.Usage, "summary, description, fixed-issues, changes")
 }
 
+func TestReviewSyncCommand_RegistersMetadataFlagsAndCompletion(t *testing.T) {
+	tests := []string{"reviewers", "remove-reviewers", "assignee", "remove-assignee", "ready-for-review"}
+	for _, name := range tests {
+		flag := reviewSyncCmd.Flags().Lookup(name)
+		require.NotNil(t, flag, "flag %s should exist", name)
+	}
+}
+
 func TestRunReviewSync_UpdatesSelectedSectionsOnly(t *testing.T) {
 	restoreFlags := saveGlobalFlags()
 	defer restoreFlags()
@@ -137,6 +145,7 @@ func TestRunReviewSync_UpdatesSelectedSectionsOnly(t *testing.T) {
 	assert.Equal(t, expectedBody, *githubClient.lastUpdatePROptions.Body)
 	assert.Nil(t, githubClient.lastUpdatePROptions.Title)
 	assert.Equal(t, expectedBody, result.pr.Body)
+	assert.True(t, result.existed)
 }
 
 func TestRunReviewSync_SyncsTitleOnlyWhenRequested(t *testing.T) {
@@ -189,6 +198,157 @@ func TestRunReviewSync_SyncsTitleOnlyWhenRequested(t *testing.T) {
 	assert.Equal(t, "feature/new-title", *githubClient.lastUpdatePROptions.Title)
 	assert.Nil(t, githubClient.lastUpdatePROptions.Body)
 	assert.Equal(t, "feature/new-title", result.pr.Title)
+}
+
+func TestRunReviewSync_AddsAndRemovesReviewers(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+	}()
+
+	reviewSyncCmdFlags.reviewers = []string{"alice", "platform"}
+	reviewSyncCmdFlags.removeReviewers = []string{"bob", "security"}
+
+	gitClient := &mockGit{currentBranch: "feature/review-metadata"}
+	body := renderReviewTemplateBodyWithOverrides("feature/review-metadata", nil, nil, nil, nil, "", "")
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  31,
+			Title:   "Existing title",
+			Body:    body,
+			HTMLURL: "https://github.com/test/repo/pull/31",
+		},
+		orgMembers: []github.User{
+			{Login: "alice", Name: "Alice Dev"},
+			{Login: "bob", Name: "Bob Dev"},
+		},
+		teams: []github.Team{
+			{Organization: "testowner", Slug: "platform", Name: "Platform"},
+			{Organization: "testowner", Slug: "security", Name: "Security"},
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, false)
+
+	require.NoError(t, result.err)
+	assert.Equal(t, []string{"alice"}, githubClient.lastRequestedReviewers)
+	assert.Equal(t, []string{"platform"}, githubClient.lastRequestedTeamReviewers)
+	assert.Equal(t, []string{"bob"}, githubClient.lastRemovedReviewers)
+	assert.Equal(t, []string{"security"}, githubClient.lastRemovedTeamReviewers)
+	assert.Equal(t, []string{"alice"}, result.reviewers)
+	assert.Equal(t, []string{"testowner/platform"}, result.teamReviewers)
+	assert.NotContains(t, githubClient.calls, "update_pr")
+}
+
+func TestRunReviewSync_AddsAndRemovesAssignees(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+	}()
+
+	reviewSyncCmdFlags.assignees = []string{"alice"}
+	reviewSyncCmdFlags.removeAssignees = []string{"bob"}
+
+	gitClient := &mockGit{currentBranch: "feature/assignee-metadata"}
+	body := renderReviewTemplateBodyWithOverrides("feature/assignee-metadata", nil, nil, nil, nil, "", "")
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  32,
+			Title:   "Existing title",
+			Body:    body,
+			HTMLURL: "https://github.com/test/repo/pull/32",
+		},
+		orgMembers: []github.User{
+			{Login: "alice", Name: "Alice Dev"},
+			{Login: "bob", Name: "Bob Dev"},
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, false)
+
+	require.NoError(t, result.err)
+	assert.Equal(t, []string{"alice"}, githubClient.lastAssignedUsers)
+	assert.Equal(t, []string{"bob"}, githubClient.lastRemovedAssignees)
+	assert.Equal(t, []string{"alice"}, result.assignees)
+	assert.NotContains(t, githubClient.calls, "update_pr")
+}
+
+func TestRunReviewSync_MarksPullRequestReadyForReview(t *testing.T) {
+	restoreFlags := saveGlobalFlags()
+	defer restoreFlags()
+	defer resetReviewFlags()
+	withDefaultReviewTemplateResolver(t)
+
+	origNewGitClient := newGitClient
+	origNewGitHubClient := newGitHubClient
+	defer func() {
+		newGitClient = origNewGitClient
+		newGitHubClient = origNewGitHubClient
+	}()
+
+	reviewSyncCmdFlags.readyForReview = true
+
+	gitClient := &mockGit{currentBranch: "feature/ready"}
+	body := renderReviewTemplateBodyWithOverrides("feature/ready", nil, nil, nil, nil, "", "")
+	githubClient := &mockGitHub{
+		doesPRExist: true,
+		existingPR: &github.PullRequest{
+			Number:  33,
+			NodeID:  "PR_node_33",
+			Title:   "Existing title",
+			Body:    body,
+			HTMLURL: "https://github.com/test/repo/pull/33",
+			Draft:   true,
+		},
+	}
+
+	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
+		return gitClient, nil
+	}
+	newGitHubClient = func(gitClient git.Git, cfg *viper.Viper) (github.Github, error) {
+		return githubClient, nil
+	}
+
+	statusCh := make(chan string, 16)
+	result := runReviewSync(&statusCh, false)
+
+	require.NoError(t, result.err)
+	assert.Equal(t, "PR_node_33", githubClient.markReadyNodeID)
+	require.NotNil(t, result.pr)
+	assert.False(t, result.pr.Draft)
+	assert.NotContains(t, githubClient.calls, "update_pr")
 }
 
 func TestRunReviewSync_RejectsSummaryOverrideWithoutSummarySection(t *testing.T) {

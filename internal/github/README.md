@@ -47,7 +47,7 @@ var ErrOAuthClientIDMissing = errors.New("github oauth client id is missing in t
 ```
 
 <a name="FetchLatestReleaseTag"></a>
-## func [FetchLatestReleaseTag](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L948>)
+## func [FetchLatestReleaseTag](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L960>)
 
 ```go
 func FetchLatestReleaseTag(ctx context.Context, client *http.Client, owner string, repo string) (string, error)
@@ -71,7 +71,7 @@ type CreatePROptions struct {
 ```
 
 <a name="CreateReleaseOptions"></a>
-## type [CreateReleaseOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L79-L86>)
+## type [CreateReleaseOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L81-L88>)
 
 CreateReleaseOptions contains the options for creating a release
 
@@ -87,7 +87,7 @@ type CreateReleaseOptions struct {
 ```
 
 <a name="Github"></a>
-## type [Github](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L97-L126>)
+## type [Github](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L99-L134>)
 
 
 
@@ -115,8 +115,14 @@ type Github interface {
     GetTeams() ([]Team, error)
     // RequestReviewers requests reviewers on a pull request
     RequestReviewers(prNumber int, reviewers []string, teamReviewers []string) error
+    // RemoveReviewers removes pending reviewer requests from a pull request
+    RemoveReviewers(prNumber int, reviewers []string, teamReviewers []string) error
     // AssignUsersToPR assigns users to a pull request
     AssignUsersToPR(prNumber int, assignees []string) error
+    // RemoveAssigneesFromPR removes users assigned to a pull request
+    RemoveAssigneesFromPR(prNumber int, assignees []string) error
+    // MarkPullRequestReadyForReview moves a draft pull request to ready for review
+    MarkPullRequestReadyForReview(prNodeID string) error
     // DoesPRExistForBranch checks if a PR exists for a given branch
     DoesPRExistForBranch(branch string) (bool, *PullRequest, error)
     // CreateRelease creates a GitHub release
@@ -125,7 +131,7 @@ type Github interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1124>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1225>)
 
 ```go
 func New(git git.Git, cfg *viper.Viper) (Github, error)
@@ -134,7 +140,7 @@ func New(git git.Git, cfg *viper.Viper) (Github, error)
 
 
 <a name="NewAuthOnly"></a>
-### func [NewAuthOnly](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1128>)
+### func [NewAuthOnly](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1229>)
 
 ```go
 func NewAuthOnly(cfg *viper.Viper) (Github, error)
@@ -143,7 +149,7 @@ func NewAuthOnly(cfg *viper.Viper) (Github, error)
 
 
 <a name="NewAuthOnlyWithOptions"></a>
-### func [NewAuthOnlyWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1132>)
+### func [NewAuthOnlyWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1233>)
 
 ```go
 func NewAuthOnlyWithOptions(cfg *viper.Viper, allowPrompt bool) (Github, error)
@@ -152,7 +158,7 @@ func NewAuthOnlyWithOptions(cfg *viper.Viper, allowPrompt bool) (Github, error)
 
 
 <a name="NewWithHTTPClient"></a>
-### func [NewWithHTTPClient](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1071>)
+### func [NewWithHTTPClient](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1172>)
 
 ```go
 func NewWithHTTPClient(g git.Git, cfg *viper.Viper, httpClient *http.Client, baseURL string) (Github, error)
@@ -161,7 +167,7 @@ func NewWithHTTPClient(g git.Git, cfg *viper.Viper, httpClient *http.Client, bas
 NewWithHTTPClient returns a new GitHub client using the provided HTTP client and base URL. This bypasses OAuth authentication and is intended for testing with mock servers.
 
 <a name="NewWithHTTPClientAndRepo"></a>
-### func [NewWithHTTPClientAndRepo](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1100>)
+### func [NewWithHTTPClientAndRepo](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1201>)
 
 ```go
 func NewWithHTTPClientAndRepo(g git.Git, cfg *viper.Viper, httpClient *http.Client, baseURL, owner, repo string) (Github, error)
@@ -170,7 +176,7 @@ func NewWithHTTPClientAndRepo(g git.Git, cfg *viper.Viper, httpClient *http.Clie
 NewWithHTTPClientAndRepo creates a GitHub client with explicit owner/repo, bypassing remote URL parsing.
 
 <a name="NewWithOptions"></a>
-### func [NewWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1180>)
+### func [NewWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L1281>)
 
 ```go
 func NewWithOptions(git git.Git, cfg *viper.Viper, allowPrompt bool) (Github, error)
@@ -179,7 +185,7 @@ func NewWithOptions(git git.Git, cfg *viper.Viper, allowPrompt bool) (Github, er
 
 
 <a name="GithubConfig"></a>
-## type [GithubConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L139-L141>)
+## type [GithubConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L147-L149>)
 
 
 
@@ -190,7 +196,7 @@ type GithubConfig struct {
 ```
 
 <a name="Label"></a>
-## type [Label](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L48-L52>)
+## type [Label](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L50-L54>)
 
 Label represents a GitHub label
 
@@ -203,7 +209,7 @@ type Label struct {
 ```
 
 <a name="PullRequest"></a>
-## type [PullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L39-L45>)
+## type [PullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L39-L47>)
 
 PullRequest represents a GitHub pull request
 
@@ -212,13 +218,15 @@ type PullRequest struct {
     Title   string
     Body    string
     Number  int
+    NodeID  string
     URL     string
     HTMLURL string
+    Draft   bool
 }
 ```
 
 <a name="Release"></a>
-## type [Release](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L89-L95>)
+## type [Release](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L91-L97>)
 
 Release represents a GitHub release
 
@@ -233,7 +241,7 @@ type Release struct {
 ```
 
 <a name="Team"></a>
-## type [Team](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L61-L66>)
+## type [Team](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L63-L68>)
 
 Team represents a GitHub organization team.
 
@@ -247,7 +255,7 @@ type Team struct {
 ```
 
 <a name="Team.Canonical"></a>
-### func \(Team\) [Canonical](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L69>)
+### func \(Team\) [Canonical](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L71>)
 
 ```go
 func (t Team) Canonical() string
@@ -268,7 +276,7 @@ type UpdatePROptions struct {
 ```
 
 <a name="User"></a>
-## type [User](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L55-L58>)
+## type [User](<https://github.com/tagoro9/fotingo/blob/main/internal/github/github.go#L57-L60>)
 
 User represents a GitHub user
 

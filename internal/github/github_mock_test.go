@@ -574,6 +574,27 @@ func (suite *MockServerTestSuite) TestRequestReviewers_WithTeamReviewers() {
 	assert.NoError(suite.T(), err)
 }
 
+func (suite *MockServerTestSuite) TestRemoveReviewers_Success() {
+	pr := testutil.NewPullRequest(1, "Test PR", "feature-branch", "main", "open")
+	pr.RequestedReviewers = []*testutil.MockUser{testutil.NewUser(1, "reviewer1", "Reviewer One")}
+	pr.RequestedTeams = []*testutil.MockTeam{testutil.NewTeam(1, "testowner", "platform", "Platform", "Platform team")}
+	suite.server.AddPullRequest("testowner", "testrepo", pr)
+
+	err := suite.client.RemoveReviewers(1, []string{"reviewer1"}, []string{"platform"})
+
+	require.NoError(suite.T(), err)
+	updated := suite.server.GetPullRequest("testowner", "testrepo", 1)
+	require.NotNil(suite.T(), updated)
+	assert.Empty(suite.T(), updated.RequestedReviewers)
+	assert.Empty(suite.T(), updated.RequestedTeams)
+}
+
+func (suite *MockServerTestSuite) TestRemoveReviewers_PRNotFound() {
+	err := suite.client.RemoveReviewers(999, []string{"reviewer1"}, nil)
+
+	assert.Error(suite.T(), err)
+}
+
 func (suite *MockServerTestSuite) TestAssignUsersToPR_Success() {
 	suite.server.AddPullRequest("testowner", "testrepo",
 		testutil.NewPullRequest(1, "Test PR", "feature-branch", "main", "open"),
@@ -585,6 +606,47 @@ func (suite *MockServerTestSuite) TestAssignUsersToPR_Success() {
 	err := suite.client.AssignUsersToPR(1, []string{"alice"})
 
 	assert.NoError(suite.T(), err)
+}
+
+func (suite *MockServerTestSuite) TestRemoveAssigneesFromPR_Success() {
+	pr := testutil.NewPullRequest(1, "Test PR", "feature-branch", "main", "open")
+	pr.Assignees = []*testutil.MockUser{
+		testutil.NewUser(1, "alice", "Alice Developer"),
+		testutil.NewUser(2, "bob", "Bob Developer"),
+	}
+	suite.server.AddPullRequest("testowner", "testrepo", pr)
+
+	err := suite.client.RemoveAssigneesFromPR(1, []string{"alice"})
+
+	require.NoError(suite.T(), err)
+	updated := suite.server.GetPullRequest("testowner", "testrepo", 1)
+	require.NotNil(suite.T(), updated)
+	require.Len(suite.T(), updated.Assignees, 1)
+	assert.Equal(suite.T(), "bob", updated.Assignees[0].Login)
+}
+
+func (suite *MockServerTestSuite) TestRemoveAssigneesFromPR_NotFound() {
+	err := suite.client.RemoveAssigneesFromPR(999, []string{"alice"})
+
+	assert.Error(suite.T(), err)
+}
+
+func (suite *MockServerTestSuite) TestMarkPullRequestReadyForReview_Success() {
+	pr := testutil.NewDraftPullRequest(1, "Draft PR", "feature-branch", "main")
+	suite.server.AddPullRequest("testowner", "testrepo", pr)
+
+	err := suite.client.MarkPullRequestReadyForReview(pr.NodeID)
+
+	require.NoError(suite.T(), err)
+	updated := suite.server.GetPullRequest("testowner", "testrepo", 1)
+	require.NotNil(suite.T(), updated)
+	assert.False(suite.T(), updated.Draft)
+}
+
+func (suite *MockServerTestSuite) TestMarkPullRequestReadyForReview_RequiresNodeID() {
+	err := suite.client.MarkPullRequestReadyForReview("")
+
+	assert.Error(suite.T(), err)
 }
 
 // -----------------------------------------------------------------------

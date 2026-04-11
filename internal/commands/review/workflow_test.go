@@ -181,7 +181,14 @@ func (m workflowSuccessMockGitHub) GetTeams() ([]github.Team, error)      { retu
 func (m workflowSuccessMockGitHub) RequestReviewers(int, []string, []string) error {
 	return nil
 }
+func (m workflowSuccessMockGitHub) RemoveReviewers(int, []string, []string) error {
+	return nil
+}
 func (m workflowSuccessMockGitHub) AssignUsersToPR(int, []string) error { return nil }
+func (m workflowSuccessMockGitHub) RemoveAssigneesFromPR(int, []string) error {
+	return nil
+}
+func (m workflowSuccessMockGitHub) MarkPullRequestReadyForReview(string) error { return nil }
 func (m workflowSuccessMockGitHub) DoesPRExistForBranch(string) (bool, *github.PullRequest, error) {
 	return false, nil, nil
 }
