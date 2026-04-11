@@ -15,6 +15,7 @@ type CommandExamples struct {
 	ReviewTemplateOverrides string
 	ReviewBodyFromStdin     string
 	ReviewSyncDefault       string
+	ReviewSyncMetadata      string
 	ReviewWithParticipants  string
 }
 
@@ -33,6 +34,7 @@ func DefaultCommandExamples() CommandExamples {
 		ReviewTemplateOverrides: `fotingo review -y --template-summary "Improve checkout decline handling" --template-description "Why: reduce support tickets from unclear payment errors.\n\nWhat changed:\n- clearer decline copy\n- structured telemetry\n- regression coverage"`,
 		ReviewBodyFromStdin:     `printf '## Summary\n\nImprove checkout decline handling\n\n## Description\n\nDetailed reviewer notes.\n' | fotingo review -y --description -`,
 		ReviewSyncDefault:       "fotingo review sync -y",
+		ReviewSyncMetadata:      "fotingo review sync -y -r alice --remove-reviewers team/platform --assignee bob --remove-assignee carol --ready-for-review",
 		ReviewWithParticipants:  "fotingo review -y -r alice -r team/platform --assignee bob --labels bug",
 	}
 }

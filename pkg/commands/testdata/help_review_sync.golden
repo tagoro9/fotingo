@@ -6,7 +6,12 @@ Usage:
   fotingo review sync [flags]
 
 Flags:
+  -a, --assignee strings              Assignees to add to the pull request (repeatable)
   -h, --help                          help for sync
+      --ready-for-review              Move the existing draft pull request to ready for review
+      --remove-assignee strings       Assignees to remove from the pull request (repeatable)
+      --remove-reviewers strings      Review requests to remove from the pull request (users or teams, repeatable)
+  -r, --reviewers strings             Reviewers to request on the pull request (users or teams, repeatable)
       --section strings               Sync only the specified fotingo-managed section (repeatable). Supported values: summary, description, fixed-issues, changes
       --sync-title                    Refresh the pull request title using fotingo's derived title rules
       --template-description string   Override the synced Description section content; expands escaped \n, \r\n, and \t

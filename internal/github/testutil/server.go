@@ -344,6 +344,11 @@ func (m *MockGitHubServer) handleRequest(w http.ResponseWriter, r *http.Request)
 		owner, repo, number := extractOwnerRepoNumber(strings.TrimSuffix(path, "/requested_reviewers"))
 		m.handleRequestReviewers(w, r, owner, repo, number)
 
+	// DELETE /repos/{owner}/{repo}/pulls/{number}/requested_reviewers - remove requested reviewers
+	case matchPath(path, "/repos/{owner}/{repo}/pulls/{number}/requested_reviewers") && r.Method == http.MethodDelete:
+		owner, repo, number := extractOwnerRepoNumber(strings.TrimSuffix(path, "/requested_reviewers"))
+		m.handleRemoveReviewers(w, r, owner, repo, number)
+
 	// POST /repos/{owner}/{repo}/issues/{number}/labels - add labels
 	case matchPath(path, "/repos/{owner}/{repo}/issues/{number}/labels") && r.Method == http.MethodPost:
 		owner, repo, number := extractOwnerRepoNumberFromIssues(path)
@@ -353,6 +358,15 @@ func (m *MockGitHubServer) handleRequest(w http.ResponseWriter, r *http.Request)
 	case matchPath(path, "/repos/{owner}/{repo}/issues/{number}/assignees") && r.Method == http.MethodPost:
 		owner, repo, number := extractOwnerRepoNumberFromIssues(path)
 		m.handleAddAssignees(w, r, owner, repo, number)
+
+	// DELETE /repos/{owner}/{repo}/issues/{number}/assignees - remove assignees
+	case matchPath(path, "/repos/{owner}/{repo}/issues/{number}/assignees") && r.Method == http.MethodDelete:
+		owner, repo, number := extractOwnerRepoNumberFromIssues(path)
+		m.handleRemoveAssignees(w, r, owner, repo, number)
+
+	// POST /graphql - GraphQL mutations
+	case path == "/graphql" && r.Method == http.MethodPost:
+		m.handleGraphQL(w, r)
 
 	// GET /repos/{owner}/{repo}/collaborators - list collaborators
 	case matchPath(path, "/repos/{owner}/{repo}/collaborators") && r.Method == http.MethodGet:
@@ -517,6 +531,7 @@ func (m *MockGitHubServer) handleCreatePullRequest(w http.ResponseWriter, r *htt
 	newNumber := len(m.pullRequests[key]) + 1
 	newPR := &MockPullRequest{
 		ID:      int64(newNumber * 1000),
+		NodeID:  "PR_node_" + itoa(newNumber),
 		Number:  newNumber,
 		Title:   createRequest.Title,
 		Body:    createRequest.Body,
@@ -605,8 +620,8 @@ func (m *MockGitHubServer) handleRequestReviewers(w http.ResponseWriter, r *http
 		return
 	}
 
-	m.mu.RLock()
-	defer m.mu.RUnlock()
+	m.mu.Lock()
+	defer m.mu.Unlock()
 
 	key := owner + "/" + repo
 	var foundPR *MockPullRequest
@@ -649,6 +664,7 @@ func (m *MockGitHubServer) handleRequestReviewers(w http.ResponseWriter, r *http
 	for _, reviewer := range reviewRequest.Reviewers {
 		for _, collab := range collaborators {
 			if collab.Login == reviewer {
+				foundPR.RequestedReviewers = appendUniqueUsers(foundPR.RequestedReviewers, collab)
 				requestedReviewers = append(requestedReviewers, collab.ToAPIResponse())
 				break
 			}
@@ -660,6 +676,7 @@ func (m *MockGitHubServer) handleRequestReviewers(w http.ResponseWriter, r *http
 		if team == nil {
 			team = NewTeam(0, owner, teamSlug, teamSlug, "")
 		}
+		foundPR.RequestedTeams = appendUniqueTeams(foundPR.RequestedTeams, team)
 		requestedTeams = append(requestedTeams, team.ToAPIResponse())
 	}
 
@@ -668,6 +685,45 @@ func (m *MockGitHubServer) handleRequestReviewers(w http.ResponseWriter, r *http
 	response["requested_teams"] = requestedTeams
 
 	m.writeJSON(w, http.StatusCreated, response)
+}
+
+func (m *MockGitHubServer) handleRemoveReviewers(w http.ResponseWriter, r *http.Request, owner, repo string, number int) {
+	var reviewRequest struct {
+		Reviewers     []string `json:"reviewers"`
+		TeamReviewers []string `json:"team_reviewers"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&reviewRequest); err != nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid request body",
+		})
+		return
+	}
+
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	key := owner + "/" + repo
+	var foundPR *MockPullRequest
+	for _, pr := range m.pullRequests[key] {
+		if pr.Number == number {
+			foundPR = pr
+			break
+		}
+	}
+
+	if foundPR == nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusNotFound,
+			Message:    "Not Found",
+		})
+		return
+	}
+
+	foundPR.RequestedReviewers = removeUsersByLogin(foundPR.RequestedReviewers, reviewRequest.Reviewers)
+	foundPR.RequestedTeams = removeTeamsBySlug(foundPR.RequestedTeams, reviewRequest.TeamReviewers)
+	m.writeJSON(w, http.StatusOK, foundPR.ToAPIResponse())
 }
 
 func (m *MockGitHubServer) handleAddLabels(w http.ResponseWriter, r *http.Request, owner, repo string, number int) {
@@ -763,7 +819,6 @@ func (m *MockGitHubServer) handleAddAssignees(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	assigned := make([]*MockUser, 0, len(assigneeRequest.Assignees))
 	for _, login := range assigneeRequest.Assignees {
 		user := findUserByLogin(m.collaborators[key], login)
 		if user == nil {
@@ -772,11 +827,100 @@ func (m *MockGitHubServer) handleAddAssignees(w http.ResponseWriter, r *http.Req
 		if user == nil {
 			user = NewUser(0, login, login)
 		}
-		assigned = append(assigned, user)
+		foundPR.Assignees = appendUniqueUsers(foundPR.Assignees, user)
 	}
 
-	foundPR.Assignees = assigned
 	m.writeJSON(w, http.StatusCreated, foundPR.ToAPIResponse())
+}
+
+func (m *MockGitHubServer) handleRemoveAssignees(w http.ResponseWriter, r *http.Request, owner, repo string, number int) {
+	var assigneeRequest struct {
+		Assignees []string `json:"assignees"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&assigneeRequest); err != nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid request body",
+		})
+		return
+	}
+
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	key := owner + "/" + repo
+	var foundPR *MockPullRequest
+	for _, pr := range m.pullRequests[key] {
+		if pr.Number == number {
+			foundPR = pr
+			break
+		}
+	}
+
+	if foundPR == nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusNotFound,
+			Message:    "Not Found",
+		})
+		return
+	}
+
+	foundPR.Assignees = removeUsersByLogin(foundPR.Assignees, assigneeRequest.Assignees)
+	m.writeJSON(w, http.StatusOK, foundPR.ToAPIResponse())
+}
+
+func (m *MockGitHubServer) handleGraphQL(w http.ResponseWriter, r *http.Request) {
+	var request struct {
+		Query     string            `json:"query"`
+		Variables map[string]string `json:"variables"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid request body",
+		})
+		return
+	}
+
+	if !strings.Contains(request.Query, "markPullRequestReadyForReview") {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Unsupported GraphQL operation",
+		})
+		return
+	}
+
+	nodeID := strings.TrimSpace(request.Variables["pullRequestId"])
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	for _, prs := range m.pullRequests {
+		for _, pr := range prs {
+			if pr.apiNodeID() != nodeID {
+				continue
+			}
+			pr.Draft = false
+			pr.UpdatedAt = time.Now()
+			m.writeJSON(w, http.StatusOK, map[string]interface{}{
+				"data": map[string]interface{}{
+					"markPullRequestReadyForReview": map[string]interface{}{
+						"pullRequest": map[string]interface{}{
+							"id": pr.apiNodeID(),
+						},
+					},
+				},
+			})
+			return
+		}
+	}
+
+	m.writeJSON(w, http.StatusOK, map[string]interface{}{
+		"errors": []map[string]interface{}{
+			{"message": "Pull request not found"},
+		},
+	})
 }
 
 func (m *MockGitHubServer) handleListCollaborators(w http.ResponseWriter, r *http.Request, owner, repo string) {
@@ -1027,6 +1171,36 @@ func findUserByLogin(users []*MockUser, login string) *MockUser {
 	return nil
 }
 
+func appendUniqueUsers(users []*MockUser, next *MockUser) []*MockUser {
+	if next == nil || findUserByLogin(users, next.Login) != nil {
+		return users
+	}
+	return append(users, next)
+}
+
+func removeUsersByLogin(users []*MockUser, logins []string) []*MockUser {
+	if len(users) == 0 || len(logins) == 0 {
+		return users
+	}
+
+	remove := make(map[string]struct{}, len(logins))
+	for _, login := range logins {
+		remove[login] = struct{}{}
+	}
+
+	kept := users[:0]
+	for _, user := range users {
+		if user == nil {
+			continue
+		}
+		if _, ok := remove[user.Login]; ok {
+			continue
+		}
+		kept = append(kept, user)
+	}
+	return kept
+}
+
 func findTeamBySlug(teams []*MockTeam, slug string) *MockTeam {
 	for _, team := range teams {
 		if team != nil && team.Slug == slug {
@@ -1034,4 +1208,34 @@ func findTeamBySlug(teams []*MockTeam, slug string) *MockTeam {
 		}
 	}
 	return nil
+}
+
+func appendUniqueTeams(teams []*MockTeam, next *MockTeam) []*MockTeam {
+	if next == nil || findTeamBySlug(teams, next.Slug) != nil {
+		return teams
+	}
+	return append(teams, next)
+}
+
+func removeTeamsBySlug(teams []*MockTeam, slugs []string) []*MockTeam {
+	if len(teams) == 0 || len(slugs) == 0 {
+		return teams
+	}
+
+	remove := make(map[string]struct{}, len(slugs))
+	for _, slug := range slugs {
+		remove[slug] = struct{}{}
+	}
+
+	kept := teams[:0]
+	for _, team := range teams {
+		if team == nil {
+			continue
+		}
+		if _, ok := remove[team.Slug]; ok {
+			continue
+		}
+		kept = append(kept, team)
+	}
+	return kept
 }

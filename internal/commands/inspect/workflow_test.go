@@ -149,7 +149,19 @@ func (s *inspectGitHubStub) RequestReviewers(int, []string, []string) error {
 	return fmt.Errorf("not implemented")
 }
 
+func (s *inspectGitHubStub) RemoveReviewers(int, []string, []string) error {
+	return fmt.Errorf("not implemented")
+}
+
 func (s *inspectGitHubStub) AssignUsersToPR(int, []string) error {
+	return fmt.Errorf("not implemented")
+}
+
+func (s *inspectGitHubStub) RemoveAssigneesFromPR(int, []string) error {
+	return fmt.Errorf("not implemented")
+}
+
+func (s *inspectGitHubStub) MarkPullRequestReadyForReview(string) error {
 	return fmt.Errorf("not implemented")
 }
 

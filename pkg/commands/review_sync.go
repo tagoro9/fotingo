@@ -20,6 +20,11 @@ type reviewSyncFlags struct {
 	title               string
 	templateSummary     string
 	templateDescription string
+	reviewers           []string
+	removeReviewers     []string
+	assignees           []string
+	removeAssignees     []string
+	readyForReview      bool
 }
 
 type reviewSyncSectionSpec struct {
@@ -42,7 +47,16 @@ func init() {
 	reviewSyncCmd.Flags().StringVar(&reviewSyncCmdFlags.title, "title", "", "Override the pull request title during sync")
 	reviewSyncCmd.Flags().StringVar(&reviewSyncCmdFlags.templateSummary, "template-summary", "", "Override the synced Summary section content")
 	reviewSyncCmd.Flags().StringVar(&reviewSyncCmdFlags.templateDescription, "template-description", "", "Override the synced Description section content; expands escaped \\n, \\r\\n, and \\t")
+	reviewSyncCmd.Flags().StringSliceVarP(&reviewSyncCmdFlags.reviewers, "reviewers", "r", []string{}, "Reviewers to request on the pull request (users or teams, repeatable)")
+	reviewSyncCmd.Flags().StringSliceVar(&reviewSyncCmdFlags.removeReviewers, "remove-reviewers", []string{}, "Review requests to remove from the pull request (users or teams, repeatable)")
+	reviewSyncCmd.Flags().StringSliceVarP(&reviewSyncCmdFlags.assignees, "assignee", "a", []string{}, "Assignees to add to the pull request (repeatable)")
+	reviewSyncCmd.Flags().StringSliceVar(&reviewSyncCmdFlags.removeAssignees, "remove-assignee", []string{}, "Assignees to remove from the pull request (repeatable)")
+	reviewSyncCmd.Flags().BoolVar(&reviewSyncCmdFlags.readyForReview, "ready-for-review", false, "Move the existing draft pull request to ready for review")
 	_ = reviewSyncCmd.RegisterFlagCompletionFunc("section", completeReviewSyncSectionFlag)
+	_ = reviewSyncCmd.RegisterFlagCompletionFunc("reviewers", completeReviewReviewersFlag)
+	_ = reviewSyncCmd.RegisterFlagCompletionFunc("remove-reviewers", completeReviewReviewersFlag)
+	_ = reviewSyncCmd.RegisterFlagCompletionFunc("assignee", completeReviewAssigneesFlag)
+	_ = reviewSyncCmd.RegisterFlagCompletionFunc("remove-assignee", completeReviewAssigneesFlag)
 
 	reviewCmd.AddCommand(reviewSyncCmd)
 }
@@ -130,6 +144,22 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 	}
 	if !exists || pr == nil {
 		return reviewResult{err: fmt.Errorf("no pull request found for branch %s", branch)}
+	}
+
+	resolvedReviewers, resolvedTeamReviewers, resolvedRemoveReviewers, resolvedRemoveTeamReviewers, resolveWarnings, err := resolveReviewSyncReviewers(ghClient)
+	if err != nil {
+		return reviewResult{err: fmt.Errorf("failed to resolve reviewers: %w", err)}
+	}
+	for _, warning := range resolveWarnings {
+		out.InfoRaw(commandruntime.LogEmojiWarning, warning)
+	}
+
+	resolvedAssignees, resolvedRemoveAssignees, resolveWarnings, err := resolveReviewSyncAssignees(ghClient)
+	if err != nil {
+		return reviewResult{err: fmt.Errorf("failed to resolve assignees: %w", err)}
+	}
+	for _, warning := range resolveWarnings {
+		out.InfoRaw(commandruntime.LogEmojiWarning, warning)
 	}
 
 	needsDerivedTitle := reviewSyncCmdFlags.syncTitle && strings.TrimSpace(reviewSyncCmdFlags.title) == ""
@@ -238,20 +268,27 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 		updateOpts.Title = title
 	}
 
-	if updateOpts.Title == nil && updateOpts.Body == nil {
-		return reviewResult{
-			pr:      pr,
-			issue:   issue,
-			jiraURL: jiraURL,
+	updatedPR := pr
+	if updateOpts.Title != nil || updateOpts.Body != nil {
+		out.InfoRaw(commandruntime.LogEmojiReview, "Updating pull request...")
+		updatedPR, err = ghClient.UpdatePullRequest(pr.Number, updateOpts)
+		if err != nil {
+			return reviewResult{err: err}
 		}
+		out.InfoRaw(commandruntime.LogEmojiCheck, fmt.Sprintf("Pull request synchronized: %s", updatedPR.HTMLURL))
 	}
 
-	out.InfoRaw(commandruntime.LogEmojiReview, "Updating pull request...")
-	updatedPR, err := ghClient.UpdatePullRequest(pr.Number, updateOpts)
-	if err != nil {
-		return reviewResult{err: err}
-	}
-	out.InfoRaw(commandruntime.LogEmojiCheck, fmt.Sprintf("Pull request synchronized: %s", updatedPR.HTMLURL))
+	appliedReviewers, appliedTeamReviewers, appliedAssignees := applyReviewSyncMetadata(
+		out,
+		ghClient,
+		updatedPR,
+		resolvedReviewers,
+		resolvedTeamReviewers,
+		resolvedRemoveReviewers,
+		resolvedRemoveTeamReviewers,
+		resolvedAssignees,
+		resolvedRemoveAssignees,
+	)
 
 	if len(newLinkedIssueIDs) > 0 {
 		if jiraClient == nil {
@@ -292,10 +329,144 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 	}
 
 	return reviewResult{
-		pr:      updatedPR,
-		issue:   issue,
-		jiraURL: jiraURL,
+		pr:            updatedPR,
+		issue:         issue,
+		jiraURL:       jiraURL,
+		reviewers:     appliedReviewers,
+		teamReviewers: appliedTeamReviewers,
+		assignees:     appliedAssignees,
+		existed:       true,
 	}
+}
+
+func resolveReviewSyncReviewers(
+	ghClient github.Github,
+) (
+	[]string,
+	[]string,
+	[]string,
+	[]string,
+	[]string,
+	error,
+) {
+	var addUsers []string
+	var addTeams []string
+	var addWarnings []string
+	var err error
+	if len(reviewSyncCmdFlags.reviewers) > 0 {
+		addUsers, addTeams, addWarnings, err = resolveReviewReviewers(ghClient, reviewSyncCmdFlags.reviewers)
+		if err != nil {
+			return nil, nil, nil, nil, addWarnings, err
+		}
+	}
+
+	var removeUsers []string
+	var removeTeams []string
+	var removeWarnings []string
+	if len(reviewSyncCmdFlags.removeReviewers) > 0 {
+		removeUsers, removeTeams, removeWarnings, err = resolveReviewReviewers(ghClient, reviewSyncCmdFlags.removeReviewers)
+	}
+	warnings := append([]string{}, addWarnings...)
+	warnings = append(warnings, removeWarnings...)
+	if err != nil {
+		return nil, nil, nil, nil, warnings, err
+	}
+
+	return addUsers, addTeams, removeUsers, removeTeams, internalreview.DedupeStringsPreserveOrder(warnings), nil
+}
+
+func resolveReviewSyncAssignees(ghClient github.Github) ([]string, []string, []string, error) {
+	var addAssignees []string
+	var addWarnings []string
+	var err error
+	if len(reviewSyncCmdFlags.assignees) > 0 {
+		addAssignees, addWarnings, err = resolveReviewAssignees(ghClient, reviewSyncCmdFlags.assignees)
+		if err != nil {
+			return nil, nil, addWarnings, err
+		}
+	}
+
+	var removeAssignees []string
+	var removeWarnings []string
+	if len(reviewSyncCmdFlags.removeAssignees) > 0 {
+		removeAssignees, removeWarnings, err = resolveReviewAssignees(ghClient, reviewSyncCmdFlags.removeAssignees)
+	}
+	warnings := append([]string{}, addWarnings...)
+	warnings = append(warnings, removeWarnings...)
+	if err != nil {
+		return nil, nil, warnings, err
+	}
+
+	return addAssignees, removeAssignees, internalreview.DedupeStringsPreserveOrder(warnings), nil
+}
+
+func applyReviewSyncMetadata(
+	out commandruntime.LocalizedEmitter,
+	ghClient github.Github,
+	pr *github.PullRequest,
+	reviewers []string,
+	teamReviewers []string,
+	removeReviewers []string,
+	removeTeamReviewers []string,
+	assignees []string,
+	removeAssignees []string,
+) ([]string, []string, []string) {
+	appliedReviewers := []string(nil)
+	appliedTeamReviewers := []string(nil)
+	appliedAssignees := []string(nil)
+
+	if len(reviewers) > 0 || len(teamReviewers) > 0 {
+		allReviewers := append(append([]string{}, reviewers...), teamReviewers...)
+		out.Verbose(i18n.ReviewStatusRequestReviewers, strings.Join(allReviewers, ", "))
+		if err := ghClient.RequestReviewers(pr.Number, reviewers, internalreview.ToTeamSlugs(teamReviewers)); err != nil {
+			out.InfoRaw(commandruntime.LogEmojiWarning, formatReviewReviewersWarning(err))
+		} else {
+			appliedReviewers = append([]string{}, reviewers...)
+			appliedTeamReviewers = append([]string{}, teamReviewers...)
+			out.Verbose(i18n.ReviewStatusReviewersDone)
+		}
+	}
+
+	if len(removeReviewers) > 0 || len(removeTeamReviewers) > 0 {
+		allReviewers := append(append([]string{}, removeReviewers...), removeTeamReviewers...)
+		out.InfoRaw(commandruntime.LogEmojiProgress, fmt.Sprintf("Removing review requests: %s", strings.Join(allReviewers, ", ")))
+		if err := ghClient.RemoveReviewers(pr.Number, removeReviewers, internalreview.ToTeamSlugs(removeTeamReviewers)); err != nil {
+			out.InfoRaw(commandruntime.LogEmojiWarning, fmt.Sprintf("Failed to remove review requests: %v", err))
+		} else {
+			out.InfoRaw(commandruntime.LogEmojiCheck, "Review requests removed")
+		}
+	}
+
+	if len(assignees) > 0 {
+		out.Verbose(i18n.ReviewStatusAssignAssignees, strings.Join(assignees, ", "))
+		if err := ghClient.AssignUsersToPR(pr.Number, assignees); err != nil {
+			out.Info(commandruntime.LogEmojiWarning, i18n.ReviewStatusAssignAssigneesWarn, err)
+		} else {
+			appliedAssignees = append([]string{}, assignees...)
+			out.Verbose(i18n.ReviewStatusAssigneesDone)
+		}
+	}
+
+	if len(removeAssignees) > 0 {
+		out.InfoRaw(commandruntime.LogEmojiProgress, fmt.Sprintf("Removing pull request assignees: %s", strings.Join(removeAssignees, ", ")))
+		if err := ghClient.RemoveAssigneesFromPR(pr.Number, removeAssignees); err != nil {
+			out.InfoRaw(commandruntime.LogEmojiWarning, fmt.Sprintf("Failed to remove pull request assignees: %v", err))
+		} else {
+			out.InfoRaw(commandruntime.LogEmojiCheck, "Pull request assignees removed")
+		}
+	}
+
+	if reviewSyncCmdFlags.readyForReview {
+		out.InfoRaw(commandruntime.LogEmojiProgress, "Moving pull request to ready for review...")
+		if err := ghClient.MarkPullRequestReadyForReview(pr.NodeID); err != nil {
+			out.InfoRaw(commandruntime.LogEmojiWarning, fmt.Sprintf("Failed to move pull request to ready for review: %v", err))
+		} else {
+			pr.Draft = false
+			out.InfoRaw(commandruntime.LogEmojiCheck, "Pull request is ready for review")
+		}
+	}
+
+	return appliedReviewers, appliedTeamReviewers, appliedAssignees
 }
 
 func buildReviewSyncEditorBody(currentBody string, freshBody string, sections []string) (string, error) {

@@ -156,11 +156,15 @@ func outputReviewJSON(result reviewResult) error {
 		if result.existed {
 			state = localizer.T(i18n.ReviewStateExisting)
 		}
+		draft := result.pr.Draft
+		if !result.existed && reviewCmdFlags.draft {
+			draft = true
+		}
 		output.PullRequest = &PullRequestInfo{
 			Number: result.pr.Number,
 			URL:    result.pr.HTMLURL,
 			Title:  result.pr.Title,
-			Draft:  reviewCmdFlags.draft,
+			Draft:  draft,
 			State:  state,
 		}
 	}

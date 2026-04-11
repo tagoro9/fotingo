@@ -40,8 +40,10 @@ type PullRequest struct {
 	Title   string
 	Body    string
 	Number  int
+	NodeID  string
 	URL     string
 	HTMLURL string
+	Draft   bool
 }
 
 // Label represents a GitHub label
@@ -117,8 +119,14 @@ type Github interface {
 	GetTeams() ([]Team, error)
 	// RequestReviewers requests reviewers on a pull request
 	RequestReviewers(prNumber int, reviewers []string, teamReviewers []string) error
+	// RemoveReviewers removes pending reviewer requests from a pull request
+	RemoveReviewers(prNumber int, reviewers []string, teamReviewers []string) error
 	// AssignUsersToPR assigns users to a pull request
 	AssignUsersToPR(prNumber int, assignees []string) error
+	// RemoveAssigneesFromPR removes users assigned to a pull request
+	RemoveAssigneesFromPR(prNumber int, assignees []string) error
+	// MarkPullRequestReadyForReview moves a draft pull request to ready for review
+	MarkPullRequestReadyForReview(prNodeID string) error
 	// DoesPRExistForBranch checks if a PR exists for a given branch
 	DoesPRExistForBranch(branch string) (bool, *PullRequest, error)
 	// CreateRelease creates a GitHub release
@@ -243,8 +251,10 @@ func (g *github) CreatePullRequest(opts CreatePROptions) (*PullRequest, error) {
 		Title:   pr.GetTitle(),
 		Body:    pr.GetBody(),
 		Number:  pr.GetNumber(),
+		NodeID:  pr.GetNodeID(),
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),
+		Draft:   pr.GetDraft(),
 	}, nil
 }
 
@@ -267,8 +277,10 @@ func (g *github) UpdatePullRequest(prNumber int, opts UpdatePROptions) (*PullReq
 		Title:   pr.GetTitle(),
 		Body:    pr.GetBody(),
 		Number:  pr.GetNumber(),
+		NodeID:  pr.GetNodeID(),
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),
+		Draft:   pr.GetDraft(),
 	}, nil
 }
 
@@ -1004,6 +1016,24 @@ func (g *github) RequestReviewers(prNumber int, reviewers []string, teamReviewer
 	return nil
 }
 
+// RemoveReviewers removes pending reviewer requests from a pull request.
+func (g *github) RemoveReviewers(prNumber int, reviewers []string, teamReviewers []string) error {
+	if len(reviewers) == 0 && len(teamReviewers) == 0 {
+		return nil
+	}
+
+	reviewersRequest := hub.ReviewersRequest{
+		Reviewers:     reviewers,
+		TeamReviewers: teamReviewers,
+	}
+
+	_, err := g.hub.PullRequests.RemoveReviewers(context.Background(), g.owner, g.repo, prNumber, reviewersRequest)
+	if err != nil {
+		return fmt.Errorf("failed to remove reviewers: %w", err)
+	}
+	return nil
+}
+
 // AssignUsersToPR assigns users to a pull request.
 func (g *github) AssignUsersToPR(prNumber int, assignees []string) error {
 	if len(assignees) == 0 {
@@ -1014,6 +1044,75 @@ func (g *github) AssignUsersToPR(prNumber int, assignees []string) error {
 	if err != nil {
 		return fmt.Errorf("failed to assign users to pull request: %w", err)
 	}
+	return nil
+}
+
+// RemoveAssigneesFromPR removes users assigned to a pull request.
+func (g *github) RemoveAssigneesFromPR(prNumber int, assignees []string) error {
+	if len(assignees) == 0 {
+		return nil
+	}
+
+	_, _, err := g.hub.Issues.RemoveAssignees(context.Background(), g.owner, g.repo, prNumber, assignees)
+	if err != nil {
+		return fmt.Errorf("failed to remove assignees from pull request: %w", err)
+	}
+	return nil
+}
+
+type markReadyForReviewGraphQLRequest struct {
+	Query     string            `json:"query"`
+	Variables map[string]string `json:"variables"`
+}
+
+type graphQLError struct {
+	Message string `json:"message"`
+}
+
+type markReadyForReviewGraphQLResponse struct {
+	Errors []graphQLError `json:"errors"`
+}
+
+// MarkPullRequestReadyForReview moves a draft pull request to ready for review.
+func (g *github) MarkPullRequestReadyForReview(prNodeID string) error {
+	nodeID := strings.TrimSpace(prNodeID)
+	if nodeID == "" {
+		return fmt.Errorf("pull request node ID is required to mark ready for review")
+	}
+
+	request := markReadyForReviewGraphQLRequest{
+		Query: `mutation($pullRequestId: ID!) {
+  markPullRequestReadyForReview(input: {pullRequestId: $pullRequestId}) {
+    pullRequest {
+      id
+    }
+  }
+}`,
+		Variables: map[string]string{"pullRequestId": nodeID},
+	}
+
+	req, err := g.hub.NewRequest("POST", "/graphql", request)
+	if err != nil {
+		return fmt.Errorf("failed to create ready-for-review request: %w", err)
+	}
+
+	var response markReadyForReviewGraphQLResponse
+	if _, err := g.hub.Do(context.Background(), req, &response); err != nil {
+		return fmt.Errorf("failed to mark pull request ready for review: %w", err)
+	}
+	if len(response.Errors) > 0 {
+		messages := make([]string, 0, len(response.Errors))
+		for _, graphQLErr := range response.Errors {
+			if strings.TrimSpace(graphQLErr.Message) != "" {
+				messages = append(messages, graphQLErr.Message)
+			}
+		}
+		if len(messages) == 0 {
+			messages = append(messages, "unknown GraphQL error")
+		}
+		return fmt.Errorf("failed to mark pull request ready for review: %s", strings.Join(messages, "; "))
+	}
+
 	return nil
 }
 
@@ -1036,8 +1135,10 @@ func (g *github) DoesPRExistForBranch(branch string) (bool, *PullRequest, error)
 		Title:   pr.GetTitle(),
 		Body:    pr.GetBody(),
 		Number:  pr.GetNumber(),
+		NodeID:  pr.GetNodeID(),
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),
+		Draft:   pr.GetDraft(),
 	}, nil
 }
 

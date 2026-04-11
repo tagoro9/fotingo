@@ -82,6 +82,12 @@ Refresh fotingo-managed sections on an existing pull request:
 {{EXAMPLE_REVIEW_SYNC_DEFAULT}}
 ```
 
+Update review metadata on an existing pull request:
+
+```bash
+{{EXAMPLE_REVIEW_SYNC_METADATA}}
+```
+
 ## Supporting Commands
 
 - `fotingo open issue` to open the Jira issue linked to the current branch context.
@@ -96,12 +102,15 @@ Refresh fotingo-managed sections on an existing pull request:
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
+- For current-branch PR context, run `fotingo inspect --json` and read the `pullRequest` fields before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
 - Use `fotingo review --branch ...` when the pull request should target a non-default base branch.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.
 - Use `fotingo review sync -y` after follow-up commits to refresh fotingo-managed sections while preserving manual edits outside the managed placeholders.
 - Use `fotingo review sync --section ...` to limit which managed sections are rewritten. Supported section values are `summary`, `description`, `fixed-issues`, and `changes`, and shell completion can suggest them. `--template-summary` and `--template-description` only apply when those sections are included in the sync.
 - Use `fotingo review sync --sync-title` to recompute the PR title, or `fotingo review sync --title "..."` when you need an explicit title update.
+- Use `fotingo review sync -r ... --remove-reviewers ... --assignee ... --remove-assignee ...` to add or remove reviewers and assignees on an existing PR after resolving participant values with `fotingo search ... --json`.
+- Use `fotingo review sync --ready-for-review` to move an existing draft PR out of draft.
 - Use `--description -` when you need to replace the entire PR body instead of filling template placeholders.
 - Use `--title` only when the generated PR title is wrong or incomplete.
 - Use `fotingo open issue` when you need the linked Jira URL for the current branch context. Interactive runs can disambiguate between multiple linked issues; automation should prefer `--json` and handle ambiguity errors that list the candidate issue IDs.
