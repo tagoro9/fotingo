@@ -296,18 +296,16 @@ type InspectPRInfo struct {
 ```
 
 <a name="InspectPROutput"></a>
-## type [InspectPROutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L178-L185>)
+## type [InspectPROutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L178-L183>)
 
 InspectPROutput represents the JSON output of the inspect pr command.
 
 ```go
 type InspectPROutput struct {
-    Branch         *BranchInfo                    `json:"branch,omitempty"`
-    PullRequest    *PullRequestInfo               `json:"pullRequest,omitempty"`
-    Comments       []PullRequestCommentInfo       `json:"comments"`
-    Reviews        []PullRequestReviewInfo        `json:"reviews"`
-    ReviewComments []PullRequestReviewCommentInfo `json:"reviewComments"`
-    Conversations  []PullRequestConversationInfo  `json:"conversations"`
+    Branch      *BranchInfo              `json:"branch,omitempty"`
+    PullRequest *PullRequestInfo         `json:"pullRequest,omitempty"`
+    Comments    []PullRequestCommentInfo `json:"comments"`
+    Reviews     []PullRequestReviewInfo  `json:"reviews"`
 }
 ```
 
@@ -403,7 +401,7 @@ type OpenOutput struct {
 ```
 
 <a name="PullRequestCommentInfo"></a>
-## type [PullRequestCommentInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L188-L197>)
+## type [PullRequestCommentInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L186-L195>)
 
 PullRequestCommentInfo represents a top\-level pull request comment in inspect output.
 
@@ -421,7 +419,7 @@ type PullRequestCommentInfo struct {
 ```
 
 <a name="PullRequestConversationInfo"></a>
-## type [PullRequestConversationInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L244-L248>)
+## type [PullRequestConversationInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L243-L247>)
 
 PullRequestConversationInfo represents grouped inline review comments.
 
@@ -451,7 +449,7 @@ type PullRequestInfo struct {
 ```
 
 <a name="PullRequestReviewCommentInfo"></a>
-## type [PullRequestReviewCommentInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L213-L241>)
+## type [PullRequestReviewCommentInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L212-L240>)
 
 PullRequestReviewCommentInfo represents an inline pull request review comment in inspect output.
 
@@ -488,21 +486,22 @@ type PullRequestReviewCommentInfo struct {
 ```
 
 <a name="PullRequestReviewInfo"></a>
-## type [PullRequestReviewInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L200-L210>)
+## type [PullRequestReviewInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L198-L209>)
 
 PullRequestReviewInfo represents a submitted pull request review in inspect output.
 
 ```go
 type PullRequestReviewInfo struct {
-    ID                int64  `json:"id"`
-    Author            string `json:"author,omitempty"`
-    State             string `json:"state,omitempty"`
-    Body              string `json:"body,omitempty"`
-    CommitID          string `json:"commitId,omitempty"`
-    URL               string `json:"url,omitempty"`
-    HTMLURL           string `json:"htmlUrl,omitempty"`
-    AuthorAssociation string `json:"authorAssociation,omitempty"`
-    SubmittedAt       string `json:"submittedAt,omitempty"`
+    ID                int64                         `json:"id"`
+    Author            string                        `json:"author,omitempty"`
+    State             string                        `json:"state,omitempty"`
+    Body              string                        `json:"body,omitempty"`
+    CommitID          string                        `json:"commitId,omitempty"`
+    URL               string                        `json:"url,omitempty"`
+    HTMLURL           string                        `json:"htmlUrl,omitempty"`
+    AuthorAssociation string                        `json:"authorAssociation,omitempty"`
+    SubmittedAt       string                        `json:"submittedAt,omitempty"`
+    Conversations     []PullRequestConversationInfo `json:"conversations"`
 }
 ```
 

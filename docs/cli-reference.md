@@ -224,7 +224,7 @@ Flags:
 | `--branch` | `-b`  | Inspect a specific branch |
 | `--issue`  | `-i`  | Inspect a specific issue  |
 
-`fotingo inspect pr` returns the open pull request for the inspected branch plus top-level comments, submitted reviews, inline review comments, and grouped inline conversations. It supports `--branch`/`-b` and returns a JSON error when the branch has no open pull request.
+`fotingo inspect pr` returns the open pull request for the inspected branch plus top-level comments and submitted reviews with their grouped inline conversations. It supports `--branch`/`-b` and returns a JSON error when the branch has no open pull request.
 
 ### `completion`
 
