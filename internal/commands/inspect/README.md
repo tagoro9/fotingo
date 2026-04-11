@@ -18,11 +18,13 @@ Package inspect contains branch/commit issue\-ID extraction helpers.
 - [type CommitInfo](<#CommitInfo>)
 - [type IssueInfo](<#IssueInfo>)
 - [type PullRequestInfo](<#PullRequestInfo>)
+- [type PullRequestInspector](<#PullRequestInspector>)
 - [type WorkflowDeps](<#WorkflowDeps>)
 - [type WorkflowOptions](<#WorkflowOptions>)
 - [type WorkflowResult](<#WorkflowResult>)
 - [type WorkflowRunner](<#WorkflowRunner>)
   - [func \(r WorkflowRunner\) Run\(\) \(WorkflowResult, error\)](<#WorkflowRunner.Run>)
+  - [func \(r WorkflowRunner\) RunPullRequest\(\) \(WorkflowResult, error\)](<#WorkflowRunner.RunPullRequest>)
 
 
 <a name="ExtractIssueIDsFromCommits"></a>
@@ -44,7 +46,7 @@ func IssueIDPattern() *regexp.Regexp
 IssueIDPattern returns the compiled Jira\-style issue key matcher.
 
 <a name="BranchInfo"></a>
-## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L18-L22>)
+## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L20-L24>)
 
 BranchInfo represents branch\-related inspect command output.
 
@@ -57,7 +59,7 @@ type BranchInfo struct {
 ```
 
 <a name="CommitInfo"></a>
-## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L11-L15>)
+## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L13-L17>)
 
 CommitInfo represents one commit in inspect command output.
 
@@ -70,7 +72,7 @@ type CommitInfo struct {
 ```
 
 <a name="IssueInfo"></a>
-## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L25-L34>)
+## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L38-L47>)
 
 IssueInfo represents issue\-related inspect command output.
 
@@ -88,35 +90,50 @@ type IssueInfo struct {
 ```
 
 <a name="PullRequestInfo"></a>
-## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L37-L42>)
+## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L27-L35>)
 
 PullRequestInfo represents pull\-request\-related inspect command output.
 
 ```go
 type PullRequestInfo struct {
-    Number      int
     Title       string
     Description string
+    Number      int
     URL         string
+    APIURL      string
+    State       string
+    Draft       bool
+}
+```
+
+<a name="PullRequestInspector"></a>
+## type [PullRequestInspector](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L66-L69>)
+
+PullRequestInspector resolves pull requests and discussion context for inspect pr.
+
+```go
+type PullRequestInspector interface {
+    DoesPRExistForBranch(branch string) (bool, *github.PullRequest, error)
+    GetPullRequestDiscussion(prNumber int) (*github.PullRequestDiscussion, error)
 }
 ```
 
 <a name="WorkflowDeps"></a>
-## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L60-L65>)
+## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L72-L77>)
 
 WorkflowDeps are inspect workflow dependencies.
 
 ```go
 type WorkflowDeps struct {
     NewGitClient     func(*viper.Viper, *chan string) (git.Git, error)
-    NewGitHubClient  func(git.Git, *viper.Viper) (github.Github, error)
+    NewGitHubClient  func(git.Git, *viper.Viper) (PullRequestInspector, error)
     NewJiraClient    func(*viper.Viper) (jira.Jira, error)
     FetchBranchIssue func(jira.Jira, string) (*jira.Issue, error)
 }
 ```
 
 <a name="WorkflowOptions"></a>
-## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L54-L57>)
+## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L60-L63>)
 
 WorkflowOptions controls inspect workflow selection behavior.
 
@@ -128,7 +145,7 @@ type WorkflowOptions struct {
 ```
 
 <a name="WorkflowResult"></a>
-## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L45-L51>)
+## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L50-L57>)
 
 WorkflowResult is the internal inspect workflow result.
 
@@ -137,13 +154,14 @@ type WorkflowResult struct {
     Branch      *BranchInfo
     Issue       *IssueInfo
     PullRequest *PullRequestInfo
+    Discussion  *github.PullRequestDiscussion
     IssueIDs    []string
     Commits     []CommitInfo
 }
 ```
 
 <a name="WorkflowRunner"></a>
-## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L68-L72>)
+## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L80-L84>)
 
 WorkflowRunner executes the inspect workflow.
 
@@ -156,13 +174,22 @@ type WorkflowRunner struct {
 ```
 
 <a name="WorkflowRunner.Run"></a>
-### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L75>)
+### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L87>)
 
 ```go
 func (r WorkflowRunner) Run() (WorkflowResult, error)
 ```
 
 Run executes inspect workflow and returns structured result data.
+
+<a name="WorkflowRunner.RunPullRequest"></a>
+### func \(WorkflowRunner\) [RunPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L200>)
+
+```go
+func (r WorkflowRunner) RunPullRequest() (WorkflowResult, error)
+```
+
+RunPullRequest executes PR discussion inspection and returns structured result data.
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)
 

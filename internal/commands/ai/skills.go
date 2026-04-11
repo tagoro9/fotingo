@@ -13,7 +13,7 @@ var skillsFS embed.FS
 
 // skillMetadataVersion is the semver for generated fotingo skill content.
 // Bump this when generated skill guidance/frontmatter changes.
-const skillMetadataVersion = "1.8.0"
+const skillMetadataVersion = "1.9.0"
 
 // RenderSkill returns provider-specific skill markdown content from embedded assets.
 func RenderSkill(provider Provider) (string, error) {
@@ -43,6 +43,7 @@ func RenderSkill(provider Provider) (string, error) {
 		"{{SKILL_VERSION}}":                     skillMetadataVersion,
 		"{{FOTINGO_VERSION}}":                   buildVersion,
 		"{{EXAMPLE_INSPECT_JSON}}":              examples.InspectJSON,
+		"{{EXAMPLE_INSPECT_PR_JSON}}":           examples.InspectPullRequestJSON,
 		"{{EXAMPLE_START_EXISTING_ISSUE}}":      examples.StartExistingIssue,
 		"{{EXAMPLE_START_CREATE_ISSUE}}":        examples.StartCreateIssue,
 		"{{EXAMPLE_START_WORKTREE}}":            examples.StartWorktree,

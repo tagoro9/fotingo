@@ -334,6 +334,16 @@ func (m *MockGitHubServer) handleRequest(w http.ResponseWriter, r *http.Request)
 		owner, repo, number := extractOwnerRepoNumber(path)
 		m.handleGetPullRequest(w, owner, repo, number)
 
+	// GET /repos/{owner}/{repo}/pulls/{number}/reviews - list PR reviews
+	case matchPath(path, "/repos/{owner}/{repo}/pulls/{number}/reviews") && r.Method == http.MethodGet:
+		owner, repo, number := extractOwnerRepoNumber(path)
+		m.handleListPullRequestReviews(w, owner, repo, number)
+
+	// GET /repos/{owner}/{repo}/pulls/{number}/comments - list PR review comments
+	case matchPath(path, "/repos/{owner}/{repo}/pulls/{number}/comments") && r.Method == http.MethodGet:
+		owner, repo, number := extractOwnerRepoNumber(path)
+		m.handleListPullRequestReviewComments(w, owner, repo, number)
+
 	// PATCH /repos/{owner}/{repo}/pulls/{number} - edit PR
 	case matchPathWithNumber(path, "/repos/{owner}/{repo}/pulls/{number}") && r.Method == http.MethodPatch:
 		owner, repo, number := extractOwnerRepoNumber(path)
@@ -353,6 +363,11 @@ func (m *MockGitHubServer) handleRequest(w http.ResponseWriter, r *http.Request)
 	case matchPath(path, "/repos/{owner}/{repo}/issues/{number}/labels") && r.Method == http.MethodPost:
 		owner, repo, number := extractOwnerRepoNumberFromIssues(path)
 		m.handleAddLabels(w, r, owner, repo, number)
+
+	// GET /repos/{owner}/{repo}/issues/{number}/comments - list PR issue comments
+	case matchPath(path, "/repos/{owner}/{repo}/issues/{number}/comments") && r.Method == http.MethodGet:
+		owner, repo, number := extractOwnerRepoNumberFromIssues(path)
+		m.handleListPullRequestIssueComments(w, owner, repo, number)
 
 	// POST /repos/{owner}/{repo}/issues/{number}/assignees - add assignees
 	case matchPath(path, "/repos/{owner}/{repo}/issues/{number}/assignees") && r.Method == http.MethodPost:
@@ -604,6 +619,66 @@ func (m *MockGitHubServer) handleEditPullRequest(w http.ResponseWriter, r *http.
 		StatusCode: http.StatusNotFound,
 		Message:    "Pull request not found",
 	})
+}
+
+func (m *MockGitHubServer) handleListPullRequestIssueComments(w http.ResponseWriter, owner, repo string, number int) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	pr := m.findPullRequestLocked(owner, repo, number)
+	if pr == nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusNotFound,
+			Message:    "Pull request not found",
+		})
+		return
+	}
+
+	response := make([]map[string]interface{}, 0, len(pr.IssueComments))
+	for _, comment := range pr.IssueComments {
+		response = append(response, comment.ToAPIResponse())
+	}
+	m.writeJSON(w, http.StatusOK, response)
+}
+
+func (m *MockGitHubServer) handleListPullRequestReviews(w http.ResponseWriter, owner, repo string, number int) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	pr := m.findPullRequestLocked(owner, repo, number)
+	if pr == nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusNotFound,
+			Message:    "Pull request not found",
+		})
+		return
+	}
+
+	response := make([]map[string]interface{}, 0, len(pr.Reviews))
+	for _, review := range pr.Reviews {
+		response = append(response, review.ToAPIResponse())
+	}
+	m.writeJSON(w, http.StatusOK, response)
+}
+
+func (m *MockGitHubServer) handleListPullRequestReviewComments(w http.ResponseWriter, owner, repo string, number int) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	pr := m.findPullRequestLocked(owner, repo, number)
+	if pr == nil {
+		m.writeErrorResponse(w, &ErrorResponse{
+			StatusCode: http.StatusNotFound,
+			Message:    "Pull request not found",
+		})
+		return
+	}
+
+	response := make([]map[string]interface{}, 0, len(pr.ReviewComments))
+	for _, comment := range pr.ReviewComments {
+		response = append(response, comment.ToAPIResponse())
+	}
+	m.writeJSON(w, http.StatusOK, response)
 }
 
 func (m *MockGitHubServer) handleRequestReviewers(w http.ResponseWriter, r *http.Request, owner, repo string, number int) {
@@ -1238,4 +1313,14 @@ func removeTeamsBySlug(teams []*MockTeam, slugs []string) []*MockTeam {
 		kept = append(kept, team)
 	}
 	return kept
+}
+
+func (m *MockGitHubServer) findPullRequestLocked(owner, repo string, number int) *MockPullRequest {
+	key := owner + "/" + repo
+	for _, pr := range m.pullRequests[key] {
+		if pr.Number == number {
+			return pr
+		}
+	}
+	return nil
 }

@@ -18,6 +18,7 @@ fotingo start PROJ-123 -y --json
 fotingo review -y --json
 fotingo open pr --json
 fotingo inspect
+fotingo inspect pr --json
 ```
 
 When `start` runs with `--worktree` or `git.worktree.enabled=true`, automation should read both `branch.name` and `branch.worktreePath` from the JSON result.
@@ -125,6 +126,70 @@ fotingo review -y --branch release/2026.04
     "type": "Bug",
     "url": "https://jira.example.com/browse/PROJ-123"
   }
+}
+```
+
+### `inspect pr` success
+
+```json
+{
+  "branch": {
+    "name": "b/PROJ-123_fix_login_bug"
+  },
+  "pullRequest": {
+    "number": 42,
+    "url": "https://github.com/owner/repo/pull/42",
+    "apiUrl": "https://api.github.com/repos/owner/repo/pulls/42",
+    "title": "[PROJ-123] Fix login bug",
+    "description": "PR body",
+    "draft": false,
+    "state": "open"
+  },
+  "comments": [
+    {
+      "id": 101,
+      "author": "alice",
+      "body": "Top-level PR comment",
+      "htmlUrl": "https://github.com/owner/repo/pull/42#issuecomment-101",
+      "createdAt": "2026-04-11T10:00:00Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 201,
+      "author": "bob",
+      "state": "COMMENTED",
+      "body": "Review body",
+      "submittedAt": "2026-04-11T10:05:00Z"
+    }
+  ],
+  "reviewComments": [
+    {
+      "id": 301,
+      "reviewId": 201,
+      "author": "bob",
+      "body": "Please adjust this line",
+      "path": "internal/example.go",
+      "line": 10,
+      "conversationId": "review-comment-301"
+    }
+  ],
+  "conversations": [
+    {
+      "id": "review-comment-301",
+      "comments": [
+        {
+          "id": 301,
+          "reviewId": 201,
+          "author": "bob",
+          "body": "Please adjust this line",
+          "path": "internal/example.go",
+          "line": 10,
+          "conversationId": "review-comment-301"
+        }
+      ]
+    }
+  ]
 }
 ```
 

@@ -200,6 +200,17 @@ Output execution context as JSON.
 
 ```bash
 fotingo inspect [flags]
+fotingo inspect pr [flags]
+```
+
+Examples:
+
+```bash
+fotingo inspect
+fotingo inspect --branch feature/PROJ-123-my-feature
+fotingo inspect --issue PROJ-123
+fotingo inspect pr --json
+fotingo inspect pr --branch feature/PROJ-123-my-feature --json
 ```
 
 Branch inspection now includes pull request metadata when the inspected branch already has an
@@ -212,6 +223,8 @@ Flags:
 | ---------- | ----- | ------------------------- |
 | `--branch` | `-b`  | Inspect a specific branch |
 | `--issue`  | `-i`  | Inspect a specific issue  |
+
+`fotingo inspect pr` returns the open pull request for the inspected branch plus top-level comments, submitted reviews, inline review comments, and grouped inline conversations. It supports `--branch`/`-b` and returns a JSON error when the branch has no open pull request.
 
 ### `completion`
 

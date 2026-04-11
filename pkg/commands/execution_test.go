@@ -364,6 +364,56 @@ func (s *ExecutionTestSuite) TestInspect_WithBranchFlag() {
 	assert.Equal(t, "Pull request body for Inspect explicit branch", result.PullRequest.Description)
 }
 
+func (s *ExecutionTestSuite) TestInspectPullRequest_DiscussionJSON() {
+	t := s.T()
+
+	cleanup := s.checkoutIssueBranch("TEST-123", "inspect_pr_discussion")
+	defer cleanup()
+
+	branchName := "b/TEST-123_inspect_pr_discussion"
+	pr := ghtestutil.NewPullRequest(64, "[TEST-123] Inspect PR discussion", branchName, "main", "open")
+	pr.IssueComments = []*ghtestutil.MockIssueComment{
+		ghtestutil.NewIssueComment(101, "Top-level PR comment", "alice"),
+	}
+	pr.Reviews = []*ghtestutil.MockPullRequestReview{
+		ghtestutil.NewPullRequestReview(201, "COMMENTED", "Review body", "bob"),
+	}
+	pr.ReviewComments = []*ghtestutil.MockPullRequestReviewComment{
+		ghtestutil.NewPullRequestReviewComment(301, 201, 0, "Please adjust this line", "bob"),
+		ghtestutil.NewPullRequestReviewComment(302, 201, 301, "Done", "alice"),
+	}
+	s.githubServer.AddPullRequest("testowner", "testrepo", pr)
+	t.Cleanup(func() { s.githubServer.SetPullRequests("testowner", "testrepo", nil) })
+
+	output := captureStdout(t, func() {
+		Fotingo.SetArgs([]string{"inspect", "pr", "--json"})
+		err := Fotingo.Execute()
+		assert.NoError(t, err)
+	})
+
+	var result InspectPROutput
+	err := json.Unmarshal([]byte(extractJSON(output)), &result)
+	require.NoError(t, err, "output should contain valid JSON, got: %s", output)
+
+	require.NotNil(t, result.Branch)
+	assert.Equal(t, branchName, result.Branch.Name)
+	require.NotNil(t, result.PullRequest)
+	assert.Equal(t, 64, result.PullRequest.Number)
+	assert.Equal(t, "[TEST-123] Inspect PR discussion", result.PullRequest.Title)
+	assert.Equal(t, "Pull request body for [TEST-123] Inspect PR discussion", result.PullRequest.Description)
+	require.Len(t, result.Comments, 1)
+	assert.Equal(t, "Top-level PR comment", result.Comments[0].Body)
+	require.Len(t, result.Reviews, 1)
+	assert.Equal(t, "COMMENTED", result.Reviews[0].State)
+	require.Len(t, result.ReviewComments, 2)
+	assert.Equal(t, "review-comment-301", result.ReviewComments[0].ConversationID)
+	assert.Equal(t, int64(301), result.ReviewComments[1].InReplyToID)
+	require.Len(t, result.Conversations, 1)
+	assert.Equal(t, "review-comment-301", result.Conversations[0].ID)
+	assert.Len(t, result.Conversations[0].Comments, 2)
+
+}
+
 func (s *ExecutionTestSuite) TestInspect_WithNonExistentIssue() {
 	t := s.T()
 

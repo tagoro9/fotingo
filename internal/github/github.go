@@ -44,6 +44,78 @@ type PullRequest struct {
 	URL     string
 	HTMLURL string
 	Draft   bool
+	State   string
+}
+
+// PullRequestDiscussion contains comments, reviews, and review conversations for a pull request.
+type PullRequestDiscussion struct {
+	Comments       []PullRequestIssueComment
+	Reviews        []PullRequestReview
+	ReviewComments []PullRequestReviewComment
+	Conversations  []PullRequestConversation
+}
+
+// PullRequestIssueComment represents a top-level pull request issue comment.
+type PullRequestIssueComment struct {
+	ID                int64
+	Author            string
+	Body              string
+	URL               string
+	HTMLURL           string
+	AuthorAssociation string
+	CreatedAt         string
+	UpdatedAt         string
+}
+
+// PullRequestReview represents a submitted pull request review.
+type PullRequestReview struct {
+	ID                int64
+	Author            string
+	State             string
+	Body              string
+	CommitID          string
+	URL               string
+	HTMLURL           string
+	AuthorAssociation string
+	SubmittedAt       string
+}
+
+// PullRequestReviewComment represents an inline pull request review comment.
+type PullRequestReviewComment struct {
+	ID                   int64
+	NodeID               string
+	ReviewID             int64
+	InReplyToID          int64
+	Author               string
+	Body                 string
+	Path                 string
+	DiffHunk             string
+	Side                 string
+	StartSide            string
+	Line                 int
+	StartLine            int
+	OriginalLine         int
+	OriginalStartLine    int
+	Position             int
+	OriginalPosition     int
+	CommitID             string
+	OriginalCommitID     string
+	SubjectType          string
+	URL                  string
+	HTMLURL              string
+	PullRequestURL       string
+	AuthorAssociation    string
+	CreatedAt            string
+	UpdatedAt            string
+	ConversationID       string
+	ConversationResolved *bool
+}
+
+// PullRequestConversation groups related inline review comments.
+type PullRequestConversation struct {
+	ID       string
+	Resolved *bool
+	Comments []PullRequestReviewComment
 }
 
 // Label represents a GitHub label
@@ -107,6 +179,8 @@ type Github interface {
 	CreatePullRequest(opts CreatePROptions) (*PullRequest, error)
 	// UpdatePullRequest updates an existing pull request
 	UpdatePullRequest(prNumber int, opts UpdatePROptions) (*PullRequest, error)
+	// GetPullRequestDiscussion returns comments and reviews for an existing pull request
+	GetPullRequestDiscussion(prNumber int) (*PullRequestDiscussion, error)
 	// GetLabels returns all labels from the repository
 	GetLabels() ([]Label, error)
 	// AddLabelsToPR adds labels to a pull request
@@ -255,6 +329,7 @@ func (g *github) CreatePullRequest(opts CreatePROptions) (*PullRequest, error) {
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),
 		Draft:   pr.GetDraft(),
+		State:   pr.GetState(),
 	}, nil
 }
 
@@ -281,7 +356,221 @@ func (g *github) UpdatePullRequest(prNumber int, opts UpdatePROptions) (*PullReq
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),
 		Draft:   pr.GetDraft(),
+		State:   pr.GetState(),
 	}, nil
+}
+
+// GetPullRequestDiscussion returns comments and reviews for an existing pull request.
+func (g *github) GetPullRequestDiscussion(prNumber int) (*PullRequestDiscussion, error) {
+	issueComments, err := g.listPullRequestIssueComments(prNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	reviews, err := g.listPullRequestReviews(prNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	reviewComments, err := g.listPullRequestReviewComments(prNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	return &PullRequestDiscussion{
+		Comments:       issueComments,
+		Reviews:        reviews,
+		ReviewComments: reviewComments,
+		Conversations:  GroupPullRequestReviewComments(reviewComments),
+	}, nil
+}
+
+func (g *github) listPullRequestIssueComments(prNumber int) ([]PullRequestIssueComment, error) {
+	sort := "created"
+	direction := "asc"
+	opts := &hub.IssueListCommentsOptions{
+		Sort:      &sort,
+		Direction: &direction,
+		ListOptions: hub.ListOptions{
+			PerPage: 100,
+		},
+	}
+
+	var mapped []PullRequestIssueComment
+	for {
+		comments, resp, err := g.hub.Issues.ListComments(context.Background(), g.owner, g.repo, prNumber, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to list pull request issue comments: %w", err)
+		}
+		for _, comment := range comments {
+			mapped = append(mapped, mapPullRequestIssueComment(comment))
+		}
+		if resp == nil || resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+
+	return mapped, nil
+}
+
+func (g *github) listPullRequestReviews(prNumber int) ([]PullRequestReview, error) {
+	opts := &hub.ListOptions{PerPage: 100}
+	var mapped []PullRequestReview
+	for {
+		reviews, resp, err := g.hub.PullRequests.ListReviews(context.Background(), g.owner, g.repo, prNumber, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to list pull request reviews: %w", err)
+		}
+		for _, review := range reviews {
+			mapped = append(mapped, mapPullRequestReview(review))
+		}
+		if resp == nil || resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+
+	return mapped, nil
+}
+
+func (g *github) listPullRequestReviewComments(prNumber int) ([]PullRequestReviewComment, error) {
+	opts := &hub.PullRequestListCommentsOptions{
+		Sort:      "created",
+		Direction: "asc",
+		ListOptions: hub.ListOptions{
+			PerPage: 100,
+		},
+	}
+
+	var mapped []PullRequestReviewComment
+	for {
+		comments, resp, err := g.hub.PullRequests.ListComments(context.Background(), g.owner, g.repo, prNumber, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to list pull request review comments: %w", err)
+		}
+		for _, comment := range comments {
+			mapped = append(mapped, mapPullRequestReviewComment(comment))
+		}
+		if resp == nil || resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+
+	return mapped, nil
+}
+
+func mapPullRequestIssueComment(comment *hub.IssueComment) PullRequestIssueComment {
+	return PullRequestIssueComment{
+		ID:                comment.GetID(),
+		Author:            comment.GetUser().GetLogin(),
+		Body:              comment.GetBody(),
+		URL:               comment.GetURL(),
+		HTMLURL:           comment.GetHTMLURL(),
+		AuthorAssociation: comment.GetAuthorAssociation(),
+		CreatedAt:         formatGitHubTimestamp(comment.GetCreatedAt()),
+		UpdatedAt:         formatGitHubTimestamp(comment.GetUpdatedAt()),
+	}
+}
+
+func mapPullRequestReview(review *hub.PullRequestReview) PullRequestReview {
+	return PullRequestReview{
+		ID:                review.GetID(),
+		Author:            review.GetUser().GetLogin(),
+		State:             review.GetState(),
+		Body:              review.GetBody(),
+		CommitID:          review.GetCommitID(),
+		URL:               review.GetPullRequestURL(),
+		HTMLURL:           review.GetHTMLURL(),
+		AuthorAssociation: review.GetAuthorAssociation(),
+		SubmittedAt:       formatGitHubTimestamp(review.GetSubmittedAt()),
+	}
+}
+
+func mapPullRequestReviewComment(comment *hub.PullRequestComment) PullRequestReviewComment {
+	return PullRequestReviewComment{
+		ID:                comment.GetID(),
+		NodeID:            comment.GetNodeID(),
+		ReviewID:          comment.GetPullRequestReviewID(),
+		InReplyToID:       comment.GetInReplyTo(),
+		Author:            comment.GetUser().GetLogin(),
+		Body:              comment.GetBody(),
+		Path:              comment.GetPath(),
+		DiffHunk:          comment.GetDiffHunk(),
+		Side:              comment.GetSide(),
+		StartSide:         comment.GetStartSide(),
+		Line:              comment.GetLine(),
+		StartLine:         comment.GetStartLine(),
+		OriginalLine:      comment.GetOriginalLine(),
+		OriginalStartLine: comment.GetOriginalStartLine(),
+		Position:          comment.GetPosition(),
+		OriginalPosition:  comment.GetOriginalPosition(),
+		CommitID:          comment.GetCommitID(),
+		OriginalCommitID:  comment.GetOriginalCommitID(),
+		SubjectType:       comment.GetSubjectType(),
+		URL:               comment.GetURL(),
+		HTMLURL:           comment.GetHTMLURL(),
+		PullRequestURL:    comment.GetPullRequestURL(),
+		AuthorAssociation: comment.GetAuthorAssociation(),
+		CreatedAt:         formatGitHubTimestamp(comment.GetCreatedAt()),
+		UpdatedAt:         formatGitHubTimestamp(comment.GetUpdatedAt()),
+		ConversationID:    pullRequestReviewConversationID(comment),
+	}
+}
+
+func formatGitHubTimestamp(timestamp hub.Timestamp) string {
+	if timestamp.IsZero() {
+		return ""
+	}
+	return timestamp.Format(time.RFC3339)
+}
+
+func pullRequestReviewConversationID(comment *hub.PullRequestComment) string {
+	if comment == nil {
+		return ""
+	}
+	if comment.GetInReplyTo() > 0 {
+		return fmt.Sprintf("review-comment-%d", comment.GetInReplyTo())
+	}
+	if comment.GetID() > 0 {
+		return fmt.Sprintf("review-comment-%d", comment.GetID())
+	}
+	if nodeID := strings.TrimSpace(comment.GetNodeID()); nodeID != "" {
+		return "review-comment-" + nodeID
+	}
+	return ""
+}
+
+// GroupPullRequestReviewComments groups inline review comments into conversation-like threads.
+func GroupPullRequestReviewComments(comments []PullRequestReviewComment) []PullRequestConversation {
+	if len(comments) == 0 {
+		return nil
+	}
+
+	conversationByID := make(map[string]int, len(comments))
+	conversations := make([]PullRequestConversation, 0)
+	for _, comment := range comments {
+		conversationID := strings.TrimSpace(comment.ConversationID)
+		if conversationID == "" {
+			if comment.InReplyToID > 0 {
+				conversationID = fmt.Sprintf("review-comment-%d", comment.InReplyToID)
+			} else {
+				conversationID = fmt.Sprintf("review-comment-%d", comment.ID)
+			}
+			comment.ConversationID = conversationID
+		}
+
+		idx, ok := conversationByID[conversationID]
+		if !ok {
+			conversationByID[conversationID] = len(conversations)
+			conversations = append(conversations, PullRequestConversation{ID: conversationID})
+			idx = len(conversations) - 1
+		}
+		conversations[idx].Comments = append(conversations[idx].Comments, comment)
+	}
+
+	return conversations
 }
 
 // GetLabels returns all labels from the repository
@@ -1139,6 +1428,7 @@ func (g *github) DoesPRExistForBranch(branch string) (bool, *PullRequest, error)
 		URL:     pr.GetURL(),
 		HTMLURL: pr.GetHTMLURL(),
 		Draft:   pr.GetDraft(),
+		State:   pr.GetState(),
 	}, nil
 }
 

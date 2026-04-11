@@ -225,6 +225,67 @@ func TestMockGitHubServer_PullRequests(t *testing.T) {
 	})
 }
 
+func TestMockGitHubServer_PullRequestDiscussion(t *testing.T) {
+	server := NewMockGitHubServer()
+	defer server.Close()
+
+	owner := "testowner"
+	repo := "testrepo"
+	pr := NewPullRequest(1, "Discussion PR", "feature", "main", "open")
+	pr.IssueComments = []*MockIssueComment{
+		NewIssueComment(101, "Top-level comment", "alice"),
+	}
+	pr.Reviews = []*MockPullRequestReview{
+		NewPullRequestReview(201, "COMMENTED", "Review body", "bob"),
+	}
+	pr.ReviewComments = []*MockPullRequestReviewComment{
+		NewPullRequestReviewComment(301, 201, 0, "Inline comment", "bob"),
+	}
+	server.AddPullRequest(owner, repo, pr)
+
+	t.Run("list issue comments", func(t *testing.T) {
+		resp, err := http.Get(server.URL() + "/repos/" + owner + "/" + repo + "/issues/1/comments")
+		require.NoError(t, err)
+		defer func() { _ = resp.Body.Close() }()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		var result []map[string]interface{}
+		require.NoError(t, json.NewDecoder(resp.Body).Decode(&result))
+		require.Len(t, result, 1)
+		assert.Equal(t, float64(101), result[0]["id"])
+		assert.Equal(t, "Top-level comment", result[0]["body"])
+	})
+
+	t.Run("list reviews", func(t *testing.T) {
+		resp, err := http.Get(server.URL() + "/repos/" + owner + "/" + repo + "/pulls/1/reviews")
+		require.NoError(t, err)
+		defer func() { _ = resp.Body.Close() }()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		var result []map[string]interface{}
+		require.NoError(t, json.NewDecoder(resp.Body).Decode(&result))
+		require.Len(t, result, 1)
+		assert.Equal(t, float64(201), result[0]["id"])
+		assert.Equal(t, "COMMENTED", result[0]["state"])
+	})
+
+	t.Run("list review comments", func(t *testing.T) {
+		resp, err := http.Get(server.URL() + "/repos/" + owner + "/" + repo + "/pulls/1/comments")
+		require.NoError(t, err)
+		defer func() { _ = resp.Body.Close() }()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		var result []map[string]interface{}
+		require.NoError(t, json.NewDecoder(resp.Body).Decode(&result))
+		require.Len(t, result, 1)
+		assert.Equal(t, float64(301), result[0]["id"])
+		assert.Equal(t, "Inline comment", result[0]["body"])
+	})
+}
+
 func TestMockGitHubServer_Collaborators(t *testing.T) {
 	server := NewMockGitHubServer()
 	defer server.Close()

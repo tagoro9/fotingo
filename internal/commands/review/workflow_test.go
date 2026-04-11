@@ -171,6 +171,9 @@ func (m *workflowSuccessMockGitHub) CreatePullRequest(opts github.CreatePROption
 func (m workflowSuccessMockGitHub) UpdatePullRequest(int, github.UpdatePROptions) (*github.PullRequest, error) {
 	return m.pr, nil
 }
+func (m workflowSuccessMockGitHub) GetPullRequestDiscussion(int) (*github.PullRequestDiscussion, error) {
+	return nil, nil
+}
 func (m workflowSuccessMockGitHub) GetLabels() ([]github.Label, error) { return nil, nil }
 func (m workflowSuccessMockGitHub) AddLabelsToPR(int, []string) error  { return nil }
 func (m workflowSuccessMockGitHub) GetCollaborators() ([]github.User, error) {

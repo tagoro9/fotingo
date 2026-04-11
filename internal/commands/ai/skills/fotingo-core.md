@@ -16,6 +16,12 @@ When branch or issue context is unclear, inspect first:
 {{EXAMPLE_INSPECT_JSON}}
 ```
 
+When pull request comments, reviews, or inline conversations matter, inspect the current branch PR:
+
+```bash
+{{EXAMPLE_INSPECT_PR_JSON}}
+```
+
 ## Start Workflows
 
 Start from an existing issue:
@@ -92,17 +98,20 @@ Update review metadata on an existing pull request:
 
 - `fotingo open issue` to open the Jira issue linked to the current branch context.
 - `fotingo open pr` to open current-branch PR URL.
+- `fotingo inspect pr --json` to read current-branch pull request comments, reviews, inline review comments, and grouped conversations.
 
 ## Workflow Guide
 
 - Start from `fotingo inspect --json` when branch or issue context is unclear.
 - `fotingo inspect --json` returns branch context, linked issue context, commit history, and `pullRequest` metadata including title, description, and URL when the inspected branch already has an open PR.
+- Use `fotingo inspect pr --json` when you need pull request discussion context before editing, syncing, or responding to review feedback.
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
 - Use `fotingo start --worktree ... --json` when you want an isolated sibling checkout; automation should read `branch.name` and `branch.worktreePath` from the JSON result.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
 - For current-branch PR context, run `fotingo inspect --json` and read the `pullRequest` fields before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
+- For current-branch PR discussion context, run `fotingo inspect pr --json` and read `pullRequest`, `comments`, `reviews`, `reviewComments`, and `conversations` before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
 - Use `fotingo review --branch ...` when the pull request should target a non-default base branch.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.

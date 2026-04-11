@@ -4,22 +4,22 @@ import (
 	"fmt"
 	"testing"
 
-	hub "github.com/google/go-github/v84/github"
 	giturl "github.com/kubescape/go-git-url"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tagoro9/fotingo/internal/auth"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
 	"github.com/tagoro9/fotingo/internal/jira"
 )
 
 type inspectGitStub struct {
-	currentBranch string
-	defaultBranch string
-	issueID       string
-	issueErr      error
+	currentBranch      string
+	currentBranchErr   error
+	currentBranchCalls int
+	defaultBranch      string
+	issueID            string
+	issueErr           error
 
 	commitsSinceDefault      []git.Commit
 	commitsSinceDefaultErr   error
@@ -37,6 +37,10 @@ func (s *inspectGitStub) GetRemote() (giturl.IGitURL, error) {
 }
 
 func (s *inspectGitStub) GetCurrentBranch() (string, error) {
+	s.currentBranchCalls++
+	if s.currentBranchErr != nil {
+		return "", s.currentBranchErr
+	}
 	return s.currentBranch, nil
 }
 
@@ -91,89 +95,31 @@ func (s *inspectGitStub) GetCommitsSinceDefaultBranch() ([]git.Commit, error) {
 func (s *inspectGitStub) GetIssuesFromCommits([]git.Commit) []string { return nil }
 
 type inspectGitHubStub struct {
-	exists bool
-	pr     *github.PullRequest
-	err    error
-	calls  []string
-}
+	pr            *github.PullRequest
+	prExists      bool
+	prErr         error
+	discussion    *github.PullRequestDiscussion
+	discussionErr error
 
-func (s *inspectGitHubStub) Authenticate() (*auth.AccessToken, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) IsAuthenticated() bool { return true }
-
-func (s *inspectGitHubStub) SetTokenStore(func() string, func(string) error) {}
-
-func (s *inspectGitHubStub) GetConfig() *viper.Viper { return viper.New() }
-
-func (s *inspectGitHubStub) GetConfigString(string) string { return "" }
-
-func (s *inspectGitHubStub) SaveConfig(string, interface{}) error { return nil }
-
-func (s *inspectGitHubStub) GetPullRequestUrl() (string, error) {
-	return "", fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) GetCurrentUser() (*hub.User, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) CreatePullRequest(github.CreatePROptions) (*github.PullRequest, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) UpdatePullRequest(int, github.UpdatePROptions) (*github.PullRequest, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) GetLabels() ([]github.Label, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) AddLabelsToPR(int, []string) error { return fmt.Errorf("not implemented") }
-
-func (s *inspectGitHubStub) GetCollaborators() ([]github.User, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) GetOrgMembers() ([]github.User, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) GetTeams() ([]github.Team, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) RequestReviewers(int, []string, []string) error {
-	return fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) RemoveReviewers(int, []string, []string) error {
-	return fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) AssignUsersToPR(int, []string) error {
-	return fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) RemoveAssigneesFromPR(int, []string) error {
-	return fmt.Errorf("not implemented")
-}
-
-func (s *inspectGitHubStub) MarkPullRequestReadyForReview(string) error {
-	return fmt.Errorf("not implemented")
+	branchCalls []string
+	prNumbers   []int
 }
 
 func (s *inspectGitHubStub) DoesPRExistForBranch(branch string) (bool, *github.PullRequest, error) {
-	s.calls = append(s.calls, branch)
-	return s.exists, s.pr, s.err
+	s.branchCalls = append(s.branchCalls, branch)
+	if s.prErr != nil {
+		return false, nil, s.prErr
+	}
+	return s.prExists, s.pr, nil
 }
 
-func (s *inspectGitHubStub) CreateRelease(github.CreateReleaseOptions) (*github.Release, error) {
-	return nil, fmt.Errorf("not implemented")
+func (s *inspectGitHubStub) GetPullRequestDiscussion(prNumber int) (*github.PullRequestDiscussion, error) {
+	s.prNumbers = append(s.prNumbers, prNumber)
+	if s.discussionErr != nil {
+		return nil, s.discussionErr
+	}
+	return s.discussion, nil
 }
-
 func TestWorkflowRunnerRun_UsesDefaultBranchDivergenceCommits(t *testing.T) {
 	gitStub := &inspectGitStub{
 		currentBranch: "feature/TEST-123",
@@ -236,7 +182,6 @@ func TestWorkflowRunnerRun_DefaultBranchSkipsCommitCollection(t *testing.T) {
 	assert.Equal(t, 0, gitStub.commitsSinceDefaultCalls)
 	assert.Equal(t, 0, gitStub.commitsSinceCalls)
 }
-
 func TestWorkflowRunnerRun_IncludesPullRequestWhenBranchHasOne(t *testing.T) {
 	gitStub := &inspectGitStub{
 		currentBranch: "feature/FOTINGO-30",
@@ -244,7 +189,7 @@ func TestWorkflowRunnerRun_IncludesPullRequestWhenBranchHasOne(t *testing.T) {
 		issueErr:      fmt.Errorf("no issue in branch"),
 	}
 	ghStub := &inspectGitHubStub{
-		exists: true,
+		prExists: true,
 		pr: &github.PullRequest{
 			Number:  42,
 			Title:   "Inspect PR metadata",
@@ -258,7 +203,7 @@ func TestWorkflowRunnerRun_IncludesPullRequestWhenBranchHasOne(t *testing.T) {
 		Options: WorkflowOptions{},
 		Deps: WorkflowDeps{
 			NewGitClient:    func(*viper.Viper, *chan string) (git.Git, error) { return gitStub, nil },
-			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) { return ghStub, nil },
+			NewGitHubClient: func(git.Git, *viper.Viper) (PullRequestInspector, error) { return ghStub, nil },
 			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
 				return nil, fmt.Errorf("jira should not be initialized")
 			},
@@ -275,7 +220,7 @@ func TestWorkflowRunnerRun_IncludesPullRequestWhenBranchHasOne(t *testing.T) {
 	assert.Equal(t, "Inspect PR metadata", result.PullRequest.Title)
 	assert.Equal(t, "PR body", result.PullRequest.Description)
 	assert.Equal(t, "https://github.com/testowner/testrepo/pull/42", result.PullRequest.URL)
-	assert.Equal(t, []string{"feature/FOTINGO-30"}, ghStub.calls)
+	assert.Equal(t, []string{"feature/FOTINGO-30"}, ghStub.branchCalls)
 }
 
 func TestWorkflowRunnerRun_GitHubLookupFailureDoesNotFailInspect(t *testing.T) {
@@ -290,7 +235,7 @@ func TestWorkflowRunnerRun_GitHubLookupFailureDoesNotFailInspect(t *testing.T) {
 		Options: WorkflowOptions{},
 		Deps: WorkflowDeps{
 			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return gitStub, nil },
-			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+			NewGitHubClient: func(git.Git, *viper.Viper) (PullRequestInspector, error) {
 				return nil, fmt.Errorf("github auth unavailable")
 			},
 			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
@@ -306,4 +251,104 @@ func TestWorkflowRunnerRun_GitHubLookupFailureDoesNotFailInspect(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, result.Branch)
 	assert.Nil(t, result.PullRequest)
+}
+
+func TestWorkflowRunnerRunPullRequest_UsesCurrentBranchPRDiscussion(t *testing.T) {
+	gitStub := &inspectGitStub{currentBranch: "feature/TEST-123"}
+	discussion := &github.PullRequestDiscussion{
+		Comments: []github.PullRequestIssueComment{
+			{ID: 101, Author: "alice", Body: "Looks good"},
+		},
+	}
+	ghStub := &inspectGitHubStub{
+		prExists: true,
+		pr: &github.PullRequest{
+			Title:   "Feature PR",
+			Body:    "PR body",
+			Number:  42,
+			URL:     "https://api.github.com/repos/acme/repo/pulls/42",
+			HTMLURL: "https://github.com/acme/repo/pull/42",
+			State:   "open",
+			Draft:   true,
+		},
+		discussion: discussion,
+	}
+
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return gitStub, nil },
+			NewGitHubClient: func(git.Git, *viper.Viper) (PullRequestInspector, error) {
+				return ghStub, nil
+			},
+		},
+	}
+
+	result, err := runner.RunPullRequest()
+
+	require.NoError(t, err)
+	require.NotNil(t, result.Branch)
+	assert.Equal(t, "feature/TEST-123", result.Branch.Name)
+	require.NotNil(t, result.PullRequest)
+	assert.Equal(t, 42, result.PullRequest.Number)
+	assert.Equal(t, "Feature PR", result.PullRequest.Title)
+	assert.Equal(t, "PR body", result.PullRequest.Description)
+	assert.Equal(t, "https://github.com/acme/repo/pull/42", result.PullRequest.URL)
+	assert.Equal(t, "https://api.github.com/repos/acme/repo/pulls/42", result.PullRequest.APIURL)
+	assert.Equal(t, "open", result.PullRequest.State)
+	assert.True(t, result.PullRequest.Draft)
+	assert.Same(t, discussion, result.Discussion)
+	assert.Equal(t, []string{"feature/TEST-123"}, ghStub.branchCalls)
+	assert.Equal(t, []int{42}, ghStub.prNumbers)
+	assert.Equal(t, 1, gitStub.currentBranchCalls)
+}
+
+func TestWorkflowRunnerRunPullRequest_UsesExplicitBranch(t *testing.T) {
+	gitStub := &inspectGitStub{currentBranch: "current-branch"}
+	ghStub := &inspectGitHubStub{
+		prExists: true,
+		pr:       &github.PullRequest{Number: 7, Title: "Explicit branch PR"},
+	}
+
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Branch: "feature/explicit"},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return gitStub, nil },
+			NewGitHubClient: func(git.Git, *viper.Viper) (PullRequestInspector, error) {
+				return ghStub, nil
+			},
+		},
+	}
+
+	result, err := runner.RunPullRequest()
+
+	require.NoError(t, err)
+	assert.Equal(t, "feature/explicit", result.Branch.Name)
+	assert.Equal(t, []string{"feature/explicit"}, ghStub.branchCalls)
+	assert.Equal(t, 0, gitStub.currentBranchCalls)
+}
+
+func TestWorkflowRunnerRunPullRequest_NoOpenPullRequest(t *testing.T) {
+	gitStub := &inspectGitStub{currentBranch: "feature/missing"}
+	ghStub := &inspectGitHubStub{}
+
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return gitStub, nil },
+			NewGitHubClient: func(git.Git, *viper.Viper) (PullRequestInspector, error) {
+				return ghStub, nil
+			},
+		},
+	}
+
+	result, err := runner.RunPullRequest()
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "no open pull request found for branch feature/missing")
+	assert.Nil(t, result.PullRequest)
+	assert.Empty(t, ghStub.prNumbers)
 }

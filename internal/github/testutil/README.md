@@ -43,6 +43,9 @@ Package testutil provides mock HTTP server utilities for testing GitHub client c
   - [func \(m \*MockGitHubServer\) SetReleases\(owner, repo string, releases \[\]\*MockRelease\)](<#MockGitHubServer.SetReleases>)
   - [func \(m \*MockGitHubServer\) SetTeams\(org string, teams \[\]\*MockTeam\)](<#MockGitHubServer.SetTeams>)
   - [func \(m \*MockGitHubServer\) URL\(\) string](<#MockGitHubServer.URL>)
+- [type MockIssueComment](<#MockIssueComment>)
+  - [func NewIssueComment\(id int64, body, author string\) \*MockIssueComment](<#NewIssueComment>)
+  - [func \(c \*MockIssueComment\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockIssueComment.ToAPIResponse>)
 - [type MockLabel](<#MockLabel>)
   - [func NewLabel\(id int64, name, description, color string\) \*MockLabel](<#NewLabel>)
   - [func SampleLabels\(\) \[\]\*MockLabel](<#SampleLabels>)
@@ -53,6 +56,12 @@ Package testutil provides mock HTTP server utilities for testing GitHub client c
   - [func NewPullRequest\(number int, title, head, base, state string\) \*MockPullRequest](<#NewPullRequest>)
   - [func SamplePullRequests\(\) \[\]\*MockPullRequest](<#SamplePullRequests>)
   - [func \(pr \*MockPullRequest\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequest.ToAPIResponse>)
+- [type MockPullRequestReview](<#MockPullRequestReview>)
+  - [func NewPullRequestReview\(id int64, state, body, author string\) \*MockPullRequestReview](<#NewPullRequestReview>)
+  - [func \(r \*MockPullRequestReview\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequestReview.ToAPIResponse>)
+- [type MockPullRequestReviewComment](<#MockPullRequestReviewComment>)
+  - [func NewPullRequestReviewComment\(id int64, reviewID int64, inReplyToID int64, body, author string\) \*MockPullRequestReviewComment](<#NewPullRequestReviewComment>)
+  - [func \(c \*MockPullRequestReviewComment\) ToAPIResponse\(\) map\[string\]interface\{\}](<#MockPullRequestReviewComment.ToAPIResponse>)
 - [type MockRelease](<#MockRelease>)
   - [func NewRelease\(id int64, tagName, name, targetCommitish string\) \*MockRelease](<#NewRelease>)
   - [func SampleReleases\(\) \[\]\*MockRelease](<#SampleReleases>)
@@ -349,8 +358,44 @@ func (m *MockGitHubServer) URL() string
 
 URL returns the base URL of the mock server.
 
+<a name="MockIssueComment"></a>
+## type [MockIssueComment](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L96-L105>)
+
+MockIssueComment represents a pull request issue comment for testing.
+
+```go
+type MockIssueComment struct {
+    ID                int64
+    User              *MockUser
+    Body              string
+    URL               string
+    HTMLURL           string
+    AuthorAssociation string
+    CreatedAt         time.Time
+    UpdatedAt         time.Time
+}
+```
+
+<a name="NewIssueComment"></a>
+### func [NewIssueComment](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L433>)
+
+```go
+func NewIssueComment(id int64, body, author string) *MockIssueComment
+```
+
+NewIssueComment creates a new MockIssueComment with the given parameters.
+
+<a name="MockIssueComment.ToAPIResponse"></a>
+### func \(\*MockIssueComment\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L108>)
+
+```go
+func (c *MockIssueComment) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockIssueComment to a GitHub API response format.
+
 <a name="MockLabel"></a>
-## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L151-L156>)
+## type [MockLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L280-L285>)
 
 MockLabel represents a GitHub label for testing.
 
@@ -364,7 +409,7 @@ type MockLabel struct {
 ```
 
 <a name="NewLabel"></a>
-### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L311>)
+### func [NewLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L500>)
 
 ```go
 func NewLabel(id int64, name, description, color string) *MockLabel
@@ -373,7 +418,7 @@ func NewLabel(id int64, name, description, color string) *MockLabel
 NewLabel creates a new MockLabel with the given parameters.
 
 <a name="SampleLabels"></a>
-### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L371>)
+### func [SampleLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L560>)
 
 ```go
 func SampleLabels() []*MockLabel
@@ -382,7 +427,7 @@ func SampleLabels() []*MockLabel
 SampleLabels returns a set of sample labels for testing.
 
 <a name="MockLabel.ToAPIResponse"></a>
-### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L181>)
+### func \(\*MockLabel\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L310>)
 
 ```go
 func (l *MockLabel) ToAPIResponse() map[string]interface{}
@@ -391,7 +436,7 @@ func (l *MockLabel) ToAPIResponse() map[string]interface{}
 ToAPIResponse converts the MockLabel to a GitHub API response format.
 
 <a name="MockPRRef"></a>
-## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L86-L89>)
+## type [MockPRRef](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L90-L93>)
 
 MockPRRef represents a pull request head/base reference.
 
@@ -403,7 +448,7 @@ type MockPRRef struct {
 ```
 
 <a name="MockPullRequest"></a>
-## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L83>)
+## type [MockPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L64-L87>)
 
 MockPullRequest represents a GitHub pull request for testing.
 
@@ -427,11 +472,15 @@ type MockPullRequest struct {
     RequestedTeams     []*MockTeam
     CreatedAt          time.Time
     UpdatedAt          time.Time
+
+    IssueComments  []*MockIssueComment
+    Reviews        []*MockPullRequestReview
+    ReviewComments []*MockPullRequestReviewComment
 }
 ```
 
 <a name="NewDraftPullRequest"></a>
-### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L304>)
+### func [NewDraftPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L493>)
 
 ```go
 func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
@@ -440,7 +489,7 @@ func NewDraftPullRequest(number int, title, head, base string) *MockPullRequest
 NewDraftPullRequest creates a new draft MockPullRequest.
 
 <a name="NewPullRequest"></a>
-### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L282>)
+### func [NewPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L411>)
 
 ```go
 func NewPullRequest(number int, title, head, base, state string) *MockPullRequest
@@ -449,7 +498,7 @@ func NewPullRequest(number int, title, head, base, state string) *MockPullReques
 NewPullRequest creates a new MockPullRequest with the given parameters.
 
 <a name="SamplePullRequests"></a>
-### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L392>)
+### func [SamplePullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L581>)
 
 ```go
 func SamplePullRequests() []*MockPullRequest
@@ -458,7 +507,7 @@ func SamplePullRequests() []*MockPullRequest
 SamplePullRequests returns a set of sample pull requests for testing.
 
 <a name="MockPullRequest.ToAPIResponse"></a>
-### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L92>)
+### func \(\*MockPullRequest\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L221>)
 
 ```go
 func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
@@ -466,8 +515,99 @@ func (pr *MockPullRequest) ToAPIResponse() map[string]interface{}
 
 ToAPIResponse converts the MockPullRequest to a GitHub API response format.
 
+<a name="MockPullRequestReview"></a>
+## type [MockPullRequestReview](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L125-L136>)
+
+MockPullRequestReview represents a pull request review for testing.
+
+```go
+type MockPullRequestReview struct {
+    ID                int64
+    User              *MockUser
+    State             string
+    Body              string
+    CommitID          string
+    URL               string
+    HTMLURL           string
+    PullRequestURL    string
+    AuthorAssociation string
+    SubmittedAt       time.Time
+}
+```
+
+<a name="NewPullRequestReview"></a>
+### func [NewPullRequestReview](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L448>)
+
+```go
+func NewPullRequestReview(id int64, state, body, author string) *MockPullRequestReview
+```
+
+NewPullRequestReview creates a new MockPullRequestReview with the given parameters.
+
+<a name="MockPullRequestReview.ToAPIResponse"></a>
+### func \(\*MockPullRequestReview\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L139>)
+
+```go
+func (r *MockPullRequestReview) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequestReview to a GitHub API response format.
+
+<a name="MockPullRequestReviewComment"></a>
+## type [MockPullRequestReviewComment](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L158-L184>)
+
+MockPullRequestReviewComment represents an inline pull request review comment for testing.
+
+```go
+type MockPullRequestReviewComment struct {
+    ID                int64
+    NodeID            string
+    ReviewID          int64
+    InReplyToID       int64
+    User              *MockUser
+    Body              string
+    Path              string
+    DiffHunk          string
+    Side              string
+    StartSide         string
+    Line              int
+    StartLine         int
+    OriginalLine      int
+    OriginalStartLine int
+    Position          int
+    OriginalPosition  int
+    CommitID          string
+    OriginalCommitID  string
+    SubjectType       string
+    URL               string
+    HTMLURL           string
+    PullRequestURL    string
+    AuthorAssociation string
+    CreatedAt         time.Time
+    UpdatedAt         time.Time
+}
+```
+
+<a name="NewPullRequestReviewComment"></a>
+### func [NewPullRequestReviewComment](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L464>)
+
+```go
+func NewPullRequestReviewComment(id int64, reviewID int64, inReplyToID int64, body, author string) *MockPullRequestReviewComment
+```
+
+NewPullRequestReviewComment creates a new MockPullRequestReviewComment with the given parameters.
+
+<a name="MockPullRequestReviewComment.ToAPIResponse"></a>
+### func \(\*MockPullRequestReviewComment\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L187>)
+
+```go
+func (c *MockPullRequestReviewComment) ToAPIResponse() map[string]interface{}
+```
+
+ToAPIResponse converts the MockPullRequestReviewComment to a GitHub API response format.
+
 <a name="MockRelease"></a>
-## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L191-L202>)
+## type [MockRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L320-L331>)
 
 MockRelease represents a GitHub release for testing.
 
@@ -487,7 +627,7 @@ type MockRelease struct {
 ```
 
 <a name="NewRelease"></a>
-### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L332>)
+### func [NewRelease](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L521>)
 
 ```go
 func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
@@ -496,7 +636,7 @@ func NewRelease(id int64, tagName, name, targetCommitish string) *MockRelease
 NewRelease creates a new MockRelease with the given parameters.
 
 <a name="SampleReleases"></a>
-### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L417>)
+### func [SampleReleases](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L606>)
 
 ```go
 func SampleReleases() []*MockRelease
@@ -505,7 +645,7 @@ func SampleReleases() []*MockRelease
 SampleReleases returns a set of sample releases for testing.
 
 <a name="MockRelease.ToAPIResponse"></a>
-### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L205>)
+### func \(\*MockRelease\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L334>)
 
 ```go
 func (r *MockRelease) ToAPIResponse() map[string]interface{}
@@ -533,7 +673,7 @@ type MockRepository struct {
 ```
 
 <a name="DefaultRepository"></a>
-### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L238>)
+### func [DefaultRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L367>)
 
 ```go
 func DefaultRepository() *MockRepository
@@ -542,7 +682,7 @@ func DefaultRepository() *MockRepository
 DefaultRepository returns a default test repository.
 
 <a name="NewRepository"></a>
-### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L267>)
+### func [NewRepository](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L396>)
 
 ```go
 func NewRepository(id int64, owner, name string) *MockRepository
@@ -560,7 +700,7 @@ func (r *MockRepository) ToAPIResponse() map[string]interface{}
 ToAPIResponse converts the MockRepository to a GitHub API response format.
 
 <a name="MockTeam"></a>
-## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L159-L165>)
+## type [MockTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L288-L294>)
 
 MockTeam represents a GitHub organization team for testing.
 
@@ -575,7 +715,7 @@ type MockTeam struct {
 ```
 
 <a name="NewTeam"></a>
-### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L321>)
+### func [NewTeam](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L510>)
 
 ```go
 func NewTeam(id int64, organization, slug, name, description string) *MockTeam
@@ -584,7 +724,7 @@ func NewTeam(id int64, organization, slug, name, description string) *MockTeam
 NewTeam creates a new MockTeam with the given parameters.
 
 <a name="SampleTeams"></a>
-### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L384>)
+### func [SampleTeams](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L573>)
 
 ```go
 func SampleTeams(org string) []*MockTeam
@@ -593,7 +733,7 @@ func SampleTeams(org string) []*MockTeam
 SampleTeams returns a set of sample teams for testing.
 
 <a name="MockTeam.ToAPIResponse"></a>
-### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L168>)
+### func \(\*MockTeam\) [ToAPIResponse](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L297>)
 
 ```go
 func (t *MockTeam) ToAPIResponse() map[string]interface{}
@@ -619,7 +759,7 @@ type MockUser struct {
 ```
 
 <a name="DefaultUser"></a>
-### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L225>)
+### func [DefaultUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L354>)
 
 ```go
 func DefaultUser() *MockUser
@@ -628,7 +768,7 @@ func DefaultUser() *MockUser
 DefaultUser returns a default test user.
 
 <a name="NewUser"></a>
-### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L254>)
+### func [NewUser](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L383>)
 
 ```go
 func NewUser(id int64, login, name string) *MockUser
@@ -637,7 +777,7 @@ func NewUser(id int64, login, name string) *MockUser
 NewUser creates a new MockUser with the given parameters.
 
 <a name="SampleCollaborators"></a>
-### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L362>)
+### func [SampleCollaborators](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L551>)
 
 ```go
 func SampleCollaborators() []*MockUser
@@ -646,7 +786,7 @@ func SampleCollaborators() []*MockUser
 SampleCollaborators returns a set of sample collaborators for testing.
 
 <a name="SampleUsers"></a>
-### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L352>)
+### func [SampleUsers](<https://github.com/tagoro9/fotingo/blob/main/internal/github/testutil/fixtures.go#L541>)
 
 ```go
 func SampleUsers() []*MockUser
