@@ -18,9 +18,10 @@ import (
 
 // WorkflowOptions contains flag values used by start workflow execution.
 type WorkflowOptions struct {
-	Title    string
-	NoBranch bool
-	Worktree bool
+	Title        string
+	NoBranch     bool
+	Worktree     bool
+	WorktreePath string
 }
 
 // WorkflowResult contains the structured result for non-interactive execution paths.
@@ -389,7 +390,9 @@ func (r WorkflowRunner) createIssueBranch(out WorkflowEmitter, gitClient git.Git
 
 	if r.Options.Worktree {
 		createIssueWorktreeStart := time.Now()
-		branchName, worktreePath, err := gitClient.CreateIssueWorktreeBranch(issue)
+		branchName, worktreePath, err := gitClient.CreateIssueWorktreeBranch(issue, git.WorktreeOptions{
+			ParentPath: r.Options.WorktreePath,
+		})
 		logStartPhaseTiming(out, "create_issue_worktree_branch", createIssueWorktreeStart)
 		if err != nil {
 			return "", "", fterrors.WrapGitError(r.localize(i18n.StartWrapCreateBranch), err)

@@ -27,7 +27,7 @@ func DefaultCommandExamples() CommandExamples {
 		InspectPullRequestJSON:  "fotingo inspect pr --json",
 		StartExistingIssue:      "fotingo start PROJ-123 -y",
 		StartCreateIssue:        `fotingo start -p PROJ -k Task -t "Improve checkout decline error handling" -d "Problem: payment declines are hard to diagnose. Goal: clear user-facing messaging plus actionable logs. Acceptance criteria: improved copy, telemetry events, and regression tests for decline paths." -y`,
-		StartWorktree:           "fotingo start PROJ-123 --worktree -y --json",
+		StartWorktree:           "fotingo start PROJ-123 --worktree-path .claude/worktrees -y --json",
 		SearchReviewers:         "fotingo search reviewers ali --json",
 		SearchAssignees:         "fotingo search assignees bob --json",
 		SearchLabels:            "fotingo search labels bug --json",

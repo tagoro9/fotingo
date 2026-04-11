@@ -21,7 +21,7 @@ fotingo inspect
 fotingo inspect pr --json
 ```
 
-When `start` runs with `--worktree` or `git.worktree.enabled=true`, automation should read both `branch.name` and `branch.worktreePath` from the JSON result.
+When `start` runs with `--worktree`, `--worktree-path`, or `git.worktree.enabled=true`, automation should read both `branch.name` and `branch.worktreePath` from the JSON result.
 
 ## Recommended Flags for Automation
 
@@ -71,7 +71,7 @@ fotingo review -y --branch release/2026.04
   "branch": {
     "name": "b/PROJ-123_fix_login_bug",
     "created": true,
-    "worktreePath": "/workspace/repo-b-proj-123_fix_login_bug"
+    "worktreePath": "/workspace/repo/.claude/worktrees/fotingo-wt-b-proj-123_fix_login_bug"
   }
 }
 ```

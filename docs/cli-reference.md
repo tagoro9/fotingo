@@ -81,28 +81,34 @@ fotingo start PROJ-123 --no-branch
 # Start in a new sibling worktree
 fotingo start PROJ-123 --worktree
 
+# Start in a worktree under a specific parent directory
+fotingo start PROJ-123 --worktree-path .claude/worktrees
+
 # Start in non-interactive mode
 fotingo start PROJ-123 -y
 ```
 
 Flags:
 
-| Flag            | Short | Description                                         |
-| --------------- | ----- | --------------------------------------------------- |
-| `--title`       | `-t`  | Create a new issue with this title                  |
-| `--description` | `-d`  | Description for new issue                           |
-| `--project`     | `-p`  | Project key for new issue (required with `--title`) |
-| `--kind`        | `-k`  | Issue type: Story, Bug, Task, SubTask, Epic         |
-| `--parent`      | `-a`  | Parent issue for sub-tasks                          |
-| `--epic`        | `-e`  | Epic issue key to link                              |
-| `--labels`      | `-l`  | Labels to add (repeatable)                          |
-| `--no-branch`   | `-n`  | Set issue status without creating/switching branch  |
-| `--worktree`    |       | Create the issue branch in a new sibling worktree   |
-| `--interactive` | `-i`  | Interactive create flow                             |
+| Flag              | Short | Description                                         |
+| ----------------- | ----- | --------------------------------------------------- |
+| `--title`         | `-t`  | Create a new issue with this title                  |
+| `--description`   | `-d`  | Description for new issue                           |
+| `--project`       | `-p`  | Project key for new issue (required with `--title`) |
+| `--kind`          | `-k`  | Issue type: Story, Bug, Task, SubTask, Epic         |
+| `--parent`        | `-a`  | Parent issue for sub-tasks                          |
+| `--epic`          | `-e`  | Epic issue key to link                              |
+| `--labels`        | `-l`  | Labels to add (repeatable)                          |
+| `--no-branch`     | `-n`  | Set issue status without creating/switching branch  |
+| `--worktree`      |       | Create the issue branch in a new sibling worktree   |
+| `--worktree-path` |       | Parent directory for the created linked worktree    |
+| `--interactive`   | `-i`  | Interactive create flow                             |
 
 Notes:
 
 - In worktree mode, `start` prints the created branch name and worktree folder, and JSON output includes `branch.name` plus `branch.worktreePath`.
+- Worktree directory names use the hardcoded `fotingo-wt-<branch>` format.
+- `--worktree-path` implies worktree mode and overrides `git.worktree.path` for one invocation.
 
 ### `review`
 

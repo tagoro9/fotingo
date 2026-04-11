@@ -98,9 +98,10 @@ func (e startExecutor) newWorkflowRunner() internalstart.WorkflowRunner {
 		Config:   fotingoConfig,
 		Localize: localizer.T,
 		Options: internalstart.WorkflowOptions{
-			Title:    startCmdFlags.title,
-			NoBranch: startCmdFlags.noBranch,
-			Worktree: startWorktreeEnabled(fotingoConfig),
+			Title:        startCmdFlags.title,
+			NoBranch:     startCmdFlags.noBranch,
+			Worktree:     startWorktreeEnabled(fotingoConfig),
+			WorktreePath: startWorktreePath(fotingoConfig),
 		},
 		Deps: internalstart.WorkflowDeps{
 			NormalizeFlags: e.deps.normalizeFlags,

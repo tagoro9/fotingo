@@ -968,6 +968,30 @@ func (suite *GitTestSuite) TestHasUncommittedChanges_WithNewFile() {
 	assert.True(suite.T(), hasChanges)
 }
 
+func (suite *GitTestSuite) TestIssueWorktreePath_DefaultSiblingPath() {
+	got, err := issueWorktreePath(filepath.Join("workspace", "fotingo"), "f/TEST-123_some_work", WorktreeOptions{})
+	assert.NoError(suite.T(), err)
+	assert.Equal(suite.T(), filepath.Join("workspace", "fotingo-wt-f-test-123_some_work"), got)
+}
+
+func (suite *GitTestSuite) TestIssueWorktreePath_CustomRelativeParent() {
+	root := filepath.Join("workspace", "fotingo")
+	got, err := issueWorktreePath(root, "f/TEST-123_some_work", WorktreeOptions{
+		ParentPath: filepath.Join(".claude", "worktrees"),
+	})
+	assert.NoError(suite.T(), err)
+	assert.Equal(suite.T(), filepath.Join(root, ".claude", "worktrees", "fotingo-wt-f-test-123_some_work"), got)
+}
+
+func (suite *GitTestSuite) TestIssueWorktreePath_CustomAbsoluteParent() {
+	parent := filepath.Join(string(filepath.Separator), "tmp", "fotingo-worktrees")
+	got, err := issueWorktreePath(filepath.Join("workspace", "fotingo"), "f/TEST-123_some_work", WorktreeOptions{
+		ParentPath: parent,
+	})
+	assert.NoError(suite.T(), err)
+	assert.Equal(suite.T(), filepath.Join(parent, "fotingo-wt-f-test-123_some_work"), got)
+}
+
 func (suite *GitTestSuite) TestGetCommitsSince_WhitespaceInMessage() {
 	head, err := suite.repo.Head()
 	assert.NoError(suite.T(), err)

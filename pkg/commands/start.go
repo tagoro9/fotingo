@@ -18,16 +18,17 @@ import (
 
 // startFlags holds the flags for the start command
 type startFlags struct {
-	title       string
-	description string
-	project     string
-	kind        string
-	parent      string
-	epic        string
-	labels      []string
-	noBranch    bool
-	worktree    bool
-	interactive bool
+	title        string
+	description  string
+	project      string
+	kind         string
+	parent       string
+	epic         string
+	labels       []string
+	worktreePath string
+	noBranch     bool
+	worktree     bool
+	interactive  bool
 }
 
 var startCmdFlags = startFlags{}
@@ -135,6 +136,7 @@ func init() {
 	startCmd.Flags().StringVarP(&startCmdFlags.parent, "parent", "a", "", localizer.T(i18n.StartFlagParent))
 	startCmd.Flags().StringVarP(&startCmdFlags.epic, "epic", "e", "", localizer.T(i18n.StartFlagEpic))
 	startCmd.Flags().StringSliceVarP(&startCmdFlags.labels, "labels", "l", []string{}, localizer.T(i18n.StartFlagLabels))
+	startCmd.Flags().StringVar(&startCmdFlags.worktreePath, "worktree-path", "", localizer.T(i18n.StartFlagWorktreePath))
 	startCmd.Flags().BoolVarP(&startCmdFlags.noBranch, "no-branch", "n", false, localizer.T(i18n.StartFlagNoBranch))
 	startCmd.Flags().BoolVar(&startCmdFlags.worktree, "worktree", false, localizer.T(i18n.StartFlagWorktree))
 	startCmd.Flags().BoolVarP(&startCmdFlags.interactive, "interactive", "i", false, localizer.T(i18n.StartFlagInteractive))
@@ -191,6 +193,7 @@ func normalizeStartCreateFlags(cmd *cobra.Command, issueID string) error {
 	startCmdFlags.kind = strings.TrimSpace(startCmdFlags.kind)
 	startCmdFlags.parent = strings.TrimSpace(startCmdFlags.parent)
 	startCmdFlags.epic = strings.TrimSpace(startCmdFlags.epic)
+	startCmdFlags.worktreePath = strings.TrimSpace(startCmdFlags.worktreePath)
 
 	if cmd.Flags().Changed("kind") && startCmdFlags.kind != "" {
 		if _, err := parseIssueKind(startCmdFlags.kind); err != nil {
@@ -389,13 +392,23 @@ func collectInteractiveCreateFlags(cmd *cobra.Command) error {
 }
 
 func startWorktreeEnabled(cfg *viper.Viper) bool {
-	if startCmdFlags.worktree {
+	if startCmdFlags.worktree || strings.TrimSpace(startCmdFlags.worktreePath) != "" {
 		return true
 	}
 	if cfg == nil {
 		return false
 	}
 	return cfg.GetBool("git.worktree.enabled")
+}
+
+func startWorktreePath(cfg *viper.Viper) string {
+	if path := strings.TrimSpace(startCmdFlags.worktreePath); path != "" {
+		return path
+	}
+	if cfg == nil {
+		return ""
+	}
+	return strings.TrimSpace(cfg.GetString("git.worktree.path"))
 }
 
 func getInteractiveProjectIssueTypeNames(projectKey string) ([]string, error) {

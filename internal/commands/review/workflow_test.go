@@ -124,7 +124,7 @@ func (workflowSuccessMockGit) GetIssueId() (string, error)        { return "TEST
 func (workflowSuccessMockGit) CreateIssueBranch(*jira.Issue) (string, error) {
 	return "", nil
 }
-func (workflowSuccessMockGit) CreateIssueWorktreeBranch(*jira.Issue) (string, string, error) {
+func (workflowSuccessMockGit) CreateIssueWorktreeBranch(*jira.Issue, git.WorktreeOptions) (string, string, error) {
 	return "", "", nil
 }
 func (workflowSuccessMockGit) Push() error { return nil }

@@ -111,13 +111,14 @@ func (e *blockingWorkflowEmitter) DebugRaw(string) {
 }
 
 type workflowMockGit struct {
-	messageCh           *chan string
-	createBranchName    string
-	createWorktreePath  string
-	fetchDefaultCalls   int
-	createBranchCalls   int
-	createWorktreeCalls int
-	hasUncommitedCalls  int
+	messageCh             *chan string
+	createBranchName      string
+	createWorktreePath    string
+	createWorktreeOptions git.WorktreeOptions
+	fetchDefaultCalls     int
+	createBranchCalls     int
+	createWorktreeCalls   int
+	hasUncommitedCalls    int
 }
 
 func (m *workflowMockGit) GetRemote() (giturl.IGitURL, error) { return nil, nil }
@@ -131,8 +132,9 @@ func (m *workflowMockGit) CreateIssueBranch(*jira.Issue) (string, error) {
 	m.createBranchCalls++
 	return m.createBranchName, nil
 }
-func (m *workflowMockGit) CreateIssueWorktreeBranch(*jira.Issue) (string, string, error) {
+func (m *workflowMockGit) CreateIssueWorktreeBranch(_ *jira.Issue, options git.WorktreeOptions) (string, string, error) {
 	m.createWorktreeCalls++
+	m.createWorktreeOptions = options
 	return m.createBranchName, m.createWorktreePath, nil
 }
 func (m *workflowMockGit) Push() error { return nil }
@@ -353,8 +355,11 @@ func TestWorkflowRunnerRunWithResult_UsesWorktreeBranchCreationWhenEnabled(t *te
 	}
 
 	runner := WorkflowRunner{
-		Config:  viper.New(),
-		Options: WorkflowOptions{Worktree: true},
+		Config: viper.New(),
+		Options: WorkflowOptions{
+			Worktree:     true,
+			WorktreePath: ".claude/worktrees",
+		},
 		Deps: WorkflowDeps{
 			NormalizeFlags: func(*cobra.Command, string) error { return nil },
 			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
@@ -381,6 +386,9 @@ func TestWorkflowRunnerRunWithResult_UsesWorktreeBranchCreationWhenEnabled(t *te
 	assert.Equal(t, 1, gitClient.fetchDefaultCalls)
 	assert.Zero(t, gitClient.createBranchCalls)
 	assert.Equal(t, 1, gitClient.createWorktreeCalls)
+	assert.Equal(t, git.WorktreeOptions{
+		ParentPath: ".claude/worktrees",
+	}, gitClient.createWorktreeOptions)
 }
 
 func TestWorkflowRunnerCreateIssueBranch_EmitsBranchAndWorktreeLocation(t *testing.T) {

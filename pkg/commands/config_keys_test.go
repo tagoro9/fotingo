@@ -39,6 +39,15 @@ func TestLookupConfigKeySpec_GitWorktreeEnabled(t *testing.T) {
 	assert.Equal(t, "Create start branches in sibling linked worktrees", spec.Description)
 }
 
+func TestLookupConfigKeySpec_GitWorktreeLocation(t *testing.T) {
+	t.Parallel()
+
+	pathSpec, ok := lookupConfigKeySpec("git.worktree.path")
+	require.True(t, ok)
+	assert.Equal(t, configValueTypeString, pathSpec.ValueType)
+	assert.Equal(t, "Parent directory for start worktrees", pathSpec.Description)
+}
+
 func TestParseConfigKeyValue_Duration(t *testing.T) {
 	t.Parallel()
 

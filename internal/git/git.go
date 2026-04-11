@@ -54,7 +54,7 @@ type Git interface {
 	// CreateIssueBranch creates a new branch for the given issue
 	CreateIssueBranch(issue *jira.Issue) (string, error)
 	// CreateIssueWorktreeBranch creates a new linked worktree and issue branch.
-	CreateIssueWorktreeBranch(issue *jira.Issue) (string, string, error)
+	CreateIssueWorktreeBranch(issue *jira.Issue, options WorktreeOptions) (string, string, error)
 	// Push pushes the current branch to the remote with upstream tracking
 	Push() error
 	// StashChanges stashes uncommitted changes with the provided message
@@ -76,6 +76,14 @@ type Git interface {
 	// GetIssuesFromCommits extracts issue IDs from commit messages
 	GetIssuesFromCommits(commits []Commit) []string
 }
+
+// WorktreeOptions controls where linked worktrees are created.
+type WorktreeOptions struct {
+	// ParentPath is the directory to create worktrees under. Relative paths are resolved from the active worktree root.
+	ParentPath string
+}
+
+const issueWorktreeDirectoryPrefix = "fotingo-wt"
 
 // CredentialProvider abstracts git credential retrieval for testability.
 type CredentialProvider interface {
@@ -725,7 +733,7 @@ func (g *git) CreateIssueBranch(issue *jira.Issue) (string, error) {
 	return branchName, nil
 }
 
-func (g *git) CreateIssueWorktreeBranch(issue *jira.Issue) (string, string, error) {
+func (g *git) CreateIssueWorktreeBranch(issue *jira.Issue, options WorktreeOptions) (string, string, error) {
 	branchName, defaultBranch, remote, err := g.prepareIssueBranch(issue)
 	if err != nil {
 		return "", "", err
@@ -736,9 +744,12 @@ func (g *git) CreateIssueWorktreeBranch(issue *jira.Issue) (string, string, erro
 		return "", "", err
 	}
 
-	worktreePath, err := siblingWorktreePath(worktreeRoot, branchName)
+	worktreePath, err := issueWorktreePath(worktreeRoot, branchName, options)
 	if err != nil {
 		return "", "", err
+	}
+	if err := os.MkdirAll(filepath.Dir(worktreePath), 0755); err != nil {
+		return "", "", fmt.Errorf("failed to create worktree parent directory %s: %w", filepath.Dir(worktreePath), err)
 	}
 	if _, statErr := os.Stat(worktreePath); statErr == nil {
 		return "", "", fmt.Errorf("worktree path %s already exists", worktreePath)
@@ -846,15 +857,10 @@ func (g *git) resolveDefaultBranchReference(remote, defaultBranch string) (*plum
 	return branchRef, nil
 }
 
-func siblingWorktreePath(worktreeRoot, branchName string) (string, error) {
+func issueWorktreePath(worktreeRoot, branchName string, options WorktreeOptions) (string, error) {
 	root := strings.TrimSpace(worktreeRoot)
 	if root == "" {
 		return "", fmt.Errorf("worktree root is required")
-	}
-
-	repoName := filepath.Base(root)
-	if repoName == "." || repoName == string(filepath.Separator) || strings.TrimSpace(repoName) == "" {
-		return "", fmt.Errorf("failed to derive repository name from %s", root)
 	}
 
 	friendlyBranch := directoryFriendlyBranchName(branchName)
@@ -862,7 +868,14 @@ func siblingWorktreePath(worktreeRoot, branchName string) (string, error) {
 		return "", fmt.Errorf("failed to derive worktree directory name from branch %s", branchName)
 	}
 
-	return filepath.Join(filepath.Dir(root), fmt.Sprintf("%s-%s", repoName, friendlyBranch)), nil
+	parent := strings.TrimSpace(options.ParentPath)
+	if parent == "" {
+		parent = filepath.Dir(root)
+	} else if !filepath.IsAbs(parent) {
+		parent = filepath.Join(root, parent)
+	}
+
+	return filepath.Join(parent, fmt.Sprintf("%s-%s", issueWorktreeDirectoryPrefix, friendlyBranch)), nil
 }
 
 func directoryFriendlyBranchName(branchName string) string {
