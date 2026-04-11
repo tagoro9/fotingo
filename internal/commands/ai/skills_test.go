@@ -27,6 +27,7 @@ func TestRenderSkill(t *testing.T) {
 			assert.Contains(t, content, "description:")
 			assert.Contains(t, content, "Fotingo Workflow Skill")
 			assert.Contains(t, content, "fotingo inspect --json")
+			assert.Contains(t, content, "fotingo inspect pr --json")
 			assert.Contains(t, content, "fotingo search reviewers ali --json")
 			assert.Contains(t, content, "fotingo review -y")
 			assert.Contains(t, content, "fotingo review -y --branch release/2026.04")

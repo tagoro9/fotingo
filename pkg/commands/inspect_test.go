@@ -4,7 +4,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	internalinspect "github.com/tagoro9/fotingo/internal/commands/inspect"
 	"github.com/tagoro9/fotingo/internal/git"
+	"github.com/tagoro9/fotingo/internal/github"
 )
 
 func TestInspectFlags(t *testing.T) {
@@ -30,6 +32,18 @@ func TestInspectCmdUse(t *testing.T) {
 	assert.NotEmpty(t, inspectCmd.Long)
 	assert.Contains(t, inspectCmd.Long, "JSON")
 	assert.Contains(t, inspectCmd.Long, "AI agents")
+}
+
+func TestInspectPrCmd(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, "pr", inspectPrCmd.Use)
+	assert.NotEmpty(t, inspectPrCmd.Short)
+	assert.NotEmpty(t, inspectPrCmd.Long)
+
+	branchFlag := inspectPrCmd.Flags().Lookup("branch")
+	assert.NotNil(t, branchFlag, "branch flag should exist")
+	assert.Equal(t, "b", branchFlag.Shorthand)
 }
 
 func TestInspectOutput_BranchInfo(t *testing.T) {
@@ -130,6 +144,61 @@ func TestInspectOutput_PullRequestInfo(t *testing.T) {
 	assert.Equal(t, "Inspect PR metadata", output.PullRequest.Title)
 	assert.Equal(t, "PR body", output.PullRequest.Description)
 	assert.Equal(t, "https://github.com/testowner/testrepo/pull/42", output.PullRequest.URL)
+}
+
+func TestBuildInspectPROutput(t *testing.T) {
+	t.Parallel()
+
+	resolved := true
+	output := buildInspectPROutput(internalinspect.WorkflowResult{
+		Branch: &internalinspect.BranchInfo{Name: "feature/TEST-123"},
+		PullRequest: &internalinspect.PullRequestInfo{
+			Title:       "Feature PR",
+			Description: "PR body",
+			Number:      42,
+			URL:         "https://github.com/owner/repo/pull/42",
+			APIURL:      "https://api.github.com/repos/owner/repo/pulls/42",
+			State:       "open",
+			Draft:       false,
+		},
+		Discussion: &github.PullRequestDiscussion{
+			Comments: []github.PullRequestIssueComment{
+				{ID: 101, Author: "alice", Body: "Top-level comment"},
+			},
+			Reviews: []github.PullRequestReview{
+				{ID: 201, Author: "bob", State: "COMMENTED", Body: "Review body"},
+			},
+			ReviewComments: []github.PullRequestReviewComment{
+				{ID: 301, Author: "bob", Body: "Inline comment", ConversationID: "review-comment-301"},
+			},
+			Conversations: []github.PullRequestConversation{
+				{
+					ID:       "review-comment-301",
+					Resolved: &resolved,
+					Comments: []github.PullRequestReviewComment{
+						{ID: 301, Author: "bob", Body: "Inline comment", ConversationID: "review-comment-301"},
+					},
+				},
+			},
+		},
+	})
+
+	require := assert.New(t)
+	require.NotNil(output.Branch)
+	require.Equal("feature/TEST-123", output.Branch.Name)
+	require.NotNil(output.PullRequest)
+	require.Equal(42, output.PullRequest.Number)
+	require.Equal("PR body", output.PullRequest.Description)
+	require.Len(output.Comments, 1)
+	require.Equal("alice", output.Comments[0].Author)
+	require.Len(output.Reviews, 1)
+	require.Equal("COMMENTED", output.Reviews[0].State)
+	require.Len(output.ReviewComments, 1)
+	require.Equal("review-comment-301", output.ReviewComments[0].ConversationID)
+	require.Len(output.Conversations, 1)
+	require.NotNil(output.Conversations[0].Resolved)
+	require.True(*output.Conversations[0].Resolved)
+	require.Len(output.Conversations[0].Comments, 1)
 }
 
 func TestExtractIssueIDsFromCommits(t *testing.T) {

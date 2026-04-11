@@ -135,11 +135,13 @@ type SearchResultInfo struct {
 
 // PullRequestInfo contains information about a GitHub pull request.
 type PullRequestInfo struct {
-	Number int    `json:"number"`
-	URL    string `json:"url"`
-	Title  string `json:"title"`
-	Draft  bool   `json:"draft"`
-	State  string `json:"state"`
+	Number      int    `json:"number"`
+	URL         string `json:"url"`
+	APIURL      string `json:"apiUrl,omitempty"`
+	Title       string `json:"title"`
+	Description string `json:"description,omitempty"`
+	Draft       bool   `json:"draft"`
+	State       string `json:"state"`
 }
 
 // OpenOutput represents the JSON output of the open command.

@@ -1,6 +1,8 @@
 package inspect
 
 import (
+	"fmt"
+
 	"github.com/spf13/viper"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
@@ -21,6 +23,17 @@ type BranchInfo struct {
 	DefaultBranch string
 }
 
+// PullRequestInfo represents pull-request-related inspect command output.
+type PullRequestInfo struct {
+	Title       string
+	Description string
+	Number      int
+	URL         string
+	APIURL      string
+	State       string
+	Draft       bool
+}
+
 // IssueInfo represents issue-related inspect command output.
 type IssueInfo struct {
 	Key         string
@@ -33,19 +46,12 @@ type IssueInfo struct {
 	URL         string
 }
 
-// PullRequestInfo represents pull-request-related inspect command output.
-type PullRequestInfo struct {
-	Number      int
-	Title       string
-	Description string
-	URL         string
-}
-
 // WorkflowResult is the internal inspect workflow result.
 type WorkflowResult struct {
 	Branch      *BranchInfo
 	Issue       *IssueInfo
 	PullRequest *PullRequestInfo
+	Discussion  *github.PullRequestDiscussion
 	IssueIDs    []string
 	Commits     []CommitInfo
 }
@@ -56,10 +62,16 @@ type WorkflowOptions struct {
 	Issue  string
 }
 
+// PullRequestInspector resolves pull requests and discussion context for inspect pr.
+type PullRequestInspector interface {
+	DoesPRExistForBranch(branch string) (bool, *github.PullRequest, error)
+	GetPullRequestDiscussion(prNumber int) (*github.PullRequestDiscussion, error)
+}
+
 // WorkflowDeps are inspect workflow dependencies.
 type WorkflowDeps struct {
 	NewGitClient     func(*viper.Viper, *chan string) (git.Git, error)
-	NewGitHubClient  func(git.Git, *viper.Viper) (github.Github, error)
+	NewGitHubClient  func(git.Git, *viper.Viper) (PullRequestInspector, error)
 	NewJiraClient    func(*viper.Viper) (jira.Jira, error)
 	FetchBranchIssue func(jira.Jira, string) (*jira.Issue, error)
 }
@@ -173,10 +185,65 @@ func (r WorkflowRunner) Run() (WorkflowResult, error) {
 					Title:       pr.Title,
 					Description: pr.Body,
 					URL:         url,
+					APIURL:      pr.URL,
+					State:       pr.State,
+					Draft:       pr.Draft,
 				}
 			}
 		}
 	}
 
 	return output, nil
+}
+
+// RunPullRequest executes PR discussion inspection and returns structured result data.
+func (r WorkflowRunner) RunPullRequest() (WorkflowResult, error) {
+	statusCh := make(chan string, 10)
+	gitClient, err := r.Deps.NewGitClient(r.Config, &statusCh)
+	if err != nil {
+		return WorkflowResult{}, err
+	}
+	if r.Deps.NewGitHubClient == nil {
+		return WorkflowResult{}, fmt.Errorf("inspect workflow dependency NewGitHubClient is required")
+	}
+
+	branchName := r.Options.Branch
+	if branchName == "" {
+		branchName, err = gitClient.GetCurrentBranch()
+		if err != nil {
+			return WorkflowResult{}, err
+		}
+	}
+
+	ghClient, err := r.Deps.NewGitHubClient(gitClient, r.Config)
+	if err != nil {
+		return WorkflowResult{}, err
+	}
+
+	exists, pr, err := ghClient.DoesPRExistForBranch(branchName)
+	if err != nil {
+		return WorkflowResult{}, err
+	}
+	if !exists || pr == nil {
+		return WorkflowResult{}, fmt.Errorf("no open pull request found for branch %s", branchName)
+	}
+
+	discussion, err := ghClient.GetPullRequestDiscussion(pr.Number)
+	if err != nil {
+		return WorkflowResult{}, err
+	}
+
+	return WorkflowResult{
+		Branch: &BranchInfo{Name: branchName},
+		PullRequest: &PullRequestInfo{
+			Title:       pr.Title,
+			Description: pr.Body,
+			Number:      pr.Number,
+			URL:         pr.HTMLURL,
+			APIURL:      pr.URL,
+			State:       pr.State,
+			Draft:       pr.Draft,
+		},
+		Discussion: discussion,
+	}, nil
 }

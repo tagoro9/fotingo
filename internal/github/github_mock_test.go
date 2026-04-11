@@ -710,6 +710,84 @@ func (suite *MockServerTestSuite) TestDoesPRExistForBranch_APIError() {
 }
 
 // -----------------------------------------------------------------------
+// GetPullRequestDiscussion
+// -----------------------------------------------------------------------
+
+func (suite *MockServerTestSuite) TestGetPullRequestDiscussion_Success() {
+	pr := testutil.NewPullRequest(5, "Discussion PR", "feature-branch", "main", "open")
+	pr.IssueComments = []*testutil.MockIssueComment{
+		testutil.NewIssueComment(101, "Top-level comment", "alice"),
+	}
+	pr.Reviews = []*testutil.MockPullRequestReview{
+		testutil.NewPullRequestReview(201, "COMMENTED", "Review body", "bob"),
+	}
+	pr.ReviewComments = []*testutil.MockPullRequestReviewComment{
+		testutil.NewPullRequestReviewComment(301, 201, 0, "Please adjust this line", "bob"),
+		testutil.NewPullRequestReviewComment(302, 201, 301, "Done", "alice"),
+	}
+	suite.server.AddPullRequest("testowner", "testrepo", pr)
+
+	discussion, err := suite.client.GetPullRequestDiscussion(5)
+
+	require.NoError(suite.T(), err)
+	require.NotNil(suite.T(), discussion)
+	require.Len(suite.T(), discussion.Comments, 1)
+	assert.Equal(suite.T(), int64(101), discussion.Comments[0].ID)
+	assert.Equal(suite.T(), "alice", discussion.Comments[0].Author)
+	assert.Equal(suite.T(), "Top-level comment", discussion.Comments[0].Body)
+	require.Len(suite.T(), discussion.Reviews, 1)
+	assert.Equal(suite.T(), int64(201), discussion.Reviews[0].ID)
+	assert.Equal(suite.T(), "COMMENTED", discussion.Reviews[0].State)
+	assert.Equal(suite.T(), "bob", discussion.Reviews[0].Author)
+	require.Len(suite.T(), discussion.ReviewComments, 2)
+	assert.Equal(suite.T(), int64(301), discussion.ReviewComments[0].ID)
+	assert.Equal(suite.T(), "review-comment-301", discussion.ReviewComments[0].ConversationID)
+	assert.Equal(suite.T(), int64(302), discussion.ReviewComments[1].ID)
+	assert.Equal(suite.T(), int64(301), discussion.ReviewComments[1].InReplyToID)
+	assert.Equal(suite.T(), "review-comment-301", discussion.ReviewComments[1].ConversationID)
+	require.Len(suite.T(), discussion.Conversations, 1)
+	assert.Equal(suite.T(), "review-comment-301", discussion.Conversations[0].ID)
+	assert.Len(suite.T(), discussion.Conversations[0].Comments, 2)
+
+	log := suite.server.GetRequestLog()
+	assert.Equal(suite.T(), 1, countRequests(log, http.MethodGet, "/repos/testowner/testrepo/issues/5/comments"))
+	assert.Equal(suite.T(), 1, countRequests(log, http.MethodGet, "/repos/testowner/testrepo/pulls/5/reviews"))
+	assert.Equal(suite.T(), 1, countRequests(log, http.MethodGet, "/repos/testowner/testrepo/pulls/5/comments"))
+}
+
+func (suite *MockServerTestSuite) TestGetPullRequestDiscussion_APIError() {
+	suite.server.SetErrorResponse("GET /repos/testowner/testrepo/issues/5/comments", &testutil.ErrorResponse{
+		StatusCode: http.StatusInternalServerError,
+		Message:    "Internal Server Error",
+	})
+
+	discussion, err := suite.client.GetPullRequestDiscussion(5)
+
+	assert.Error(suite.T(), err)
+	assert.Nil(suite.T(), discussion)
+	assert.Contains(suite.T(), err.Error(), "failed to list pull request issue comments")
+}
+
+func TestGroupPullRequestReviewComments(t *testing.T) {
+	comments := []PullRequestReviewComment{
+		{ID: 1, ConversationID: "review-comment-1", Body: "root"},
+		{ID: 2, InReplyToID: 1, Body: "reply"},
+		{ID: 3, Body: "new thread"},
+	}
+
+	conversations := GroupPullRequestReviewComments(comments)
+
+	require.Len(t, conversations, 2)
+	assert.Equal(t, "review-comment-1", conversations[0].ID)
+	require.Len(t, conversations[0].Comments, 2)
+	assert.Equal(t, int64(1), conversations[0].Comments[0].ID)
+	assert.Equal(t, int64(2), conversations[0].Comments[1].ID)
+	assert.Equal(t, "review-comment-1", conversations[0].Comments[1].ConversationID)
+	assert.Equal(t, "review-comment-3", conversations[1].ID)
+	assert.Equal(t, "review-comment-3", conversations[1].Comments[0].ConversationID)
+}
+
+// -----------------------------------------------------------------------
 // CreateRelease
 // -----------------------------------------------------------------------
 

@@ -80,12 +80,141 @@ type MockPullRequest struct {
 	RequestedTeams     []*MockTeam
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
+
+	IssueComments  []*MockIssueComment
+	Reviews        []*MockPullRequestReview
+	ReviewComments []*MockPullRequestReviewComment
 }
 
 // MockPRRef represents a pull request head/base reference.
 type MockPRRef struct {
 	Ref string
 	SHA string
+}
+
+// MockIssueComment represents a pull request issue comment for testing.
+type MockIssueComment struct {
+	ID                int64
+	User              *MockUser
+	Body              string
+	URL               string
+	HTMLURL           string
+	AuthorAssociation string
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
+}
+
+// ToAPIResponse converts the MockIssueComment to a GitHub API response format.
+func (c *MockIssueComment) ToAPIResponse() map[string]interface{} {
+	resp := map[string]interface{}{
+		"id":                 c.ID,
+		"body":               c.Body,
+		"url":                c.URL,
+		"html_url":           c.HTMLURL,
+		"author_association": c.AuthorAssociation,
+		"created_at":         c.CreatedAt.Format(time.RFC3339),
+		"updated_at":         c.UpdatedAt.Format(time.RFC3339),
+	}
+	if c.User != nil {
+		resp["user"] = c.User.ToAPIResponse()
+	}
+	return resp
+}
+
+// MockPullRequestReview represents a pull request review for testing.
+type MockPullRequestReview struct {
+	ID                int64
+	User              *MockUser
+	State             string
+	Body              string
+	CommitID          string
+	URL               string
+	HTMLURL           string
+	PullRequestURL    string
+	AuthorAssociation string
+	SubmittedAt       time.Time
+}
+
+// ToAPIResponse converts the MockPullRequestReview to a GitHub API response format.
+func (r *MockPullRequestReview) ToAPIResponse() map[string]interface{} {
+	resp := map[string]interface{}{
+		"id":                 r.ID,
+		"state":              r.State,
+		"body":               r.Body,
+		"commit_id":          r.CommitID,
+		"url":                r.URL,
+		"html_url":           r.HTMLURL,
+		"pull_request_url":   r.PullRequestURL,
+		"author_association": r.AuthorAssociation,
+		"submitted_at":       r.SubmittedAt.Format(time.RFC3339),
+	}
+	if r.User != nil {
+		resp["user"] = r.User.ToAPIResponse()
+	}
+	return resp
+}
+
+// MockPullRequestReviewComment represents an inline pull request review comment for testing.
+type MockPullRequestReviewComment struct {
+	ID                int64
+	NodeID            string
+	ReviewID          int64
+	InReplyToID       int64
+	User              *MockUser
+	Body              string
+	Path              string
+	DiffHunk          string
+	Side              string
+	StartSide         string
+	Line              int
+	StartLine         int
+	OriginalLine      int
+	OriginalStartLine int
+	Position          int
+	OriginalPosition  int
+	CommitID          string
+	OriginalCommitID  string
+	SubjectType       string
+	URL               string
+	HTMLURL           string
+	PullRequestURL    string
+	AuthorAssociation string
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
+}
+
+// ToAPIResponse converts the MockPullRequestReviewComment to a GitHub API response format.
+func (c *MockPullRequestReviewComment) ToAPIResponse() map[string]interface{} {
+	resp := map[string]interface{}{
+		"id":                     c.ID,
+		"node_id":                c.NodeID,
+		"pull_request_review_id": c.ReviewID,
+		"in_reply_to_id":         c.InReplyToID,
+		"body":                   c.Body,
+		"path":                   c.Path,
+		"diff_hunk":              c.DiffHunk,
+		"side":                   c.Side,
+		"start_side":             c.StartSide,
+		"line":                   c.Line,
+		"start_line":             c.StartLine,
+		"original_line":          c.OriginalLine,
+		"original_start_line":    c.OriginalStartLine,
+		"position":               c.Position,
+		"original_position":      c.OriginalPosition,
+		"commit_id":              c.CommitID,
+		"original_commit_id":     c.OriginalCommitID,
+		"subject_type":           c.SubjectType,
+		"url":                    c.URL,
+		"html_url":               c.HTMLURL,
+		"pull_request_url":       c.PullRequestURL,
+		"author_association":     c.AuthorAssociation,
+		"created_at":             c.CreatedAt.Format(time.RFC3339),
+		"updated_at":             c.UpdatedAt.Format(time.RFC3339),
+	}
+	if c.User != nil {
+		resp["user"] = c.User.ToAPIResponse()
+	}
+	return resp
 }
 
 // ToAPIResponse converts the MockPullRequest to a GitHub API response format.
@@ -297,6 +426,66 @@ func NewPullRequest(number int, title, head, base, state string) *MockPullReques
 		User:      DefaultUser(),
 		CreatedAt: now,
 		UpdatedAt: now,
+	}
+}
+
+// NewIssueComment creates a new MockIssueComment with the given parameters.
+func NewIssueComment(id int64, body, author string) *MockIssueComment {
+	now := time.Now()
+	return &MockIssueComment{
+		ID:                id,
+		User:              NewUser(id, author, author),
+		Body:              body,
+		URL:               "https://api.github.com/repos/testowner/testrepo/issues/comments/" + itoa(int(id)),
+		HTMLURL:           "https://github.com/testowner/testrepo/pull/1#issuecomment-" + itoa(int(id)),
+		AuthorAssociation: "MEMBER",
+		CreatedAt:         now,
+		UpdatedAt:         now,
+	}
+}
+
+// NewPullRequestReview creates a new MockPullRequestReview with the given parameters.
+func NewPullRequestReview(id int64, state, body, author string) *MockPullRequestReview {
+	return &MockPullRequestReview{
+		ID:                id,
+		User:              NewUser(id, author, author),
+		State:             state,
+		Body:              body,
+		CommitID:          "abc123def456",
+		URL:               "https://api.github.com/repos/testowner/testrepo/pulls/1/reviews/" + itoa(int(id)),
+		HTMLURL:           "https://github.com/testowner/testrepo/pull/1#pullrequestreview-" + itoa(int(id)),
+		PullRequestURL:    "https://api.github.com/repos/testowner/testrepo/pulls/1",
+		AuthorAssociation: "MEMBER",
+		SubmittedAt:       time.Now(),
+	}
+}
+
+// NewPullRequestReviewComment creates a new MockPullRequestReviewComment with the given parameters.
+func NewPullRequestReviewComment(id int64, reviewID int64, inReplyToID int64, body, author string) *MockPullRequestReviewComment {
+	now := time.Now()
+	return &MockPullRequestReviewComment{
+		ID:                id,
+		NodeID:            "PRRC_" + itoa(int(id)),
+		ReviewID:          reviewID,
+		InReplyToID:       inReplyToID,
+		User:              NewUser(id, author, author),
+		Body:              body,
+		Path:              "internal/example.go",
+		DiffHunk:          "@@ -1,1 +1,1 @@",
+		Side:              "RIGHT",
+		Line:              10,
+		OriginalLine:      10,
+		Position:          1,
+		OriginalPosition:  1,
+		CommitID:          "abc123def456",
+		OriginalCommitID:  "abc123def456",
+		SubjectType:       "line",
+		URL:               "https://api.github.com/repos/testowner/testrepo/pulls/comments/" + itoa(int(id)),
+		HTMLURL:           "https://github.com/testowner/testrepo/pull/1#discussion_r" + itoa(int(id)),
+		PullRequestURL:    "https://api.github.com/repos/testowner/testrepo/pulls/1",
+		AuthorAssociation: "MEMBER",
+		CreatedAt:         now,
+		UpdatedAt:         now,
 	}
 }
 

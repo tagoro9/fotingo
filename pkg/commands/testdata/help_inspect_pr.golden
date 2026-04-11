@@ -1,0 +1,16 @@
+Inspect the open pull request for the current branch or an explicit branch and output comments, reviews, and conversations as JSON.
+
+Usage:
+  fotingo inspect pr [flags]
+
+Flags:
+  -b, --branch string   Inspect a specific branch
+  -h, --help            help for pr
+
+Global Flags:
+      --debug      Show diagnostic output (includes verbose)
+      --json       Output results as JSON
+      --no-color   Disable colored output
+      --quiet      Suppress non-essential output
+  -v, --verbose    Show step-level progress output
+  -y, --yes        Accept defaults without prompting

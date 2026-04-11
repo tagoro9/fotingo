@@ -22,6 +22,10 @@ Output is always JSON formatted for easy parsing.
 
 Usage:
   fotingo inspect [flags]
+  fotingo inspect [command]
+
+Available Commands:
+  pr          Inspect pull request discussion context as JSON
 
 Flags:
   -b, --branch string   Inspect a specific branch
@@ -35,3 +39,5 @@ Global Flags:
       --quiet      Suppress non-essential output
   -v, --verbose    Show step-level progress output
   -y, --yes        Accept defaults without prompting
+
+Use "fotingo inspect [command] --help" for more information about a command.

@@ -175,6 +175,8 @@ type mockGitHub struct {
 	doesPRExist                     bool
 	existingPR                      *github.PullRequest
 	doesPRExistErr                  error
+	pullRequestDiscussion           *github.PullRequestDiscussion
+	pullRequestDiscussionErr        error
 	createRelease                   *github.Release
 	createReleaseErr                error
 	calls                           []string
@@ -292,6 +294,11 @@ func (m *mockGitHub) MarkPullRequestReadyForReview(nodeID string) error {
 
 func (m *mockGitHub) DoesPRExistForBranch(_ string) (bool, *github.PullRequest, error) {
 	return m.doesPRExist, m.existingPR, m.doesPRExistErr
+}
+
+func (m *mockGitHub) GetPullRequestDiscussion(_ int) (*github.PullRequestDiscussion, error) {
+	m.calls = append(m.calls, "get_pull_request_discussion")
+	return m.pullRequestDiscussion, m.pullRequestDiscussionErr
 }
 
 func (m *mockGitHub) CreateRelease(_ github.CreateReleaseOptions) (*github.Release, error) {

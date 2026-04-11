@@ -35,6 +35,7 @@ This file defines JSON output structures for all commands to support machine\-re
 - [type GlobalFlags](<#GlobalFlags>)
 - [type InspectOutput](<#InspectOutput>)
 - [type InspectPRInfo](<#InspectPRInfo>)
+- [type InspectPROutput](<#InspectPROutput>)
 - [type IssueInfo](<#IssueInfo>)
 - [type JSONOutput](<#JSONOutput>)
   - [func NewJSONOutput\(\) \*JSONOutput](<#NewJSONOutput>)
@@ -42,7 +43,11 @@ This file defines JSON output structures for all commands to support machine\-re
   - [func \(j \*JSONOutput\) WriteError\(err error\) error](<#JSONOutput.WriteError>)
   - [func \(j \*JSONOutput\) WriteSuccess\(data interface\{\}\) error](<#JSONOutput.WriteSuccess>)
 - [type OpenOutput](<#OpenOutput>)
+- [type PullRequestCommentInfo](<#PullRequestCommentInfo>)
+- [type PullRequestConversationInfo](<#PullRequestConversationInfo>)
 - [type PullRequestInfo](<#PullRequestInfo>)
+- [type PullRequestReviewCommentInfo](<#PullRequestReviewCommentInfo>)
+- [type PullRequestReviewInfo](<#PullRequestReviewInfo>)
 - [type ReviewOutput](<#ReviewOutput>)
 - [type SearchOutput](<#SearchOutput>)
 - [type SearchResultInfo](<#SearchResultInfo>)
@@ -109,7 +114,7 @@ func IsShellCompletionRequest() bool
 
 
 <a name="OutputJSON"></a>
-## func [OutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L234>)
+## func [OutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L236>)
 
 ```go
 func OutputJSON(data interface{})
@@ -118,7 +123,7 @@ func OutputJSON(data interface{})
 OutputJSON outputs the data as formatted JSON to stdout. This is a convenience function that creates a new JSONOutput and writes.
 
 <a name="OutputJSONError"></a>
-## func [OutputJSONError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L243>)
+## func [OutputJSONError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L245>)
 
 ```go
 func OutputJSONError(err error)
@@ -127,7 +132,7 @@ func OutputJSONError(err error)
 OutputJSONError outputs an error as JSON to stdout.
 
 <a name="ShouldOutputDebug"></a>
-## func [ShouldOutputDebug](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L275>)
+## func [ShouldOutputDebug](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L277>)
 
 ```go
 func ShouldOutputDebug() bool
@@ -136,7 +141,7 @@ func ShouldOutputDebug() bool
 ShouldOutputDebug returns true when diagnostic output should be shown.
 
 <a name="ShouldOutputJSON"></a>
-## func [ShouldOutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L255>)
+## func [ShouldOutputJSON](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L257>)
 
 ```go
 func ShouldOutputJSON() bool
@@ -145,7 +150,7 @@ func ShouldOutputJSON() bool
 ShouldOutputJSON returns true if the \-\-json flag is set. Commands should check this before outputting human\-readable text.
 
 <a name="ShouldOutputVerbose"></a>
-## func [ShouldOutputVerbose](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L267>)
+## func [ShouldOutputVerbose](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L269>)
 
 ```go
 func ShouldOutputVerbose() bool
@@ -154,7 +159,7 @@ func ShouldOutputVerbose() bool
 ShouldOutputVerbose returns true when step\-level progress should be shown.
 
 <a name="ShouldSuppressOutput"></a>
-## func [ShouldSuppressOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L262>)
+## func [ShouldSuppressOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L264>)
 
 ```go
 func ShouldSuppressOutput() bool
@@ -163,7 +168,7 @@ func ShouldSuppressOutput() bool
 ShouldSuppressOutput returns true if output should be suppressed. This is true when \-\-quiet is set or when \-\-json is set \(to avoid mixing human\-readable output with JSON\).
 
 <a name="AISetupOutput"></a>
-## type [AISetupOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L164-L172>)
+## type [AISetupOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L166-L174>)
 
 AISetupOutput represents JSON output for \`fotingo ai setup\`.
 
@@ -180,7 +185,7 @@ type AISetupOutput struct {
 ```
 
 <a name="AISetupResult"></a>
-## type [AISetupResult](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L175-L182>)
+## type [AISetupResult](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L177-L184>)
 
 AISetupResult captures one provider install outcome.
 
@@ -196,7 +201,7 @@ type AISetupResult struct {
 ```
 
 <a name="BranchInfo"></a>
-## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L40-L44>)
+## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L44-L48>)
 
 BranchInfo contains information about a git branch
 
@@ -209,7 +214,7 @@ type BranchInfo struct {
 ```
 
 <a name="CommitInfo"></a>
-## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L67-L71>)
+## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L71-L75>)
 
 CommitInfo contains information about a git commit
 
@@ -222,7 +227,7 @@ type CommitInfo struct {
 ```
 
 <a name="ErrorOutput"></a>
-## type [ErrorOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L193-L197>)
+## type [ErrorOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L195-L199>)
 
 ErrorOutput represents a JSON error response.
 
@@ -262,7 +267,7 @@ type GlobalFlags struct {
 ```
 
 <a name="InspectOutput"></a>
-## type [InspectOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L31-L37>)
+## type [InspectOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L35-L41>)
 
 InspectOutput represents the JSON output of the inspect command
 
@@ -277,7 +282,7 @@ type InspectOutput struct {
 ```
 
 <a name="InspectPRInfo"></a>
-## type [InspectPRInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L59-L64>)
+## type [InspectPRInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L63-L68>)
 
 InspectPRInfo contains information about a pull request related to branch inspect output.
 
@@ -290,8 +295,24 @@ type InspectPRInfo struct {
 }
 ```
 
+<a name="InspectPROutput"></a>
+## type [InspectPROutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L178-L185>)
+
+InspectPROutput represents the JSON output of the inspect pr command.
+
+```go
+type InspectPROutput struct {
+    Branch         *BranchInfo                    `json:"branch,omitempty"`
+    PullRequest    *PullRequestInfo               `json:"pullRequest,omitempty"`
+    Comments       []PullRequestCommentInfo       `json:"comments"`
+    Reviews        []PullRequestReviewInfo        `json:"reviews"`
+    ReviewComments []PullRequestReviewCommentInfo `json:"reviewComments"`
+    Conversations  []PullRequestConversationInfo  `json:"conversations"`
+}
+```
+
 <a name="IssueInfo"></a>
-## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L47-L56>)
+## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L51-L60>)
 
 IssueInfo contains information about a Jira issue
 
@@ -309,7 +330,7 @@ type IssueInfo struct {
 ```
 
 <a name="JSONOutput"></a>
-## type [JSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L200-L202>)
+## type [JSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L202-L204>)
 
 JSONOutput provides utilities for outputting JSON responses.
 
@@ -320,7 +341,7 @@ type JSONOutput struct {
 ```
 
 <a name="NewJSONOutput"></a>
-### func [NewJSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L205>)
+### func [NewJSONOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L207>)
 
 ```go
 func NewJSONOutput() *JSONOutput
@@ -329,7 +350,7 @@ func NewJSONOutput() *JSONOutput
 NewJSONOutput creates a new JSONOutput that writes to stdout.
 
 <a name="JSONOutput.Write"></a>
-### func \(\*JSONOutput\) [Write](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L212>)
+### func \(\*JSONOutput\) [Write](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L214>)
 
 ```go
 func (j *JSONOutput) Write(data interface{}) error
@@ -338,7 +359,7 @@ func (j *JSONOutput) Write(data interface{}) error
 Write outputs data as formatted JSON to stdout.
 
 <a name="JSONOutput.WriteError"></a>
-### func \(\*JSONOutput\) [WriteError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L217>)
+### func \(\*JSONOutput\) [WriteError](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L219>)
 
 ```go
 func (j *JSONOutput) WriteError(err error) error
@@ -347,7 +368,7 @@ func (j *JSONOutput) WriteError(err error) error
 WriteError outputs an error as JSON.
 
 <a name="JSONOutput.WriteSuccess"></a>
-### func \(\*JSONOutput\) [WriteSuccess](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L228>)
+### func \(\*JSONOutput\) [WriteSuccess](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L230>)
 
 ```go
 func (j *JSONOutput) WriteSuccess(data interface{}) error
@@ -356,7 +377,7 @@ func (j *JSONOutput) WriteSuccess(data interface{}) error
 WriteSuccess outputs a generic success response.
 
 <a name="OpenOutput"></a>
-## type [OpenOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L155-L161>)
+## type [OpenOutput](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L157-L163>)
 
 OpenOutput represents the JSON output of the open command.
 
@@ -381,18 +402,107 @@ type OpenOutput struct {
 }
 ```
 
+<a name="PullRequestCommentInfo"></a>
+## type [PullRequestCommentInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L188-L197>)
+
+PullRequestCommentInfo represents a top\-level pull request comment in inspect output.
+
+```go
+type PullRequestCommentInfo struct {
+    ID                int64  `json:"id"`
+    Author            string `json:"author,omitempty"`
+    Body              string `json:"body,omitempty"`
+    URL               string `json:"url,omitempty"`
+    HTMLURL           string `json:"htmlUrl,omitempty"`
+    AuthorAssociation string `json:"authorAssociation,omitempty"`
+    CreatedAt         string `json:"createdAt,omitempty"`
+    UpdatedAt         string `json:"updatedAt,omitempty"`
+}
+```
+
+<a name="PullRequestConversationInfo"></a>
+## type [PullRequestConversationInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L244-L248>)
+
+PullRequestConversationInfo represents grouped inline review comments.
+
+```go
+type PullRequestConversationInfo struct {
+    ID       string                         `json:"id"`
+    Resolved *bool                          `json:"resolved,omitempty"`
+    Comments []PullRequestReviewCommentInfo `json:"comments"`
+}
+```
+
 <a name="PullRequestInfo"></a>
-## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L137-L143>)
+## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/output.go#L137-L145>)
 
 PullRequestInfo contains information about a GitHub pull request.
 
 ```go
 type PullRequestInfo struct {
-    Number int    `json:"number"`
-    URL    string `json:"url"`
-    Title  string `json:"title"`
-    Draft  bool   `json:"draft"`
-    State  string `json:"state"`
+    Number      int    `json:"number"`
+    URL         string `json:"url"`
+    APIURL      string `json:"apiUrl,omitempty"`
+    Title       string `json:"title"`
+    Description string `json:"description,omitempty"`
+    Draft       bool   `json:"draft"`
+    State       string `json:"state"`
+}
+```
+
+<a name="PullRequestReviewCommentInfo"></a>
+## type [PullRequestReviewCommentInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L213-L241>)
+
+PullRequestReviewCommentInfo represents an inline pull request review comment in inspect output.
+
+```go
+type PullRequestReviewCommentInfo struct {
+    ID                   int64  `json:"id"`
+    NodeID               string `json:"nodeId,omitempty"`
+    ReviewID             int64  `json:"reviewId,omitempty"`
+    InReplyToID          int64  `json:"inReplyToId,omitempty"`
+    Author               string `json:"author,omitempty"`
+    Body                 string `json:"body,omitempty"`
+    Path                 string `json:"path,omitempty"`
+    DiffHunk             string `json:"diffHunk,omitempty"`
+    Side                 string `json:"side,omitempty"`
+    StartSide            string `json:"startSide,omitempty"`
+    Line                 int    `json:"line,omitempty"`
+    StartLine            int    `json:"startLine,omitempty"`
+    OriginalLine         int    `json:"originalLine,omitempty"`
+    OriginalStartLine    int    `json:"originalStartLine,omitempty"`
+    Position             int    `json:"position,omitempty"`
+    OriginalPosition     int    `json:"originalPosition,omitempty"`
+    CommitID             string `json:"commitId,omitempty"`
+    OriginalCommitID     string `json:"originalCommitId,omitempty"`
+    SubjectType          string `json:"subjectType,omitempty"`
+    URL                  string `json:"url,omitempty"`
+    HTMLURL              string `json:"htmlUrl,omitempty"`
+    PullRequestURL       string `json:"pullRequestUrl,omitempty"`
+    AuthorAssociation    string `json:"authorAssociation,omitempty"`
+    CreatedAt            string `json:"createdAt,omitempty"`
+    UpdatedAt            string `json:"updatedAt,omitempty"`
+    ConversationID       string `json:"conversationId,omitempty"`
+    ConversationResolved *bool  `json:"conversationResolved,omitempty"`
+}
+```
+
+<a name="PullRequestReviewInfo"></a>
+## type [PullRequestReviewInfo](<https://github.com/tagoro9/fotingo/blob/main/pkg/commands/inspect.go#L200-L210>)
+
+PullRequestReviewInfo represents a submitted pull request review in inspect output.
+
+```go
+type PullRequestReviewInfo struct {
+    ID                int64  `json:"id"`
+    Author            string `json:"author,omitempty"`
+    State             string `json:"state,omitempty"`
+    Body              string `json:"body,omitempty"`
+    CommitID          string `json:"commitId,omitempty"`
+    URL               string `json:"url,omitempty"`
+    HTMLURL           string `json:"htmlUrl,omitempty"`
+    AuthorAssociation string `json:"authorAssociation,omitempty"`
+    SubmittedAt       string `json:"submittedAt,omitempty"`
 }
 ```
 

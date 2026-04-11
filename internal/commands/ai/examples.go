@@ -4,6 +4,7 @@ package ai
 // between help text and generated skill content.
 type CommandExamples struct {
 	InspectJSON             string
+	InspectPullRequestJSON  string
 	StartExistingIssue      string
 	StartCreateIssue        string
 	StartWorktree           string
@@ -23,6 +24,7 @@ type CommandExamples struct {
 func DefaultCommandExamples() CommandExamples {
 	return CommandExamples{
 		InspectJSON:             "fotingo inspect --json",
+		InspectPullRequestJSON:  "fotingo inspect pr --json",
 		StartExistingIssue:      "fotingo start PROJ-123 -y",
 		StartCreateIssue:        `fotingo start -p PROJ -k Task -t "Improve checkout decline error handling" -d "Problem: payment declines are hard to diagnose. Goal: clear user-facing messaging plus actionable logs. Acceptance criteria: improved copy, telemetry events, and regression tests for decline paths." -y`,
 		StartWorktree:           "fotingo start PROJ-123 --worktree -y --json",
