@@ -16,6 +16,8 @@ Use `--json` for machine-readable output:
 ```bash
 fotingo start PROJ-123 -y --json
 fotingo review -y --json
+fotingo review stacks --json
+fotingo review stacks sync --json
 fotingo open pr --json
 fotingo inspect
 fotingo inspect pr --json
@@ -53,6 +55,21 @@ Use the global `--branch` flag when the automation needs to target a non-default
 ```bash
 fotingo review -y --branch release/2026.04
 ```
+
+When that base branch already has an open PR, `fotingo review -y --branch <parent-branch>` creates a stacked child PR and updates the stack section across the open stack. To refresh stack sections later without prompting:
+
+```bash
+fotingo review stacks sync --json
+```
+
+To rebase a stack whose branches may live in separate local worktrees:
+
+```bash
+fotingo review stacks rebase --json
+fotingo review stacks rebase --push --json
+```
+
+Automation should run stack rebase only when it is prepared to handle conflicts. The command requires clean worktrees before starting and stops at the first failed rebase; `--push` is the explicit opt-in for force-with-lease pushes.
 
 ## JSON Schemas
 
@@ -94,6 +111,40 @@ fotingo review -y --branch release/2026.04
     "status": "In Review",
     "type": "Bug",
     "url": "https://jira.example.com/browse/PROJ-123"
+  }
+}
+```
+
+### `review stacks` success
+
+```json
+{
+  "success": true,
+  "stack": {
+    "stackId": "owner/repo#12",
+    "currentBranch": "feature/PROJ-124-leaf",
+    "currentPullRequest": 14,
+    "members": [
+      {
+        "number": 12,
+        "url": "https://github.com/owner/repo/pull/12",
+        "title": "[PROJ-122] Parent",
+        "jiraKey": "PROJ-122",
+        "headRef": "feature/PROJ-122-parent",
+        "baseRef": "main",
+        "status": "🟢"
+      },
+      {
+        "number": 14,
+        "url": "https://github.com/owner/repo/pull/14",
+        "title": "[PROJ-124] Leaf",
+        "jiraKey": "PROJ-124",
+        "headRef": "feature/PROJ-124-leaf",
+        "baseRef": "feature/PROJ-122-parent",
+        "status": "🟢 👀",
+        "current": true
+      }
+    ]
   }
 }
 ```

@@ -11,6 +11,7 @@ Fotingo helps you:
 
 - Start working on Jira issues with consistent branch naming
 - Create pull requests with issue context and metadata
+- Manage stacked pull request chains, including worktree-aware rebases
 - Open related URLs for branch, issue, PR, and repository
 - Inspect local branch/issue context as JSON
 - Automate command flows with machine-readable output
@@ -64,6 +65,13 @@ fotingo start PROJ-123
 
 # Create a pull request for current branch
 fotingo review -y
+
+# Create a child PR stacked on an open parent PR branch
+fotingo review -y --branch feature/PROJ-122-parent
+
+# Inspect and refresh the current stacked PR chain
+fotingo review stacks
+fotingo review stacks sync
 
 # Open the PR in browser
 fotingo open pr

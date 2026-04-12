@@ -104,7 +104,7 @@ PR template resolution order:
 2. Standard GitHub PR template locations (`.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE.md`, or `pull_request_template.md`)
 3. Built-in default template
 
-The default template uses fotingo-managed HTML comment markers for `summary`, `description`, `fixed-issues`, and `changes`, plus the `{fotingo.banner}` placeholder.
+The default template uses fotingo-managed HTML comment markers for `summary`, `description`, `fixed-issues`, `changes`, and an initially empty `stacked-prs` range, plus the `{fotingo.banner}` placeholder.
 
 Repository templates can use the same marker pairs:
 
@@ -112,5 +112,8 @@ Repository templates can use the same marker pairs:
 - `<!-- fotingo:start description -->` / `<!-- fotingo:end description -->`
 - `<!-- fotingo:start fixed-issues -->` / `<!-- fotingo:end fixed-issues -->`
 - `<!-- fotingo:start changes -->` / `<!-- fotingo:end changes -->`
+- `<!-- fotingo:start stacked-prs -->` / `<!-- fotingo:end stacked-prs -->`
+
+Keep the `stacked-prs` marker range empty in templates. Fotingo renders the visible `Stacked PRs` table only after a PR becomes part of a stack. Stack sync commands rewrite only that marker-owned range and preserve content outside it.
 
 Legacy managed placeholders such as `{summary}`, `{description}`, `{fixedIssues}`, and `{changes}` are still supported for backward compatibility, but they are deprecated.
