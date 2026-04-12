@@ -71,6 +71,12 @@ type WorkflowDeps struct {
 	ShouldOpenReviewEditor func(bool) bool
 }
 
+type stackGitHubClient interface {
+	FindOpenPullRequestByHeadBranch(string) (*github.PullRequest, bool, error)
+	ListOpenPullRequestsByStackID(string) ([]github.PullRequest, error)
+	UpdatePullRequestBodies([]github.PullRequestBodyUpdate) ([]*github.PullRequest, error)
+}
+
 // WorkflowRunner executes the review command workflow.
 type WorkflowRunner struct {
 	Config   *viper.Viper
@@ -147,6 +153,26 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 		return result
 	}
 	out.Verbose(i18n.ReviewStatusNoExistingPR)
+
+	stackBaseBranch := strings.TrimSpace(r.Options.BaseBranch)
+	var stackParentPR *github.PullRequest
+	var stackClient stackGitHubClient
+	if stackBaseBranch != "" {
+		if candidate, ok := ghClient.(stackGitHubClient); ok {
+			stackClient = candidate
+			parentPR, parentExists, stackErr := stackClient.FindOpenPullRequestByHeadBranch(stackBaseBranch)
+			if stackErr != nil {
+				result.Err = fterrors.WrapGitHubError(t(i18n.ReviewWrapCheckExistingPR), stackErr)
+				return result
+			}
+			if parentExists {
+				stackParentPR = parentPR
+				out.Debugf("review stack parent pr=%d branch=%s", parentPR.Number, stackBaseBranch)
+			}
+		} else {
+			out.Debugf("review stack detection skipped: github client does not support stack operations")
+		}
+	}
 
 	out.Verbose(i18n.ReviewStatusCheckRemoteBranch)
 	remoteBranchStart := time.Now()
@@ -256,7 +282,7 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 
 	if shouldCollectReviewCommits(r.Options.Description) {
 		collectCommitsStart := time.Now()
-		loadedCommits, commitErr := gitClient.GetCommitsSinceDefaultBranch()
+		loadedCommits, commitErr := collectReviewCommits(gitClient, stackParentPR != nil, stackBaseBranch)
 		logReviewPhaseTiming(out, "collect_commits", collectCommitsStart)
 		if commitErr != nil {
 			out.Debugf("review commits unavailable: %v", commitErr)
@@ -297,7 +323,7 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 
 	prTitle = r.Deps.DerivePRTitle(branch, issue, editorTitle, editorMode)
 
-	baseBranch := strings.TrimSpace(r.Options.BaseBranch)
+	baseBranch := stackBaseBranch
 	if baseBranch == "" {
 		defaultBranchStart := time.Now()
 		baseBranch, err = gitClient.GetDefaultBranch()
@@ -327,6 +353,15 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	}
 	result.PR = pr
 	out.Info("rocket", i18n.ReviewStatusPRCreated, pr.HTMLURL)
+
+	if stackParentPR != nil && stackClient != nil {
+		if updatedStackPR, stackErr := updateStackedPRSections(stackClient, jiraClient, stackParentPR, pr); stackErr != nil {
+			result.Err = fterrors.WrapGitHubError("failed to update stacked pull request sections", stackErr)
+			return result
+		} else if updatedStackPR != nil {
+			result.PR = updatedStackPR
+		}
+	}
 
 	if len(resolvedReviewers) > 0 || len(resolvedTeamReviewers) > 0 {
 		out.Verbose(i18n.ReviewStatusRequestReviewers, strings.Join(append(resolvedReviewers, resolvedTeamReviewers...), ", "))
@@ -425,6 +460,105 @@ func isMissingBranchIssueIDError(err error) bool {
 
 func shouldCollectReviewCommits(description string) bool {
 	return strings.TrimSpace(description) == ""
+}
+
+type reviewCommitCollector interface {
+	GetCommitsSince(string) ([]git.Commit, error)
+	GetCommitsSinceDefaultBranch() ([]git.Commit, error)
+}
+
+func collectReviewCommits(gitClient reviewCommitCollector, useBaseBranch bool, baseBranch string) ([]git.Commit, error) {
+	if useBaseBranch && strings.TrimSpace(baseBranch) != "" {
+		commits, err := gitClient.GetCommitsSince(baseBranch)
+		if err == nil {
+			return commits, nil
+		}
+		return nil, fmt.Errorf("failed to get commits since base branch %s: %w", baseBranch, err)
+	}
+	return gitClient.GetCommitsSinceDefaultBranch()
+}
+
+func updateStackedPRSections(
+	stackClient stackGitHubClient,
+	jiraClient jira.Jira,
+	parentPR *github.PullRequest,
+	childPR *github.PullRequest,
+) (*github.PullRequest, error) {
+	if stackClient == nil || parentPR == nil || childPR == nil {
+		return childPR, nil
+	}
+
+	stackID := ExtractStackID(parentPR.Body)
+	if stackID == "" {
+		stackID = StackIDForRootPR(parentPR.Number, parentPR.HTMLURL)
+	}
+
+	members := []github.PullRequest{*parentPR}
+	if existingMembers, err := stackClient.ListOpenPullRequestsByStackID(stackID); err != nil {
+		return nil, err
+	} else if len(existingMembers) > 0 {
+		members = existingMembers
+	}
+	members = appendStackMember(members, *parentPR)
+	members = appendStackMember(members, *childPR)
+
+	updates := make([]github.PullRequestBodyUpdate, 0, len(members))
+	for _, member := range members {
+		body, err := ReplaceStackedPRSectionContent(
+			member.Body,
+			RenderStackedPRSection(StackRenderOptions{
+				StackID: stackID,
+				Items:   stackPRItems(members, member.Number, jiraClient),
+			}),
+		)
+		if err != nil {
+			return nil, fmt.Errorf("pull request #%d: %w", member.Number, err)
+		}
+		updates = append(updates, github.PullRequestBodyUpdate{Number: member.Number, Body: body})
+	}
+
+	updated, err := stackClient.UpdatePullRequestBodies(updates)
+	if err != nil {
+		return nil, err
+	}
+	for _, candidate := range updated {
+		if candidate != nil && candidate.Number == childPR.Number {
+			return candidate, nil
+		}
+	}
+	return childPR, nil
+}
+
+func appendStackMember(members []github.PullRequest, pr github.PullRequest) []github.PullRequest {
+	for _, member := range members {
+		if member.Number == pr.Number {
+			return members
+		}
+	}
+	return append(members, pr)
+}
+
+func stackPRItems(members []github.PullRequest, currentNumber int, jiraClient jira.Jira) []StackPullRequest {
+	items := make([]StackPullRequest, 0, len(members))
+	for _, member := range members {
+		jiraKey := DeriveStackJiraKey(member.HeadRef, member.Title, member.Body)
+		jiraURL := ""
+		if jiraClient != nil && jiraKey != "" {
+			jiraURL = jiraClient.GetIssueURL(jiraKey)
+		}
+		items = append(items, StackPullRequest{
+			Number:  member.Number,
+			Title:   member.Title,
+			HTMLURL: member.HTMLURL,
+			JiraKey: jiraKey,
+			JiraURL: jiraURL,
+			State:   member.State,
+			Draft:   member.Draft,
+			Merged:  member.Merged,
+			Current: member.Number == currentNumber,
+		})
+	}
+	return items
 }
 
 func logReviewPhaseTiming(out WorkflowEmitter, phase string, start time.Time) {
