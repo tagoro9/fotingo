@@ -140,7 +140,7 @@ Rebase stack branches in their existing local worktrees:
 - Use `fotingo review sync --sync-title` to recompute the PR title, or `fotingo review sync --title "..."` when you need an explicit title update.
 - Use `fotingo review sync -r ... --remove-reviewers ... --assignee ... --remove-assignee ...` to add or remove reviewers and assignees on an existing PR after resolving participant values with `fotingo search ... --json`.
 - Use `fotingo review sync --ready-for-review` to move an existing draft PR out of draft.
-- Use `fotingo review stacks --json` to inspect the current branch's stack in root-to-leaf order. Stack status values are emoji-only: `🟢` open, `📝` draft, `🔴` closed, `🟣` merged, `⚪` unknown, and `👀` for the current PR.
+- Use `fotingo review stacks --json` to inspect the current branch's stack in root-to-leaf order. JSON stack status values are emoji-only (`🟢` open, `📝` draft, `🔴` closed, `🟣` merged, `⚪` unknown), and the current PR is exposed with `current: true`.
 - Use `fotingo review stacks sync --json` to refresh deterministic stacked PR sections across every open PR in the current stack without opening an editor.
 - Use `fotingo review stacks rebase --json` when stack branches need to be rebased. The command discovers local git worktrees for each stack branch, requires clean worktrees before starting, and stops at the first conflict. Add `--push` only when you intentionally want force-with-lease pushes after successful rebases.
 - Use `--description -` when you need to replace the entire PR body instead of filling template placeholders.

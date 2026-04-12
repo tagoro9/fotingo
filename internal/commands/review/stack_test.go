@@ -8,7 +8,7 @@ import (
 	"github.com/tagoro9/fotingo/internal/github"
 )
 
-func TestRenderStackedPRSection_RendersTableWithEmojiStatus(t *testing.T) {
+func TestRenderStackedPRSection_RendersTableWithCurrentOrderMarker(t *testing.T) {
 	t.Parallel()
 
 	content := RenderStackedPRSection(StackRenderOptions{
@@ -44,11 +44,15 @@ func TestRenderStackedPRSection_RendersTableWithEmojiStatus(t *testing.T) {
 
 	assert.Contains(t, content, `<!-- fotingo:stack id="owner/repo#12" version="1" -->`)
 	assert.Contains(t, content, "**Stacked PRs**")
-	assert.Contains(t, content, "| Order | Jira | Pull request | Status |")
-	assert.Contains(t, content, "| 1 | [ABC-1](https://jira.example/browse/ABC-1) | [#12 Parent change](https://github.example/pull/12) | 🟢 |")
-	assert.Contains(t, content, "| 2 | [ABC-2](https://jira.example/browse/ABC-2) | [#13 Child change](https://github.example/pull/13) | 🟢 👀 |")
-	assert.Contains(t, content, "| 3 | - | #14 | 🔴 |")
-	assert.Contains(t, content, "| 4 | - | #15 | 📝 |")
+	assert.Contains(t, content, "| Order | Jira | Pull request |")
+	assert.NotContains(t, content, "| Status |")
+	assert.Contains(t, content, "| 1 | [ABC-1](https://jira.example/browse/ABC-1) | [#12 Parent change](https://github.example/pull/12) |")
+	assert.Contains(t, content, "| 👉 2 | [ABC-2](https://jira.example/browse/ABC-2) | [#13 Child change](https://github.example/pull/13) |")
+	assert.Contains(t, content, "| 3 | - | #14 |")
+	assert.Contains(t, content, "| 4 | - | #15 |")
+	assert.NotContains(t, content, "🟢")
+	assert.NotContains(t, content, "🔴")
+	assert.NotContains(t, content, "📝")
 	assert.NotContains(t, content, "open")
 	assert.NotContains(t, content, "closed")
 }
@@ -65,7 +69,7 @@ func TestStackStatusEmoji(t *testing.T) {
 		{name: "draft", item: StackPullRequest{State: "open", Draft: true}, want: "📝"},
 		{name: "closed", item: StackPullRequest{State: "closed"}, want: "🔴"},
 		{name: "merged", item: StackPullRequest{State: "merged"}, want: "🟣"},
-		{name: "current", item: StackPullRequest{State: "open", Current: true}, want: "🟢 👀"},
+		{name: "current", item: StackPullRequest{State: "open", Current: true}, want: "🟢"},
 		{name: "unknown", item: StackPullRequest{}, want: "⚪"},
 	}
 
@@ -76,6 +80,13 @@ func TestStackStatusEmoji(t *testing.T) {
 			assert.Equal(t, tt.want, StackStatusEmoji(tt.item))
 		})
 	}
+}
+
+func TestStackOrderLabel(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, "1", StackOrderLabel(1, false))
+	assert.Equal(t, "👉 2", StackOrderLabel(2, true))
 }
 
 func TestExtractStackID(t *testing.T) {
