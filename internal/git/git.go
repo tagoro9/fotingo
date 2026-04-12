@@ -83,6 +83,12 @@ type WorktreeOptions struct {
 	ParentPath string
 }
 
+// WorktreeInfo describes a local git worktree.
+type WorktreeInfo struct {
+	Path   string
+	Branch string
+}
+
 const issueWorktreeDirectoryPrefix = "fotingo-wt"
 
 // CredentialProvider abstracts git credential retrieval for testability.
@@ -780,6 +786,116 @@ func (g *git) CreateIssueWorktreeBranch(issue *jira.Issue, options WorktreeOptio
 	}
 
 	return branchName, worktreePath, nil
+}
+
+// ListWorktrees returns local worktree paths and checked-out branches.
+func (g *git) ListWorktrees() ([]WorktreeInfo, error) {
+	worktreeRoot, err := g.worktreeRoot()
+	if err != nil {
+		return nil, err
+	}
+
+	stdout, stderr, err := execGitCommand(worktreeRoot, gitNonInteractiveEnv(), "worktree", "list", "--porcelain")
+	if err != nil {
+		return nil, fmt.Errorf("failed to list worktrees: %w", err)
+	}
+	if stderr != "" {
+		return nil, fmt.Errorf("failed to list worktrees: %s", stderr)
+	}
+
+	return parseWorktreeList(stdout), nil
+}
+
+// IsWorktreeClean reports whether the given worktree has no uncommitted changes.
+func (g *git) IsWorktreeClean(path string) (bool, error) {
+	path = strings.TrimSpace(path)
+	if path == "" {
+		return false, fmt.Errorf("worktree path is required")
+	}
+	stdout, stderr, err := execGitCommand(path, gitNonInteractiveEnv(), "status", "--porcelain")
+	if err != nil {
+		return false, fmt.Errorf("failed to inspect worktree %s: %w", path, err)
+	}
+	if stderr != "" {
+		return false, fmt.Errorf("failed to inspect worktree %s: %s", path, stderr)
+	}
+	return strings.TrimSpace(stdout) == "", nil
+}
+
+// RebaseWorktree rebases the worktree's checked-out branch onto baseRef.
+func (g *git) RebaseWorktree(path string, baseRef string) error {
+	path = strings.TrimSpace(path)
+	baseRef = strings.TrimSpace(baseRef)
+	if path == "" {
+		return fmt.Errorf("worktree path is required")
+	}
+	if baseRef == "" {
+		return fmt.Errorf("base ref is required")
+	}
+	_, stderr, err := execGitCommand(path, gitNonInteractiveEnv(), "rebase", baseRef)
+	if err != nil {
+		if stderr != "" {
+			return fmt.Errorf("failed to rebase worktree %s onto %s: %s", path, baseRef, stderr)
+		}
+		return fmt.Errorf("failed to rebase worktree %s onto %s: %w", path, baseRef, err)
+	}
+	return nil
+}
+
+// PushWorktreeBranch pushes a worktree branch, optionally with force-with-lease.
+func (g *git) PushWorktreeBranch(path string, branch string, forceWithLease bool) error {
+	path = strings.TrimSpace(path)
+	branch = strings.TrimSpace(branch)
+	if path == "" {
+		return fmt.Errorf("worktree path is required")
+	}
+	if branch == "" {
+		return fmt.Errorf("branch is required")
+	}
+	args := []string{"push"}
+	if forceWithLease {
+		args = append(args, "--force-with-lease")
+	}
+	args = append(args, "origin", branch)
+	_, stderr, err := execGitCommand(path, gitNonInteractiveEnv(), args...)
+	if err != nil {
+		if stderr != "" {
+			return fmt.Errorf("failed to push branch %s from worktree %s: %s", branch, path, stderr)
+		}
+		return fmt.Errorf("failed to push branch %s from worktree %s: %w", branch, path, err)
+	}
+	return nil
+}
+
+func parseWorktreeList(output string) []WorktreeInfo {
+	var worktrees []WorktreeInfo
+	current := WorktreeInfo{}
+	flush := func() {
+		if strings.TrimSpace(current.Path) != "" {
+			worktrees = append(worktrees, current)
+		}
+		current = WorktreeInfo{}
+	}
+
+	for _, line := range strings.Split(strings.ReplaceAll(output, "\r\n", "\n"), "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			flush()
+			continue
+		}
+		switch {
+		case strings.HasPrefix(line, "worktree "):
+			if current.Path != "" {
+				flush()
+			}
+			current.Path = strings.TrimSpace(strings.TrimPrefix(line, "worktree "))
+		case strings.HasPrefix(line, "branch "):
+			branch := strings.TrimSpace(strings.TrimPrefix(line, "branch "))
+			current.Branch = strings.TrimPrefix(branch, "refs/heads/")
+		}
+	}
+	flush()
+	return worktrees
 }
 
 // FetchDefaultBranch refreshes remote tracking refs for the configured default branch.

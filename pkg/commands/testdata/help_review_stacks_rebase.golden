@@ -1,0 +1,17 @@
+Rebase local stack branches in order, using each branch's existing local worktree when present.
+
+Usage:
+  fotingo review stacks rebase [flags]
+
+Flags:
+  -h, --help   help for rebase
+      --push   Push rebased stack branches with force-with-lease
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting

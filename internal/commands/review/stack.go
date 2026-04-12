@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/tagoro9/fotingo/internal/github"
 )
 
 const (
@@ -120,6 +122,67 @@ func DeriveStackJiraKey(values ...string) string {
 		}
 	}
 	return ""
+}
+
+// OrderStackPullRequests orders a linear stack from root to leaf.
+func OrderStackPullRequests(members []github.PullRequest) ([]github.PullRequest, error) {
+	if len(members) <= 1 {
+		return append([]github.PullRequest(nil), members...), nil
+	}
+
+	headBranches := make(map[string]struct{}, len(members))
+	byBaseBranch := make(map[string][]github.PullRequest, len(members))
+	byNumber := make(map[int]github.PullRequest, len(members))
+	for _, member := range members {
+		byNumber[member.Number] = member
+		if head := strings.TrimSpace(member.HeadRef); head != "" {
+			headBranches[head] = struct{}{}
+		}
+		if base := strings.TrimSpace(member.BaseRef); base != "" {
+			byBaseBranch[base] = append(byBaseBranch[base], member)
+		}
+	}
+
+	var roots []github.PullRequest
+	for _, member := range byNumber {
+		if _, ok := headBranches[strings.TrimSpace(member.BaseRef)]; !ok {
+			roots = append(roots, member)
+		}
+	}
+	if len(roots) != 1 {
+		return nil, fmt.Errorf("stack must be a single linear chain, found %d roots", len(roots))
+	}
+
+	ordered := make([]github.PullRequest, 0, len(members))
+	seen := map[int]struct{}{}
+	current := roots[0]
+	for {
+		if _, ok := seen[current.Number]; ok {
+			return nil, fmt.Errorf("stack contains a cycle at pull request #%d", current.Number)
+		}
+		seen[current.Number] = struct{}{}
+		ordered = append(ordered, current)
+
+		children := byBaseBranch[strings.TrimSpace(current.HeadRef)]
+		filtered := children[:0]
+		for _, child := range children {
+			if child.Number != current.Number {
+				filtered = append(filtered, child)
+			}
+		}
+		if len(filtered) == 0 {
+			break
+		}
+		if len(filtered) > 1 {
+			return nil, fmt.Errorf("branching stacks are not supported: pull request #%d has %d children", current.Number, len(filtered))
+		}
+		current = filtered[0]
+	}
+
+	if len(ordered) != len(members) {
+		return nil, fmt.Errorf("stack must be a single linear chain, ordered %d of %d pull requests", len(ordered), len(members))
+	}
+	return ordered, nil
 }
 
 // StackStatusEmoji returns emoji-only display state for a stack table row.

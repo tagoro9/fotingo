@@ -1,0 +1,16 @@
+Refresh the deterministic stacked PR sections for every open pull request in the current stack.
+
+Usage:
+  fotingo review stacks sync [flags]
+
+Flags:
+  -h, --help   help for sync
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting

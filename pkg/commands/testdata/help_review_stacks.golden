@@ -1,0 +1,23 @@
+Inspect and manage the stacked pull request chain for the current branch.
+
+Usage:
+  fotingo review stacks [flags]
+  fotingo review stacks [command]
+
+Available Commands:
+  rebase      Rebase local stack branches in order
+  sync        Refresh stacked PR sections across the current stack
+
+Flags:
+  -h, --help   help for stacks
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting
+
+Use "fotingo review stacks [command] --help" for more information about a command.

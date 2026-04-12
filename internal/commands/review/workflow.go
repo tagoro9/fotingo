@@ -501,14 +501,18 @@ func updateStackedPRSections(
 	}
 	members = appendStackMember(members, *parentPR)
 	members = appendStackMember(members, *childPR)
+	orderedMembers, err := OrderStackPullRequests(members)
+	if err != nil {
+		return nil, err
+	}
 
-	updates := make([]github.PullRequestBodyUpdate, 0, len(members))
-	for _, member := range members {
+	updates := make([]github.PullRequestBodyUpdate, 0, len(orderedMembers))
+	for _, member := range orderedMembers {
 		body, err := ReplaceStackedPRSectionContent(
 			member.Body,
 			RenderStackedPRSection(StackRenderOptions{
 				StackID: stackID,
-				Items:   stackPRItems(members, member.Number, jiraClient),
+				Items:   stackPRItems(orderedMembers, member.Number, jiraClient),
 			}),
 		)
 		if err != nil {
