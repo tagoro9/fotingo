@@ -40,6 +40,7 @@ Usage:
   fotingo review [command]
 
 Available Commands:
+  stacks      Inspect and manage stacked pull requests
   sync        Refresh fotingo-managed sections in the current pull request
 
 Flags:

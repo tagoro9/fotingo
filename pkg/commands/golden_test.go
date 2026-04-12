@@ -90,6 +90,21 @@ func TestHelpOutput(t *testing.T) {
 			goldenFile: "help_review_sync.golden",
 		},
 		{
+			name:       "review stacks help",
+			args:       []string{"fotingo", "review", "stacks", "--help"},
+			goldenFile: "help_review_stacks.golden",
+		},
+		{
+			name:       "review stacks sync help",
+			args:       []string{"fotingo", "review", "stacks", "sync", "--help"},
+			goldenFile: "help_review_stacks_sync.golden",
+		},
+		{
+			name:       "review stacks rebase help",
+			args:       []string{"fotingo", "review", "stacks", "rebase", "--help"},
+			goldenFile: "help_review_stacks_rebase.golden",
+		},
+		{
 			name:       "search help",
 			args:       []string{"fotingo", "search", "--help"},
 			goldenFile: "help_search.golden",

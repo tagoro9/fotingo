@@ -992,6 +992,46 @@ func (suite *GitTestSuite) TestIssueWorktreePath_CustomAbsoluteParent() {
 	assert.Equal(suite.T(), filepath.Join(parent, "fotingo-wt-f-test-123_some_work"), got)
 }
 
+func (suite *GitTestSuite) TestParseWorktreeList() {
+	output := "worktree /workspace/repo\nHEAD abc123\nbranch refs/heads/main\n\nworktree /workspace/repo-stack\nHEAD def456\nbranch refs/heads/feature/ABC-1\n\n"
+
+	worktrees := parseWorktreeList(output)
+
+	assert.Len(suite.T(), worktrees, 2)
+	assert.Equal(suite.T(), WorktreeInfo{Path: "/workspace/repo", Branch: "main"}, worktrees[0])
+	assert.Equal(suite.T(), WorktreeInfo{Path: "/workspace/repo-stack", Branch: "feature/ABC-1"}, worktrees[1])
+}
+
+func (suite *GitTestSuite) TestRebaseWorktree_AllowsSuccessfulGitProgressOnStderr() {
+	original := execGitCommand
+	suite.T().Cleanup(func() { execGitCommand = original })
+
+	execGitCommand = func(dir string, env []string, args ...string) (string, string, error) {
+		assert.Equal(suite.T(), "/workspace/repo-stack", dir)
+		assert.Equal(suite.T(), []string{"rebase", "feature/parent"}, args)
+		return "", "Successfully rebased and updated refs/heads/feature/child.", nil
+	}
+
+	err := suite.git.RebaseWorktree("/workspace/repo-stack", "feature/parent")
+
+	assert.NoError(suite.T(), err)
+}
+
+func (suite *GitTestSuite) TestPushWorktreeBranch_UsesForceWithLeaseBeforeRemote() {
+	original := execGitCommand
+	suite.T().Cleanup(func() { execGitCommand = original })
+
+	execGitCommand = func(dir string, env []string, args ...string) (string, string, error) {
+		assert.Equal(suite.T(), "/workspace/repo-stack", dir)
+		assert.Equal(suite.T(), []string{"push", "--force-with-lease", "origin", "feature/child"}, args)
+		return "", "Everything up-to-date", nil
+	}
+
+	err := suite.git.PushWorktreeBranch("/workspace/repo-stack", "feature/child", true)
+
+	assert.NoError(suite.T(), err)
+}
+
 func (suite *GitTestSuite) TestGetCommitsSince_WhitespaceInMessage() {
 	head, err := suite.repo.Head()
 	assert.NoError(suite.T(), err)

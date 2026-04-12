@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/tagoro9/fotingo/internal/github"
 )
 
 func TestRenderStackedPRSection_RendersTableWithEmojiStatus(t *testing.T) {
@@ -75,6 +76,57 @@ func TestStackStatusEmoji(t *testing.T) {
 			assert.Equal(t, tt.want, StackStatusEmoji(tt.item))
 		})
 	}
+}
+
+func TestExtractStackID(t *testing.T) {
+	t.Parallel()
+
+	body := `<!-- fotingo:stack id="owner/repo#12" version="1" -->`
+
+	assert.Equal(t, "owner/repo#12", ExtractStackID(body))
+}
+
+func TestStackIDForRootPR(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, "owner/repo#12", StackIDForRootPR(12, "https://github.com/owner/repo/pull/12"))
+	assert.Equal(t, "pr-12", StackIDForRootPR(12, ""))
+}
+
+func TestDeriveStackJiraKey(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, "ABC-123", DeriveStackJiraKey("feature/abc-123-test"))
+	assert.Equal(t, "ABC-124", DeriveStackJiraKey("", "ABC-124 title"))
+	assert.Empty(t, DeriveStackJiraKey("feature/no-ticket"))
+}
+
+func TestOrderStackPullRequests(t *testing.T) {
+	t.Parallel()
+
+	members := []github.PullRequest{
+		{Number: 13, HeadRef: "child", BaseRef: "parent"},
+		{Number: 12, HeadRef: "parent", BaseRef: "main"},
+		{Number: 14, HeadRef: "leaf", BaseRef: "child"},
+	}
+
+	ordered, err := OrderStackPullRequests(members)
+
+	require.NoError(t, err)
+	assert.Equal(t, []int{12, 13, 14}, []int{ordered[0].Number, ordered[1].Number, ordered[2].Number})
+}
+
+func TestOrderStackPullRequests_RejectsBranchingStack(t *testing.T) {
+	t.Parallel()
+
+	_, err := OrderStackPullRequests([]github.PullRequest{
+		{Number: 12, HeadRef: "parent", BaseRef: "main"},
+		{Number: 13, HeadRef: "child-a", BaseRef: "parent"},
+		{Number: 14, HeadRef: "child-b", BaseRef: "parent"},
+	})
+
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "branching stacks are not supported")
 }
 
 func TestStackedPRSectionMarkers(t *testing.T) {
