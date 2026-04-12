@@ -23,8 +23,10 @@ Package review contains shared review\-command workflow helpers.
 - [func DeriveDescription\(issue \*jira.Issue, commits \[\]git.Commit, emptyPlaceholder string\) string](<#DeriveDescription>)
 - [func DeriveEditorTitle\(content string\) string](<#DeriveEditorTitle>)
 - [func DerivePRTitle\(titleOverride string, branch string, issue \*jira.Issue, editorTitle string, editorMode bool\) string](<#DerivePRTitle>)
+- [func DeriveStackJiraKey\(values ...string\) string](<#DeriveStackJiraKey>)
 - [func DeriveSummary\(branch string, issue \*jira.Issue, commits \[\]git.Commit\) string](<#DeriveSummary>)
 - [func ExtractManagedSectionContent\(body string, section string\) \(string, error\)](<#ExtractManagedSectionContent>)
+- [func ExtractStackID\(body string\) string](<#ExtractStackID>)
 - [func ExtractStackedPRSectionContent\(body string\) \(string, error\)](<#ExtractStackedPRSectionContent>)
 - [func FieldTokenCandidates\(field string\) \[\]string](<#FieldTokenCandidates>)
 - [func FindRepositoryRoot\(\) \(string, error\)](<#FindRepositoryRoot>)
@@ -55,6 +57,7 @@ Package review contains shared review\-command workflow helpers.
 - [func ScoreTokenMatch\(token string, fields \[\]string\) \(int, bool\)](<#ScoreTokenMatch>)
 - [func SplitCommitMessage\(message string\) \(string, string\)](<#SplitCommitMessage>)
 - [func SplitEditorContent\(content string\) \(string, string\)](<#SplitEditorContent>)
+- [func StackIDForRootPR\(prNumber int, htmlURL string\) string](<#StackIDForRootPR>)
 - [func StackStatusEmoji\(item StackPullRequest\) string](<#StackStatusEmoji>)
 - [func StackedPRSectionMarkers\(\) \(string, string\)](<#StackedPRSectionMarkers>)
 - [func TakePrefix\(content string, n int\) string](<#TakePrefix>)
@@ -196,6 +199,15 @@ func DerivePRTitle(titleOverride string, branch string, issue *jira.Issue, edito
 
 DerivePRTitle returns the final PR title after applying overrides and editor content.
 
+<a name="DeriveStackJiraKey"></a>
+## func [DeriveStackJiraKey](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L115>)
+
+```go
+func DeriveStackJiraKey(values ...string) string
+```
+
+DeriveStackJiraKey extracts a Jira issue key from PR metadata.
+
 <a name="DeriveSummary"></a>
 ## func [DeriveSummary](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L217>)
 
@@ -214,8 +226,17 @@ func ExtractManagedSectionContent(body string, section string) (string, error)
 
 ExtractManagedSectionContent returns the content between the marker pair for a section.
 
+<a name="ExtractStackID"></a>
+## func [ExtractStackID](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L83>)
+
+```go
+func ExtractStackID(body string) string
+```
+
+ExtractStackID returns the fotingo stack id embedded in a PR body.
+
 <a name="ExtractStackedPRSectionContent"></a>
-## func [ExtractStackedPRSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L42>)
+## func [ExtractStackedPRSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L48>)
 
 ```go
 func ExtractStackedPRSectionContent(body string) (string, error)
@@ -368,7 +389,7 @@ func PreferParticipantUser(current github.User, candidate github.User) github.Us
 PreferParticipantUser prefers candidates that provide a richer name field.
 
 <a name="RenderStackedPRSection"></a>
-## func [RenderStackedPRSection](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L52>)
+## func [RenderStackedPRSection](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L58>)
 
 ```go
 func RenderStackedPRSection(opts StackRenderOptions) string
@@ -395,7 +416,7 @@ func ReplaceManagedSectionContent(body string, section string, replacement strin
 ReplaceManagedSectionContent replaces the content between a section's markers.
 
 <a name="ReplaceStackedPRSectionContent"></a>
-## func [ReplaceStackedPRSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L47>)
+## func [ReplaceStackedPRSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L53>)
 
 ```go
 func ReplaceStackedPRSectionContent(body string, replacement string) (string, error)
@@ -484,8 +505,17 @@ func SplitEditorContent(content string) (string, string)
 
 SplitEditorContent returns title/body parts from editor content.
 
+<a name="StackIDForRootPR"></a>
+## func [StackIDForRootPR](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L93>)
+
+```go
+func StackIDForRootPR(prNumber int, htmlURL string) string
+```
+
+StackIDForRootPR derives a stable stack id from the root pull request URL.
+
 <a name="StackStatusEmoji"></a>
-## func [StackStatusEmoji](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L77>)
+## func [StackStatusEmoji](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L126>)
 
 ```go
 func StackStatusEmoji(item StackPullRequest) string
@@ -494,7 +524,7 @@ func StackStatusEmoji(item StackPullRequest) string
 StackStatusEmoji returns emoji\-only display state for a stack table row.
 
 <a name="StackedPRSectionMarkers"></a>
-## func [StackedPRSectionMarkers](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L37>)
+## func [StackedPRSectionMarkers](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L43>)
 
 ```go
 func StackedPRSectionMarkers() (string, string)
@@ -672,7 +702,7 @@ type RunPickerFunc func(title string, items []ui.PickerItem) (*ui.PickerItem, er
 ```
 
 <a name="StackPullRequest"></a>
-## type [StackPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L18-L28>)
+## type [StackPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L24-L34>)
 
 StackPullRequest contains the PR metadata rendered in a stack table.
 
@@ -691,7 +721,7 @@ type StackPullRequest struct {
 ```
 
 <a name="StackRenderOptions"></a>
-## type [StackRenderOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L31-L34>)
+## type [StackRenderOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L37-L40>)
 
 StackRenderOptions configures stacked PR section rendering.
 
@@ -793,7 +823,7 @@ type WorkflowResult struct {
 ```
 
 <a name="WorkflowRunner"></a>
-## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L75-L80>)
+## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L81-L86>)
 
 WorkflowRunner executes the review command workflow.
 
@@ -807,7 +837,7 @@ type WorkflowRunner struct {
 ```
 
 <a name="WorkflowRunner.Run"></a>
-### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L83>)
+### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L89>)
 
 ```go
 func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEditor bool) WorkflowResult

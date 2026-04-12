@@ -152,6 +152,9 @@ func (workflowSuccessMockGit) SaveConfig(string, any) error               { retu
 
 type workflowSuccessMockGitHub struct {
 	pr              *github.PullRequest
+	parentPR        *github.PullRequest
+	stackMembers    []github.PullRequest
+	bodyUpdates     []github.PullRequestBodyUpdate
 	createPROptions github.CreatePROptions
 }
 
@@ -195,8 +198,47 @@ func (m workflowSuccessMockGitHub) MarkPullRequestReadyForReview(string) error {
 func (m workflowSuccessMockGitHub) DoesPRExistForBranch(string) (bool, *github.PullRequest, error) {
 	return false, nil, nil
 }
+func (m workflowSuccessMockGitHub) FindOpenPullRequestByHeadBranch(string) (*github.PullRequest, bool, error) {
+	if m.parentPR == nil {
+		return nil, false, nil
+	}
+	return m.parentPR, true, nil
+}
+func (m workflowSuccessMockGitHub) ListOpenPullRequestsByStackID(string) ([]github.PullRequest, error) {
+	return append([]github.PullRequest(nil), m.stackMembers...), nil
+}
+func (m *workflowSuccessMockGitHub) UpdatePullRequestBodies(updates []github.PullRequestBodyUpdate) ([]*github.PullRequest, error) {
+	m.bodyUpdates = append([]github.PullRequestBodyUpdate(nil), updates...)
+	updated := make([]*github.PullRequest, 0, len(updates))
+	for _, update := range updates {
+		pr := &github.PullRequest{Number: update.Number, Body: update.Body, HTMLURL: fmt.Sprintf("https://github.com/test/repo/pull/%d", update.Number), State: "open"}
+		if m.pr != nil && update.Number == m.pr.Number {
+			pr.Title = m.pr.Title
+			pr.HeadRef = m.pr.HeadRef
+			pr.BaseRef = m.pr.BaseRef
+		}
+		updated = append(updated, pr)
+	}
+	return updated, nil
+}
 func (m workflowSuccessMockGitHub) CreateRelease(github.CreateReleaseOptions) (*github.Release, error) {
 	return nil, nil
+}
+
+type stackWorkflowMockGit struct {
+	workflowSuccessMockGit
+	commitsSinceRef string
+	defaultCommits  bool
+}
+
+func (g *stackWorkflowMockGit) GetCommitsSince(ref string) ([]git.Commit, error) {
+	g.commitsSinceRef = ref
+	return []git.Commit{{Message: "feat: child delta", Additions: 1}}, nil
+}
+
+func (g *stackWorkflowMockGit) GetCommitsSinceDefaultBranch() ([]git.Commit, error) {
+	g.defaultCommits = true
+	return []git.Commit{{Message: "feat: default delta", Additions: 2}}, nil
 }
 
 type workflowSuccessMockJira struct{}
@@ -352,6 +394,142 @@ func TestWorkflowRunnerRun_UsesExplicitBaseBranchOverride(t *testing.T) {
 	result := runner.Run(nil, nil, false)
 	require.NoError(t, result.Err)
 	assert.Equal(t, "release/2026.04", ghClient.createPROptions.Base)
+}
+
+func TestWorkflowRunnerRun_UpdatesStackSectionsWhenBaseBranchHasPR(t *testing.T) {
+	parent := &github.PullRequest{
+		Number:  12,
+		Title:   "ABC-1 Parent",
+		Body:    "<!-- fotingo:start stacked-prs -->\n<!-- fotingo:end stacked-prs -->",
+		HTMLURL: "https://github.com/testowner/testrepo/pull/12",
+		HeadRef: "feature/ABC-1-parent",
+		BaseRef: "main",
+		State:   "open",
+	}
+	child := &github.PullRequest{
+		Number:  13,
+		Title:   "ABC-2 Child",
+		Body:    "<!-- fotingo:start stacked-prs -->\n<!-- fotingo:end stacked-prs -->",
+		HTMLURL: "https://github.com/testowner/testrepo/pull/13",
+		HeadRef: "feature/ABC-2-child",
+		BaseRef: "feature/ABC-1-parent",
+		State:   "open",
+	}
+	ghClient := &workflowSuccessMockGitHub{pr: child, parentPR: parent}
+	gitClient := &stackWorkflowMockGit{}
+	runner := stackWorkflowRunner(gitClient, ghClient, WorkflowOptions{Simple: true, BaseBranch: "feature/ABC-1-parent"})
+
+	result := runner.Run(nil, nil, false)
+
+	require.NoError(t, result.Err)
+	assert.Equal(t, "feature/ABC-1-parent", ghClient.createPROptions.Base)
+	require.Len(t, ghClient.bodyUpdates, 2)
+	assert.Equal(t, 12, ghClient.bodyUpdates[0].Number)
+	assert.Equal(t, 13, ghClient.bodyUpdates[1].Number)
+	assert.Contains(t, ghClient.bodyUpdates[0].Body, `<!-- fotingo:stack id="testowner/testrepo#12" version="1" -->`)
+	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 1 | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) | 🟢 👀 |")
+	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 2 | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) | 🟢 |")
+	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 1 | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) | 🟢 |")
+	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 2 | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) | 🟢 👀 |")
+	assert.Equal(t, "feature/ABC-1-parent", gitClient.commitsSinceRef)
+	assert.False(t, gitClient.defaultCommits)
+}
+
+func TestWorkflowRunnerRun_ExtendsExistingStackSections(t *testing.T) {
+	parent := &github.PullRequest{
+		Number:  13,
+		Title:   "ABC-2 Middle",
+		Body:    "<!-- fotingo:start stacked-prs -->\n<!-- fotingo:stack id=\"testowner/testrepo#12\" version=\"1\" -->\n<!-- fotingo:end stacked-prs -->",
+		HTMLURL: "https://github.com/testowner/testrepo/pull/13",
+		HeadRef: "feature/ABC-2-middle",
+		BaseRef: "feature/ABC-1-parent",
+		State:   "open",
+	}
+	root := github.PullRequest{
+		Number:  12,
+		Title:   "ABC-1 Parent",
+		Body:    "<!-- fotingo:start stacked-prs -->\n<!-- fotingo:stack id=\"testowner/testrepo#12\" version=\"1\" -->\n<!-- fotingo:end stacked-prs -->",
+		HTMLURL: "https://github.com/testowner/testrepo/pull/12",
+		HeadRef: "feature/ABC-1-parent",
+		BaseRef: "main",
+		State:   "open",
+	}
+	middle := *parent
+	child := &github.PullRequest{
+		Number:  14,
+		Title:   "ABC-3 Child",
+		Body:    "<!-- fotingo:start stacked-prs -->\n<!-- fotingo:end stacked-prs -->",
+		HTMLURL: "https://github.com/testowner/testrepo/pull/14",
+		HeadRef: "feature/ABC-3-child",
+		BaseRef: "feature/ABC-2-middle",
+		State:   "open",
+	}
+	ghClient := &workflowSuccessMockGitHub{
+		pr:           child,
+		parentPR:     parent,
+		stackMembers: []github.PullRequest{root, middle},
+	}
+	runner := stackWorkflowRunner(&stackWorkflowMockGit{}, ghClient, WorkflowOptions{Simple: true, BaseBranch: "feature/ABC-2-middle"})
+
+	result := runner.Run(nil, nil, false)
+
+	require.NoError(t, result.Err)
+	require.Len(t, ghClient.bodyUpdates, 3)
+	assert.Equal(t, []int{12, 13, 14}, []int{ghClient.bodyUpdates[0].Number, ghClient.bodyUpdates[1].Number, ghClient.bodyUpdates[2].Number})
+	assert.Contains(t, ghClient.bodyUpdates[2].Body, `<!-- fotingo:stack id="testowner/testrepo#12" version="1" -->`)
+	assert.Contains(t, ghClient.bodyUpdates[2].Body, "| 3 | ABC-3 | [#14 ABC-3 Child](https://github.com/testowner/testrepo/pull/14) | 🟢 👀 |")
+}
+
+func TestWorkflowRunnerRun_UsesDefaultCommitScopeWhenBaseBranchHasNoPR(t *testing.T) {
+	child := &github.PullRequest{Number: 13, HTMLURL: "https://github.com/testowner/testrepo/pull/13", State: "open"}
+	ghClient := &workflowSuccessMockGitHub{pr: child}
+	gitClient := &stackWorkflowMockGit{}
+	runner := stackWorkflowRunner(gitClient, ghClient, WorkflowOptions{Simple: true, BaseBranch: "release/2026.04"})
+
+	result := runner.Run(nil, nil, false)
+
+	require.NoError(t, result.Err)
+	assert.Empty(t, gitClient.commitsSinceRef)
+	assert.True(t, gitClient.defaultCommits)
+	assert.Empty(t, ghClient.bodyUpdates)
+}
+
+func stackWorkflowRunner(gitClient git.Git, ghClient *workflowSuccessMockGitHub, options WorkflowOptions) WorkflowRunner {
+	return WorkflowRunner{
+		Config:  viper.New(),
+		Options: options,
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return gitClient, nil
+			},
+			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+				return ghClient, nil
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return workflowSuccessMockJira{}, nil
+			},
+			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+				return nil, nil
+			},
+			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error) {
+				return "body", nil
+			},
+			ResolveLabels: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			ResolveReviewers: func(github.Github, []string) ([]string, []string, []string, error) {
+				return nil, nil, nil, nil
+			},
+			ResolveAssignees: func(github.Github, []string) ([]string, []string, error) {
+				return nil, nil, nil
+			},
+			SplitEditorContent:     SplitEditorContent,
+			DerivePRTitle:          func(string, *jira.Issue, string, bool) string { return "title" },
+			ToTeamSlugs:            ToTeamSlugs,
+			FormatReviewersWarning: func(err error) string { return err.Error() },
+			ShouldOpenReviewEditor: func(bool) bool { return false },
+		},
+	}
 }
 
 func TestWorkflowRunnerRun_UsesDefaultBaseBranchWithoutOverride(t *testing.T) {

@@ -2,6 +2,7 @@ package review
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -12,6 +13,11 @@ const (
 	stackStatusClosed  = "closed"
 	stackStatusMerged  = "merged"
 	stackStatusUnknown = "unknown"
+)
+
+var (
+	stackIDPattern      = regexp.MustCompile(`<!--\s*fotingo:stack\s+id="((?:\\"|[^"])*)"\s+version="1"\s*-->`)
+	stackIssueIDPattern = regexp.MustCompile(`\b([A-Z][A-Z0-9_]+-\d+)\b`)
 )
 
 // StackPullRequest contains the PR metadata rendered in a stack table.
@@ -71,6 +77,49 @@ func RenderStackedPRSection(opts StackRenderOptions) string {
 	}
 	builder.WriteString("\n")
 	return builder.String()
+}
+
+// ExtractStackID returns the fotingo stack id embedded in a PR body.
+func ExtractStackID(body string) string {
+	matches := stackIDPattern.FindStringSubmatch(body)
+	if len(matches) < 2 {
+		return ""
+	}
+	value := strings.ReplaceAll(matches[1], `\"`, `"`)
+	return strings.ReplaceAll(value, `\\`, `\`)
+}
+
+// StackIDForRootPR derives a stable stack id from the root pull request URL.
+func StackIDForRootPR(prNumber int, htmlURL string) string {
+	htmlURL = strings.TrimSpace(htmlURL)
+	if htmlURL == "" {
+		return fmt.Sprintf("pr-%d", prNumber)
+	}
+
+	trimmed := strings.TrimSuffix(htmlURL, "/")
+	marker := "/pull/"
+	index := strings.LastIndex(trimmed, marker)
+	if index < 0 {
+		return fmt.Sprintf("pr-%d", prNumber)
+	}
+
+	repoURL := strings.TrimPrefix(trimmed[:index], "https://github.com/")
+	repoURL = strings.TrimPrefix(repoURL, "http://github.com/")
+	if repoURL == "" {
+		return fmt.Sprintf("pr-%d", prNumber)
+	}
+	return fmt.Sprintf("%s#%d", repoURL, prNumber)
+}
+
+// DeriveStackJiraKey extracts a Jira issue key from PR metadata.
+func DeriveStackJiraKey(values ...string) string {
+	for _, value := range values {
+		matches := stackIssueIDPattern.FindStringSubmatch(strings.ToUpper(value))
+		if len(matches) > 1 {
+			return matches[1]
+		}
+	}
+	return ""
 }
 
 // StackStatusEmoji returns emoji-only display state for a stack table row.
