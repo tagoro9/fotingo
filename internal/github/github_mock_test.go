@@ -43,7 +43,7 @@ func newMockGitWithRemote(owner, repo, currentBranch string) *mockGitWithRemote 
 type MockServerTestSuite struct {
 	suite.Suite
 	server *testutil.MockGitHubServer
-	client Github
+	client *github
 	git    *mockGitWithRemote
 }
 
@@ -59,7 +59,9 @@ func (suite *MockServerTestSuite) SetupTest() {
 	cfg.Set("github.cache.teamsTTL", "1h")
 	client, err := NewWithHTTPClient(suite.git, cfg, &http.Client{}, suite.server.URL()+"/api/v3/")
 	require.NoError(suite.T(), err)
-	suite.client = client
+	ghClient, ok := client.(*github)
+	require.True(suite.T(), ok)
+	suite.client = ghClient
 }
 
 func (suite *MockServerTestSuite) TearDownTest() {
@@ -283,6 +285,40 @@ func (suite *MockServerTestSuite) TestUpdatePullRequest_NotFound() {
 	assert.Nil(suite.T(), pr)
 }
 
+func (suite *MockServerTestSuite) TestUpdatePullRequestBodies_Success() {
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(1, "First PR", "feature-one", "main", "open"),
+	)
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(2, "Second PR", "feature-two", "feature-one", "open"),
+	)
+
+	updated, err := suite.client.UpdatePullRequestBodies([]PullRequestBodyUpdate{
+		{Number: 1, Body: "first body"},
+		{Number: 2, Body: "second body"},
+	})
+
+	require.NoError(suite.T(), err)
+	require.Len(suite.T(), updated, 2)
+	assert.Equal(suite.T(), "first body", updated[0].Body)
+	assert.Equal(suite.T(), "second body", updated[1].Body)
+}
+
+func (suite *MockServerTestSuite) TestUpdatePullRequestBodies_StopsOnError() {
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(1, "First PR", "feature-one", "main", "open"),
+	)
+
+	updated, err := suite.client.UpdatePullRequestBodies([]PullRequestBodyUpdate{
+		{Number: 1, Body: "first body"},
+		{Number: 99, Body: "missing body"},
+	})
+
+	require.Error(suite.T(), err)
+	assert.Nil(suite.T(), updated)
+	assert.Contains(suite.T(), err.Error(), "failed to update pull request #99 body")
+}
+
 // -----------------------------------------------------------------------
 // GetLabels
 // -----------------------------------------------------------------------
@@ -430,9 +466,8 @@ func (suite *MockServerTestSuite) TestGetCollaborators_CacheMissRepopulates() {
 	initialCalls := countRequests(suite.server.GetRequestLog(), http.MethodGet, "/repos/testowner/testrepo/collaborators")
 	assert.Equal(suite.T(), 1, initialCalls)
 
-	internalClient := suite.client.(*github)
-	require.NotNil(suite.T(), internalClient.metadataCache)
-	require.NoError(suite.T(), internalClient.metadataCache.Delete(internalClient.metadataCacheKey("collaborators")))
+	require.NotNil(suite.T(), suite.client.metadataCache)
+	require.NoError(suite.T(), suite.client.metadataCache.Delete(suite.client.metadataCacheKey("collaborators")))
 
 	suite.server.SetCollaborators("testowner", "testrepo", []*testutil.MockUser{
 		testutil.NewUser(1, "alice", "Alice Developer"),
@@ -482,12 +517,7 @@ func (suite *MockServerTestSuite) TestSupportsOrganizationMetadata_UserOwner() {
 	repository := testutil.DefaultRepository()
 	suite.server.AddRepository(repository)
 
-	checker, ok := suite.client.(interface {
-		SupportsOrganizationMetadata() (bool, error)
-	})
-	require.True(suite.T(), ok)
-
-	supported, err := checker.SupportsOrganizationMetadata()
+	supported, err := suite.client.SupportsOrganizationMetadata()
 
 	require.NoError(suite.T(), err)
 	assert.False(suite.T(), supported)
@@ -498,16 +528,11 @@ func (suite *MockServerTestSuite) TestSupportsOrganizationMetadata_OrganizationO
 	repository.Owner.Type = "Organization"
 	suite.server.AddRepository(repository)
 
-	checker, ok := suite.client.(interface {
-		SupportsOrganizationMetadata() (bool, error)
-	})
-	require.True(suite.T(), ok)
-
-	first, err := checker.SupportsOrganizationMetadata()
+	first, err := suite.client.SupportsOrganizationMetadata()
 	require.NoError(suite.T(), err)
 	assert.True(suite.T(), first)
 
-	second, err := checker.SupportsOrganizationMetadata()
+	second, err := suite.client.SupportsOrganizationMetadata()
 	require.NoError(suite.T(), err)
 	assert.True(suite.T(), second)
 
@@ -665,6 +690,70 @@ func (suite *MockServerTestSuite) TestDoesPRExistForBranch_Exists() {
 	require.NotNil(suite.T(), pr)
 	assert.Equal(suite.T(), 1, pr.Number)
 	assert.Contains(suite.T(), pr.HTMLURL, "pull/1")
+	assert.Equal(suite.T(), "feature-branch", pr.HeadRef)
+	assert.Equal(suite.T(), "main", pr.BaseRef)
+}
+
+func (suite *MockServerTestSuite) TestFindOpenPullRequestByHeadBranch() {
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(1, "Feature PR", "feature-branch", "main", "open"),
+	)
+
+	pr, exists, err := suite.client.FindOpenPullRequestByHeadBranch("feature-branch")
+
+	require.NoError(suite.T(), err)
+	assert.True(suite.T(), exists)
+	require.NotNil(suite.T(), pr)
+	assert.Equal(suite.T(), 1, pr.Number)
+	assert.Equal(suite.T(), "feature-branch", pr.HeadRef)
+	assert.Equal(suite.T(), "main", pr.BaseRef)
+}
+
+func (suite *MockServerTestSuite) TestListOpenPullRequestsByBaseBranch() {
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(1, "Parent PR", "feature-parent", "main", "open"),
+	)
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(2, "Child PR", "feature-child", "feature-parent", "open"),
+	)
+	suite.server.AddPullRequest("testowner", "testrepo",
+		testutil.NewPullRequest(3, "Closed Child PR", "feature-closed-child", "feature-parent", "closed"),
+	)
+
+	prs, err := suite.client.ListOpenPullRequestsByBaseBranch("feature-parent")
+
+	require.NoError(suite.T(), err)
+	require.Len(suite.T(), prs, 1)
+	assert.Equal(suite.T(), 2, prs[0].Number)
+	assert.Equal(suite.T(), "feature-child", prs[0].HeadRef)
+	assert.Equal(suite.T(), "feature-parent", prs[0].BaseRef)
+}
+
+func (suite *MockServerTestSuite) TestListOpenPullRequestsByStackID() {
+	stackMarker := `<!-- fotingo:stack id="testowner/testrepo#1" version="1" -->`
+	first := testutil.NewPullRequest(1, "Parent PR", "feature-parent", "main", "open")
+	first.Body = stackMarker + "\nparent"
+	second := testutil.NewPullRequest(2, "Child PR", "feature-child", "feature-parent", "open")
+	second.Body = stackMarker + "\nchild"
+	other := testutil.NewPullRequest(3, "Other PR", "feature-other", "main", "open")
+	other.Body = `<!-- fotingo:stack id="testowner/testrepo#99" version="1" -->`
+	suite.server.AddPullRequest("testowner", "testrepo", first)
+	suite.server.AddPullRequest("testowner", "testrepo", second)
+	suite.server.AddPullRequest("testowner", "testrepo", other)
+
+	prs, err := suite.client.ListOpenPullRequestsByStackID("testowner/testrepo#1")
+
+	require.NoError(suite.T(), err)
+	require.Len(suite.T(), prs, 2)
+	assert.Equal(suite.T(), []int{1, 2}, []int{prs[0].Number, prs[1].Number})
+}
+
+func (suite *MockServerTestSuite) TestListOpenPullRequestsByStackID_RejectsEmptyID() {
+	prs, err := suite.client.ListOpenPullRequestsByStackID(" ")
+
+	require.Error(suite.T(), err)
+	assert.Nil(suite.T(), prs)
+	assert.Contains(suite.T(), err.Error(), "stack id is required")
 }
 
 func (suite *MockServerTestSuite) TestDoesPRExistForBranch_NotExists() {

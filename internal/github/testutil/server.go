@@ -474,6 +474,7 @@ func (m *MockGitHubServer) handleListPullRequests(w http.ResponseWriter, r *http
 
 	// Filter by head if specified
 	headFilter := r.URL.Query().Get("head")
+	baseFilter := r.URL.Query().Get("base")
 	stateFilter := r.URL.Query().Get("state")
 
 	var filteredPRs []*MockPullRequest
@@ -484,6 +485,9 @@ func (m *MockGitHubServer) handleListPullRequests(w http.ResponseWriter, r *http
 			if pr.Head.Ref != expectedHead {
 				continue
 			}
+		}
+		if baseFilter != "" && pr.Base.Ref != baseFilter {
+			continue
 		}
 
 		// Filter by state

@@ -73,6 +73,7 @@ type MockPullRequest struct {
 	Head               MockPRRef
 	Base               MockPRRef
 	Draft              bool
+	Merged             bool
 	Mergeable          bool
 	User               *MockUser
 	Assignees          []*MockUser
@@ -229,6 +230,7 @@ func (pr *MockPullRequest) ToAPIResponse() map[string]interface{} {
 		"html_url":  pr.HTMLURL,
 		"url":       pr.URL,
 		"draft":     pr.Draft,
+		"merged":    pr.Merged,
 		"mergeable": pr.Mergeable,
 		"head": map[string]interface{}{
 			"ref": pr.Head.Ref,
@@ -422,6 +424,7 @@ func NewPullRequest(number int, title, head, base, state string) *MockPullReques
 		Head:      MockPRRef{Ref: head, SHA: "abc123def456"},
 		Base:      MockPRRef{Ref: base},
 		Draft:     false,
+		Merged:    false,
 		Mergeable: true,
 		User:      DefaultUser(),
 		CreatedAt: now,
