@@ -17,6 +17,9 @@ type CommandExamples struct {
 	ReviewBodyFromStdin     string
 	ReviewSyncDefault       string
 	ReviewSyncMetadata      string
+	ReviewStacksList        string
+	ReviewStacksSync        string
+	ReviewStacksRebase      string
 	ReviewWithParticipants  string
 }
 
@@ -37,6 +40,9 @@ func DefaultCommandExamples() CommandExamples {
 		ReviewBodyFromStdin:     `printf '## Summary\n\nImprove checkout decline handling\n\n## Description\n\nDetailed reviewer notes.\n' | fotingo review -y --description -`,
 		ReviewSyncDefault:       "fotingo review sync -y",
 		ReviewSyncMetadata:      "fotingo review sync -y -r alice --remove-reviewers team/platform --assignee bob --remove-assignee carol --ready-for-review",
+		ReviewStacksList:        "fotingo review stacks --json",
+		ReviewStacksSync:        "fotingo review stacks sync --json",
+		ReviewStacksRebase:      "fotingo review stacks rebase --json",
 		ReviewWithParticipants:  "fotingo review -y -r alice -r team/platform --assignee bob --labels bug",
 	}
 }

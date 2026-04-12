@@ -64,6 +64,12 @@ Create a pull request against a non-default base branch:
 {{EXAMPLE_REVIEW_BASE_BRANCH}}
 ```
 
+Create a stacked child pull request by targeting an open parent PR branch:
+
+```bash
+fotingo review -y --branch feature/PROJ-122-parent
+```
+
 Create with reviewers/assignees:
 
 ```bash
@@ -94,6 +100,19 @@ Update review metadata on an existing pull request:
 {{EXAMPLE_REVIEW_SYNC_METADATA}}
 ```
 
+Inspect and refresh the current stacked PR chain:
+
+```bash
+{{EXAMPLE_REVIEW_STACKS_LIST}}
+{{EXAMPLE_REVIEW_STACKS_SYNC}}
+```
+
+Rebase stack branches in their existing local worktrees:
+
+```bash
+{{EXAMPLE_REVIEW_STACKS_REBASE}}
+```
+
 ## Supporting Commands
 
 - `fotingo open issue` to open the Jira issue linked to the current branch context.
@@ -114,12 +133,16 @@ Update review metadata on an existing pull request:
 - For current-branch PR discussion context, run `fotingo inspect pr --json` and read `pullRequest`, top-level `comments`, and `reviews[].conversations[].comments` before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
 - Use `fotingo review --branch ...` when the pull request should target a non-default base branch.
+- Use `fotingo review --branch <parent-branch>` to create a stacked child PR when `<parent-branch>` already has an open PR. Fotingo updates stack metadata and stacked PR sections automatically in that case.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.
 - Use `fotingo review sync -y` after follow-up commits to refresh fotingo-managed sections while preserving manual edits outside the managed placeholders.
 - Use `fotingo review sync --section ...` to limit which managed sections are rewritten. Supported section values are `summary`, `description`, `fixed-issues`, and `changes`, and shell completion can suggest them. `--template-summary` and `--template-description` only apply when those sections are included in the sync.
 - Use `fotingo review sync --sync-title` to recompute the PR title, or `fotingo review sync --title "..."` when you need an explicit title update.
 - Use `fotingo review sync -r ... --remove-reviewers ... --assignee ... --remove-assignee ...` to add or remove reviewers and assignees on an existing PR after resolving participant values with `fotingo search ... --json`.
 - Use `fotingo review sync --ready-for-review` to move an existing draft PR out of draft.
+- Use `fotingo review stacks --json` to inspect the current branch's stack in root-to-leaf order. Stack status values are emoji-only: `🟢` open, `📝` draft, `🔴` closed, `🟣` merged, `⚪` unknown, and `👀` for the current PR.
+- Use `fotingo review stacks sync --json` to refresh deterministic stacked PR sections across every open PR in the current stack without opening an editor.
+- Use `fotingo review stacks rebase --json` when stack branches need to be rebased. The command discovers local git worktrees for each stack branch, requires clean worktrees before starting, and stops at the first conflict. Add `--push` only when you intentionally want force-with-lease pushes after successful rebases.
 - Use `--description -` when you need to replace the entire PR body instead of filling template placeholders.
 - Use `--title` only when the generated PR title is wrong or incomplete.
 - Use `fotingo open issue` when you need the linked Jira URL for the current branch context. Interactive runs can disambiguate between multiple linked issues; automation should prefer `--json` and handle ambiguity errors that list the candidate issue IDs.
