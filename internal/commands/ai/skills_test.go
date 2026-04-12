@@ -37,7 +37,7 @@ func TestRenderSkill(t *testing.T) {
 			assert.Contains(t, content, "fotingo review stacks --json")
 			assert.Contains(t, content, "fotingo review stacks sync --json")
 			assert.Contains(t, content, "fotingo review stacks rebase --json")
-			assert.Contains(t, content, "Stack status values are emoji-only")
+			assert.Contains(t, content, "JSON stack status values are emoji-only")
 			assert.Contains(t, content, "`pullRequest` fields")
 			assert.Contains(t, content, "fotingo start PROJ-123 -y")
 			assert.Contains(t, content, "fotingo start PROJ-123 --worktree-path .claude/worktrees -y --json")

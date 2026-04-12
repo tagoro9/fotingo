@@ -59,6 +59,7 @@ Package review contains shared review\-command workflow helpers.
 - [func SplitCommitMessage\(message string\) \(string, string\)](<#SplitCommitMessage>)
 - [func SplitEditorContent\(content string\) \(string, string\)](<#SplitEditorContent>)
 - [func StackIDForRootPR\(prNumber int, htmlURL string\) string](<#StackIDForRootPR>)
+- [func StackOrderLabel\(order int, current bool\) string](<#StackOrderLabel>)
 - [func StackStatusEmoji\(item StackPullRequest\) string](<#StackStatusEmoji>)
 - [func StackedPRSectionMarkers\(\) \(string, string\)](<#StackedPRSectionMarkers>)
 - [func TakePrefix\(content string, n int\) string](<#TakePrefix>)
@@ -201,7 +202,7 @@ func DerivePRTitle(titleOverride string, branch string, issue *jira.Issue, edito
 DerivePRTitle returns the final PR title after applying overrides and editor content.
 
 <a name="DeriveStackJiraKey"></a>
-## func [DeriveStackJiraKey](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L117>)
+## func [DeriveStackJiraKey](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L116>)
 
 ```go
 func DeriveStackJiraKey(values ...string) string
@@ -228,7 +229,7 @@ func ExtractManagedSectionContent(body string, section string) (string, error)
 ExtractManagedSectionContent returns the content between the marker pair for a section.
 
 <a name="ExtractStackID"></a>
-## func [ExtractStackID](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L85>)
+## func [ExtractStackID](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L84>)
 
 ```go
 func ExtractStackID(body string) string
@@ -372,7 +373,7 @@ func OldestCommitHeaderAndBody(commits []git.Commit) (string, string)
 OldestCommitHeaderAndBody returns the oldest commit header and body from branch commits.
 
 <a name="OrderStackPullRequests"></a>
-## func [OrderStackPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L128>)
+## func [OrderStackPullRequests](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L127>)
 
 ```go
 func OrderStackPullRequests(members []github.PullRequest) ([]github.PullRequest, error)
@@ -516,7 +517,7 @@ func SplitEditorContent(content string) (string, string)
 SplitEditorContent returns title/body parts from editor content.
 
 <a name="StackIDForRootPR"></a>
-## func [StackIDForRootPR](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L95>)
+## func [StackIDForRootPR](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L94>)
 
 ```go
 func StackIDForRootPR(prNumber int, htmlURL string) string
@@ -524,14 +525,23 @@ func StackIDForRootPR(prNumber int, htmlURL string) string
 
 StackIDForRootPR derives a stable stack id from the root pull request URL.
 
+<a name="StackOrderLabel"></a>
+## func [StackOrderLabel](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L193>)
+
+```go
+func StackOrderLabel(order int, current bool) string
+```
+
+StackOrderLabel returns the order cell shown in stack tables.
+
 <a name="StackStatusEmoji"></a>
-## func [StackStatusEmoji](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L189>)
+## func [StackStatusEmoji](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L188>)
 
 ```go
 func StackStatusEmoji(item StackPullRequest) string
 ```
 
-StackStatusEmoji returns emoji\-only display state for a stack table row.
+StackStatusEmoji returns emoji\-only PR state for stack JSON output.
 
 <a name="StackedPRSectionMarkers"></a>
 ## func [StackedPRSectionMarkers](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L45>)

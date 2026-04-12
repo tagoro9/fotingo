@@ -141,7 +141,7 @@ Automation should run stack rebase only when it is prepared to handle conflicts.
         "jiraKey": "PROJ-124",
         "headRef": "feature/PROJ-124-leaf",
         "baseRef": "feature/PROJ-122-parent",
-        "status": "🟢 👀",
+        "status": "🟢",
         "current": true
       }
     ]

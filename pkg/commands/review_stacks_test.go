@@ -130,7 +130,7 @@ func TestDiscoverCurrentReviewStack_UsesExistingStackID(t *testing.T) {
 	assert.Equal(t, 12, stack.Members[0].Number)
 	assert.Equal(t, 13, stack.Members[1].Number)
 	assert.True(t, stack.Members[1].Current)
-	assert.Equal(t, "🟢 👀", stack.Members[1].Status)
+	assert.Equal(t, "🟢", stack.Members[1].Status)
 }
 
 func TestDiscoverCurrentReviewStack_DiscoversChildWhenRootHasNoStackID(t *testing.T) {
@@ -187,8 +187,9 @@ func TestSyncCurrentReviewStack_UpdatesEveryStackMember(t *testing.T) {
 	assert.Equal(t, 12, ghClient.bodyUpdates[0].Number)
 	assert.Equal(t, 13, ghClient.bodyUpdates[1].Number)
 	assert.Contains(t, ghClient.bodyUpdates[0].Body, "**Stacked PRs**")
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 1 | ABC-1 | [#12")
-	assert.Contains(t, ghClient.bodyUpdates[1].Body, "🟢 👀")
+	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 👉 1 | ABC-1 | [#12")
+	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 👉 2 | ABC-2 | [#13")
+	assert.NotContains(t, ghClient.bodyUpdates[1].Body, "| Status |")
 }
 
 func TestSyncCurrentReviewStack_FailsBeforePartialUpdateWhenMarkerMissing(t *testing.T) {
@@ -306,15 +307,20 @@ func TestPrintReviewStack_MarksCurrentPullRequest(t *testing.T) {
 	stack := &reviewStackContext{
 		Members: []reviewStackMember{
 			{Number: 12, URL: "https://github.com/owner/repo/pull/12", JiraKey: "ABC-1", HeadRef: "feature/ABC-1-parent", BaseRef: "main", Status: "🟢"},
-			{Number: 13, URL: "https://github.com/owner/repo/pull/13", JiraKey: "ABC-2", HeadRef: "feature/ABC-2-child", BaseRef: "feature/ABC-1-parent", Status: "🟢 👀", Current: true},
+			{Number: 13, URL: "https://github.com/owner/repo/pull/13", JiraKey: "ABC-2", HeadRef: "feature/ABC-2-child", BaseRef: "feature/ABC-1-parent", Status: "🟢", Current: true},
 		},
 	}
 
 	output := captureStdout(t, func() { printReviewStack(stack) })
 
 	assert.Contains(t, output, "Stacked PRs")
-	assert.Contains(t, output, "Order | Jira | Pull request | Branch | Base | Status")
-	assert.Contains(t, output, "2 | ABC-2 | [#13](https://github.com/owner/repo/pull/13) | feature/ABC-2-child | feature/ABC-1-parent | 🟢 👀 *")
+	assert.Contains(t, output, "Order  Jira   Pull request")
+	assert.Contains(t, output, "👉 2")
+	assert.Contains(t, output, "ABC-2  #13 https://github.com/owner/repo/pull/13")
+	assert.Contains(t, output, "feature/ABC-2-child")
+	assert.NotContains(t, output, "|")
+	assert.NotContains(t, output, "[#13]")
+	assert.NotContains(t, output, "Status")
 }
 
 func TestReviewStacksCommand_RegistersSubcommandsAndCompletion(t *testing.T) {

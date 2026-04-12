@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"text/tabwriter"
 
 	"github.com/spf13/cobra"
 	"github.com/tagoro9/fotingo/internal/commandruntime"
@@ -305,7 +306,7 @@ func buildReviewStackContext(stackID string, currentBranch string, currentPRNumb
 			JiraKey: jiraKey,
 			HeadRef: member.HeadRef,
 			BaseRef: member.BaseRef,
-			Status:  internalreview.StackStatusEmoji(internalreview.StackPullRequest{State: member.State, Draft: member.Draft, Merged: member.Merged, Current: member.Number == currentPRNumber}),
+			Status:  internalreview.StackStatusEmoji(internalreview.StackPullRequest{State: member.State, Draft: member.Draft, Merged: member.Merged}),
 			Current: member.Number == currentPRNumber,
 		})
 	}
@@ -314,24 +315,20 @@ func buildReviewStackContext(stackID string, currentBranch string, currentPRNumb
 
 func printReviewStack(stack *reviewStackContext) {
 	_, _ = fmt.Fprintln(os.Stdout, "Stacked PRs")
-	_, _ = fmt.Fprintln(os.Stdout, "Order | Jira | Pull request | Branch | Base | Status")
+	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+	_, _ = fmt.Fprintln(writer, "Order\tJira\tPull request\tBranch\tBase")
 	for index, member := range stack.Members {
-		current := ""
-		if member.Current {
-			current = " *"
-		}
 		_, _ = fmt.Fprintf(
-			os.Stdout,
-			"%d | %s | %s | %s | %s | %s%s\n",
-			index+1,
+			writer,
+			"%s\t%s\t%s\t%s\t%s\n",
+			internalreview.StackOrderLabel(index+1, member.Current),
 			formatReviewStackJira(member),
 			formatReviewStackPR(member),
 			member.HeadRef,
 			member.BaseRef,
-			member.Status,
-			current,
 		)
 	}
+	_ = writer.Flush()
 }
 
 func formatReviewStackJira(member reviewStackMember) string {
@@ -346,7 +343,7 @@ func formatReviewStackPR(member reviewStackMember) string {
 	if strings.TrimSpace(member.URL) == "" {
 		return label
 	}
-	return fmt.Sprintf("[%s](%s)", label, member.URL)
+	return fmt.Sprintf("%s %s", label, member.URL)
 }
 
 func stackItemsForMembers(members []github.PullRequest, currentNumber int) []internalreview.StackPullRequest {

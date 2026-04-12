@@ -167,6 +167,7 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 			}
 			if parentExists {
 				stackParentPR = parentPR
+				out.InfoRaw("review", fmt.Sprintf("Stack mode enabled: base branch %s is pull request #%d", stackBaseBranch, parentPR.Number))
 				out.Debugf("review stack parent pr=%d branch=%s", parentPR.Number, stackBaseBranch)
 			}
 		} else {
@@ -355,12 +356,14 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	out.Info("rocket", i18n.ReviewStatusPRCreated, pr.HTMLURL)
 
 	if stackParentPR != nil && stackClient != nil {
+		out.InfoRaw("progress", fmt.Sprintf("Updating stacked PR sections for parent #%d and new PR #%d", stackParentPR.Number, pr.Number))
 		if updatedStackPR, stackErr := updateStackedPRSections(stackClient, jiraClient, stackParentPR, pr); stackErr != nil {
 			result.Err = fterrors.WrapGitHubError("failed to update stacked pull request sections", stackErr)
 			return result
 		} else if updatedStackPR != nil {
 			result.PR = updatedStackPR
 		}
+		out.InfoRaw("check", "Stacked PR sections updated")
 	}
 
 	if len(resolvedReviewers) > 0 || len(resolvedTeamReviewers) > 0 {

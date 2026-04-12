@@ -68,14 +68,13 @@ func RenderStackedPRSection(opts StackRenderOptions) string {
 		fmt.Fprintf(&builder, "<!-- fotingo:stack id=\"%s\" version=\"1\" -->\n\n", escapeStackMetadataValue(stackID))
 	}
 	builder.WriteString("**Stacked PRs**\n\n")
-	builder.WriteString("| Order | Jira | Pull request | Status |\n")
-	builder.WriteString("| --- | --- | --- | --- |\n")
+	builder.WriteString("| Order | Jira | Pull request |\n")
+	builder.WriteString("| --- | --- | --- |\n")
 	for index, item := range opts.Items {
-		fmt.Fprintf(&builder, "| %d | %s | %s | %s |\n",
-			index+1,
+		fmt.Fprintf(&builder, "| %s | %s | %s |\n",
+			StackOrderLabel(index+1, item.Current),
 			formatStackJiraLink(item),
-			formatStackPRLink(item),
-			StackStatusEmoji(item))
+			formatStackPRLink(item))
 	}
 	builder.WriteString("\n")
 	return builder.String()
@@ -185,13 +184,18 @@ func OrderStackPullRequests(members []github.PullRequest) ([]github.PullRequest,
 	return ordered, nil
 }
 
-// StackStatusEmoji returns emoji-only display state for a stack table row.
+// StackStatusEmoji returns emoji-only PR state for stack JSON output.
 func StackStatusEmoji(item StackPullRequest) string {
-	status := stackBaseStatusEmoji(item)
-	if item.Current {
-		status = strings.TrimSpace(status + " 👀")
+	return stackBaseStatusEmoji(item)
+}
+
+// StackOrderLabel returns the order cell shown in stack tables.
+func StackOrderLabel(order int, current bool) string {
+	label := fmt.Sprintf("%d", order)
+	if current {
+		return "👉 " + label
 	}
-	return status
+	return label
 }
 
 func stackBaseStatusEmoji(item StackPullRequest) string {
