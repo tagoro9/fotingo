@@ -35,16 +35,26 @@ type UpdatePROptions struct {
 	Body  *string
 }
 
+// PullRequestBodyUpdate contains a PR body update for stack synchronization.
+type PullRequestBodyUpdate struct {
+	Number int
+	Body   string
+}
+
 // PullRequest represents a GitHub pull request
 type PullRequest struct {
-	Title   string
-	Body    string
-	Number  int
-	NodeID  string
-	URL     string
-	HTMLURL string
-	Draft   bool
-	State   string
+	Title     string
+	Body      string
+	Number    int
+	NodeID    string
+	URL       string
+	HTMLURL   string
+	HeadRef   string
+	BaseRef   string
+	Draft     bool
+	State     string
+	Merged    bool
+	Mergeable *bool
 }
 
 // PullRequestDiscussion contains comments, reviews, and review conversations for a pull request.
@@ -321,16 +331,7 @@ func (g *github) CreatePullRequest(opts CreatePROptions) (*PullRequest, error) {
 		return nil, fmt.Errorf("failed to create pull request: %w", err)
 	}
 
-	return &PullRequest{
-		Title:   pr.GetTitle(),
-		Body:    pr.GetBody(),
-		Number:  pr.GetNumber(),
-		NodeID:  pr.GetNodeID(),
-		URL:     pr.GetURL(),
-		HTMLURL: pr.GetHTMLURL(),
-		Draft:   pr.GetDraft(),
-		State:   pr.GetState(),
-	}, nil
+	return mapPullRequest(pr), nil
 }
 
 // UpdatePullRequest updates an existing pull request with the provided fields.
@@ -348,16 +349,21 @@ func (g *github) UpdatePullRequest(prNumber int, opts UpdatePROptions) (*PullReq
 		return nil, fmt.Errorf("failed to update pull request: %w", err)
 	}
 
-	return &PullRequest{
-		Title:   pr.GetTitle(),
-		Body:    pr.GetBody(),
-		Number:  pr.GetNumber(),
-		NodeID:  pr.GetNodeID(),
-		URL:     pr.GetURL(),
-		HTMLURL: pr.GetHTMLURL(),
-		Draft:   pr.GetDraft(),
-		State:   pr.GetState(),
-	}, nil
+	return mapPullRequest(pr), nil
+}
+
+// UpdatePullRequestBodies updates multiple pull request bodies in order.
+func (g *github) UpdatePullRequestBodies(updates []PullRequestBodyUpdate) ([]*PullRequest, error) {
+	updated := make([]*PullRequest, 0, len(updates))
+	for _, update := range updates {
+		body := update.Body
+		pr, err := g.UpdatePullRequest(update.Number, UpdatePROptions{Body: &body})
+		if err != nil {
+			return nil, fmt.Errorf("failed to update pull request #%d body: %w", update.Number, err)
+		}
+		updated = append(updated, pr)
+	}
+	return updated, nil
 }
 
 // GetPullRequestDiscussion returns comments and reviews for an existing pull request.
@@ -1407,20 +1413,95 @@ func (g *github) MarkPullRequestReadyForReview(prNodeID string) error {
 
 // DoesPRExistForBranch checks if a PR exists for a given branch
 func (g *github) DoesPRExistForBranch(branch string) (bool, *PullRequest, error) {
+	pr, exists, err := g.FindOpenPullRequestByHeadBranch(branch)
+	if err != nil {
+		return false, nil, err
+	}
+	return exists, pr, nil
+}
+
+// FindOpenPullRequestByHeadBranch returns the open PR for the given head branch, when present.
+func (g *github) FindOpenPullRequestByHeadBranch(branch string) (*PullRequest, bool, error) {
 	list, _, err := g.hub.PullRequests.List(context.Background(), g.owner, g.repo, &hub.PullRequestListOptions{
 		Head:  fmt.Sprintf("%s:%s", g.owner, branch),
 		State: "open",
 	})
 	if err != nil {
-		return false, nil, fmt.Errorf("failed to check for existing pull request: %w", err)
+		return nil, false, fmt.Errorf("failed to check for existing pull request: %w", err)
 	}
 
 	if len(list) == 0 {
-		return false, nil, nil
+		return nil, false, nil
 	}
 
-	pr := list[0]
-	return true, &PullRequest{
+	return mapPullRequest(list[0]), true, nil
+}
+
+// ListOpenPullRequestsByBaseBranch returns open PRs whose base branch matches the given branch.
+func (g *github) ListOpenPullRequestsByBaseBranch(branch string) ([]PullRequest, error) {
+	var mapped []PullRequest
+	opts := &hub.PullRequestListOptions{
+		Base:  branch,
+		State: "open",
+		ListOptions: hub.ListOptions{
+			PerPage: 100,
+		},
+	}
+	for {
+		list, resp, err := g.hub.PullRequests.List(context.Background(), g.owner, g.repo, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to list pull requests by base branch: %w", err)
+		}
+		for _, pr := range list {
+			mapped = append(mapped, *mapPullRequest(pr))
+		}
+		if resp == nil || resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+	return mapped, nil
+}
+
+// ListOpenPullRequestsByStackID returns open PRs whose body contains the fotingo stack id marker.
+func (g *github) ListOpenPullRequestsByStackID(stackID string) ([]PullRequest, error) {
+	stackID = strings.TrimSpace(stackID)
+	if stackID == "" {
+		return nil, fmt.Errorf("stack id is required")
+	}
+
+	var mapped []PullRequest
+	opts := &hub.PullRequestListOptions{
+		State: "open",
+		ListOptions: hub.ListOptions{
+			PerPage: 100,
+		},
+	}
+	needle := fmt.Sprintf(`fotingo:stack id="%s"`, stackID)
+	for {
+		list, resp, err := g.hub.PullRequests.List(context.Background(), g.owner, g.repo, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to list pull requests by stack id: %w", err)
+		}
+		for _, pr := range list {
+			if strings.Contains(pr.GetBody(), needle) {
+				mapped = append(mapped, *mapPullRequest(pr))
+			}
+		}
+		if resp == nil || resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+	return mapped, nil
+}
+
+func mapPullRequest(pr *hub.PullRequest) *PullRequest {
+	if pr == nil {
+		return nil
+	}
+
+	mapped := &PullRequest{
 		Title:   pr.GetTitle(),
 		Body:    pr.GetBody(),
 		Number:  pr.GetNumber(),
@@ -1429,7 +1510,19 @@ func (g *github) DoesPRExistForBranch(branch string) (bool, *PullRequest, error)
 		HTMLURL: pr.GetHTMLURL(),
 		Draft:   pr.GetDraft(),
 		State:   pr.GetState(),
-	}, nil
+		Merged:  pr.GetMerged(),
+	}
+	if pr.Head != nil {
+		mapped.HeadRef = pr.Head.GetRef()
+	}
+	if pr.Base != nil {
+		mapped.BaseRef = pr.Base.GetRef()
+	}
+	if pr.Mergeable != nil {
+		mergeable := pr.GetMergeable()
+		mapped.Mergeable = &mergeable
+	}
+	return mapped
 }
 
 // CreateRelease creates a GitHub release
