@@ -173,7 +173,7 @@ Examples:
 		ReviewFlagDescription:              "Override the entire pull request body (use '-' for stdin)",
 		ReviewFlagTemplateSummary:          "Override the default Summary section content",
 		ReviewFlagTemplateDescription:      "Override the default Description section content; expands escaped \\n, \\r\\n, and \\t",
-		ReviewDefaultTemplate:              "**Summary**\n\n<!-- fotingo:start summary -->\n<!-- fotingo:end summary -->\n\n**Description**\n\n<!-- fotingo:start description -->\n<!-- fotingo:end description -->\n\n<!-- fotingo:start fixed-issues -->\n<!-- fotingo:end fixed-issues -->\n\n**Changes**\n\n<!-- fotingo:start changes -->\n<!-- fotingo:end changes -->\n\n{fotingo.banner}",
+		ReviewDefaultTemplate:              "**Summary**\n\n<!-- fotingo:start summary -->\n<!-- fotingo:end summary -->\n\n**Description**\n\n<!-- fotingo:start description -->\n<!-- fotingo:end description -->\n\n<!-- fotingo:start fixed-issues -->\n<!-- fotingo:end fixed-issues -->\n\n<!-- fotingo:start stacked-prs -->\n<!-- fotingo:end stacked-prs -->\n\n**Changes**\n\n<!-- fotingo:start changes -->\n<!-- fotingo:end changes -->\n\n{fotingo.banner}",
 		ReviewInitialCreating:              "Starting pull request creation...",
 		ReviewStatusInitGit:                "Initializing Git client...",
 		ReviewStatusGitInit:                "Git client initialized",

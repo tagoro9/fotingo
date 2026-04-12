@@ -25,6 +25,7 @@ Package review contains shared review\-command workflow helpers.
 - [func DerivePRTitle\(titleOverride string, branch string, issue \*jira.Issue, editorTitle string, editorMode bool\) string](<#DerivePRTitle>)
 - [func DeriveSummary\(branch string, issue \*jira.Issue, commits \[\]git.Commit\) string](<#DeriveSummary>)
 - [func ExtractManagedSectionContent\(body string, section string\) \(string, error\)](<#ExtractManagedSectionContent>)
+- [func ExtractStackedPRSectionContent\(body string\) \(string, error\)](<#ExtractStackedPRSectionContent>)
 - [func FieldTokenCandidates\(field string\) \[\]string](<#FieldTokenCandidates>)
 - [func FindRepositoryRoot\(\) \(string, error\)](<#FindRepositoryRoot>)
 - [func FormatChanges\(commits \[\]git.Commit\) string](<#FormatChanges>)
@@ -41,8 +42,10 @@ Package review contains shared review\-command workflow helpers.
 - [func OldestCommitHeaderAndBody\(commits \[\]git.Commit\) \(string, string\)](<#OldestCommitHeaderAndBody>)
 - [func PickMatchWithPicker\(kind string, token string, matches \[\]MatchOption, runPicker RunPickerFunc\) \(string, error\)](<#PickMatchWithPicker>)
 - [func PreferParticipantUser\(current github.User, candidate github.User\) github.User](<#PreferParticipantUser>)
+- [func RenderStackedPRSection\(opts StackRenderOptions\) string](<#RenderStackedPRSection>)
 - [func RenderTemplate\(content string, data map\[string\]string\) \(string, bool, error\)](<#RenderTemplate>)
 - [func ReplaceManagedSectionContent\(body string, section string, replacement string\) \(string, error\)](<#ReplaceManagedSectionContent>)
+- [func ReplaceStackedPRSectionContent\(body string, replacement string\) \(string, error\)](<#ReplaceStackedPRSectionContent>)
 - [func ResolveAssignees\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, error\)](<#ResolveAssignees>)
 - [func ResolveLabels\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, error\)](<#ResolveLabels>)
 - [func ResolveReviewers\(ghClient github.Github, requested \[\]string, canPrompt bool, pick PickMatchFunc\) \(\[\]string, \[\]string, \[\]string, error\)](<#ResolveReviewers>)
@@ -52,6 +55,8 @@ Package review contains shared review\-command workflow helpers.
 - [func ScoreTokenMatch\(token string, fields \[\]string\) \(int, bool\)](<#ScoreTokenMatch>)
 - [func SplitCommitMessage\(message string\) \(string, string\)](<#SplitCommitMessage>)
 - [func SplitEditorContent\(content string\) \(string, string\)](<#SplitEditorContent>)
+- [func StackStatusEmoji\(item StackPullRequest\) string](<#StackStatusEmoji>)
+- [func StackedPRSectionMarkers\(\) \(string, string\)](<#StackedPRSectionMarkers>)
 - [func TakePrefix\(content string, n int\) string](<#TakePrefix>)
 - [func ToTeamSlugs\(canonicalTeams \[\]string\) \[\]string](<#ToTeamSlugs>)
 - [type MatchKind](<#MatchKind>)
@@ -69,6 +74,8 @@ Package review contains shared review\-command workflow helpers.
   - [func ResolveTokenMatches\(kind string, requested \[\]string, options \[\]MatchOption, canPrompt bool, pick func\(kind string, token string, matches \[\]MatchOption\) \(string, error\)\) \(\[\]MatchOption, error\)](<#ResolveTokenMatches>)
 - [type PickMatchFunc](<#PickMatchFunc>)
 - [type RunPickerFunc](<#RunPickerFunc>)
+- [type StackPullRequest](<#StackPullRequest>)
+- [type StackRenderOptions](<#StackRenderOptions>)
 - [type TemplateOptions](<#TemplateOptions>)
 - [type WorkflowDeps](<#WorkflowDeps>)
 - [type WorkflowEmitter](<#WorkflowEmitter>)
@@ -88,6 +95,14 @@ const (
     ManagedSectionDescription = "description"
     ManagedSectionFixedIssues = "fixed-issues"
     ManagedSectionChanges     = "changes"
+)
+```
+
+<a name="StackedPRsSection"></a>
+
+```go
+const (
+    StackedPRsSection = "stacked-prs"
 )
 ```
 
@@ -198,6 +213,15 @@ func ExtractManagedSectionContent(body string, section string) (string, error)
 ```
 
 ExtractManagedSectionContent returns the content between the marker pair for a section.
+
+<a name="ExtractStackedPRSectionContent"></a>
+## func [ExtractStackedPRSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L42>)
+
+```go
+func ExtractStackedPRSectionContent(body string) (string, error)
+```
+
+ExtractStackedPRSectionContent returns the content between the stack marker pair.
 
 <a name="FieldTokenCandidates"></a>
 ## func [FieldTokenCandidates](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/matching.go#L598>)
@@ -343,6 +367,15 @@ func PreferParticipantUser(current github.User, candidate github.User) github.Us
 
 PreferParticipantUser prefers candidates that provide a richer name field.
 
+<a name="RenderStackedPRSection"></a>
+## func [RenderStackedPRSection](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L52>)
+
+```go
+func RenderStackedPRSection(opts StackRenderOptions) string
+```
+
+RenderStackedPRSection renders the managed stacked PR section body.
+
 <a name="RenderTemplate"></a>
 ## func [RenderTemplate](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/template_render.go#L19>)
 
@@ -360,6 +393,15 @@ func ReplaceManagedSectionContent(body string, section string, replacement strin
 ```
 
 ReplaceManagedSectionContent replaces the content between a section's markers.
+
+<a name="ReplaceStackedPRSectionContent"></a>
+## func [ReplaceStackedPRSectionContent](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L47>)
+
+```go
+func ReplaceStackedPRSectionContent(body string, replacement string) (string, error)
+```
+
+ReplaceStackedPRSectionContent replaces the content between the stack marker pair.
 
 <a name="ResolveAssignees"></a>
 ## func [ResolveAssignees](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/resolver.go#L93-L98>)
@@ -441,6 +483,24 @@ func SplitEditorContent(content string) (string, string)
 ```
 
 SplitEditorContent returns title/body parts from editor content.
+
+<a name="StackStatusEmoji"></a>
+## func [StackStatusEmoji](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L77>)
+
+```go
+func StackStatusEmoji(item StackPullRequest) string
+```
+
+StackStatusEmoji returns emoji\-only display state for a stack table row.
+
+<a name="StackedPRSectionMarkers"></a>
+## func [StackedPRSectionMarkers](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L37>)
+
+```go
+func StackedPRSectionMarkers() (string, string)
+```
+
+StackedPRSectionMarkers returns the hidden marker pair for stack content.
 
 <a name="TakePrefix"></a>
 ## func [TakePrefix](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/helpers.go#L297>)
@@ -609,6 +669,37 @@ RunPickerFunc runs a picker with a title and list of items.
 
 ```go
 type RunPickerFunc func(title string, items []ui.PickerItem) (*ui.PickerItem, error)
+```
+
+<a name="StackPullRequest"></a>
+## type [StackPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L18-L28>)
+
+StackPullRequest contains the PR metadata rendered in a stack table.
+
+```go
+type StackPullRequest struct {
+    Number  int
+    Title   string
+    HTMLURL string
+    JiraKey string
+    JiraURL string
+    State   string
+    Draft   bool
+    Merged  bool
+    Current bool
+}
+```
+
+<a name="StackRenderOptions"></a>
+## type [StackRenderOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/stack.go#L31-L34>)
+
+StackRenderOptions configures stacked PR section rendering.
+
+```go
+type StackRenderOptions struct {
+    StackID string
+    Items   []StackPullRequest
+}
 ```
 
 <a name="TemplateOptions"></a>

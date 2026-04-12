@@ -83,6 +83,8 @@ func TestDefaultPRTemplate(t *testing.T) {
 	// Verify the default PR template contains expected placeholders
 	assert.Contains(t, defaultPRTemplate, "**Summary**\n\n<!-- fotingo:start summary -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start summary -->")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start stacked-prs -->")
+	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:end stacked-prs -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:end changes -->")
 	assert.Contains(t, defaultPRTemplate, "**Summary**")
 	assert.NotContains(t, defaultPRTemplate, "{summary}")
@@ -92,6 +94,7 @@ func TestDefaultPRTemplate(t *testing.T) {
 	assert.Contains(t, defaultPRTemplate, "{fotingo.banner}")
 	assert.Contains(t, defaultPRTemplate, "**Description**")
 	assert.Contains(t, defaultPRTemplate, "**Changes**")
+	assert.NotContains(t, defaultPRTemplate, "**Stacked PRs**")
 }
 
 func TestBuildPRBody_RendersMarkerOnlyCustomTemplate(t *testing.T) {
