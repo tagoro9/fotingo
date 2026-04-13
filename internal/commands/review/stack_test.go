@@ -46,10 +46,10 @@ func TestRenderStackedPRSection_RendersTableWithCurrentOrderMarker(t *testing.T)
 	assert.Contains(t, content, "**Stacked PRs**")
 	assert.Contains(t, content, "| Order | Jira | Pull request |")
 	assert.NotContains(t, content, "| Status |")
-	assert.Contains(t, content, "| 1 | [ABC-1](https://jira.example/browse/ABC-1) | [#12 Parent change](https://github.example/pull/12) |")
-	assert.Contains(t, content, "| 👉 2 | [ABC-2](https://jira.example/browse/ABC-2) | [#13 Child change](https://github.example/pull/13) |")
-	assert.Contains(t, content, "| 3 | - | #14 |")
-	assert.Contains(t, content, "| 4 | - | #15 |")
+	assert.Contains(t, content, "| 1   | [ABC-1](https://jira.example/browse/ABC-1) | [#12 Parent change](https://github.example/pull/12) |")
+	assert.Contains(t, content, "| 2 👉 | [ABC-2](https://jira.example/browse/ABC-2) | [#13 Child change](https://github.example/pull/13) |")
+	assert.Contains(t, content, "| 3   | - | #14 |")
+	assert.Contains(t, content, "| 4   | - | #15 |")
 	assert.NotContains(t, content, "🟢")
 	assert.NotContains(t, content, "🔴")
 	assert.NotContains(t, content, "📝")
@@ -85,8 +85,8 @@ func TestStackStatusEmoji(t *testing.T) {
 func TestStackOrderLabel(t *testing.T) {
 	t.Parallel()
 
-	assert.Equal(t, "1", StackOrderLabel(1, false))
-	assert.Equal(t, "👉 2", StackOrderLabel(2, true))
+	assert.Equal(t, "1  ", StackOrderLabel(1, false))
+	assert.Equal(t, "2 👉", StackOrderLabel(2, true))
 }
 
 func TestExtractStackID(t *testing.T) {

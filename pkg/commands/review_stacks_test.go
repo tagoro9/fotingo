@@ -170,6 +170,10 @@ func TestDiscoverCurrentReviewStack_RejectsStandalonePullRequest(t *testing.T) {
 
 func TestSyncCurrentReviewStack_UpdatesEveryStackMember(t *testing.T) {
 	restoreClients := stubReviewStacksClients(t)
+	origRoot := fotingoConfig.GetString("jira.root")
+	fotingoConfig.Set("jira.root", "https://jira.example.com")
+	t.Cleanup(func() { fotingoConfig.Set("jira.root", origRoot) })
+
 	parent, child, _ := reviewStackPullRequests()
 	gitClient := &reviewStacksMockGit{mockGit: &mockGit{currentBranch: child.HeadRef}}
 	ghClient := &reviewStacksMockGitHub{
@@ -187,8 +191,8 @@ func TestSyncCurrentReviewStack_UpdatesEveryStackMember(t *testing.T) {
 	assert.Equal(t, 12, ghClient.bodyUpdates[0].Number)
 	assert.Equal(t, 13, ghClient.bodyUpdates[1].Number)
 	assert.Contains(t, ghClient.bodyUpdates[0].Body, "**Stacked PRs**")
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 👉 1 | ABC-1 | [#12")
-	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 👉 2 | ABC-2 | [#13")
+	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 1 👉 | [ABC-1](https://jira.example.com/browse/ABC-1) | [#12")
+	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 2 👉 | [ABC-2](https://jira.example.com/browse/ABC-2) | [#13")
 	assert.NotContains(t, ghClient.bodyUpdates[1].Body, "| Status |")
 }
 
@@ -304,10 +308,14 @@ func TestRebaseCurrentReviewStack_ReportsRebaseConflictWorktree(t *testing.T) {
 }
 
 func TestPrintReviewStack_MarksCurrentPullRequest(t *testing.T) {
+	origRoot := fotingoConfig.GetString("jira.root")
+	fotingoConfig.Set("jira.root", "https://jira.example.com")
+	t.Cleanup(func() { fotingoConfig.Set("jira.root", origRoot) })
+
 	stack := &reviewStackContext{
 		Members: []reviewStackMember{
-			{Number: 12, URL: "https://github.com/owner/repo/pull/12", Title: "[ABC-1] Parent", JiraKey: "ABC-1", HeadRef: "feature/ABC-1-parent", BaseRef: "main", Status: "🟢"},
-			{Number: 13, URL: "https://github.com/owner/repo/pull/13", Title: "[ABC-2] Child", JiraKey: "ABC-2", HeadRef: "feature/ABC-2-child", BaseRef: "feature/ABC-1-parent", Status: "🟢", Current: true},
+			{Number: 12, URL: "https://github.com/owner/repo/pull/12", Title: "[ABC-1] Parent", JiraKey: "ABC-1", JiraURL: reviewStackJiraURL("ABC-1"), HeadRef: "feature/ABC-1-parent", BaseRef: "main", Status: "🟢"},
+			{Number: 13, URL: "https://github.com/owner/repo/pull/13", Title: "[ABC-2] Child", JiraKey: "ABC-2", JiraURL: reviewStackJiraURL("ABC-2"), HeadRef: "feature/ABC-2-child", BaseRef: "feature/ABC-1-parent", Status: "🟢", Current: true},
 		},
 	}
 
@@ -318,8 +326,9 @@ func TestPrintReviewStack_MarksCurrentPullRequest(t *testing.T) {
 	assert.Contains(t, output, "Order")
 	assert.Contains(t, output, "Jira")
 	assert.Contains(t, output, "PR")
-	assert.Contains(t, output, "👉 2")
+	assert.Contains(t, output, "2 👉")
 	assert.Contains(t, output, "ABC-2")
+	assert.Contains(t, output, "\x1b]8;;https://jira.example.com/browse/ABC-2\aABC-2\x1b]8;;\a")
 	assert.Contains(t, output, "\x1b]8;;https://github.com/owner/repo/pull/13\a#13 [ABC-2] Child\x1b]8;;\a")
 	assert.Contains(t, output, "feature/ABC-2-child")
 	assert.NotContains(t, output, "|")
