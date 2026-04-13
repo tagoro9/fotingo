@@ -3,9 +3,11 @@ package commands
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
-	"text/tabwriter"
 
+	"charm.land/bubbles/v2/table"
+	"charm.land/lipgloss/v2"
 	"github.com/spf13/cobra"
 	"github.com/tagoro9/fotingo/internal/commandruntime"
 	internalreview "github.com/tagoro9/fotingo/internal/commands/review"
@@ -315,20 +317,74 @@ func buildReviewStackContext(stackID string, currentBranch string, currentPRNumb
 
 func printReviewStack(stack *reviewStackContext) {
 	_, _ = fmt.Fprintln(os.Stdout, "Stacked PRs")
-	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	_, _ = fmt.Fprintln(writer, "Order\tJira\tPull request\tBranch\tBase")
+	_, _ = fmt.Fprintln(os.Stdout, renderReviewStackTable(stack))
+}
+
+func renderReviewStackTable(stack *reviewStackContext) string {
+	width := reviewStackTableWidth()
+	columns := reviewStackTableColumns(width)
+	rows := make([]table.Row, 0, len(stack.Members))
 	for index, member := range stack.Members {
-		_, _ = fmt.Fprintf(
-			writer,
-			"%s\t%s\t%s\t%s\t%s\n",
+		rows = append(rows, table.Row{
 			internalreview.StackOrderLabel(index+1, member.Current),
 			formatReviewStackJira(member),
 			formatReviewStackPR(member),
 			member.HeadRef,
 			member.BaseRef,
-		)
+		})
 	}
-	_ = writer.Flush()
+
+	styles := table.DefaultStyles()
+	styles.Header = lipgloss.NewStyle()
+	styles.Cell = lipgloss.NewStyle()
+	styles.Selected = styles.Cell
+
+	model := table.New(
+		table.WithColumns(columns),
+		table.WithRows(rows),
+		table.WithHeight(len(rows)+1),
+		table.WithWidth(width),
+		table.WithStyles(styles),
+	)
+
+	return lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		Padding(0, 1).
+		Render(model.View())
+}
+
+func reviewStackTableColumns(width int) []table.Column {
+	const (
+		orderWidth = 6
+		jiraWidth  = 10
+		prWidth    = 24
+		minRef     = 16
+	)
+
+	innerWidth := max(width, orderWidth+jiraWidth+prWidth+minRef*2)
+	refWidth := max((innerWidth-orderWidth-jiraWidth-prWidth)/2, minRef)
+	return []table.Column{
+		{Title: "Order", Width: orderWidth},
+		{Title: "Jira", Width: jiraWidth},
+		{Title: "PR", Width: prWidth},
+		{Title: "Branch", Width: refWidth},
+		{Title: "Base", Width: refWidth},
+	}
+}
+
+func reviewStackTableWidth() int {
+	const (
+		defaultWidth = 96
+		minWidth     = 72
+		tableChrome  = 4
+	)
+	if raw := strings.TrimSpace(os.Getenv("COLUMNS")); raw != "" {
+		width, err := strconv.Atoi(raw)
+		if err == nil && width > 0 {
+			return max(width-tableChrome, minWidth)
+		}
+	}
+	return defaultWidth
 }
 
 func formatReviewStackJira(member reviewStackMember) string {
@@ -340,10 +396,15 @@ func formatReviewStackJira(member reviewStackMember) string {
 
 func formatReviewStackPR(member reviewStackMember) string {
 	label := fmt.Sprintf("#%d", member.Number)
-	if strings.TrimSpace(member.URL) == "" {
+	title := strings.TrimSpace(member.Title)
+	if title != "" {
+		label = fmt.Sprintf("%s %s", label, title)
+	}
+	url := strings.TrimSpace(member.URL)
+	if url == "" {
 		return label
 	}
-	return fmt.Sprintf("%s %s", label, member.URL)
+	return lipgloss.NewStyle().Hyperlink(url).Render(label)
 }
 
 func stackItemsForMembers(members []github.PullRequest, currentNumber int) []internalreview.StackPullRequest {

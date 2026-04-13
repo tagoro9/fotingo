@@ -306,20 +306,25 @@ func TestRebaseCurrentReviewStack_ReportsRebaseConflictWorktree(t *testing.T) {
 func TestPrintReviewStack_MarksCurrentPullRequest(t *testing.T) {
 	stack := &reviewStackContext{
 		Members: []reviewStackMember{
-			{Number: 12, URL: "https://github.com/owner/repo/pull/12", JiraKey: "ABC-1", HeadRef: "feature/ABC-1-parent", BaseRef: "main", Status: "🟢"},
-			{Number: 13, URL: "https://github.com/owner/repo/pull/13", JiraKey: "ABC-2", HeadRef: "feature/ABC-2-child", BaseRef: "feature/ABC-1-parent", Status: "🟢", Current: true},
+			{Number: 12, URL: "https://github.com/owner/repo/pull/12", Title: "[ABC-1] Parent", JiraKey: "ABC-1", HeadRef: "feature/ABC-1-parent", BaseRef: "main", Status: "🟢"},
+			{Number: 13, URL: "https://github.com/owner/repo/pull/13", Title: "[ABC-2] Child", JiraKey: "ABC-2", HeadRef: "feature/ABC-2-child", BaseRef: "feature/ABC-1-parent", Status: "🟢", Current: true},
 		},
 	}
 
 	output := captureStdout(t, func() { printReviewStack(stack) })
 
 	assert.Contains(t, output, "Stacked PRs")
-	assert.Contains(t, output, "Order  Jira   Pull request")
+	assert.Contains(t, output, "╭")
+	assert.Contains(t, output, "Order")
+	assert.Contains(t, output, "Jira")
+	assert.Contains(t, output, "PR")
 	assert.Contains(t, output, "👉 2")
-	assert.Contains(t, output, "ABC-2  #13 https://github.com/owner/repo/pull/13")
+	assert.Contains(t, output, "ABC-2")
+	assert.Contains(t, output, "\x1b]8;;https://github.com/owner/repo/pull/13\a#13 [ABC-2] Child\x1b]8;;\a")
 	assert.Contains(t, output, "feature/ABC-2-child")
 	assert.NotContains(t, output, "|")
 	assert.NotContains(t, output, "[#13]")
+	assert.NotContains(t, output, "#13 https://github.com/owner/repo/pull/13")
 	assert.NotContains(t, output, "Status")
 }
 
