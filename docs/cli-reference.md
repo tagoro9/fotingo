@@ -178,7 +178,7 @@ Notes:
 - Use `fotingo review sync -r ... --remove-reviewers ... -a ... --remove-assignee ...` to update reviewers and assignees on an existing PR.
 - Use `fotingo review sync --ready-for-review` to move an existing draft PR to ready for review without recreating it.
 - Resolve reviewers, assignees, and labels ahead of time with `fotingo search ... --json` when scripting review creation.
-- Stacked PR sections render Jira keys and PR links. The current PR is marked in the order column with `👉`.
+- Stacked PR sections render Jira keys and PR links. The current PR is marked after the order number with `👉`.
 
 #### `review stacks`
 
@@ -200,7 +200,7 @@ Subcommands:
 Notes:
 
 - Stack commands default to the stack that contains the current branch's open PR.
-- `review stacks` prints a terminal table with clickable pull request labels in terminals that support links, not Markdown table syntax.
+- `review stacks` prints a terminal table with clickable Jira and pull request labels in terminals that support links, not Markdown table syntax.
 - `review stacks sync` does not open an editor; it only rewrites the marker-owned `stacked-prs` section.
 - `review stacks rebase` requires every branch that will be rebased to have a clean local worktree and stops at the first rebase conflict.
 - Branches in separate linked worktrees are supported; fotingo discovers them with Git worktree metadata and runs each rebase in that branch's worktree.

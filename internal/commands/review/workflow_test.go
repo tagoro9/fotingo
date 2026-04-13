@@ -436,10 +436,10 @@ func TestWorkflowRunnerRun_UpdatesStackSectionsWhenBaseBranchHasPR(t *testing.T)
 	assert.Equal(t, 12, ghClient.bodyUpdates[0].Number)
 	assert.Equal(t, 13, ghClient.bodyUpdates[1].Number)
 	assert.Contains(t, ghClient.bodyUpdates[0].Body, `<!-- fotingo:stack id="testowner/testrepo#12" version="1" -->`)
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 👉 1 | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) |")
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 2 | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) |")
-	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 1 | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) |")
-	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 👉 2 | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) |")
+	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 1 👉 | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) |")
+	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 2   | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) |")
+	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 1   | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) |")
+	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 2 👉 | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) |")
 	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Stack mode enabled: base branch feature/ABC-1-parent is pull request #12")
 	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Updating stacked PR sections for parent #12 and new PR #13")
 	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Stacked PR sections updated")
@@ -489,7 +489,7 @@ func TestWorkflowRunnerRun_ExtendsExistingStackSections(t *testing.T) {
 	require.Len(t, ghClient.bodyUpdates, 3)
 	assert.Equal(t, []int{12, 13, 14}, []int{ghClient.bodyUpdates[0].Number, ghClient.bodyUpdates[1].Number, ghClient.bodyUpdates[2].Number})
 	assert.Contains(t, ghClient.bodyUpdates[2].Body, `<!-- fotingo:stack id="testowner/testrepo#12" version="1" -->`)
-	assert.Contains(t, ghClient.bodyUpdates[2].Body, "| 👉 3 | ABC-3 | [#14 ABC-3 Child](https://github.com/testowner/testrepo/pull/14) |")
+	assert.Contains(t, ghClient.bodyUpdates[2].Body, "| 3 👉 | ABC-3 | [#14 ABC-3 Child](https://github.com/testowner/testrepo/pull/14) |")
 }
 
 func assertStackWorkflowRawEvent(t *testing.T, events []reviewRawEvent, message string) {

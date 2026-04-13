@@ -47,6 +47,7 @@ type reviewStackMember struct {
 	URL     string `json:"url"`
 	Title   string `json:"title"`
 	JiraKey string `json:"jiraKey,omitempty"`
+	JiraURL string `json:"jiraUrl,omitempty"`
 	HeadRef string `json:"headRef"`
 	BaseRef string `json:"baseRef"`
 	Status  string `json:"status"`
@@ -306,6 +307,7 @@ func buildReviewStackContext(stackID string, currentBranch string, currentPRNumb
 			URL:     member.HTMLURL,
 			Title:   member.Title,
 			JiraKey: jiraKey,
+			JiraURL: reviewStackJiraURL(jiraKey),
 			HeadRef: member.HeadRef,
 			BaseRef: member.BaseRef,
 			Status:  internalreview.StackStatusEmoji(internalreview.StackPullRequest{State: member.State, Draft: member.Draft, Merged: member.Merged}),
@@ -388,10 +390,15 @@ func reviewStackTableWidth() int {
 }
 
 func formatReviewStackJira(member reviewStackMember) string {
-	if strings.TrimSpace(member.JiraKey) == "" {
+	key := strings.TrimSpace(member.JiraKey)
+	if key == "" {
 		return "-"
 	}
-	return member.JiraKey
+	url := strings.TrimSpace(member.JiraURL)
+	if url == "" {
+		return key
+	}
+	return lipgloss.NewStyle().Hyperlink(url).Render(key)
 }
 
 func formatReviewStackPR(member reviewStackMember) string {
@@ -416,6 +423,7 @@ func stackItemsForMembers(members []github.PullRequest, currentNumber int) []int
 			Title:   member.Title,
 			HTMLURL: member.HTMLURL,
 			JiraKey: jiraKey,
+			JiraURL: reviewStackJiraURL(jiraKey),
 			State:   member.State,
 			Draft:   member.Draft,
 			Merged:  member.Merged,
@@ -423,6 +431,18 @@ func stackItemsForMembers(members []github.PullRequest, currentNumber int) []int
 		})
 	}
 	return items
+}
+
+func reviewStackJiraURL(jiraKey string) string {
+	key := strings.TrimSpace(jiraKey)
+	if key == "" {
+		return ""
+	}
+	root, err := commandruntime.NormalizeHTTPSRootURL(fotingoConfig.GetString("jira.root"), "jira root")
+	if err != nil {
+		return ""
+	}
+	return fmt.Sprintf("%s/browse/%s", root, strings.ToUpper(key))
 }
 
 func appendReviewStackMember(members []github.PullRequest, pr github.PullRequest) []github.PullRequest {

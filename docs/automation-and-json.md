@@ -130,6 +130,7 @@ Automation should run stack rebase only when it is prepared to handle conflicts.
         "url": "https://github.com/owner/repo/pull/12",
         "title": "[PROJ-122] Parent",
         "jiraKey": "PROJ-122",
+        "jiraUrl": "https://jira.example.com/browse/PROJ-122",
         "headRef": "feature/PROJ-122-parent",
         "baseRef": "main",
         "status": "🟢"
@@ -139,6 +140,7 @@ Automation should run stack rebase only when it is prepared to handle conflicts.
         "url": "https://github.com/owner/repo/pull/14",
         "title": "[PROJ-124] Leaf",
         "jiraKey": "PROJ-124",
+        "jiraUrl": "https://jira.example.com/browse/PROJ-124",
         "headRef": "feature/PROJ-124-leaf",
         "baseRef": "feature/PROJ-122-parent",
         "status": "🟢",

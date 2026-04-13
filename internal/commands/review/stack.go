@@ -193,9 +193,9 @@ func StackStatusEmoji(item StackPullRequest) string {
 func StackOrderLabel(order int, current bool) string {
 	label := fmt.Sprintf("%d", order)
 	if current {
-		return "👉 " + label
+		return label + " 👉"
 	}
-	return label
+	return label + "  "
 }
 
 func stackBaseStatusEmoji(item StackPullRequest) string {
