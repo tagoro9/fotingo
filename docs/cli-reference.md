@@ -200,7 +200,7 @@ Subcommands:
 Notes:
 
 - Stack commands default to the stack that contains the current branch's open PR.
-- `review stacks` prints terminal-aligned columns, not Markdown table syntax.
+- `review stacks` prints a terminal table with clickable pull request labels in terminals that support links, not Markdown table syntax.
 - `review stacks sync` does not open an editor; it only rewrites the marker-owned `stacked-prs` section.
 - `review stacks rebase` requires every branch that will be rebased to have a clean local worktree and stops at the first rebase conflict.
 - Branches in separate linked worktrees are supported; fotingo discovers them with Git worktree metadata and runs each rebase in that branch's worktree.
