@@ -73,11 +73,34 @@ fotingo review -y --branch feature/PROJ-122-parent
 fotingo review stacks
 fotingo review stacks sync
 
+# Inspect pull request comments and review conversations
+fotingo inspect pr --json
+
+# Refresh selected PR sections or metadata after follow-up changes
+fotingo review sync --section changes --section fixed-issues -y
+
 # Open the PR in browser
 fotingo open pr
 ```
 
 For full authentication setup details, see [docs/authentication.md](./docs/authentication.md).
+
+## Common Commands
+
+| Command                 | What it does                                                                                 |
+| ----------------------- | -------------------------------------------------------------------------------------------- |
+| `fotingo start`         | Creates or checks out a Jira-backed branch, optionally in a dedicated worktree               |
+| `fotingo review`        | Creates a pull request with issue context, labels, reviewers, and optional base overrides    |
+| `fotingo review sync`   | Refreshes managed PR sections, reviewers, assignees, title, and draft readiness              |
+| `fotingo review stacks` | Lists, syncs, and rebases linear stacked PR chains, including branches in separate worktrees |
+| `fotingo inspect`       | Prints branch, issue, commit, and pull request metadata for automation                       |
+| `fotingo inspect pr`    | Prints PR comments, submitted reviews, and grouped inline review conversations               |
+| `fotingo open`          | Opens the related issue, PR, branch, repository, or release page                             |
+| `fotingo search`        | Resolves reviewers, assignees, labels, projects, and issue types before command automation   |
+| `fotingo config`        | Reads and writes local configuration such as Jira root and worktree parent paths             |
+| `fotingo completion`    | Generates shell completion scripts                                                           |
+
+For flags, JSON contracts, and examples, see the [CLI Reference](./docs/cli-reference.md) and [Automation and JSON](./docs/automation-and-json.md) docs.
 
 ## Telemetry
 
