@@ -105,7 +105,7 @@ jobs:
       - name: Run pre-commit
         id: pre-commit
         continue-on-error: true
-        uses: open-turo/action-pre-commit@v3.5.1
+        uses: open-turo/action-pre-commit@v3.6.0
         with:
           github-token: ${{ steps.app-token.outputs.token }}
       - name: Detect changes
