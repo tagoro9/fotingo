@@ -74,6 +74,10 @@ func (m *mockGit) HasUncommittedChanges() (bool, error) {
 	return false, nil
 }
 
+func (m *mockGit) HasStashableChanges() (bool, error) {
+	return false, nil
+}
+
 func (m *mockGit) GetCommitsSince(_ string) ([]git.Commit, error) {
 	return nil, nil
 }

@@ -115,6 +115,7 @@ type workflowMockGit struct {
 	createBranchName      string
 	createWorktreePath    string
 	createWorktreeOptions git.WorktreeOptions
+	hasStashableChanges   bool
 	fetchDefaultCalls     int
 	createBranchCalls     int
 	createWorktreeCalls   int
@@ -147,6 +148,10 @@ func (m *workflowMockGit) PopStash() error {
 func (m *workflowMockGit) HasUncommittedChanges() (bool, error) {
 	m.hasUncommitedCalls++
 	return false, nil
+}
+func (m *workflowMockGit) HasStashableChanges() (bool, error) {
+	m.hasUncommitedCalls++
+	return m.hasStashableChanges, nil
 }
 func (m *workflowMockGit) GetCommitsSince(string) ([]git.Commit, error) {
 	return nil, nil
@@ -290,6 +295,47 @@ func TestWorkflowRunnerProgressStartWorkflow_WaitsForGitDebugForwarding(t *testi
 		t.Fatal("timed out waiting for workflow to finish")
 	}
 
+	assert.Equal(t, 1, gitClient.fetchDefaultCalls)
+	assert.Equal(t, 1, gitClient.createBranchCalls)
+	assert.Equal(t, 1, gitClient.hasUncommitedCalls)
+}
+
+func TestWorkflowRunnerProgressStartWorkflow_IgnoresUntrackedOnlyState(t *testing.T) {
+	gitClient := &workflowMockGit{createBranchName: "f/test-123_fix_worktree"}
+	jiraClient := &workflowMockJira{
+		setIssue: &jira.Issue{
+			Key:     "TEST-123",
+			Summary: "Fix worktree start flow",
+			Type:    "Task",
+			Status:  string(jira.StatusInProgress),
+		},
+	}
+	stashCalls := 0
+
+	runner := WorkflowRunner{
+		Config: viper.New(),
+		Deps: WorkflowDeps{
+			RunWithSpinner: func(work func(WorkflowEmitter) error) error {
+				return work(&startCollectingEmitter{})
+			},
+			ResolveIssueAssignee: func(WorkflowEmitter, jira.Jira, string) {},
+			NewGitClient: func(_ *viper.Viper, _ *chan string) (git.Git, error) {
+				return gitClient, nil
+			},
+			StashChanges: func(WorkflowEmitter, git.Git) error {
+				stashCalls++
+				return nil
+			},
+		},
+	}
+
+	err := runner.progressStartWorkflow(
+		jiraClient,
+		&jira.Issue{Key: "TEST-123", Summary: "Fix worktree start flow", Type: "Task"},
+		"TEST-123",
+	)
+	require.NoError(t, err)
+	assert.Equal(t, 0, stashCalls)
 	assert.Equal(t, 1, gitClient.fetchDefaultCalls)
 	assert.Equal(t, 1, gitClient.createBranchCalls)
 	assert.Equal(t, 1, gitClient.hasUncommitedCalls)

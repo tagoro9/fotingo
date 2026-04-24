@@ -143,6 +143,9 @@ func (workflowSuccessMockGit) PopStash() error { return nil }
 func (workflowSuccessMockGit) HasUncommittedChanges() (bool, error) {
 	return false, nil
 }
+func (workflowSuccessMockGit) HasStashableChanges() (bool, error) {
+	return false, nil
+}
 func (workflowSuccessMockGit) GetCommitsSince(string) ([]git.Commit, error) {
 	return nil, nil
 }

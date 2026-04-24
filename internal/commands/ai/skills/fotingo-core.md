@@ -126,6 +126,7 @@ Rebase stack branches in their existing local worktrees:
 - Use `fotingo inspect pr --json` when you need pull request discussion context before editing, syncing, or responding to review feedback.
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
 - Use `fotingo start --worktree-path <parent> ... --json` when you want an isolated checkout under a specific parent; automation should read `branch.name` and `branch.worktreePath` from the JSON result. Worktree directory names use the hardcoded `fotingo-wt-<branch>` format.
+- `fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.

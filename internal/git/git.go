@@ -63,6 +63,8 @@ type Git interface {
 	PopStash() error
 	// HasUncommittedChanges checks if there are uncommitted changes (staged or unstaged)
 	HasUncommittedChanges() (bool, error)
+	// HasStashableChanges checks whether tracked or staged changes require start's auto-stash flow.
+	HasStashableChanges() (bool, error)
 	// GetCommitsSince returns commits since the given reference
 	GetCommitsSince(ref string) ([]Commit, error)
 	// DoesBranchExistInRemote checks if a branch exists on the remote
@@ -905,9 +907,35 @@ func (g *git) FetchDefaultBranch() error {
 		return fmt.Errorf("failed to get default branch: %w", err)
 	}
 
-	remote := g.GetConfigString("remote")
+	worktreeRoot, err := g.worktreeRoot()
+	if err != nil {
+		return err
+	}
+
+	remote := strings.TrimSpace(g.GetConfigString("remote"))
+	if remote == "" {
+		return fmt.Errorf("git remote is not configured")
+	}
+
 	(*g.messages) <- fmt.Sprintf("Fetching from remote %s", remote)
-	if err := g.fetch(remote); err != nil {
+	refspec := fmt.Sprintf(
+		"refs/heads/%s:refs/remotes/%s/%s",
+		defaultBranch,
+		remote,
+		defaultBranch,
+	)
+	_, stderr, err := execGitCommand(
+		worktreeRoot,
+		gitNonInteractiveEnv(),
+		"fetch",
+		"--depth=1",
+		remote,
+		refspec,
+	)
+	if err != nil {
+		if stderr != "" {
+			return fmt.Errorf("failed to fetch from remote: %s", stderr)
+		}
 		return fmt.Errorf("failed to fetch from remote: %w", err)
 	}
 
@@ -1197,6 +1225,30 @@ func (g *git) HasUncommittedChanges() (bool, error) {
 	}
 
 	return false, nil
+}
+
+// HasStashableChanges reports whether tracked or staged changes should trigger start auto-stash.
+func (g *git) HasStashableChanges() (bool, error) {
+	worktreeRoot, err := g.worktreeRoot()
+	if err != nil {
+		return false, err
+	}
+
+	stdout, stderr, err := execGitCommand(
+		worktreeRoot,
+		gitNonInteractiveEnv(),
+		"status",
+		"--porcelain",
+		"--untracked-files=no",
+	)
+	if err != nil {
+		if stderr != "" {
+			return false, fmt.Errorf("failed to get worktree status: %s", stderr)
+		}
+		return false, fmt.Errorf("failed to get worktree status: %w", err)
+	}
+
+	return strings.TrimSpace(stdout) != "", nil
 }
 
 func (g *git) loadGlobalIgnoreMatcher() (gitignore.Matcher, error) {
