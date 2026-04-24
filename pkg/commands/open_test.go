@@ -37,6 +37,8 @@ type mockGit struct {
 	remoteErr         error
 	hasChanges        bool
 	hasChangesErr     error
+	hasStashable      *bool
+	hasStashableErr   error
 	stashErr          error
 	stashCalls        int
 	stashMessage      string
@@ -93,6 +95,16 @@ func (m *mockGit) PopStash() error {
 }
 
 func (m *mockGit) HasUncommittedChanges() (bool, error) {
+	return m.hasChanges, m.hasChangesErr
+}
+
+func (m *mockGit) HasStashableChanges() (bool, error) {
+	if m.hasStashableErr != nil {
+		return false, m.hasStashableErr
+	}
+	if m.hasStashable != nil {
+		return *m.hasStashable, nil
+	}
 	return m.hasChanges, m.hasChangesErr
 }
 

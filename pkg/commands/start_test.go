@@ -928,6 +928,56 @@ func TestRunStartWithResult_AutoStashesWhenChangesExist(t *testing.T) {
 	assert.Equal(t, 1, g.createBranchCalls)
 }
 
+func TestRunStartWithResult_DoesNotAutoStashForUntrackedOnlyState(t *testing.T) {
+	origFlags := startCmdFlags
+	origNewJiraClient := newJiraClient
+	origNewGitClient := newGitClient
+	defer func() {
+		startCmdFlags = origFlags
+		newJiraClient = origNewJiraClient
+		newGitClient = origNewGitClient
+	}()
+
+	startCmdFlags = startFlags{}
+	j := &mockJira{
+		trackerIssue: &tracker.Issue{
+			Key: "TEST-123",
+		},
+		currentUser: &tracker.User{
+			ID:   "user-1",
+			Name: "Jane Doe",
+		},
+		setJiraIssueStatus: &jira.Issue{
+			Key:     "TEST-123",
+			Summary: "Ignore untracked-only state",
+			Status:  string(jira.StatusInProgress),
+			Type:    "Task",
+		},
+	}
+	stashable := false
+	g := &mockGit{
+		hasChanges:       true,
+		hasStashable:     &stashable,
+		createBranchName: "f/test-123_ignore_untracked_only_state",
+	}
+
+	newJiraClient = func(_ *viper.Viper) (jira.Jira, error) {
+		return j, nil
+	}
+	newGitClient = func(_ *viper.Viper, _ *chan string) (git.Git, error) {
+		return g, nil
+	}
+
+	statusCh := make(chan string, 32)
+	defer close(statusCh)
+
+	cmd := newStartFlagProbeCommand(t)
+	result := runStartWithResult(cmd, &statusCh, "TEST-123")
+	require.NoError(t, result.err)
+	assert.Equal(t, 0, g.stashCalls)
+	assert.Equal(t, 1, g.createBranchCalls)
+}
+
 func TestRunStartWithResult_ReturnsErrorWhenAutoStashFails(t *testing.T) {
 	origFlags := startCmdFlags
 	origNewJiraClient := newJiraClient

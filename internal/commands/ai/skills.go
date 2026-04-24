@@ -13,7 +13,7 @@ var skillsFS embed.FS
 
 // skillMetadataVersion is the semver for generated fotingo skill content.
 // Bump this when generated skill guidance/frontmatter changes.
-const skillMetadataVersion = "1.12.0"
+const skillMetadataVersion = "1.13.1"
 
 // RenderSkill returns provider-specific skill markdown content from embedded assets.
 func RenderSkill(provider Provider) (string, error) {

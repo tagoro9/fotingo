@@ -69,6 +69,10 @@ func (s *inspectGitStub) HasUncommittedChanges() (bool, error) {
 	return false, fmt.Errorf("not implemented")
 }
 
+func (s *inspectGitStub) HasStashableChanges() (bool, error) {
+	return false, fmt.Errorf("not implemented")
+}
+
 func (s *inspectGitStub) GetCommitsSince(string) ([]git.Commit, error) {
 	s.commitsSinceCalls++
 	return nil, fmt.Errorf("unexpected call")

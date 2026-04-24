@@ -551,6 +551,45 @@ func (s *GitFsTestSuite) TestHasUncommittedChanges_WithGlobalIgnoreAndNonIgnored
 	assert.True(t, hasChanges)
 }
 
+func (s *GitFsTestSuite) TestHasStashableChanges_IgnoresUntrackedOnlyState() {
+	t := s.T()
+
+	require.NoError(t, os.MkdirAll(filepath.Join(s.repoDir(), ".codex"), 0755))
+	require.NoError(t, os.MkdirAll(filepath.Join(s.repoDir(), "openspec"), 0755))
+	require.NoError(t, os.WriteFile(filepath.Join(s.repoDir(), ".codex", "notes.md"), []byte("local notes"), 0644))
+	require.NoError(t, os.WriteFile(filepath.Join(s.repoDir(), "openspec", "proposal.md"), []byte("draft spec"), 0644))
+
+	hasChanges, err := s.gitClient.HasStashableChanges()
+	assert.NoError(t, err)
+	assert.False(t, hasChanges)
+}
+
+func (s *GitFsTestSuite) TestHasStashableChanges_DetectsTrackedChanges() {
+	t := s.T()
+
+	require.NoError(t, os.WriteFile(filepath.Join(s.repoDir(), "dummy.txt"), []byte("modified"), 0644))
+
+	hasChanges, err := s.gitClient.HasStashableChanges()
+	assert.NoError(t, err)
+	assert.True(t, hasChanges)
+}
+
+func (s *GitFsTestSuite) TestHasStashableChanges_DetectsStagedChanges() {
+	t := s.T()
+
+	wt, err := s.repo.Worktree()
+	require.NoError(t, err)
+
+	filePath := filepath.Join(s.repoDir(), "staged-only.txt")
+	require.NoError(t, os.WriteFile(filePath, []byte("staged"), 0644))
+	_, err = wt.Add("staged-only.txt")
+	require.NoError(t, err)
+
+	hasChanges, err := s.gitClient.HasStashableChanges()
+	assert.NoError(t, err)
+	assert.True(t, hasChanges)
+}
+
 func (s *GitFsTestSuite) configureGlobalIgnore(patterns string) {
 	t := s.T()
 
@@ -737,8 +776,10 @@ func TestFetchDefaultBranch_UsesGitRemoteFallbackWhenRepoRemoteIsMissing(t *test
 	runGitCommand(t, targetDir, "add", "LOCAL.md")
 	runGitCommand(t, targetDir, "commit", "--no-verify", "-m", "feat: local repo")
 	runGitCommand(t, targetDir, "branch", "-M", "main")
+	runGitCommand(t, targetDir, "remote", "add", "origin", "file://"+bareDir)
 
 	originalExecGitCommand := execGitCommand
+	var capturedFetchArgs []string
 	defer func() {
 		execGitCommand = originalExecGitCommand
 	}()
@@ -753,6 +794,9 @@ func TestFetchDefaultBranch_UsesGitRemoteFallbackWhenRepoRemoteIsMissing(t *test
 		case "remote get-url origin":
 			return "file://" + bareDir, "", nil
 		default:
+			if len(args) > 0 && args[0] == "fetch" {
+				capturedFetchArgs = append([]string{}, args...)
+			}
 			return originalExecGitCommand(dir, env, args...)
 		}
 	}
@@ -773,6 +817,16 @@ func TestFetchDefaultBranch_UsesGitRemoteFallbackWhenRepoRemoteIsMissing(t *test
 	remoteMain := plumbing.NewRemoteReferenceName("origin", "main")
 	_, err = internalGit.repo.Reference(remoteMain, true)
 	require.NoError(t, err)
+	require.Equal(
+		t,
+		[]string{
+			"fetch",
+			"--depth=1",
+			"origin",
+			"refs/heads/main:refs/remotes/origin/main",
+		},
+		capturedFetchArgs,
+	)
 }
 
 func runGitCommand(t *testing.T, dir string, args ...string) {

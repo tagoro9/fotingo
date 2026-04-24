@@ -181,7 +181,7 @@ func (r WorkflowRunner) RunWithResult(cmd *cobra.Command, statusCh *chan string,
 
 	out.Verbose(i18n.StartStatusCheckChanges)
 	checkChangesStart := time.Now()
-	hasChanges, err := gitClient.HasUncommittedChanges()
+	hasChanges, err := gitClient.HasStashableChanges()
 	logStartPhaseTiming(out, "check_uncommitted_changes", checkChangesStart)
 	if err != nil {
 		result.Err = fterrors.WrapGitError(t(i18n.StartWrapCheckChanges), err)
@@ -338,7 +338,7 @@ func (r WorkflowRunner) progressStartWorkflow(jiraClient jira.Jira, issue *jira.
 
 		out.Verbose(i18n.StartStatusCheckChanges)
 		checkChangesStart := time.Now()
-		hasChanges, err := gitClient.HasUncommittedChanges()
+		hasChanges, err := gitClient.HasStashableChanges()
 		logStartPhaseTiming(out, "check_uncommitted_changes", checkChangesStart)
 		if err != nil {
 			return fterrors.WrapGitError(r.localize(i18n.StartWrapCheckChanges), err)

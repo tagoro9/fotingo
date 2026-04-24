@@ -83,6 +83,8 @@ fotingo review sync --section changes --section fixed-issues -y
 fotingo open pr
 ```
 
+`fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place.
+
 For full authentication setup details, see [docs/authentication.md](./docs/authentication.md).
 
 ## Common Commands
