@@ -25,6 +25,7 @@ fotingo inspect pr --json
 
 When `start` runs with `--worktree`, `--worktree-path`, or `git.worktree.enabled=true`, automation should read both `branch.name` and `branch.worktreePath` from the JSON result.
 `start` auto-stashes only tracked or staged changes; untracked-only files and directories remain untouched.
+`start` refreshes only the default branch when needed and avoids shallow-fetch side effects during that preflight step.
 
 ## Recommended Flags for Automation
 

@@ -109,6 +109,7 @@ Notes:
 - In worktree mode, `start` prints the created branch name and worktree folder, and JSON output includes `branch.name` plus `branch.worktreePath`.
 - Worktree directory names use the hardcoded `fotingo-wt-<branch>` format.
 - `start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place.
+- `start` resolves and refreshes only the repository default branch during branch preflight. If the local remote-tracking ref is already current, fotingo skips the fetch; when a refresh is needed, it uses a targeted non-shallow fetch.
 - `--worktree-path` implies worktree mode and overrides `git.worktree.path` for one invocation.
 
 ### `review`

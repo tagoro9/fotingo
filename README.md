@@ -83,7 +83,7 @@ fotingo review sync --section changes --section fixed-issues -y
 fotingo open pr
 ```
 
-`fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place.
+`fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place. When branch creation needs a base refresh, fotingo checks only the default branch and does not use shallow fetches during that preflight step.
 
 For full authentication setup details, see [docs/authentication.md](./docs/authentication.md).
 
