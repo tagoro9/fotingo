@@ -572,72 +572,64 @@ func (g *git) GetDefaultBranch() (string, error) {
 		return "", fmt.Errorf("git remote is not configured")
 	}
 
-	branch, showErr := g.getRemoteDefaultBranchFromGitCommand(remote)
-	if showErr == nil {
+	if branch, ok := g.getCachedRemoteDefaultBranch(remote); ok {
 		return branch, nil
 	}
 
-	// Prefer cached remote HEAD when available to avoid unnecessary network calls.
-	cachedHeadRefName := plumbing.ReferenceName(fmt.Sprintf("refs/remotes/%s/HEAD", remote))
-	if headRef, err := g.repo.Reference(cachedHeadRefName, false); err == nil {
-		if headRef.Type() == plumbing.SymbolicReference {
-			target := normalizeDefaultBranchName(remote, headRef.Target().Short())
-			if target != "" {
-				return target, nil
-			}
-		}
-	}
-
-	remoteRef, remoteURL, err := g.getConfiguredRemote(remote)
+	branch, err := g.getRemoteDefaultBranchFromSymref(remote)
 	if err != nil {
 		return "", err
 	}
 
-	credentials, err := g.credentialProvider.GetCredentials(remoteURL)
-	if err != nil {
-		return "", fmt.Errorf(
-			"failed to get credentials for remote %s while resolving default branch: %w",
-			remote,
-			err,
-		)
+	if cacheErr := g.cacheRemoteDefaultBranch(remote, branch); cacheErr != nil {
+		(*g.messages) <- fmt.Sprintf("Failed to cache remote HEAD for %s: %s", remote, cacheErr)
 	}
 
-	refs, err := remoteRef.List(&gogit.ListOptions{
-		Auth: credentials,
-	})
-	if err != nil {
-		return "", fmt.Errorf("failed to list remote refs for %s: %w", remote, err)
-	}
-
-	// Look for remote HEAD reference that points to the default branch.
-	for _, ref := range refs {
-		if ref.Name() != plumbing.HEAD {
-			continue
-		}
-		target := normalizeDefaultBranchName(remote, ref.Target().Short())
-		if target != "" && target != "HEAD" {
-			return target, nil
-		}
-	}
-
-	return "", fmt.Errorf("could not determine default branch for remote %s: %w", remote, showErr)
+	return branch, nil
 }
 
-func (g *git) getRemoteDefaultBranchFromGitCommand(remote string) (string, error) {
+func (g *git) getCachedRemoteDefaultBranch(remote string) (string, bool) {
+	cachedHeadRefName := plumbing.ReferenceName(fmt.Sprintf("refs/remotes/%s/HEAD", remote))
+	headRef, err := g.repo.Reference(cachedHeadRefName, false)
+	if err != nil || headRef.Type() != plumbing.SymbolicReference {
+		return "", false
+	}
+
+	target := normalizeDefaultBranchName(remote, headRef.Target().Short())
+	if target == "" || target == "HEAD" {
+		return "", false
+	}
+
+	return target, true
+}
+
+func (g *git) cacheRemoteDefaultBranch(remote, branch string) error {
+	branch = strings.TrimSpace(branch)
+	if branch == "" {
+		return fmt.Errorf("default branch is required")
+	}
+
+	return g.repo.Storer.SetReference(plumbing.NewSymbolicReference(
+		plumbing.ReferenceName(fmt.Sprintf("refs/remotes/%s/HEAD", remote)),
+		plumbing.NewRemoteReferenceName(remote, branch),
+	))
+}
+
+func (g *git) getRemoteDefaultBranchFromSymref(remote string) (string, error) {
 	worktreeRoot, err := g.worktreeRoot()
 	if err != nil {
 		return "", err
 	}
 
-	stdout, stderr, err := execGitCommand(worktreeRoot, gitNonInteractiveEnv(), "remote", "show", remote)
+	stdout, stderr, err := execGitCommand(worktreeRoot, gitNonInteractiveEnv(), "ls-remote", "--symref", remote, "HEAD")
 	if err != nil {
 		if stderr == "" {
-			return "", fmt.Errorf("failed to inspect remote %s: %w", remote, err)
+			return "", fmt.Errorf("failed to inspect remote %s HEAD: %w", remote, err)
 		}
-		return "", fmt.Errorf("failed to inspect remote %s: %s", remote, stderr)
+		return "", fmt.Errorf("failed to inspect remote %s HEAD: %s", remote, stderr)
 	}
 
-	branch, err := parseRemoteHeadBranch(stdout)
+	branch, err := parseRemoteHeadBranchSymref(stdout)
 	if err != nil {
 		return "", fmt.Errorf("failed to parse remote %s HEAD branch: %w", remote, err)
 	}
@@ -645,15 +637,20 @@ func (g *git) getRemoteDefaultBranchFromGitCommand(remote string) (string, error
 	return branch, nil
 }
 
-func parseRemoteHeadBranch(output string) (string, error) {
+func parseRemoteHeadBranchSymref(output string) (string, error) {
 	scanner := bufio.NewScanner(strings.NewReader(output))
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		if !strings.HasPrefix(line, "HEAD branch:") {
+		if !strings.HasPrefix(line, "ref: ") {
 			continue
 		}
-		branch := strings.TrimSpace(strings.TrimPrefix(line, "HEAD branch:"))
-		branch = strings.TrimPrefix(branch, "refs/heads/")
+
+		fields := strings.Fields(line)
+		if len(fields) < 3 || fields[2] != "HEAD" {
+			return "", fmt.Errorf("remote HEAD branch is unavailable")
+		}
+
+		branch := strings.TrimSpace(strings.TrimPrefix(fields[1], "refs/heads/"))
 		if branch == "" || branch == "(unknown)" {
 			return "", fmt.Errorf("remote HEAD branch is unavailable")
 		}
@@ -664,7 +661,7 @@ func parseRemoteHeadBranch(output string) (string, error) {
 		return "", fmt.Errorf("failed to read remote output: %w", err)
 	}
 
-	return "", fmt.Errorf("HEAD branch line not found")
+	return "", fmt.Errorf("HEAD symref line not found")
 }
 
 func gitNonInteractiveEnv() []string {
@@ -907,44 +904,25 @@ func (g *git) FetchDefaultBranch() error {
 		return fmt.Errorf("failed to get default branch: %w", err)
 	}
 
-	worktreeRoot, err := g.worktreeRoot()
-	if err != nil {
-		return err
-	}
-
 	remote := strings.TrimSpace(g.GetConfigString("remote"))
 	if remote == "" {
 		return fmt.Errorf("git remote is not configured")
 	}
 
-	(*g.messages) <- fmt.Sprintf("Fetching from remote %s", remote)
-	refspec := fmt.Sprintf(
-		"refs/heads/%s:refs/remotes/%s/%s",
-		defaultBranch,
-		remote,
-		defaultBranch,
-	)
-	_, stderr, err := execGitCommand(
-		worktreeRoot,
-		gitNonInteractiveEnv(),
-		"fetch",
-		"--depth=1",
-		remote,
-		refspec,
-	)
+	localHash, hasLocalRef, err := g.getLocalRemoteBranchHash(remote, defaultBranch)
 	if err != nil {
-		if stderr != "" {
-			return fmt.Errorf("failed to fetch from remote: %s", stderr)
+		return fmt.Errorf("failed to inspect default branch reference: %w", err)
+	}
+
+	if hasLocalRef {
+		remoteHash, err := g.getRemoteBranchTipHash(remote, defaultBranch)
+		if err == nil && remoteHash == localHash {
+			(*g.messages) <- fmt.Sprintf("Default branch %s is already current", defaultBranch)
+			return nil
 		}
-		return fmt.Errorf("failed to fetch from remote: %w", err)
 	}
 
-	remoteDefaultRef := plumbing.NewRemoteReferenceName(remote, defaultBranch)
-	if _, err := g.repo.Reference(remoteDefaultRef, true); err != nil {
-		return fmt.Errorf("failed to get default branch reference: %w", err)
-	}
-
-	return nil
+	return g.fetchDefaultBranchRef(remote, defaultBranch)
 }
 
 func (g *git) prepareIssueBranch(issue *jira.Issue) (string, string, string, error) {
@@ -986,10 +964,9 @@ func (g *git) resolveDefaultBranchReference(remote, defaultBranch string) (*plum
 		return branchRef, nil
 	}
 
-	(*g.messages) <- fmt.Sprintf("Fetching from remote %s", remote)
-	if err := g.fetch(remote); err != nil {
-		(*g.messages) <- fmt.Sprintf("Failed to fetch from remote: %s", err)
-		return nil, fmt.Errorf("failed to fetch from remote: %w", err)
+	if err := g.fetchDefaultBranchRef(remote, defaultBranch); err != nil {
+		(*g.messages) <- fmt.Sprintf("Failed to refresh default branch %s from remote %s: %s", defaultBranch, remote, err)
+		return nil, fmt.Errorf("failed to refresh default branch reference: %w", err)
 	}
 
 	branchRef, err = g.repo.Reference(remoteDefaultRef, true)
@@ -999,6 +976,92 @@ func (g *git) resolveDefaultBranchReference(remote, defaultBranch string) (*plum
 	}
 
 	return branchRef, nil
+}
+
+func (g *git) getLocalRemoteBranchHash(remote, branch string) (plumbing.Hash, bool, error) {
+	ref, err := g.repo.Reference(plumbing.NewRemoteReferenceName(remote, branch), true)
+	if err == nil {
+		return ref.Hash(), true, nil
+	}
+	if errors.Is(err, plumbing.ErrReferenceNotFound) || strings.Contains(err.Error(), "reference not found") {
+		return plumbing.ZeroHash, false, nil
+	}
+	return plumbing.ZeroHash, false, err
+}
+
+func (g *git) getRemoteBranchTipHash(remote, branch string) (plumbing.Hash, error) {
+	worktreeRoot, err := g.worktreeRoot()
+	if err != nil {
+		return plumbing.ZeroHash, err
+	}
+
+	refName := fmt.Sprintf("refs/heads/%s", branch)
+	stdout, stderr, err := execGitCommand(worktreeRoot, gitNonInteractiveEnv(), "ls-remote", "--refs", remote, refName)
+	if err != nil {
+		if stderr == "" {
+			return plumbing.ZeroHash, fmt.Errorf("failed to inspect remote branch %s on %s: %w", branch, remote, err)
+		}
+		return plumbing.ZeroHash, fmt.Errorf("failed to inspect remote branch %s on %s: %s", branch, remote, stderr)
+	}
+
+	hash, err := parseRemoteRefHash(stdout, refName)
+	if err != nil {
+		return plumbing.ZeroHash, err
+	}
+
+	return hash, nil
+}
+
+func parseRemoteRefHash(output string, refName string) (plumbing.Hash, error) {
+	scanner := bufio.NewScanner(strings.NewReader(output))
+	for scanner.Scan() {
+		fields := strings.Fields(scanner.Text())
+		if len(fields) < 2 || fields[1] != refName {
+			continue
+		}
+		return plumbing.NewHash(fields[0]), nil
+	}
+
+	if err := scanner.Err(); err != nil {
+		return plumbing.ZeroHash, fmt.Errorf("failed to read remote ref output: %w", err)
+	}
+
+	return plumbing.ZeroHash, fmt.Errorf("remote ref %s not found", refName)
+}
+
+func (g *git) fetchDefaultBranchRef(remote, defaultBranch string) error {
+	worktreeRoot, err := g.worktreeRoot()
+	if err != nil {
+		return err
+	}
+
+	(*g.messages) <- fmt.Sprintf("Fetching branch %s from remote %s", defaultBranch, remote)
+	refspec := fmt.Sprintf(
+		"refs/heads/%s:refs/remotes/%s/%s",
+		defaultBranch,
+		remote,
+		defaultBranch,
+	)
+	_, stderr, err := execGitCommand(
+		worktreeRoot,
+		gitNonInteractiveEnv(),
+		"fetch",
+		"--no-tags",
+		remote,
+		refspec,
+	)
+	if err != nil {
+		if stderr != "" {
+			return fmt.Errorf("failed to fetch from remote: %s", stderr)
+		}
+		return fmt.Errorf("failed to fetch from remote: %w", err)
+	}
+
+	if _, err := g.repo.Reference(plumbing.NewRemoteReferenceName(remote, defaultBranch), true); err != nil {
+		return fmt.Errorf("failed to get default branch reference: %w", err)
+	}
+
+	return nil
 }
 
 func issueWorktreePath(worktreeRoot, branchName string, options WorktreeOptions) (string, error) {
