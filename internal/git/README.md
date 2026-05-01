@@ -113,7 +113,7 @@ type Git interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1670>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1733>)
 
 ```go
 func New(cfg *viper.Viper, messages *chan string) (Git, error)
@@ -122,7 +122,7 @@ func New(cfg *viper.Viper, messages *chan string) (Git, error)
 New returns a new instance of a Git client in the current working directory. It supports linked worktrees and keeps credential helper lookups rooted at the active worktree, including repositories that enable extensions.worktreeConfig.
 
 <a name="NewWithCredentialProvider"></a>
-### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1702>)
+### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1765>)
 
 ```go
 func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp CredentialProvider) (Git, error)
