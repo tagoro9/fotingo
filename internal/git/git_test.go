@@ -951,6 +951,35 @@ func (suite *GitTestSuite) TestLooksLikeCredentialPrompt() {
 	assert.False(suite.T(), looksLikeCredentialPrompt(""))
 }
 
+func (suite *GitTestSuite) TestGetDefaultBranch_PrefersCachedRemoteHead() {
+	original := execGitCommand
+	suite.T().Cleanup(func() { execGitCommand = original })
+
+	execGitCommand = func(string, []string, ...string) (string, string, error) {
+		suite.T().Fatal("expected cached remote HEAD to avoid shelling out")
+		return "", "", nil
+	}
+
+	branch, err := suite.git.GetDefaultBranch()
+
+	assert.NoError(suite.T(), err)
+	assert.Equal(suite.T(), "main", branch)
+}
+
+func (suite *GitTestSuite) TestParseRemoteHeadBranchSymref() {
+	branch, err := parseRemoteHeadBranchSymref("ref: refs/heads/main\tHEAD\nabc123\tHEAD\n")
+
+	assert.NoError(suite.T(), err)
+	assert.Equal(suite.T(), "main", branch)
+}
+
+func (suite *GitTestSuite) TestParseRemoteRefHash() {
+	hash, err := parseRemoteRefHash("0123456789012345678901234567890123456789\trefs/heads/main\n", "refs/heads/main")
+
+	assert.NoError(suite.T(), err)
+	assert.Equal(suite.T(), plumbing.NewHash("0123456789012345678901234567890123456789"), hash)
+}
+
 func (suite *GitTestSuite) TestHasUncommittedChanges_WithNewFile() {
 	// Create a new untracked file
 	worktree, err := suite.repo.Worktree()

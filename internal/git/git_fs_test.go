@@ -444,7 +444,7 @@ func (s *GitFsTestSuite) TestGetDefaultBranch_InvalidRemote() {
 	s.gitClient.Config.Set("git.remote", "nonexistent")
 	_, err := s.gitClient.GetDefaultBranch()
 	assert.Error(s.T(), err)
-	assert.Contains(s.T(), err.Error(), "failed to get remote")
+	assert.Contains(s.T(), err.Error(), "failed to inspect remote nonexistent HEAD")
 }
 
 // --- fetch error path tests ---
@@ -745,7 +745,94 @@ echo password=test-pass
 	assert.Equal(t, "test-pass", credentials.Password)
 }
 
-func TestFetchDefaultBranch_UsesGitRemoteFallbackWhenRepoRemoteIsMissing(t *testing.T) {
+func TestFetchDefaultBranch_UsesTargetedNonShallowFetchWhenRemoteRefIsMissing(t *testing.T) {
+	tmpDir := t.TempDir()
+	bareDir := filepath.Join(tmpDir, "remote.git")
+	sourceDir := filepath.Join(tmpDir, "source")
+	targetDir := filepath.Join(tmpDir, "target")
+
+	t.Setenv("GIT_CONFIG_GLOBAL", os.DevNull)
+	t.Setenv("GIT_CONFIG_NOSYSTEM", "1")
+	t.Setenv("XDG_CONFIG_HOME", filepath.Join(tmpDir, "xdg"))
+
+	runGitCommand(t, "", "init", "--bare", bareDir)
+
+	require.NoError(t, os.MkdirAll(sourceDir, 0755))
+	runGitCommand(t, "", "init", sourceDir)
+	runGitCommand(t, sourceDir, "config", "user.name", "Test User")
+	runGitCommand(t, sourceDir, "config", "user.email", "test@example.com")
+	require.NoError(t, os.WriteFile(filepath.Join(sourceDir, "README.md"), []byte("source\n"), 0644))
+	runGitCommand(t, sourceDir, "add", "README.md")
+	runGitCommand(t, sourceDir, "commit", "--no-verify", "-m", "feat: seed remote")
+	runGitCommand(t, sourceDir, "branch", "-M", "main")
+	runGitCommand(t, sourceDir, "remote", "add", "origin", "file://"+bareDir)
+	runGitCommand(t, sourceDir, "push", "-u", "origin", "main")
+	runGitCommand(t, bareDir, "symbolic-ref", "HEAD", "refs/heads/main")
+
+	require.NoError(t, os.MkdirAll(targetDir, 0755))
+	runGitCommand(t, "", "init", targetDir)
+	runGitCommand(t, targetDir, "config", "user.name", "Test User")
+	runGitCommand(t, targetDir, "config", "user.email", "test@example.com")
+	require.NoError(t, os.WriteFile(filepath.Join(targetDir, "LOCAL.md"), []byte("target\n"), 0644))
+	runGitCommand(t, targetDir, "add", "LOCAL.md")
+	runGitCommand(t, targetDir, "commit", "--no-verify", "-m", "feat: local repo")
+	runGitCommand(t, targetDir, "branch", "-M", "main")
+	runGitCommand(t, targetDir, "remote", "add", "origin", "file://"+bareDir)
+
+	originalExecGitCommand := execGitCommand
+	var capturedFetchArgs []string
+	defer func() {
+		execGitCommand = originalExecGitCommand
+	}()
+
+	execGitCommand = func(dir string, env []string, args ...string) (string, string, error) {
+		require.Equal(t, targetDir, dir)
+		require.Contains(t, strings.Join(env, "\n"), "GIT_TERMINAL_PROMPT=0")
+
+		switch strings.Join(args, " ") {
+		case "ls-remote --symref origin HEAD":
+			return "ref: refs/heads/main\tHEAD\n0123456789012345678901234567890123456789\tHEAD\n", "", nil
+		default:
+			if len(args) > 0 && args[0] == "fetch" {
+				capturedFetchArgs = append([]string{}, args...)
+			}
+			return originalExecGitCommand(dir, env, args...)
+		}
+	}
+
+	t.Chdir(targetDir)
+
+	cfg := config.NewDefaultConfig()
+	messages := make(chan string, 4)
+	client, err := NewWithCredentialProvider(cfg, &messages, &mockCredentialProvider{})
+	require.NoError(t, err)
+
+	internalGit, ok := client.(*git)
+	require.True(t, ok)
+
+	err = internalGit.FetchDefaultBranch()
+	require.NoError(t, err)
+
+	remoteMain := plumbing.NewRemoteReferenceName("origin", "main")
+	_, err = internalGit.repo.Reference(remoteMain, true)
+	require.NoError(t, err)
+	require.Equal(
+		t,
+		[]string{
+			"fetch",
+			"--no-tags",
+			"origin",
+			"refs/heads/main:refs/remotes/origin/main",
+		},
+		capturedFetchArgs,
+	)
+
+	shallow, stderr, cmdErr := originalExecGitCommand(targetDir, gitNonInteractiveEnv(), "rev-parse", "--is-shallow-repository")
+	require.NoError(t, cmdErr, stderr)
+	assert.Equal(t, "false", shallow)
+}
+
+func TestFetchDefaultBranch_SkipsFetchWhenRemoteTipMatchesLocalTrackingRef(t *testing.T) {
 	tmpDir := t.TempDir()
 	bareDir := filepath.Join(tmpDir, "remote.git")
 	sourceDir := filepath.Join(tmpDir, "source")
@@ -777,28 +864,21 @@ func TestFetchDefaultBranch_UsesGitRemoteFallbackWhenRepoRemoteIsMissing(t *test
 	runGitCommand(t, targetDir, "commit", "--no-verify", "-m", "feat: local repo")
 	runGitCommand(t, targetDir, "branch", "-M", "main")
 	runGitCommand(t, targetDir, "remote", "add", "origin", "file://"+bareDir)
+	runGitCommand(t, targetDir, "fetch", "origin", "refs/heads/main:refs/remotes/origin/main")
 
 	originalExecGitCommand := execGitCommand
-	var capturedFetchArgs []string
+	var recorded [][]string
 	defer func() {
 		execGitCommand = originalExecGitCommand
 	}()
 
 	execGitCommand = func(dir string, env []string, args ...string) (string, string, error) {
 		require.Equal(t, targetDir, dir)
-		require.Contains(t, strings.Join(env, "\n"), "GIT_TERMINAL_PROMPT=0")
-
-		switch strings.Join(args, " ") {
-		case "remote show origin":
-			return "* remote origin\n  HEAD branch: main\n", "", nil
-		case "remote get-url origin":
-			return "file://" + bareDir, "", nil
-		default:
-			if len(args) > 0 && args[0] == "fetch" {
-				capturedFetchArgs = append([]string{}, args...)
-			}
-			return originalExecGitCommand(dir, env, args...)
+		recorded = append(recorded, append([]string{}, args...))
+		if strings.Join(args, " ") == "ls-remote --symref origin HEAD" {
+			return "ref: refs/heads/main\tHEAD\n0123456789012345678901234567890123456789\tHEAD\n", "", nil
 		}
+		return originalExecGitCommand(dir, env, args...)
 	}
 
 	t.Chdir(targetDir)
@@ -814,19 +894,9 @@ func TestFetchDefaultBranch_UsesGitRemoteFallbackWhenRepoRemoteIsMissing(t *test
 	err = internalGit.FetchDefaultBranch()
 	require.NoError(t, err)
 
-	remoteMain := plumbing.NewRemoteReferenceName("origin", "main")
-	_, err = internalGit.repo.Reference(remoteMain, true)
-	require.NoError(t, err)
-	require.Equal(
-		t,
-		[]string{
-			"fetch",
-			"--depth=1",
-			"origin",
-			"refs/heads/main:refs/remotes/origin/main",
-		},
-		capturedFetchArgs,
-	)
+	for _, args := range recorded {
+		assert.NotEqual(t, "fetch", args[0], "expected no fetch when remote tip matches local tracking ref")
+	}
 }
 
 func runGitCommand(t *testing.T, dir string, args ...string) {
@@ -1057,10 +1127,8 @@ func (s *GitCredentialTestSuite) TestGetDefaultBranch_Success() {
 	assert.Equal(s.T(), "master", branch)
 }
 
-func (s *GitCredentialTestSuite) TestGetDefaultBranch_CredentialError() {
-	s.gitClient.credentialProvider = &failingCredentialProvider{}
-
-	// Remove cached remote refs to force GetDefaultBranch through the credentialed remote-list path.
+func (s *GitCredentialTestSuite) TestGetDefaultBranch_RemoteLookupError() {
+	// Remove cached remote refs to force GetDefaultBranch through the remote HEAD lookup path.
 	_ = s.workRepo.Storer.RemoveReference(plumbing.ReferenceName("refs/remotes/origin/HEAD"))
 	_ = s.workRepo.Storer.RemoveReference(plumbing.ReferenceName("refs/remotes/origin/main"))
 	_ = s.workRepo.Storer.RemoveReference(plumbing.ReferenceName("refs/remotes/origin/master"))
@@ -1074,7 +1142,7 @@ func (s *GitCredentialTestSuite) TestGetDefaultBranch_CredentialError() {
 
 	_, err := s.gitClient.GetDefaultBranch()
 	assert.Error(s.T(), err)
-	assert.Contains(s.T(), err.Error(), "failed to get credentials")
+	assert.Contains(s.T(), err.Error(), "failed to inspect remote origin HEAD")
 }
 
 // --- DoesBranchExistInRemote tests ---
