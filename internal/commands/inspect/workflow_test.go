@@ -8,9 +8,11 @@ import (
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/tagoro9/fotingo/internal/auth"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
 	"github.com/tagoro9/fotingo/internal/jira"
+	"github.com/tagoro9/fotingo/internal/tracker"
 )
 
 type inspectGitStub struct {
@@ -124,6 +126,52 @@ func (s *inspectGitHubStub) GetPullRequestDiscussion(prNumber int) (*github.Pull
 	}
 	return s.discussion, nil
 }
+
+type inspectJiraStub struct {
+	issue *jira.Issue
+}
+
+func (s inspectJiraStub) Authenticate() (*auth.AccessToken, error) { return &auth.AccessToken{}, nil }
+func (s inspectJiraStub) GetConfig() *viper.Viper                  { return viper.New() }
+func (s inspectJiraStub) SaveConfig(string, any) error             { return nil }
+func (s inspectJiraStub) Name() string                             { return "Jira" }
+func (s inspectJiraStub) GetCurrentUser() (*tracker.User, error)   { return nil, nil }
+func (s inspectJiraStub) GetUserOpenIssues() ([]tracker.Issue, error) {
+	return nil, nil
+}
+func (s inspectJiraStub) GetIssue(string) (*tracker.Issue, error) { return nil, nil }
+func (s inspectJiraStub) AssignIssue(string, string) (*tracker.Issue, error) {
+	return nil, nil
+}
+func (s inspectJiraStub) CreateIssue(tracker.CreateIssueInput) (*tracker.Issue, error) {
+	return nil, nil
+}
+func (s inspectJiraStub) GetProjectIssueTypes(string) ([]tracker.ProjectIssueType, error) {
+	return nil, nil
+}
+func (s inspectJiraStub) SetIssueStatus(string, tracker.IssueStatus) (*tracker.Issue, error) {
+	return nil, nil
+}
+func (s inspectJiraStub) AddComment(string, string) error { return nil }
+func (s inspectJiraStub) CreateRelease(tracker.CreateReleaseInput) (*tracker.Release, error) {
+	return nil, nil
+}
+func (s inspectJiraStub) SetFixVersion([]string, *tracker.Release) error { return nil }
+func (s inspectJiraStub) IsValidIssueID(string) bool                     { return true }
+func (s inspectJiraStub) GetIssueURL(issueID string) string {
+	return "https://jira.example.com/browse/" + issueID
+}
+func (s inspectJiraStub) GetIssueUrl(issueID string) (string, error) {
+	return s.GetIssueURL(issueID), nil
+}
+func (s inspectJiraStub) GetJiraIssue(string) (*jira.Issue, error) { return s.issue, nil }
+func (s inspectJiraStub) SetJiraIssueStatus(string, jira.IssueStatus) (*jira.Issue, error) {
+	return nil, nil
+}
+func (s inspectJiraStub) SearchIssues(string, string, []tracker.IssueType, int) ([]tracker.Issue, error) {
+	return nil, nil
+}
+
 func TestWorkflowRunnerRun_UsesDefaultBranchDivergenceCommits(t *testing.T) {
 	gitStub := &inspectGitStub{
 		currentBranch: "feature/TEST-123",
@@ -157,6 +205,38 @@ func TestWorkflowRunnerRun_UsesDefaultBranchDivergenceCommits(t *testing.T) {
 	assert.Equal(t, 0, gitStub.commitsSinceCalls)
 }
 
+func TestWorkflowRunnerRun_WithIssueSkipsGitInitialization(t *testing.T) {
+	jiraClient := inspectJiraStub{
+		issue: &jira.Issue{
+			Key:     "TEST-123",
+			Summary: "Fix login bug",
+			Status:  "To Do",
+			Type:    "Bug",
+		},
+	}
+
+	runner := WorkflowRunner{
+		Config:  viper.New(),
+		Options: WorkflowOptions{Issue: "TEST-123"},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
+				return nil, fmt.Errorf("git should not be initialized")
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) {
+				return jiraClient, nil
+			},
+		},
+	}
+
+	result, err := runner.Run()
+	require.NoError(t, err)
+	require.NotNil(t, result.Issue)
+	assert.Equal(t, "TEST-123", result.Issue.Key)
+	assert.Equal(t, "Fix login bug", result.Issue.Summary)
+	assert.Equal(t, "https://jira.example.com/browse/TEST-123", result.Issue.URL)
+	assert.Nil(t, result.Branch)
+}
+
 func TestWorkflowRunnerRun_DefaultBranchSkipsCommitCollection(t *testing.T) {
 	gitStub := &inspectGitStub{
 		currentBranch: "main",
@@ -186,6 +266,7 @@ func TestWorkflowRunnerRun_DefaultBranchSkipsCommitCollection(t *testing.T) {
 	assert.Equal(t, 0, gitStub.commitsSinceDefaultCalls)
 	assert.Equal(t, 0, gitStub.commitsSinceCalls)
 }
+
 func TestWorkflowRunnerRun_IncludesPullRequestWhenBranchHasOne(t *testing.T) {
 	gitStub := &inspectGitStub{
 		currentBranch: "feature/FOTINGO-30",
