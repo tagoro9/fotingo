@@ -306,6 +306,33 @@ func (s *ExecutionTestSuite) TestInspect_WithIssueFlag() {
 	assert.Nil(t, result.PullRequest)
 }
 
+func (s *ExecutionTestSuite) TestInspect_WithIssueFlagOutsideGitRepo() {
+	t := s.T()
+
+	oldDir, err := os.Getwd()
+	require.NoError(t, err)
+	require.NoError(t, os.Chdir(s.tempDir))
+	t.Cleanup(func() {
+		_ = os.Chdir(oldDir)
+	})
+
+	output := captureStdout(t, func() {
+		Fotingo.SetArgs([]string{"inspect", "--issue", "TEST-123"})
+		err := Fotingo.Execute()
+		assert.NoError(t, err)
+	})
+
+	var result InspectOutput
+	err = json.Unmarshal([]byte(extractJSON(output)), &result)
+	require.NoError(t, err, "output should contain valid JSON, got: %s", output)
+
+	require.NotNil(t, result.Issue, "issue should be present in output")
+	assert.Equal(t, "TEST-123", result.Issue.Key)
+	assert.Equal(t, "Fix login bug", result.Issue.Summary)
+	assert.Nil(t, result.Branch)
+	assert.Nil(t, result.PullRequest)
+}
+
 func (s *ExecutionTestSuite) TestInspect_DefaultBranchInfo() {
 	t := s.T()
 

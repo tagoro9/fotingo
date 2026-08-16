@@ -87,12 +87,6 @@ type WorkflowRunner struct {
 func (r WorkflowRunner) Run() (WorkflowResult, error) {
 	output := WorkflowResult{}
 
-	statusCh := make(chan string, 10)
-	gitClient, err := r.Deps.NewGitClient(r.Config, &statusCh)
-	if err != nil {
-		return WorkflowResult{}, err
-	}
-
 	if r.Options.Issue != "" {
 		jiraClient, err := r.Deps.NewJiraClient(r.Config)
 		if err != nil {
@@ -115,6 +109,12 @@ func (r WorkflowRunner) Run() (WorkflowResult, error) {
 			URL:         jiraClient.GetIssueURL(issue.Key),
 		}
 		return output, nil
+	}
+
+	statusCh := make(chan string, 10)
+	gitClient, err := r.Deps.NewGitClient(r.Config, &statusCh)
+	if err != nil {
+		return WorkflowResult{}, err
 	}
 
 	branchName := r.Options.Branch
