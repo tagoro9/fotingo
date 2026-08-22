@@ -13,6 +13,7 @@ import "github.com/tagoro9/fotingo/internal/jira"
 
 - [Variables](<#variables>)
 - [func IsUnauthorizedError\(err error\) bool](<#IsUnauthorizedError>)
+- [func NormalizeRootURL\(raw string, allowHTTP bool\) \(string, error\)](<#NormalizeRootURL>)
 - [func ShouldWarnIgnoredStoredOAuthToken\(cfg \*viper.Viper\) bool](<#ShouldWarnIgnoredStoredOAuthToken>)
 - [type Issue](<#Issue>)
   - [func \(i \*Issue\) Info\(\) string](<#Issue.Info>)
@@ -45,6 +46,15 @@ func IsUnauthorizedError(err error) bool
 ```
 
 IsUnauthorizedError returns true when the Jira API error corresponds to HTTP 401.
+
+<a name="NormalizeRootURL"></a>
+## func [NormalizeRootURL](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1536>)
+
+```go
+func NormalizeRootURL(raw string, allowHTTP bool) (string, error)
+```
+
+NormalizeRootURL validates and normalizes a Jira site root URL or Atlassian Cloud Jira API root URL.
 
 <a name="ShouldWarnIgnoredStoredOAuthToken"></a>
 ## func [ShouldWarnIgnoredStoredOAuthToken](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L507>)

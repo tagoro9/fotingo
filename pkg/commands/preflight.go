@@ -6,6 +6,7 @@ import (
 	"github.com/tagoro9/fotingo/internal/commandruntime"
 	ftconfig "github.com/tagoro9/fotingo/internal/config"
 	fterrors "github.com/tagoro9/fotingo/internal/errors"
+	"github.com/tagoro9/fotingo/internal/jira"
 )
 
 type configRequirement = commandruntime.ConfigRequirement
@@ -23,7 +24,7 @@ func ensureJiraRootConfigured() error {
 		Key:         "jira.root",
 		EnvVar:      "FOTINGO_JIRA_ROOT",
 		Prompt:      "Jira site URL",
-		Placeholder: "https://yourcompany.atlassian.net",
+		Placeholder: "https://yourcompany.atlassian.net or https://api.atlassian.com/ex/jira/{cloudId}",
 		Validate:    normalizeJiraRootConfigValue,
 	})
 }
@@ -52,5 +53,5 @@ func defaultPromptForConfigValue(requirement configRequirement) (string, error) 
 }
 
 func normalizeJiraRootConfigValue(raw string) (string, error) {
-	return commandruntime.NormalizeHTTPSRootURL(raw, "jira site URL")
+	return jira.NormalizeRootURL(raw, false)
 }

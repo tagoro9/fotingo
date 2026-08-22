@@ -296,6 +296,7 @@ type jira struct {
 	promptRoot       func() (string, error)
 	promptAuthMethod func() (string, error)
 	promptAPICreds   func() (string, string, error)
+	promptAPIToken   func() (string, error)
 	metadataCache    cache.Store
 	cacheInitErr     error
 }
@@ -350,6 +351,17 @@ func (j *jira) Authenticate() (token *auth.AccessToken, err error) {
 	rootURL, err := j.resolveJiraRootURL()
 	if err != nil {
 		return nil, err
+	}
+
+	if isAtlassianCloudJiraAPIURL(rootURL) {
+		apiToken, hasAPIToken := j.configuredAPIToken()
+		if hasAPIToken {
+			return j.authenticateWithBearerToken(rootURL, apiToken)
+		}
+		if !j.allowPrompt || !isInputTerminalFn() {
+			return nil, ErrAuthRequired
+		}
+		return j.promptAndAuthenticateWithBearerToken(rootURL)
 	}
 
 	login, apiToken, hasAPICredentials := j.configuredAPICredentials()
@@ -445,6 +457,22 @@ func (j *jira) authenticateWithAPIToken(rootURL, login, token string) (*auth.Acc
 	return &auth.AccessToken{}, nil
 }
 
+func (j *jira) authenticateWithBearerToken(rootURL, token string) (*auth.AccessToken, error) {
+	token = strings.TrimSpace(token)
+	if token == "" {
+		return nil, ErrAuthRequired
+	}
+
+	transport := &jiraClient.BearerAuthTransport{Token: token}
+	jiraClientWithAuth, err := jiraClient.NewClient(wrapJiraHTTPClient(transport.Client()), rootURL)
+	if err != nil {
+		return nil, err
+	}
+
+	j.client = jiraClientWithAuth
+	return &auth.AccessToken{}, nil
+}
+
 func (j *jira) promptAndAuthenticateWithAPIToken(rootURL string, clearOAuthToken bool) (*auth.AccessToken, error) {
 	credentialsPrompt := j.promptAPICreds
 	if credentialsPrompt == nil {
@@ -468,15 +496,44 @@ func (j *jira) promptAndAuthenticateWithAPIToken(rootURL string, clearOAuthToken
 	return j.authenticateWithAPIToken(rootURL, promptLogin, promptToken)
 }
 
+func (j *jira) promptAndAuthenticateWithBearerToken(rootURL string) (*auth.AccessToken, error) {
+	tokenPrompt := j.promptAPIToken
+	if tokenPrompt == nil {
+		tokenPrompt = promptJiraAPIToken
+	}
+	promptToken, promptErr := tokenPrompt()
+	if promptErr != nil {
+		return nil, promptErr
+	}
+	if err := j.SaveConfig("user.login", ""); err != nil {
+		return nil, err
+	}
+	if err := j.SaveConfig("user.token", promptToken); err != nil {
+		return nil, err
+	}
+	if err := j.SaveConfig("token", ""); err != nil {
+		return nil, err
+	}
+	return j.authenticateWithBearerToken(rootURL, promptToken)
+}
+
 func (j *jira) configuredAPICredentials() (string, string, bool) {
 	login := strings.TrimSpace(j.GetConfigString("user.login"))
-	apiToken := strings.TrimSpace(j.GetConfigString("user.token"))
+	apiToken, hasAPIToken := j.configuredAPIToken()
 
-	if login == "" || apiToken == "" {
+	if login == "" || !hasAPIToken {
 		return "", "", false
 	}
 
 	return login, apiToken, true
+}
+
+func (j *jira) configuredAPIToken() (string, bool) {
+	apiToken := strings.TrimSpace(j.GetConfigString("user.token"))
+	if apiToken == "" {
+		return "", false
+	}
+	return apiToken, true
 }
 
 func (j *jira) hasStoredOAuthToken() bool {
@@ -531,6 +588,9 @@ func IsUnauthorizedError(err error) bool {
 func (j *jira) GetIssueURL(issueId string) string {
 	rootURL, err := j.resolveJiraRootURL()
 	if err != nil {
+		return ""
+	}
+	if isAtlassianCloudJiraAPIURL(rootURL) {
 		return ""
 	}
 	return fmt.Sprintf("%s/browse/%s", rootURL, strings.ToUpper(issueId))
@@ -1301,6 +1361,7 @@ func NewWithOptions(cfg *viper.Viper, allowPrompt bool) (Jira, error) {
 		promptRoot:               promptForJiraRootURL,
 		promptAuthMethod:         promptJiraAuthMethod,
 		promptAPICreds:           promptJiraAPICredentials,
+		promptAPIToken:           promptJiraAPIToken,
 		metadataCache:            metadataCache,
 		cacheInitErr:             cacheErr,
 		authenticator: createAuthenticator(func() string {
@@ -1328,7 +1389,7 @@ func (j *jira) resolveJiraRootURL() (string, error) {
 
 	configRoot := j.GetConfigString("root")
 	if configRoot != "" {
-		normalized, err := normalizeJiraRootURL(configRoot, false)
+		normalized, err := NormalizeRootURL(configRoot, false)
 		if err != nil {
 			return "", err
 		}
@@ -1353,7 +1414,7 @@ func (j *jira) resolveJiraRootURL() (string, error) {
 		return "", err
 	}
 
-	normalized, err := normalizeJiraRootURL(prompted, false)
+	normalized, err := NormalizeRootURL(prompted, false)
 	if err != nil {
 		return "", err
 	}
@@ -1376,9 +1437,9 @@ var (
 func promptForJiraRootURL() (string, error) {
 	input := ui.NewInputProgram(
 		ui.WithPrompt("Jira site URL"),
-		ui.WithPlaceholder("https://yourcompany.atlassian.net"),
+		ui.WithPlaceholder("https://yourcompany.atlassian.net or https://api.atlassian.com/ex/jira/{cloudId}"),
 		ui.WithValidation(func(value string) error {
-			_, err := normalizeJiraRootURL(value, false)
+			_, err := NormalizeRootURL(value, false)
 			return err
 		}),
 	)
@@ -1436,6 +1497,29 @@ func promptJiraAPICredentials() (string, string, error) {
 	return strings.TrimSpace(login), strings.TrimSpace(token), nil
 }
 
+func promptJiraAPIToken() (string, error) {
+	tokenInput := ui.NewInputProgram(
+		ui.WithPrompt("Jira API token (Atlassian)"),
+		ui.WithPlaceholder("Create a scoped token in Atlassian account security settings"),
+		ui.WithValidation(func(value string) error {
+			if strings.TrimSpace(value) == "" {
+				return fmt.Errorf("jira api token is required")
+			}
+			return nil
+		}),
+	)
+
+	token, cancelled, err := tokenInput.RunWithCancel()
+	if err != nil {
+		return "", err
+	}
+	if cancelled || strings.TrimSpace(token) == "" {
+		return "", ErrAuthRequired
+	}
+
+	return strings.TrimSpace(token), nil
+}
+
 func promptJiraAuthMethod() (string, error) {
 	useOAuth, err := ui.Confirm("Authenticate Jira with OAuth? (No to use API token)", true)
 	if err != nil {
@@ -1447,7 +1531,9 @@ func promptJiraAuthMethod() (string, error) {
 	return jiraAuthMethodToken, nil
 }
 
-func normalizeJiraRootURL(raw string, allowHTTP bool) (string, error) {
+// NormalizeRootURL validates and normalizes a Jira site root URL or Atlassian
+// Cloud Jira API root URL.
+func NormalizeRootURL(raw string, allowHTTP bool) (string, error) {
 	trimmed := strings.TrimSpace(raw)
 	if trimmed == "" {
 		return "", errMissingJiraRoot
@@ -1474,6 +1560,18 @@ func normalizeJiraRootURL(raw string, allowHTTP bool) (string, error) {
 		return "", fmt.Errorf("invalid Jira site URL: scheme must be https")
 	}
 
+	if normalizedAPIPath, ok := normalizeAtlassianCloudJiraAPIPath(parsed); ok {
+		parsed.Path = normalizedAPIPath
+		parsed.RawPath = ""
+		parsed.RawQuery = ""
+		parsed.Fragment = ""
+		return strings.TrimRight(parsed.String(), "/"), nil
+	}
+
+	if strings.EqualFold(parsed.Host, "api.atlassian.com") {
+		return "", fmt.Errorf("invalid Jira site URL: Atlassian Cloud API URL must match https://api.atlassian.com/ex/jira/{cloudId}")
+	}
+
 	if parsed.Path != "" && parsed.Path != "/" {
 		return "", fmt.Errorf("invalid Jira site URL: path is not allowed")
 	}
@@ -1484,6 +1582,35 @@ func normalizeJiraRootURL(raw string, allowHTTP bool) (string, error) {
 	parsed.Fragment = ""
 
 	return strings.TrimRight(parsed.String(), "/"), nil
+}
+
+func normalizeJiraRootURL(raw string, allowHTTP bool) (string, error) {
+	return NormalizeRootURL(raw, allowHTTP)
+}
+
+func isAtlassianCloudJiraAPIURL(raw string) bool {
+	parsed, err := url.Parse(strings.TrimSpace(raw))
+	if err != nil {
+		return false
+	}
+	_, ok := normalizeAtlassianCloudJiraAPIPath(parsed)
+	return ok
+}
+
+func normalizeAtlassianCloudJiraAPIPath(parsed *url.URL) (string, bool) {
+	if parsed == nil || !strings.EqualFold(parsed.Host, "api.atlassian.com") {
+		return "", false
+	}
+
+	parts := strings.Split(strings.Trim(parsed.Path, "/"), "/")
+	if len(parts) != 3 {
+		return "", false
+	}
+	if parts[0] != "ex" || parts[1] != "jira" || strings.TrimSpace(parts[2]) == "" {
+		return "", false
+	}
+
+	return fmt.Sprintf("/ex/jira/%s", parts[2]), true
 }
 
 func isInputTerminal() bool {
