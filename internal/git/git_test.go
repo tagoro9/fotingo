@@ -253,6 +253,19 @@ func (suite *GitTestSuite) TestDirectoryFriendlyBranchName() {
 	assert.Equal(suite.T(), "f-test-123_fix-review-base", directoryFriendlyBranchName("f/TEST-123_fix review base"))
 }
 
+func (suite *GitTestSuite) TestSanitizeBranchName() {
+	assert.Equal(
+		suite.T(),
+		"c/ticket-123_do-something-with-unicode",
+		sanitizeBranchName("c/TICKET-123—_do-something-with-unicode"),
+	)
+	assert.Equal(
+		suite.T(),
+		"f/test-123_fix_review_base",
+		sanitizeBranchName("///F//TEST-123__Fix Review Base!!!"),
+	)
+}
+
 func (suite *GitTestSuite) TestGetIssueId_DetachedHead() {
 	// Get the current HEAD commit
 	head, err := suite.repo.Head()
@@ -347,6 +360,26 @@ func (suite *GitTestSuite) TestCreateIssueBranch() {
 
 	assert.NoError(suite.T(), err)
 	assert.Equal(suite.T(), "f/test-123_test-branch", branchName)
+
+	_, err = suite.repo.Reference(plumbing.NewBranchReferenceName(branchName), true)
+	assert.NoError(suite.T(), err)
+}
+
+func (suite *GitTestSuite) TestCreateIssueBranch_SanitizesUnicodePunctuation() {
+	issue := &jira.Issue{
+		Key:     "TICKET-1234",
+		Type:    "Task",
+		Summary: "Implement this — feature",
+	}
+
+	branchName, err := suite.git.CreateIssueBranch(issue)
+
+	assert.NoError(suite.T(), err)
+	assert.Equal(
+		suite.T(),
+		"c/ticket-1234_implement_this_feature",
+		branchName,
+	)
 
 	_, err = suite.repo.Reference(plumbing.NewBranchReferenceName(branchName), true)
 	assert.NoError(suite.T(), err)

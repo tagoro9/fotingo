@@ -113,7 +113,7 @@ type Git interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1733>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1758>)
 
 ```go
 func New(cfg *viper.Viper, messages *chan string) (Git, error)
@@ -122,7 +122,7 @@ func New(cfg *viper.Viper, messages *chan string) (Git, error)
 New returns a new instance of a Git client in the current working directory. It supports linked worktrees and keeps credential helper lookups rooted at the active worktree, including repositories that enable extensions.worktreeConfig.
 
 <a name="NewWithCredentialProvider"></a>
-### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1765>)
+### func [NewWithCredentialProvider](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L1790>)
 
 ```go
 func NewWithCredentialProvider(cfg *viper.Viper, messages *chan string, cp CredentialProvider) (Git, error)
@@ -142,7 +142,7 @@ type RemoteConfigurable interface {
 ```
 
 <a name="TemplateIssue"></a>
-## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L199-L204>)
+## type [TemplateIssue](<https://github.com/tagoro9/fotingo/blob/main/internal/git/git.go#L202-L207>)
 
 TODO Is this needed now that we have the issue struct?
 

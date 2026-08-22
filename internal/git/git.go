@@ -192,6 +192,9 @@ var placeholderPatterns = map[string]struct {
 }
 
 var fallbackIssueIDPattern = regexp.MustCompile(`(?i)(^|[^a-z0-9])([a-z][a-z0-9_]+-\d+)($|[^a-z0-9])`)
+var branchNameUnsafePattern = regexp.MustCompile(`[^a-z0-9._/-]+`)
+var branchNameUnderscorePattern = regexp.MustCompile(`_+`)
+var branchNameSlashPattern = regexp.MustCompile(`/+`)
 var worktreeDirUnsafePattern = regexp.MustCompile(`[^a-z0-9._-]+`)
 var worktreeDirDashPattern = regexp.MustCompile(`-+`)
 
@@ -1094,6 +1097,25 @@ func directoryFriendlyBranchName(branchName string) string {
 	return strings.Trim(normalized, "-.")
 }
 
+func sanitizeBranchName(branchName string) string {
+	normalized := strings.ToLower(strings.TrimSpace(branchName))
+	normalized = branchNameUnsafePattern.ReplaceAllString(normalized, "_")
+	normalized = branchNameUnderscorePattern.ReplaceAllString(normalized, "_")
+	normalized = branchNameSlashPattern.ReplaceAllString(normalized, "/")
+
+	parts := strings.Split(normalized, "/")
+	cleanParts := make([]string, 0, len(parts))
+	for _, part := range parts {
+		part = strings.Trim(part, "._-")
+		if part == "" {
+			continue
+		}
+		cleanParts = append(cleanParts, part)
+	}
+
+	return strings.Join(cleanParts, "/")
+}
+
 func (g *git) buildBranchName(issue *jira.Issue) (string, error) {
 	branchTemplate := g.GetConfigString("branchTemplate")
 	if branchTemplate == "" {
@@ -1113,7 +1135,10 @@ func (g *git) buildBranchName(issue *jira.Issue) (string, error) {
 		return "", fmt.Errorf("failed to execute branch template: %w", err)
 	}
 
-	branchName := strings.ToLower(data.String())
+	branchName := sanitizeBranchName(data.String())
+	if branchName == "" {
+		return "", fmt.Errorf("failed to build branch name from template")
+	}
 
 	// Trim branch name to 244 characters to avoid git reference name issues
 	if len(branchName) > 244 {
