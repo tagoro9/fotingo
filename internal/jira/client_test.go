@@ -1482,6 +1482,18 @@ func TestResolveJiraRootURL_NonInteractiveMissingConfig(t *testing.T) {
 	assert.ErrorIs(t, err, errMissingJiraRoot)
 }
 
+func TestGetIssueURL_AtlassianCloudAPIURLReturnsEmpty(t *testing.T) {
+	cfg := viper.New()
+	cfg.Set("jira.root", "https://api.atlassian.com/ex/jira/cloud-123")
+
+	j := &jira{
+		ViperConfigurableService: &config.ViperConfigurableService{Config: cfg, Prefix: "jira"},
+		allowPrompt:              false,
+	}
+
+	assert.Equal(t, "", j.GetIssueURL("TEST-123"))
+}
+
 func TestNormalizeJiraRootURL(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -1492,7 +1504,12 @@ func TestNormalizeJiraRootURL(t *testing.T) {
 	}{
 		{name: "https with trailing slash", input: "https://acme.atlassian.net/", want: "https://acme.atlassian.net"},
 		{name: "missing scheme defaults to https", input: "acme.atlassian.net", want: "https://acme.atlassian.net"},
+		{name: "atlassian cloud jira api root", input: "https://api.atlassian.com/ex/jira/cloud-123/", want: "https://api.atlassian.com/ex/jira/cloud-123"},
+		{name: "atlassian cloud jira api root without scheme", input: "api.atlassian.com/ex/jira/cloud-123", want: "https://api.atlassian.com/ex/jira/cloud-123"},
 		{name: "path not allowed", input: "https://acme.atlassian.net/foo", wantErr: true},
+		{name: "atlassian cloud jira api rest path rejected", input: "https://api.atlassian.com/ex/jira/cloud-123/rest/api/3/project", wantErr: true},
+		{name: "atlassian cloud confluence api path rejected", input: "https://api.atlassian.com/ex/confluence/cloud-123/wiki", wantErr: true},
+		{name: "atlassian cloud jira api missing cloud id rejected", input: "https://api.atlassian.com/ex/jira", wantErr: true},
 		{name: "http rejected by default", input: "http://acme.atlassian.net", wantErr: true},
 		{name: "http allowed for tests", input: "http://localhost:9999", allowHTTP: true, want: "http://localhost:9999"},
 	}

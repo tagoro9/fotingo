@@ -13,6 +13,7 @@ import "github.com/tagoro9/fotingo/internal/jira"
 
 - [Variables](<#variables>)
 - [func IsUnauthorizedError\(err error\) bool](<#IsUnauthorizedError>)
+- [func NormalizeRootURL\(raw string, allowHTTP bool\) \(string, error\)](<#NormalizeRootURL>)
 - [func ShouldWarnIgnoredStoredOAuthToken\(cfg \*viper.Viper\) bool](<#ShouldWarnIgnoredStoredOAuthToken>)
 - [type Issue](<#Issue>)
   - [func \(i \*Issue\) Info\(\) string](<#Issue.Info>)
@@ -38,7 +39,7 @@ var (
 ```
 
 <a name="IsUnauthorizedError"></a>
-## func [IsUnauthorizedError](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L515>)
+## func [IsUnauthorizedError](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L572>)
 
 ```go
 func IsUnauthorizedError(err error) bool
@@ -46,8 +47,17 @@ func IsUnauthorizedError(err error) bool
 
 IsUnauthorizedError returns true when the Jira API error corresponds to HTTP 401.
 
+<a name="NormalizeRootURL"></a>
+## func [NormalizeRootURL](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1536>)
+
+```go
+func NormalizeRootURL(raw string, allowHTTP bool) (string, error)
+```
+
+NormalizeRootURL validates and normalizes a Jira site root URL or Atlassian Cloud Jira API root URL.
+
 <a name="ShouldWarnIgnoredStoredOAuthToken"></a>
-## func [ShouldWarnIgnoredStoredOAuthToken](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L507>)
+## func [ShouldWarnIgnoredStoredOAuthToken](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L564>)
 
 ```go
 func ShouldWarnIgnoredStoredOAuthToken(cfg *viper.Viper) bool
@@ -154,7 +164,7 @@ type Jira interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1289>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1349>)
 
 ```go
 func New(cfg *viper.Viper) (Jira, error)
@@ -163,7 +173,7 @@ func New(cfg *viper.Viper) (Jira, error)
 New returns a new instance of an authenticated Jira client
 
 <a name="NewWithHTTPClient"></a>
-### func [NewWithHTTPClient](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1258>)
+### func [NewWithHTTPClient](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1318>)
 
 ```go
 func NewWithHTTPClient(cfg *viper.Viper, httpClient *http.Client, baseURL string) (Jira, error)
@@ -172,7 +182,7 @@ func NewWithHTTPClient(cfg *viper.Viper, httpClient *http.Client, baseURL string
 NewWithHTTPClient returns a new Jira client using the provided HTTP client and base URL. This bypasses OAuth authentication and is intended for testing with mock servers.
 
 <a name="NewWithOptions"></a>
-### func [NewWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1294>)
+### func [NewWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1354>)
 
 ```go
 func NewWithOptions(cfg *viper.Viper, allowPrompt bool) (Jira, error)
@@ -181,7 +191,7 @@ func NewWithOptions(cfg *viper.Viper, allowPrompt bool) (Jira, error)
 NewWithOptions returns an authenticated Jira client with prompt behavior controls.
 
 <a name="TransitionMapping"></a>
-## type [TransitionMapping](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L587-L591>)
+## type [TransitionMapping](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L647-L651>)
 
 TransitionMapping maps IssueStatus to regex patterns that should match transition names
 

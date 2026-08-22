@@ -2,15 +2,16 @@
 
 ## Environment Variables
 
-| Variable                  | Description                                                       |
-| ------------------------- | ----------------------------------------------------------------- |
-| `FOTINGO_JIRA_ROOT`       | Jira server URL (for example `https://yourcompany.atlassian.net`) |
-| `FOTINGO_JIRA_USER_LOGIN` | Jira username (email)                                             |
-| `FOTINGO_JIRA_USER_TOKEN` | Jira API token                                                    |
-| `FOTINGO_GIT_REMOTE`      | Git remote name (default: `origin`)                               |
-| `GITHUB_TOKEN`            | GitHub classic PAT with `repo` scope                              |
+| Variable                  | Description                               |
+| ------------------------- | ----------------------------------------- |
+| `FOTINGO_JIRA_ROOT`       | Jira site URL or Atlassian Cloud API root |
+| `FOTINGO_JIRA_USER_LOGIN` | Jira username (email)                     |
+| `FOTINGO_JIRA_USER_TOKEN` | Jira API token                            |
+| `FOTINGO_GIT_REMOTE`      | Git remote name (default: `origin`)       |
+| `GITHUB_TOKEN`            | GitHub classic PAT with `repo` scope      |
 
 If `jira.root` / `FOTINGO_JIRA_ROOT` is not set, interactive Jira-backed commands prompt for it and persist it.
+For Atlassian Cloud service accounts, set it to `https://api.atlassian.com/ex/jira/{cloudId}`.
 
 ## Configuration File
 
@@ -50,9 +51,9 @@ jira:
 | `github.cache.orgMembersTTL`    | Organization members cache TTL                 |
 | `github.cache.teamsTTL`         | Organization teams cache TTL                   |
 | `github.cache.userProfilesTTL`  | GitHub user profile cache TTL                  |
-| `jira.root`                     | Jira server URL                                |
-| `jira.user.login`               | Jira username                                  |
-| `jira.user.token`               | Jira API token                                 |
+| `jira.root`                     | Jira site URL or Atlassian Cloud API root      |
+| `jira.user.login`               | Jira username; not used with service accounts  |
+| `jira.user.token`               | Jira API token or scoped service-account token |
 | `jira.cache.issueTypesTTL`      | Jira issue types cache TTL                     |
 | `cache.path`                    | Override cache DB path                         |
 | `telemetry.enabled`             | Enable anonymous telemetry (`true` by default) |
@@ -77,6 +78,7 @@ Token setup references:
 
 - GitHub token auth: create a classic PAT at `https://github.com/settings/tokens` with `repo` scope.
 - Jira token auth: create an Atlassian API token at `https://id.atlassian.com/manage-profile/security/api-tokens`.
+- Jira service-account auth: use the Atlassian Cloud API root `https://api.atlassian.com/ex/jira/{cloudId}` and a scoped token; no username is required.
 
 ## Templates
 

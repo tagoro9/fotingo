@@ -109,6 +109,10 @@ func TestNormalizeJiraRootConfigValue(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "https://mycompany.atlassian.net", normalized)
 
+	normalized, err = normalizeJiraRootConfigValue("https://api.atlassian.com/ex/jira/cloud-123/")
+	require.NoError(t, err)
+	assert.Equal(t, "https://api.atlassian.com/ex/jira/cloud-123", normalized)
+
 	_, err = normalizeJiraRootConfigValue("http://mycompany.atlassian.net")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "scheme must be https")
