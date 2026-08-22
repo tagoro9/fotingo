@@ -13,6 +13,7 @@ import (
 	internalreview "github.com/tagoro9/fotingo/internal/commands/review"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
+	"github.com/tagoro9/fotingo/internal/jira"
 )
 
 type reviewStacksFlags struct {
@@ -438,7 +439,7 @@ func reviewStackJiraURL(jiraKey string) string {
 	if key == "" {
 		return ""
 	}
-	root, err := commandruntime.NormalizeHTTPSRootURL(fotingoConfig.GetString("jira.root"), "jira root")
+	root, err := jira.NormalizeRootURL(fotingoConfig.GetString("jira.root"), false)
 	if err != nil {
 		return ""
 	}

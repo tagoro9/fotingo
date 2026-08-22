@@ -75,6 +75,76 @@ func TestAuthenticate_ReturnsAuthRequiredWhenPromptDisabled(t *testing.T) {
 	assert.True(t, errors.Is(err, ErrAuthRequired))
 }
 
+func TestAuthenticate_RegularJiraRootRequiresUserLoginWithAPIToken(t *testing.T) {
+	cfg := viper.New()
+	cfg.Set("jira.root", "https://acme.atlassian.net")
+	cfg.Set("jira.user.token", "api-token")
+
+	client := &jira{
+		ViperConfigurableService: &config.ViperConfigurableService{Config: cfg, Prefix: "jira"},
+		allowPrompt:              false,
+	}
+
+	_, err := client.Authenticate()
+	require.Error(t, err)
+	assert.ErrorIs(t, err, ErrAuthRequired)
+}
+
+func TestAuthenticate_UsesBearerTokenForAtlassianCloudAPIURL(t *testing.T) {
+	cfg := viper.New()
+	cfg.Set("jira.root", "https://api.atlassian.com/ex/jira/cloud-123")
+	cfg.Set("jira.user.token", "scoped-token")
+
+	client := &jira{
+		ViperConfigurableService: &config.ViperConfigurableService{Config: cfg, Prefix: "jira"},
+		allowPrompt:              false,
+	}
+
+	_, err := client.Authenticate()
+	require.NoError(t, err)
+	require.NotNil(t, client.client)
+
+	baseURL := client.client.GetBaseURL()
+	assert.Equal(t, "https://api.atlassian.com/ex/jira/cloud-123/", baseURL.String())
+}
+
+func TestAuthenticate_AtlassianCloudAPIURLPromptsForTokenOnly(t *testing.T) {
+	cfg := viper.New()
+	cfg.Set("jira.root", "https://api.atlassian.com/ex/jira/cloud-123")
+	cfg.Set("jira.user.login", "old-user@example.com")
+	cfg.Set("jira.token", `{"access_token":"old-oauth-token"}`)
+	cfg.SetConfigFile(filepath.Join(t.TempDir(), "config.yaml"))
+	require.NoError(t, cfg.WriteConfigAs(cfg.ConfigFileUsed()))
+
+	tokenPromptCalled := false
+	credentialsPromptCalled := false
+	client := &jira{
+		ViperConfigurableService: &config.ViperConfigurableService{Config: cfg, Prefix: "jira"},
+		allowPrompt:              true,
+		promptAPIToken: func() (string, error) {
+			tokenPromptCalled = true
+			return "scoped-token", nil
+		},
+		promptAPICreds: func() (string, string, error) {
+			credentialsPromptCalled = true
+			return "", "", fmt.Errorf("credential prompt should not be called")
+		},
+	}
+
+	origIsInputTerminalFn := isInputTerminalFn
+	isInputTerminalFn = func() bool { return true }
+	t.Cleanup(func() { isInputTerminalFn = origIsInputTerminalFn })
+
+	_, err := client.Authenticate()
+	require.NoError(t, err)
+	assert.True(t, tokenPromptCalled)
+	assert.False(t, credentialsPromptCalled)
+	assert.Equal(t, "", cfg.GetString("jira.user.login"))
+	assert.Equal(t, "scoped-token", cfg.GetString("jira.user.token"))
+	assert.Equal(t, "", cfg.GetString("jira.token"))
+	require.NotNil(t, client.client)
+}
+
 func TestAuthenticate_OAuthTokenWithoutCredentialsFallsBackToAuthRequiredWhenNonInteractive(t *testing.T) {
 	cfg := viper.New()
 	cfg.Set("jira.root", "https://acme.atlassian.net")

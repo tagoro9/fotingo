@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/tagoro9/fotingo/internal/commandruntime"
+	"github.com/tagoro9/fotingo/internal/jira"
 	"github.com/tagoro9/fotingo/internal/tracker"
 )
 
@@ -126,7 +126,7 @@ func NormalizeIssueInput(raw string, jiraRoot string) string {
 }
 
 func extractIssueIDFromJiraBrowseURL(raw string, jiraRoot string) (string, bool) {
-	normalizedRoot, err := commandruntime.NormalizeHTTPSRootURL(jiraRoot, "jira root")
+	normalizedRoot, err := jira.NormalizeRootURL(jiraRoot, false)
 	if err != nil {
 		return "", false
 	}

@@ -47,9 +47,10 @@ Prerequisites:
    - A classic GitHub PAT from `https://github.com/settings/tokens` with `repo` scope
 2. Jira authentication:
    - Atlassian API token from `https://id.atlassian.com/manage-profile/security/api-tokens`, or
+   - Atlassian Cloud service-account scoped token with Jira root `https://api.atlassian.com/ex/jira/{cloudId}`, or
    - OAuth only in internal binaries compiled with Jira OAuth client credentials
 3. Jira account email
-4. Jira server URL (for example `https://yourcompany.atlassian.net`)
+4. Jira server URL (for example `https://yourcompany.atlassian.net`) or Atlassian Cloud API root
 
 Jira OAuth client credentials include a client secret and are intended for internal builds only.
 Committing or broadly distributing binaries with embedded Jira OAuth client secret is not considered safe.
