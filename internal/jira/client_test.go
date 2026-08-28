@@ -1482,16 +1482,22 @@ func TestResolveJiraRootURL_NonInteractiveMissingConfig(t *testing.T) {
 	assert.ErrorIs(t, err, errMissingJiraRoot)
 }
 
-func TestGetIssueURL_AtlassianCloudAPIURLReturnsEmpty(t *testing.T) {
-	cfg := viper.New()
-	cfg.Set("jira.root", "https://api.atlassian.com/ex/jira/cloud-123")
+func TestGetIssueURL_AtlassianCloudAPIURLUsesDisplayURL(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "/rest/api/3/serverInfo", r.URL.Path)
+		assert.Equal(t, http.MethodGet, r.Method)
+		_, _ = w.Write([]byte(`{"displayUrl":"https://acme.atlassian.net/"}`))
+	}))
+	defer server.Close()
 
-	j := &jira{
-		ViperConfigurableService: &config.ViperConfigurableService{Config: cfg, Prefix: "jira"},
-		allowPrompt:              false,
-	}
+	jiraClient, err := NewWithHTTPClient(viper.New(), server.Client(), server.URL)
+	require.NoError(t, err)
+	j := jiraClient.(*jira)
+	j.jiraRootURL = "https://api.atlassian.com/ex/jira/cloud-123"
 
-	assert.Equal(t, "", j.GetIssueURL("TEST-123"))
+	assert.Equal(t, "https://acme.atlassian.net/browse/TEST-123", j.GetIssueURL("test-123"))
+	assert.True(t, j.displayURLLoaded)
+	assert.Equal(t, "https://acme.atlassian.net/browse/TEST-456", j.GetIssueURL("TEST-456"))
 }
 
 func TestNormalizeJiraRootURL(t *testing.T) {
