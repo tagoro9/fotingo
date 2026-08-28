@@ -83,8 +83,7 @@ func TestDefaultPRTemplate(t *testing.T) {
 	// Verify the default PR template contains expected placeholders
 	assert.Contains(t, defaultPRTemplate, "**Summary**\n\n<!-- fotingo:start summary -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start summary -->")
-	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start stacked-prs -->")
-	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:end stacked-prs -->")
+	assert.NotContains(t, defaultPRTemplate, "stacked-prs")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:end changes -->")
 	assert.Contains(t, defaultPRTemplate, "**Summary**")
 	assert.NotContains(t, defaultPRTemplate, "{summary}")

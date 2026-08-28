@@ -41,6 +41,15 @@ type PullRequestBodyUpdate struct {
 	Body   string
 }
 
+// PullRequestStack contains GitHub-native stack metadata and its ordered PRs.
+type PullRequestStack struct {
+	ID           int64
+	Number       int
+	BaseRef      string
+	Open         bool
+	PullRequests []PullRequest
+}
+
 // PullRequest represents a GitHub pull request
 type PullRequest struct {
 	Title     string
@@ -217,6 +226,13 @@ type Github interface {
 	CreateRelease(opts CreateReleaseOptions) (*Release, error)
 }
 
+// NativeStackClient is implemented by GitHub clients that support native PR stacks.
+type NativeStackClient interface {
+	ListPullRequestStacks(pullRequestNumber int) ([]PullRequestStack, error)
+	CreatePullRequestStack(pullRequestNumbers []int) (*PullRequestStack, error)
+	AddPullRequestsToStack(stackNumber int, pullRequestNumbers []int) (*PullRequestStack, error)
+}
+
 var oauthClientID = ""
 
 var ErrAuthRequired = errors.New("github authentication required; run `fotingo login` interactively")
@@ -364,6 +380,94 @@ func (g *github) UpdatePullRequestBodies(updates []PullRequestBodyUpdate) ([]*Pu
 		updated = append(updated, pr)
 	}
 	return updated, nil
+}
+
+type nativeStackPullRequest struct {
+	Number  int    `json:"number"`
+	Title   string `json:"title"`
+	HTMLURL string `json:"html_url"`
+	Body    string `json:"body"`
+	State   string `json:"state"`
+	Draft   bool   `json:"draft"`
+	Head    struct {
+		Ref string `json:"ref"`
+		SHA string `json:"sha"`
+	} `json:"head"`
+	Base struct {
+		Ref string `json:"ref"`
+	} `json:"base"`
+}
+
+type nativeStackResponse struct {
+	ID     int64 `json:"id"`
+	Number int   `json:"number"`
+	Open   bool  `json:"open"`
+	Base   struct {
+		Ref string `json:"ref"`
+	} `json:"base"`
+	PullRequests []nativeStackPullRequest `json:"pull_requests"`
+}
+
+func (g *github) nativeStackRequest(method, path string, body any, response any) error {
+	req, err := g.hub.NewRequest(method, path, body)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Accept", "application/vnd.github+json")
+	req.Header.Set("X-GitHub-Api-Version", "2026-03-10")
+	_, err = g.hub.Do(context.Background(), req, response)
+	return err
+}
+
+func mapNativeStack(response nativeStackResponse) PullRequestStack {
+	stack := PullRequestStack{ID: response.ID, Number: response.Number, BaseRef: response.Base.Ref, Open: response.Open}
+	for _, item := range response.PullRequests {
+		stack.PullRequests = append(stack.PullRequests, PullRequest{Number: item.Number, Title: item.Title, HTMLURL: item.HTMLURL, Body: item.Body, State: item.State, Draft: item.Draft, HeadRef: item.Head.Ref, BaseRef: item.Base.Ref})
+	}
+	return stack
+}
+
+// ListPullRequestStacks lists native stacks, optionally filtered by PR number.
+func (g *github) ListPullRequestStacks(pullRequestNumber int) ([]PullRequestStack, error) {
+	var stacks []PullRequestStack
+	for page := 1; ; page++ {
+		path := fmt.Sprintf("repos/%s/%s/stacks?per_page=100&page=%d", g.owner, g.repo, page)
+		if pullRequestNumber > 0 {
+			path += fmt.Sprintf("&pull_request=%d", pullRequestNumber)
+		}
+		var response []nativeStackResponse
+		if err := g.nativeStackRequest(http.MethodGet, path, nil, &response); err != nil {
+			return nil, fmt.Errorf("failed to list pull request stacks: %w", err)
+		}
+		for _, item := range response {
+			stacks = append(stacks, mapNativeStack(item))
+		}
+		if len(response) < 100 {
+			break
+		}
+	}
+	return stacks, nil
+}
+
+// CreatePullRequestStack creates a native stack from bottom to top.
+func (g *github) CreatePullRequestStack(pullRequestNumbers []int) (*PullRequestStack, error) {
+	var response nativeStackResponse
+	if err := g.nativeStackRequest(http.MethodPost, fmt.Sprintf("repos/%s/%s/stacks", g.owner, g.repo), map[string]any{"pull_requests": pullRequestNumbers}, &response); err != nil {
+		return nil, fmt.Errorf("failed to create pull request stack: %w", err)
+	}
+	stack := mapNativeStack(response)
+	return &stack, nil
+}
+
+// AddPullRequestsToStack appends PRs to a native stack from the current top upward.
+func (g *github) AddPullRequestsToStack(stackNumber int, pullRequestNumbers []int) (*PullRequestStack, error) {
+	var response nativeStackResponse
+	path := fmt.Sprintf("repos/%s/%s/stacks/%d/add", g.owner, g.repo, stackNumber)
+	if err := g.nativeStackRequest(http.MethodPost, path, map[string]any{"pull_requests": pullRequestNumbers}, &response); err != nil {
+		return nil, fmt.Errorf("failed to add pull requests to stack #%d: %w", stackNumber, err)
+	}
+	stack := mapNativeStack(response)
+	return &stack, nil
 }
 
 // GetPullRequestDiscussion returns comments and reviews for an existing pull request.

@@ -63,11 +63,31 @@ type reviewStacksMockGitHub struct {
 	headPRs       map[string]*github.PullRequest
 	basePRs       map[string][]github.PullRequest
 	stackMembers  map[string][]github.PullRequest
+	nativeStacks  []github.PullRequestStack
 	bodyUpdates   []github.PullRequestBodyUpdate
 	findErr       error
 	baseErr       error
 	stackErr      error
 	bodyUpdateErr error
+}
+
+func (m *reviewStacksMockGitHub) ListPullRequestStacks(int) ([]github.PullRequestStack, error) {
+	if len(m.nativeStacks) == 0 {
+		for id, members := range m.stackMembers {
+			stack := github.PullRequestStack{Number: 42, PullRequests: append([]github.PullRequest(nil), members...)}
+			if id == "owner/repo#12" {
+				stack.Number = 12
+			}
+			return []github.PullRequestStack{stack}, nil
+		}
+	}
+	return append([]github.PullRequestStack(nil), m.nativeStacks...), nil
+}
+func (m *reviewStacksMockGitHub) CreatePullRequestStack([]int) (*github.PullRequestStack, error) {
+	return nil, nil
+}
+func (m *reviewStacksMockGitHub) AddPullRequestsToStack(int, []int) (*github.PullRequestStack, error) {
+	return nil, nil
 }
 
 func (m *reviewStacksMockGitHub) FindOpenPullRequestByHeadBranch(branch string) (*github.PullRequest, bool, error) {
@@ -125,7 +145,7 @@ func TestDiscoverCurrentReviewStack_UsesExistingStackID(t *testing.T) {
 	stack, err := discoverCurrentReviewStack(gitClient, ghClient)
 
 	require.NoError(t, err)
-	assert.Equal(t, "owner/repo#12", stack.StackID)
+	assert.Equal(t, "12", stack.StackID)
 	require.Len(t, stack.Members, 2)
 	assert.Equal(t, 12, stack.Members[0].Number)
 	assert.Equal(t, 13, stack.Members[1].Number)
@@ -133,7 +153,7 @@ func TestDiscoverCurrentReviewStack_UsesExistingStackID(t *testing.T) {
 	assert.Equal(t, "🟢", stack.Members[1].Status)
 }
 
-func TestDiscoverCurrentReviewStack_DiscoversChildWhenRootHasNoStackID(t *testing.T) {
+func TestDiscoverCurrentReviewStack_RejectsMarkerOnlyStack(t *testing.T) {
 	parent, child, _ := reviewStackPullRequests()
 	parent.Body = emptyStackBody()
 	ghClient := &reviewStacksMockGitHub{
@@ -145,10 +165,9 @@ func TestDiscoverCurrentReviewStack_DiscoversChildWhenRootHasNoStackID(t *testin
 
 	stack, err := discoverCurrentReviewStack(gitClient, ghClient)
 
-	require.NoError(t, err)
-	assert.Equal(t, "owner/repo#12", stack.StackID)
-	require.Len(t, stack.Members, 2)
-	assert.True(t, stack.Members[0].Current)
+	require.Error(t, err)
+	assert.Nil(t, stack)
+	assert.Contains(t, err.Error(), "no native pull request stack found")
 }
 
 func TestDiscoverCurrentReviewStack_RejectsStandalonePullRequest(t *testing.T) {
@@ -165,7 +184,7 @@ func TestDiscoverCurrentReviewStack_RejectsStandalonePullRequest(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Nil(t, stack)
-	assert.Contains(t, err.Error(), "no stacked pull requests found")
+	assert.Contains(t, err.Error(), "no native pull request stack found")
 }
 
 func TestSyncCurrentReviewStack_UpdatesEveryStackMember(t *testing.T) {
@@ -186,14 +205,8 @@ func TestSyncCurrentReviewStack_UpdatesEveryStackMember(t *testing.T) {
 	stack, err := syncCurrentReviewStack()
 
 	require.NoError(t, err)
-	assert.Equal(t, "owner/repo#12", stack.StackID)
-	require.Len(t, ghClient.bodyUpdates, 2)
-	assert.Equal(t, 12, ghClient.bodyUpdates[0].Number)
-	assert.Equal(t, 13, ghClient.bodyUpdates[1].Number)
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "**Stacked PRs**")
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 1 👉 | [ABC-1](https://jira.example.com/browse/ABC-1) | [#12")
-	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 2 👉 | [ABC-2](https://jira.example.com/browse/ABC-2) | [#13")
-	assert.NotContains(t, ghClient.bodyUpdates[1].Body, "| Status |")
+	assert.Equal(t, "12", stack.StackID)
+	assert.Empty(t, ghClient.bodyUpdates)
 }
 
 func TestSyncCurrentReviewStack_FailsBeforePartialUpdateWhenMarkerMissing(t *testing.T) {
@@ -210,10 +223,9 @@ func TestSyncCurrentReviewStack_FailsBeforePartialUpdateWhenMarkerMissing(t *tes
 
 	stack, err := syncCurrentReviewStack()
 
-	require.Error(t, err)
-	assert.Nil(t, stack)
+	require.NoError(t, err)
+	assert.NotNil(t, stack)
 	assert.Empty(t, ghClient.bodyUpdates)
-	assert.Contains(t, err.Error(), "pull request #12")
 }
 
 func TestRebaseCurrentReviewStack_UsesBranchWorktreesInOrder(t *testing.T) {
@@ -234,7 +246,7 @@ func TestRebaseCurrentReviewStack_UsesBranchWorktreesInOrder(t *testing.T) {
 	ghClient := &reviewStacksMockGitHub{
 		mockGitHub:   &mockGitHub{},
 		headPRs:      map[string]*github.PullRequest{child.HeadRef: &child},
-		stackMembers: map[string][]github.PullRequest{"owner/repo#12": {leaf, parent, child}},
+		stackMembers: map[string][]github.PullRequest{"owner/repo#12": {parent, child, leaf}},
 	}
 	restoreClients(gitClient, ghClient)
 

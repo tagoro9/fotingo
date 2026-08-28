@@ -92,8 +92,8 @@ var reviewStacksCmd = &cobra.Command{
 
 var reviewStacksSyncCmd = &cobra.Command{
 	Use:   "sync",
-	Short: "Refresh stacked PR sections across the current stack",
-	Long:  "Refresh the deterministic stacked PR sections for every open pull request in the current stack.",
+	Short: "Refresh native stack state",
+	Long:  "Refresh and display the native GitHub pull request stack without editing PR bodies.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		stack, err := syncCurrentReviewStack()
 		if ShouldOutputJSON() {
@@ -104,9 +104,7 @@ var reviewStacksSyncCmd = &cobra.Command{
 		}
 		if !ShouldOutputJSON() {
 			return runWithSharedShell(func(out commandruntime.LocalizedEmitter) error {
-				for _, member := range stack.Members {
-					out.InfoRaw(commandruntime.LogEmojiCheck, fmt.Sprintf("Updated pull request #%d: %s", member.Number, member.URL))
-				}
+				out.InfoRaw(commandruntime.LogEmojiCheck, "Native pull request stack refreshed; PR bodies were not changed")
 				return nil
 			})
 		}
@@ -162,23 +160,6 @@ func syncCurrentReviewStack() (*reviewStackContext, error) {
 	}
 	stack, err := discoverCurrentReviewStack(gitClient, ghClient)
 	if err != nil {
-		return nil, err
-	}
-	updates := make([]github.PullRequestBodyUpdate, 0, len(stack.rawMembers))
-	for _, member := range stack.rawMembers {
-		body, err := internalreview.ReplaceStackedPRSectionContent(
-			member.Body,
-			internalreview.RenderStackedPRSection(internalreview.StackRenderOptions{
-				StackID: stack.StackID,
-				Items:   stackItemsForMembers(stack.rawMembers, member.Number),
-			}),
-		)
-		if err != nil {
-			return nil, fmt.Errorf("pull request #%d: %w", member.Number, err)
-		}
-		updates = append(updates, github.PullRequestBodyUpdate{Number: member.Number, Body: body})
-	}
-	if _, err := ghClient.UpdatePullRequestBodies(updates); err != nil {
 		return nil, err
 	}
 	return stack, nil
@@ -264,33 +245,23 @@ func discoverCurrentReviewStack(gitClient git.Git, ghClient reviewStacksGithub) 
 		return nil, fmt.Errorf("no pull request found for branch %s", currentBranch)
 	}
 
-	stackID := internalreview.ExtractStackID(currentPR.Body)
-	members := []github.PullRequest{*currentPR}
-	if stackID != "" {
-		stackMembers, err := ghClient.ListOpenPullRequestsByStackID(stackID)
-		if err != nil {
-			return nil, err
-		}
-		members = stackMembers
-		members = appendReviewStackMember(members, *currentPR)
-	} else {
-		children, err := ghClient.ListOpenPullRequestsByBaseBranch(currentPR.HeadRef)
-		if err != nil {
-			return nil, err
-		}
-		if len(children) == 0 {
-			return nil, fmt.Errorf("no stacked pull requests found for branch %s", currentBranch)
-		}
-		stackID = internalreview.StackIDForRootPR(currentPR.Number, currentPR.HTMLURL)
-		for _, child := range children {
-			members = appendReviewStackMember(members, child)
-		}
+	nativeStackClient, ok := ghClient.(github.NativeStackClient)
+	if !ok {
+		return nil, fmt.Errorf("github client does not support native pull request stacks")
 	}
-	ordered, err := internalreview.OrderStackPullRequests(members)
+	stacks, err := nativeStackClient.ListPullRequestStacks(currentPR.Number)
 	if err != nil {
 		return nil, err
 	}
-	return buildReviewStackContext(stackID, currentBranch, currentPR.Number, ordered), nil
+	if len(stacks) == 0 {
+		return nil, fmt.Errorf("no native pull request stack found for branch %s", currentBranch)
+	}
+	if len(stacks) > 1 {
+		return nil, fmt.Errorf("pull request #%d belongs to %d native stacks", currentPR.Number, len(stacks))
+	}
+	stack := stacks[0]
+	members := append([]github.PullRequest(nil), stack.PullRequests...)
+	return buildReviewStackContext(strconv.Itoa(stack.Number), currentBranch, currentPR.Number, members), nil
 }
 
 func buildReviewStackContext(stackID string, currentBranch string, currentPRNumber int, members []github.PullRequest) *reviewStackContext {
@@ -415,25 +386,6 @@ func formatReviewStackPR(member reviewStackMember) string {
 	return lipgloss.NewStyle().Hyperlink(url).Render(label)
 }
 
-func stackItemsForMembers(members []github.PullRequest, currentNumber int) []internalreview.StackPullRequest {
-	items := make([]internalreview.StackPullRequest, 0, len(members))
-	for _, member := range members {
-		jiraKey := internalreview.DeriveStackJiraKey(member.HeadRef, member.Title, member.Body)
-		items = append(items, internalreview.StackPullRequest{
-			Number:  member.Number,
-			Title:   member.Title,
-			HTMLURL: member.HTMLURL,
-			JiraKey: jiraKey,
-			JiraURL: reviewStackJiraURL(jiraKey),
-			State:   member.State,
-			Draft:   member.Draft,
-			Merged:  member.Merged,
-			Current: member.Number == currentNumber,
-		})
-	}
-	return items
-}
-
 func reviewStackJiraURL(jiraKey string) string {
 	key := strings.TrimSpace(jiraKey)
 	if key == "" {
@@ -444,15 +396,6 @@ func reviewStackJiraURL(jiraKey string) string {
 		return ""
 	}
 	return fmt.Sprintf("%s/browse/%s", root, strings.ToUpper(key))
-}
-
-func appendReviewStackMember(members []github.PullRequest, pr github.PullRequest) []github.PullRequest {
-	for _, member := range members {
-		if member.Number == pr.Number {
-			return members
-		}
-	}
-	return append(members, pr)
 }
 
 func loadStackWorktrees(gitClient reviewStacksGit) (map[string]git.WorktreeInfo, error) {

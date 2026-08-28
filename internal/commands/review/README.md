@@ -843,7 +843,7 @@ type WorkflowResult struct {
 ```
 
 <a name="WorkflowRunner"></a>
-## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L81-L86>)
+## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L79-L84>)
 
 WorkflowRunner executes the review command workflow.
 
@@ -857,7 +857,7 @@ type WorkflowRunner struct {
 ```
 
 <a name="WorkflowRunner.Run"></a>
-### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L89>)
+### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L87>)
 
 ```go
 func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEditor bool) WorkflowResult

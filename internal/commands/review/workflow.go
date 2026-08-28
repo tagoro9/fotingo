@@ -73,8 +73,6 @@ type WorkflowDeps struct {
 
 type stackGitHubClient interface {
 	FindOpenPullRequestByHeadBranch(string) (*github.PullRequest, bool, error)
-	ListOpenPullRequestsByStackID(string) ([]github.PullRequest, error)
-	UpdatePullRequestBodies([]github.PullRequestBodyUpdate) ([]*github.PullRequest, error)
 }
 
 // WorkflowRunner executes the review command workflow.
@@ -156,6 +154,8 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 
 	stackBaseBranch := strings.TrimSpace(r.Options.BaseBranch)
 	var stackParentPR *github.PullRequest
+	var stack *github.PullRequestStack
+	var nativeStackClient github.NativeStackClient
 	var stackClient stackGitHubClient
 	if stackBaseBranch != "" {
 		if candidate, ok := ghClient.(stackGitHubClient); ok {
@@ -167,6 +167,24 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 			}
 			if parentExists {
 				stackParentPR = parentPR
+				candidate, nativeOK := ghClient.(github.NativeStackClient)
+				if !nativeOK {
+					result.Err = fterrors.WrapGitHubError("failed to update native pull request stack", fmt.Errorf("github client does not support native pull request stacks"))
+					return result
+				}
+				nativeStackClient = candidate
+				stacks, stackErr := nativeStackClient.ListPullRequestStacks(parentPR.Number)
+				if stackErr != nil {
+					result.Err = fterrors.WrapGitHubError(t(i18n.ReviewWrapCheckExistingPR), stackErr)
+					return result
+				}
+				if len(stacks) > 1 {
+					result.Err = fterrors.WrapGitHubError("failed to identify parent pull request stack", fmt.Errorf("pull request #%d belongs to %d stacks", parentPR.Number, len(stacks)))
+					return result
+				}
+				if len(stacks) == 1 {
+					stack = &stacks[0]
+				}
 				out.InfoRaw("review", fmt.Sprintf("Stack mode enabled: base branch %s is pull request #%d", stackBaseBranch, parentPR.Number))
 				out.Debugf("review stack parent pr=%d branch=%s", parentPR.Number, stackBaseBranch)
 			}
@@ -355,15 +373,23 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	result.PR = pr
 	out.Info("rocket", i18n.ReviewStatusPRCreated, pr.HTMLURL)
 
-	if stackParentPR != nil && stackClient != nil {
-		out.InfoRaw("progress", fmt.Sprintf("Updating stacked PR sections for parent #%d and new PR #%d", stackParentPR.Number, pr.Number))
-		if updatedStackPR, stackErr := updateStackedPRSections(stackClient, jiraClient, stackParentPR, pr); stackErr != nil {
-			result.Err = fterrors.WrapGitHubError("failed to update stacked pull request sections", stackErr)
-			return result
-		} else if updatedStackPR != nil {
-			result.PR = updatedStackPR
+	if stackParentPR != nil && nativeStackClient != nil {
+		out.InfoRaw("progress", fmt.Sprintf("Adding pull request #%d to native stack", pr.Number))
+		var stackErr error
+		if stack != nil {
+			if len(stack.PullRequests) == 0 || stack.PullRequests[len(stack.PullRequests)-1].Number != stackParentPR.Number {
+				result.Err = fterrors.WrapGitHubError("failed to update native pull request stack", fmt.Errorf("parent pull request #%d is not the current native stack top", stackParentPR.Number))
+				return result
+			}
+			_, stackErr = nativeStackClient.AddPullRequestsToStack(stack.Number, []int{pr.Number})
+		} else {
+			_, stackErr = nativeStackClient.CreatePullRequestStack([]int{stackParentPR.Number, pr.Number})
 		}
-		out.InfoRaw("check", "Stacked PR sections updated")
+		if stackErr != nil {
+			result.Err = fterrors.WrapGitHubError("failed to update native pull request stack", stackErr)
+			return result
+		}
+		out.InfoRaw("check", "Native pull request stack updated")
 	}
 
 	if len(resolvedReviewers) > 0 || len(resolvedTeamReviewers) > 0 {
@@ -479,93 +505,6 @@ func collectReviewCommits(gitClient reviewCommitCollector, useBaseBranch bool, b
 		return nil, fmt.Errorf("failed to get commits since base branch %s: %w", baseBranch, err)
 	}
 	return gitClient.GetCommitsSinceDefaultBranch()
-}
-
-func updateStackedPRSections(
-	stackClient stackGitHubClient,
-	jiraClient jira.Jira,
-	parentPR *github.PullRequest,
-	childPR *github.PullRequest,
-) (*github.PullRequest, error) {
-	if stackClient == nil || parentPR == nil || childPR == nil {
-		return childPR, nil
-	}
-
-	stackID := ExtractStackID(parentPR.Body)
-	if stackID == "" {
-		stackID = StackIDForRootPR(parentPR.Number, parentPR.HTMLURL)
-	}
-
-	members := []github.PullRequest{*parentPR}
-	if existingMembers, err := stackClient.ListOpenPullRequestsByStackID(stackID); err != nil {
-		return nil, err
-	} else if len(existingMembers) > 0 {
-		members = existingMembers
-	}
-	members = appendStackMember(members, *parentPR)
-	members = appendStackMember(members, *childPR)
-	orderedMembers, err := OrderStackPullRequests(members)
-	if err != nil {
-		return nil, err
-	}
-
-	updates := make([]github.PullRequestBodyUpdate, 0, len(orderedMembers))
-	for _, member := range orderedMembers {
-		body, err := ReplaceStackedPRSectionContent(
-			member.Body,
-			RenderStackedPRSection(StackRenderOptions{
-				StackID: stackID,
-				Items:   stackPRItems(orderedMembers, member.Number, jiraClient),
-			}),
-		)
-		if err != nil {
-			return nil, fmt.Errorf("pull request #%d: %w", member.Number, err)
-		}
-		updates = append(updates, github.PullRequestBodyUpdate{Number: member.Number, Body: body})
-	}
-
-	updated, err := stackClient.UpdatePullRequestBodies(updates)
-	if err != nil {
-		return nil, err
-	}
-	for _, candidate := range updated {
-		if candidate != nil && candidate.Number == childPR.Number {
-			return candidate, nil
-		}
-	}
-	return childPR, nil
-}
-
-func appendStackMember(members []github.PullRequest, pr github.PullRequest) []github.PullRequest {
-	for _, member := range members {
-		if member.Number == pr.Number {
-			return members
-		}
-	}
-	return append(members, pr)
-}
-
-func stackPRItems(members []github.PullRequest, currentNumber int, jiraClient jira.Jira) []StackPullRequest {
-	items := make([]StackPullRequest, 0, len(members))
-	for _, member := range members {
-		jiraKey := DeriveStackJiraKey(member.HeadRef, member.Title, member.Body)
-		jiraURL := ""
-		if jiraClient != nil && jiraKey != "" {
-			jiraURL = jiraClient.GetIssueURL(jiraKey)
-		}
-		items = append(items, StackPullRequest{
-			Number:  member.Number,
-			Title:   member.Title,
-			HTMLURL: member.HTMLURL,
-			JiraKey: jiraKey,
-			JiraURL: jiraURL,
-			State:   member.State,
-			Draft:   member.Draft,
-			Merged:  member.Merged,
-			Current: member.Number == currentNumber,
-		})
-	}
-	return items
 }
 
 func logReviewPhaseTiming(out WorkflowEmitter, phase string, start time.Time) {
