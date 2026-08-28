@@ -292,6 +292,8 @@ type jira struct {
 	*config.ViperConfigurableService
 	client           *jiraClient.Client
 	jiraRootURL      string
+	jiraDisplayURL   string
+	displayURLLoaded bool
 	allowPrompt      bool
 	promptRoot       func() (string, error)
 	promptAuthMethod func() (string, error)
@@ -591,9 +593,41 @@ func (j *jira) GetIssueURL(issueId string) string {
 		return ""
 	}
 	if isAtlassianCloudJiraAPIURL(rootURL) {
-		return ""
+		if !j.displayURLLoaded {
+			j.loadJiraDisplayURL()
+		}
+		if j.jiraDisplayURL == "" {
+			return ""
+		}
+		rootURL = j.jiraDisplayURL
 	}
 	return fmt.Sprintf("%s/browse/%s", rootURL, strings.ToUpper(issueId))
+}
+
+type jiraServerInfo struct {
+	DisplayURL string `json:"displayUrl"`
+}
+
+func (j *jira) loadJiraDisplayURL() {
+	j.displayURLLoaded = true
+	if j.client == nil {
+		return
+	}
+
+	request, err := j.client.NewRequest(http.MethodGet, "rest/api/3/serverInfo", nil)
+	if err != nil {
+		return
+	}
+
+	var serverInfo jiraServerInfo
+	if _, err := j.client.Do(request, &serverInfo); err != nil {
+		return
+	}
+
+	displayURL, err := NormalizeRootURL(serverInfo.DisplayURL, false)
+	if err == nil {
+		j.jiraDisplayURL = displayURL
+	}
 }
 
 // GetIssueUrl returns the URL of the issue given its id.
