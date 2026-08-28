@@ -293,7 +293,6 @@ type jira struct {
 	client           *jiraClient.Client
 	jiraRootURL      string
 	jiraDisplayURL   string
-	displayURLLoaded bool
 	allowPrompt      bool
 	promptRoot       func() (string, error)
 	promptAuthMethod func() (string, error)
@@ -593,9 +592,6 @@ func (j *jira) GetIssueURL(issueId string) string {
 		return ""
 	}
 	if isAtlassianCloudJiraAPIURL(rootURL) {
-		if !j.displayURLLoaded {
-			j.loadJiraDisplayURL()
-		}
 		if j.jiraDisplayURL == "" {
 			return ""
 		}
@@ -609,7 +605,6 @@ type jiraServerInfo struct {
 }
 
 func (j *jira) loadJiraDisplayURL() {
-	j.displayURLLoaded = true
 	if j.client == nil {
 		return
 	}
@@ -627,6 +622,7 @@ func (j *jira) loadJiraDisplayURL() {
 	displayURL, err := NormalizeRootURL(serverInfo.DisplayURL, false)
 	if err == nil {
 		j.jiraDisplayURL = displayURL
+		_ = j.SaveConfig("displayUrl", displayURL)
 	}
 }
 
@@ -1362,6 +1358,7 @@ func NewWithHTTPClient(cfg *viper.Viper, httpClient *http.Client, baseURL string
 		ViperConfigurableService: configurableService,
 		client:                   client,
 		allowPrompt:              false,
+		jiraDisplayURL:           strings.TrimSpace(configurableService.GetConfigString("displayUrl")),
 		metadataCache:            metadataCache,
 		cacheInitErr:             cacheErr,
 	}
@@ -1392,6 +1389,7 @@ func NewWithOptions(cfg *viper.Viper, allowPrompt bool) (Jira, error) {
 	j := &jira{
 		ViperConfigurableService: configurableService,
 		allowPrompt:              allowPrompt,
+		jiraDisplayURL:           strings.TrimSpace(configurableService.GetConfigString("displayUrl")),
 		promptRoot:               promptForJiraRootURL,
 		promptAuthMethod:         promptJiraAuthMethod,
 		promptAPICreds:           promptJiraAPICredentials,
@@ -1412,6 +1410,10 @@ func NewWithOptions(cfg *viper.Viper, allowPrompt bool) (Jira, error) {
 	_, err := j.Authenticate()
 	if err != nil {
 		return nil, err
+	}
+	rootURL, err := j.resolveJiraRootURL()
+	if err == nil && isAtlassianCloudJiraAPIURL(rootURL) && j.jiraDisplayURL == "" {
+		j.loadJiraDisplayURL()
 	}
 	return j, nil
 }
