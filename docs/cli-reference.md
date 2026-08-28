@@ -172,7 +172,7 @@ fotingo review sync -r alice --remove-reviewers team/platform -a bob --remove-as
 Notes:
 
 - Use the global `--branch` / `-b` flag to override the pull request base branch when the PR should target something other than the repository default branch.
-- When `--branch` targets a branch that already has an open PR, `review` treats the new PR as a stacked child, creates or reuses stack metadata, and updates the `Stacked PRs` section across the open stack.
+- When `--branch` targets a branch that already has an open PR, `review` treats the new PR as a stacked child and creates or extends the GitHub-native pull request stack.
 - Use `--template-summary` and `--template-description` to fill the default PR template sections.
 - `--template-description` expands escaped `\n`, `\r\n`, and `\t`, which makes multiline scripted descriptions reliable.
 - Use `--description` when you want to replace the entire PR body instead of filling template placeholders.
@@ -180,7 +180,7 @@ Notes:
 - Use `fotingo review sync -r ... --remove-reviewers ... -a ... --remove-assignee ...` to update reviewers and assignees on an existing PR.
 - Use `fotingo review sync --ready-for-review` to move an existing draft PR to ready for review without recreating it.
 - Resolve reviewers, assignees, and labels ahead of time with `fotingo search ... --json` when scripting review creation.
-- Stacked PR sections render Jira keys and PR links. The current PR is marked after the order number with `👉`.
+- Stack membership and ordering are provided by GitHub's native pull request stack API.
 
 #### `review stacks`
 
@@ -195,7 +195,7 @@ Subcommands:
 | Command                               | Description                                                                                |
 | ------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `fotingo review stacks`               | Print the current branch's stack members in root-to-leaf order, marking the current PR     |
-| `fotingo review stacks sync`          | Recompute and update the deterministic stacked PR section for every open PR in the stack   |
+| `fotingo review stacks sync`          | Refresh native stack state without editing pull request bodies                             |
 | `fotingo review stacks rebase`        | Rebase local stack branches in order, using each branch's existing worktree when available |
 | `fotingo review stacks rebase --push` | Push rebased stack branches with `--force-with-lease` after successful local rebases       |
 
@@ -203,7 +203,7 @@ Notes:
 
 - Stack commands default to the stack that contains the current branch's open PR.
 - `review stacks` prints a terminal table with clickable Jira and pull request labels in terminals that support links, not Markdown table syntax.
-- `review stacks sync` does not open an editor; it only rewrites the marker-owned `stacked-prs` section.
+- `review stacks sync` does not open an editor or rewrite pull request bodies.
 - `review stacks rebase` requires every branch that will be rebased to have a clean local worktree and stops at the first rebase conflict.
 - Branches in separate linked worktrees are supported; fotingo discovers them with Git worktree metadata and runs each rebase in that branch's worktree.
 - Branching stacks are not supported in this iteration. If one PR branch has multiple stack children, fotingo fails before updating PR bodies.

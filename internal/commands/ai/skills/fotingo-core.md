@@ -135,7 +135,7 @@ Rebase stack branches in their existing local worktrees:
 - For current-branch PR discussion context, run `fotingo inspect pr --json` and read `pullRequest`, top-level `comments`, and `reviews[].conversations[].comments` before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
 - Use `fotingo review --branch ...` when the pull request should target a non-default base branch.
-- Use `fotingo review --branch <parent-branch>` to create a stacked child PR when `<parent-branch>` already has an open PR. Fotingo updates stack metadata and stacked PR sections automatically in that case.
+- Use `fotingo review --branch <parent-branch>` to create a stacked child PR when `<parent-branch>` already has an open PR. Fotingo creates or extends the GitHub-native pull request stack automatically in that case.
 - Prefer `--template-summary` and `--template-description` because they keep the default PR layout while filling the `Summary` and `Description` sections. `--template-description` expands escaped `\n`, `\r\n`, and `\t`.
 - Use `fotingo review sync -y` after follow-up commits to refresh fotingo-managed sections while preserving manual edits outside the managed placeholders.
 - Use `fotingo review sync --section ...` to limit which managed sections are rewritten. Supported section values are `summary`, `description`, `fixed-issues`, and `changes`, and shell completion can suggest them. `--template-summary` and `--template-description` only apply when those sections are included in the sync.

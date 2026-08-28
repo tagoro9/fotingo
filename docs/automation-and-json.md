@@ -58,7 +58,7 @@ Use the global `--branch` flag when the automation needs to target a non-default
 fotingo review -y --branch release/2026.04
 ```
 
-When that base branch already has an open PR, `fotingo review -y --branch <parent-branch>` creates a stacked child PR and updates the stack section across the open stack. To refresh stack sections later without prompting:
+When that base branch already has an open PR, `fotingo review -y --branch <parent-branch>` creates a stacked child PR and creates or extends the GitHub-native stack. To refresh native stack state later without prompting:
 
 ```bash
 fotingo review stacks sync --json

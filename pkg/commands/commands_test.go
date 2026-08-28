@@ -748,7 +748,7 @@ func TestDefaultPRTemplate_ContainsRequiredSections(t *testing.T) {
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start summary -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start description -->")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start fixed-issues -->")
-	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start stacked-prs -->")
+	assert.NotContains(t, defaultPRTemplate, "stacked-prs")
 	assert.Contains(t, defaultPRTemplate, "<!-- fotingo:start changes -->")
 	assert.NotContains(t, defaultPRTemplate, "{summary}")
 	assert.NotContains(t, defaultPRTemplate, "{description}")

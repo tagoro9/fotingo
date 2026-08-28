@@ -165,6 +165,9 @@ type workflowSuccessMockGitHub struct {
 	pr              *github.PullRequest
 	parentPR        *github.PullRequest
 	stackMembers    []github.PullRequest
+	nativeStack     *github.PullRequestStack
+	createdStack    []int
+	addedToStack    []int
 	bodyUpdates     []github.PullRequestBodyUpdate
 	createPROptions github.CreatePROptions
 }
@@ -217,6 +220,20 @@ func (m workflowSuccessMockGitHub) FindOpenPullRequestByHeadBranch(string) (*git
 }
 func (m workflowSuccessMockGitHub) ListOpenPullRequestsByStackID(string) ([]github.PullRequest, error) {
 	return append([]github.PullRequest(nil), m.stackMembers...), nil
+}
+func (m *workflowSuccessMockGitHub) ListPullRequestStacks(int) ([]github.PullRequestStack, error) {
+	if m.nativeStack == nil {
+		return nil, nil
+	}
+	return []github.PullRequestStack{*m.nativeStack}, nil
+}
+func (m *workflowSuccessMockGitHub) CreatePullRequestStack(numbers []int) (*github.PullRequestStack, error) {
+	m.createdStack = append([]int(nil), numbers...)
+	return m.nativeStack, nil
+}
+func (m *workflowSuccessMockGitHub) AddPullRequestsToStack(_ int, numbers []int) (*github.PullRequestStack, error) {
+	m.addedToStack = append([]int(nil), numbers...)
+	return m.nativeStack, nil
 }
 func (m *workflowSuccessMockGitHub) UpdatePullRequestBodies(updates []github.PullRequestBodyUpdate) ([]*github.PullRequest, error) {
 	m.bodyUpdates = append([]github.PullRequestBodyUpdate(nil), updates...)
@@ -435,17 +452,11 @@ func TestWorkflowRunnerRun_UpdatesStackSectionsWhenBaseBranchHasPR(t *testing.T)
 
 	require.NoError(t, result.Err)
 	assert.Equal(t, "feature/ABC-1-parent", ghClient.createPROptions.Base)
-	require.Len(t, ghClient.bodyUpdates, 2)
-	assert.Equal(t, 12, ghClient.bodyUpdates[0].Number)
-	assert.Equal(t, 13, ghClient.bodyUpdates[1].Number)
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, `<!-- fotingo:stack id="testowner/testrepo#12" version="1" -->`)
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 1 👉 | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) |")
-	assert.Contains(t, ghClient.bodyUpdates[0].Body, "| 2   | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) |")
-	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 1   | ABC-1 | [#12 ABC-1 Parent](https://github.com/testowner/testrepo/pull/12) |")
-	assert.Contains(t, ghClient.bodyUpdates[1].Body, "| 2 👉 | ABC-2 | [#13 ABC-2 Child](https://github.com/testowner/testrepo/pull/13) |")
+	assert.Equal(t, []int{12, 13}, ghClient.createdStack)
+	assert.Empty(t, ghClient.bodyUpdates)
 	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Stack mode enabled: base branch feature/ABC-1-parent is pull request #12")
-	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Updating stacked PR sections for parent #12 and new PR #13")
-	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Stacked PR sections updated")
+	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Adding pull request #13 to native stack")
+	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Native pull request stack updated")
 	assert.Equal(t, "feature/ABC-1-parent", gitClient.commitsSinceRef)
 	assert.False(t, gitClient.defaultCommits)
 }
@@ -483,16 +494,15 @@ func TestWorkflowRunnerRun_ExtendsExistingStackSections(t *testing.T) {
 		pr:           child,
 		parentPR:     parent,
 		stackMembers: []github.PullRequest{root, middle},
+		nativeStack:  &github.PullRequestStack{Number: 42, PullRequests: []github.PullRequest{root, middle}},
 	}
 	runner := stackWorkflowRunner(&stackWorkflowMockGit{}, ghClient, WorkflowOptions{Simple: true, BaseBranch: "feature/ABC-2-middle"})
 
 	result := runner.Run(nil, nil, false)
 
 	require.NoError(t, result.Err)
-	require.Len(t, ghClient.bodyUpdates, 3)
-	assert.Equal(t, []int{12, 13, 14}, []int{ghClient.bodyUpdates[0].Number, ghClient.bodyUpdates[1].Number, ghClient.bodyUpdates[2].Number})
-	assert.Contains(t, ghClient.bodyUpdates[2].Body, `<!-- fotingo:stack id="testowner/testrepo#12" version="1" -->`)
-	assert.Contains(t, ghClient.bodyUpdates[2].Body, "| 3 👉 | ABC-3 | [#14 ABC-3 Child](https://github.com/testowner/testrepo/pull/14) |")
+	assert.Equal(t, []int{14}, ghClient.addedToStack)
+	assert.Empty(t, ghClient.bodyUpdates)
 }
 
 func assertStackWorkflowRawEvent(t *testing.T, events []reviewRawEvent, message string) {
