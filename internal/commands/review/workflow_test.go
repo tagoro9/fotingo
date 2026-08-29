@@ -431,6 +431,7 @@ func TestWorkflowRunnerRun_UpdatesStackSectionsWhenBaseBranchHasPR(t *testing.T)
 		Body:    "<!-- fotingo:start stacked-prs -->\n<!-- fotingo:end stacked-prs -->",
 		HTMLURL: "https://github.com/testowner/testrepo/pull/12",
 		HeadRef: "feature/ABC-1-parent",
+		HeadSHA: "parent-head-sha",
 		BaseRef: "main",
 		State:   "open",
 	}
@@ -457,7 +458,7 @@ func TestWorkflowRunnerRun_UpdatesStackSectionsWhenBaseBranchHasPR(t *testing.T)
 	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Stack mode enabled: base branch feature/ABC-1-parent is pull request #12")
 	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Adding pull request #13 to native stack")
 	assertStackWorkflowRawEvent(t, emitter.rawEvents, "Native pull request stack updated")
-	assert.Equal(t, "feature/ABC-1-parent", gitClient.commitsSinceRef)
+	assert.Equal(t, "parent-head-sha", gitClient.commitsSinceRef)
 	assert.False(t, gitClient.defaultCommits)
 }
 

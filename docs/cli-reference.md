@@ -204,7 +204,7 @@ Notes:
 - Stack commands default to the stack that contains the current branch's open PR.
 - `review stacks` prints a terminal table with clickable Jira and pull request labels in terminals that support links, not Markdown table syntax.
 - `review stacks sync` does not open an editor or rewrite pull request bodies.
-- `review stacks rebase` requires every branch that will be rebased to have a clean local worktree and stops at the first rebase conflict.
+- `review stacks rebase` requires every branch that will be rebased to have a clean local worktree and stops at the first rebase conflict. If earlier stack PRs have been merged, the remaining PRs are rebased onto the native stack's base branch.
 - Branches in separate linked worktrees are supported; fotingo discovers them with Git worktree metadata and runs each rebase in that branch's worktree.
 - Branching stacks are not supported in this iteration. If one PR branch has multiple stack children, fotingo fails before updating PR bodies.
 

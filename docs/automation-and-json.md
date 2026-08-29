@@ -71,7 +71,7 @@ fotingo review stacks rebase --json
 fotingo review stacks rebase --push --json
 ```
 
-Automation should run stack rebase only when it is prepared to handle conflicts. The command requires clean worktrees before starting and stops at the first failed rebase; `--push` is the explicit opt-in for force-with-lease pushes.
+Automation should run stack rebase only when it is prepared to handle conflicts. The command requires clean worktrees before starting and stops at the first failed rebase. If earlier stack PRs have been merged, remaining PRs are rebased onto the native stack base branch. `--push` is the explicit opt-in for force-with-lease pushes.
 
 ## JSON Schemas
 
