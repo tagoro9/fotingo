@@ -264,6 +264,37 @@ func TestRebaseCurrentReviewStack_UsesBranchWorktreesInOrder(t *testing.T) {
 	}, gitClient.pushes)
 }
 
+func TestRebaseCurrentReviewStack_RebasesRemainingPRAfterParentMerge(t *testing.T) {
+	restoreClients := stubReviewStacksClients(t)
+	parent, child, _ := reviewStackPullRequests()
+	parent.Merged = true
+	parent.State = "closed"
+	gitClient := &reviewStacksMockGit{
+		mockGit: &mockGit{currentBranch: child.HeadRef},
+		worktrees: []git.WorktreeInfo{
+			{Path: "/workspace/child", Branch: child.HeadRef},
+		},
+		clean: map[string]bool{"/workspace/child": true},
+	}
+	ghClient := &reviewStacksMockGitHub{
+		mockGitHub: &mockGitHub{},
+		headPRs:    map[string]*github.PullRequest{child.HeadRef: &child},
+		nativeStacks: []github.PullRequestStack{{
+			Number:       12,
+			BaseRef:      "main",
+			PullRequests: []github.PullRequest{child},
+		}},
+	}
+	restoreClients(gitClient, ghClient)
+
+	stack, err := rebaseCurrentReviewStack(true)
+
+	require.NoError(t, err)
+	assert.Equal(t, "main", stack.BaseRef)
+	assert.Equal(t, []reviewStacksRebaseCall{{path: "/workspace/child", base: "main"}}, gitClient.rebases)
+	assert.Equal(t, []reviewStacksPushCall{{path: "/workspace/child", branch: child.HeadRef, forceWithLease: true}}, gitClient.pushes)
+}
+
 func TestRebaseCurrentReviewStack_FailsBeforeRebaseWhenWorktreeDirty(t *testing.T) {
 	restoreClients := stubReviewStacksClients(t)
 	parent, child, _ := reviewStackPullRequests()

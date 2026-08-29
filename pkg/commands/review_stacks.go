@@ -37,6 +37,7 @@ type reviewStacksGit interface {
 
 type reviewStackContext struct {
 	StackID       string               `json:"stackId"`
+	BaseRef       string               `json:"baseRef"`
 	CurrentBranch string               `json:"currentBranch"`
 	CurrentPR     int                  `json:"currentPullRequest"`
 	Members       []reviewStackMember  `json:"members"`
@@ -174,15 +175,19 @@ func rebaseCurrentReviewStack(push bool) (*reviewStackContext, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(stack.rawMembers) < 2 {
-		return stack, fmt.Errorf("stack must contain at least two pull requests to rebase")
+	if len(stack.rawMembers) == 0 {
+		return stack, fmt.Errorf("native pull request stack contains no pull requests to rebase")
 	}
 
 	worktreeByBranch, err := loadStackWorktrees(gitClient)
 	if err != nil {
 		return stack, err
 	}
-	for _, member := range stack.rawMembers[1:] {
+	firstMember := 1
+	if len(stack.rawMembers) == 1 {
+		firstMember = 0
+	}
+	for _, member := range stack.rawMembers[firstMember:] {
 		worktree, ok := worktreeByBranch[member.HeadRef]
 		if !ok {
 			return stack, fmt.Errorf("no local worktree found for stack branch %s", member.HeadRef)
@@ -194,6 +199,19 @@ func rebaseCurrentReviewStack(push bool) (*reviewStackContext, error) {
 		if !clean {
 			return stack, fmt.Errorf("worktree %s for branch %s has uncommitted changes", worktree.Path, member.HeadRef)
 		}
+	}
+	if len(stack.rawMembers) == 1 {
+		member := stack.rawMembers[0]
+		worktree := worktreeByBranch[member.HeadRef]
+		if err := gitClient.RebaseWorktree(worktree.Path, stack.BaseRef); err != nil {
+			return stack, fmt.Errorf("failed to rebase branch %s in worktree %s: %w", member.HeadRef, worktree.Path, err)
+		}
+		if push {
+			if err := gitClient.PushWorktreeBranch(worktree.Path, member.HeadRef, true); err != nil {
+				return stack, fmt.Errorf("failed to push branch %s from worktree %s: %w", member.HeadRef, worktree.Path, err)
+			}
+		}
+		return stack, nil
 	}
 	for index := 1; index < len(stack.rawMembers); index++ {
 		member := stack.rawMembers[index]
@@ -261,12 +279,13 @@ func discoverCurrentReviewStack(gitClient git.Git, ghClient reviewStacksGithub) 
 	}
 	stack := stacks[0]
 	members := append([]github.PullRequest(nil), stack.PullRequests...)
-	return buildReviewStackContext(strconv.Itoa(stack.Number), currentBranch, currentPR.Number, members), nil
+	return buildReviewStackContext(strconv.Itoa(stack.Number), stack.BaseRef, currentBranch, currentPR.Number, members), nil
 }
 
-func buildReviewStackContext(stackID string, currentBranch string, currentPRNumber int, members []github.PullRequest) *reviewStackContext {
+func buildReviewStackContext(stackID string, baseRef string, currentBranch string, currentPRNumber int, members []github.PullRequest) *reviewStackContext {
 	stack := &reviewStackContext{
 		StackID:       stackID,
+		BaseRef:       baseRef,
 		CurrentBranch: currentBranch,
 		CurrentPR:     currentPRNumber,
 		Members:       make([]reviewStackMember, 0, len(members)),

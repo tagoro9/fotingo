@@ -59,6 +59,7 @@ type PullRequest struct {
 	URL       string
 	HTMLURL   string
 	HeadRef   string
+	HeadSHA   string
 	BaseRef   string
 	Draft     bool
 	State     string
@@ -233,6 +234,11 @@ type NativeStackClient interface {
 	AddPullRequestsToStack(stackNumber int, pullRequestNumbers []int) (*PullRequestStack, error)
 }
 
+// PullRequestLoader loads complete pull request metadata by number.
+type PullRequestLoader interface {
+	GetPullRequest(prNumber int) (*PullRequest, error)
+}
+
 var oauthClientID = ""
 
 var ErrAuthRequired = errors.New("github authentication required; run `fotingo login` interactively")
@@ -368,6 +374,15 @@ func (g *github) UpdatePullRequest(prNumber int, opts UpdatePROptions) (*PullReq
 	return mapPullRequest(pr), nil
 }
 
+// GetPullRequest loads a pull request by number.
+func (g *github) GetPullRequest(prNumber int) (*PullRequest, error) {
+	pr, _, err := g.hub.PullRequests.Get(context.Background(), g.owner, g.repo, prNumber)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get pull request #%d: %w", prNumber, err)
+	}
+	return mapPullRequest(pr), nil
+}
+
 // UpdatePullRequestBodies updates multiple pull request bodies in order.
 func (g *github) UpdatePullRequestBodies(updates []PullRequestBodyUpdate) ([]*PullRequest, error) {
 	updated := make([]*PullRequest, 0, len(updates))
@@ -440,7 +455,16 @@ func (g *github) ListPullRequestStacks(pullRequestNumber int) ([]PullRequestStac
 			return nil, fmt.Errorf("failed to list pull request stacks: %w", err)
 		}
 		for _, item := range response {
-			stacks = append(stacks, mapNativeStack(item))
+			stack := mapNativeStack(item)
+			loader := PullRequestLoader(g)
+			for index, member := range stack.PullRequests {
+				complete, err := loader.GetPullRequest(member.Number)
+				if err != nil {
+					return nil, fmt.Errorf("failed to enrich stack #%d pull request #%d: %w", stack.Number, member.Number, err)
+				}
+				stack.PullRequests[index] = *complete
+			}
+			stacks = append(stacks, stack)
 		}
 		if len(response) < 100 {
 			break
@@ -1618,6 +1642,7 @@ func mapPullRequest(pr *hub.PullRequest) *PullRequest {
 	}
 	if pr.Head != nil {
 		mapped.HeadRef = pr.Head.GetRef()
+		mapped.HeadSHA = pr.Head.GetSHA()
 	}
 	if pr.Base != nil {
 		mapped.BaseRef = pr.Base.GetRef()

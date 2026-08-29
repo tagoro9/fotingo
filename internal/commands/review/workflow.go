@@ -301,7 +301,11 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 
 	if shouldCollectReviewCommits(r.Options.Description) {
 		collectCommitsStart := time.Now()
-		loadedCommits, commitErr := collectReviewCommits(gitClient, stackParentPR != nil, stackBaseBranch)
+		commitBase := stackBaseBranch
+		if stackParentPR != nil && strings.TrimSpace(stackParentPR.HeadSHA) != "" {
+			commitBase = stackParentPR.HeadSHA
+		}
+		loadedCommits, commitErr := collectReviewCommits(gitClient, stackParentPR != nil, commitBase)
 		logReviewPhaseTiming(out, "collect_commits", collectCommitsStart)
 		if commitErr != nil {
 			out.Debugf("review commits unavailable: %v", commitErr)

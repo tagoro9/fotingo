@@ -6,7 +6,7 @@ Usage:
 
 Available Commands:
   rebase      Rebase local stack branches in order
-  sync        Refresh stacked PR sections across the current stack
+  sync        Refresh native stack state
 
 Flags:
   -h, --help   help for stacks
