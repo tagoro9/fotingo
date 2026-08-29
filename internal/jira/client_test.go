@@ -1498,15 +1498,32 @@ func TestGetIssueURL_AtlassianCloudAPIURLUsesDisplayURL(t *testing.T) {
 	jiraClient, err := NewWithHTTPClient(cfg, server.Client(), server.URL)
 	require.NoError(t, err)
 	j := jiraClient.(*jira)
-	j.loadJiraDisplayURL()
 
 	assert.Equal(t, "https://acme.atlassian.net/browse/TEST-123", j.GetIssueURL("test-123"))
 	assert.Equal(t, "https://acme.atlassian.net", cfg.GetString("jira.displayUrl"))
 
 	secondClient, err := NewWithHTTPClient(cfg, server.Client(), server.URL)
 	require.NoError(t, err)
+	assert.Equal(t, 1, requestCount, "a cached display URL should avoid another serverInfo request")
 	assert.Equal(t, "https://acme.atlassian.net/browse/TEST-456", secondClient.GetIssueURL("TEST-456"))
 	assert.Equal(t, 1, requestCount)
+}
+
+func TestNewWithHTTPClient_DoesNotResolveCloudDisplayURL(t *testing.T) {
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+	}))
+	defer server.Close()
+
+	cfg := viper.New()
+	cfg.SetConfigFile(filepath.Join(t.TempDir(), "config.yaml"))
+	cfg.Set("jira.root", "https://api.atlassian.com/ex/jira/cloud-123")
+
+	_, err := NewWithHTTPClient(cfg, server.Client(), server.URL)
+
+	require.NoError(t, err)
+	assert.Zero(t, requestCount)
 }
 
 func TestNormalizeJiraRootURL(t *testing.T) {
