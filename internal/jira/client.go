@@ -593,6 +593,12 @@ func (j *jira) GetIssueURL(issueId string) string {
 	}
 	if isAtlassianCloudJiraAPIURL(rootURL) {
 		if j.jiraDisplayURL == "" {
+			// Resolve this lazily so constructing a Jira client never performs an
+			// extra request. loadJiraDisplayURL persists the result for future
+			// clients; this is only needed once for a new Cloud API root.
+			j.loadJiraDisplayURL()
+		}
+		if j.jiraDisplayURL == "" {
 			return ""
 		}
 		rootURL = j.jiraDisplayURL
@@ -1410,10 +1416,6 @@ func NewWithOptions(cfg *viper.Viper, allowPrompt bool) (Jira, error) {
 	_, err := j.Authenticate()
 	if err != nil {
 		return nil, err
-	}
-	rootURL, err := j.resolveJiraRootURL()
-	if err == nil && isAtlassianCloudJiraAPIURL(rootURL) && j.jiraDisplayURL == "" {
-		j.loadJiraDisplayURL()
 	}
 	return j, nil
 }
