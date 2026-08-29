@@ -1502,7 +1502,14 @@ func TestGetIssueURL_AtlassianCloudAPIURLUsesDisplayURL(t *testing.T) {
 	assert.Equal(t, "https://acme.atlassian.net/browse/TEST-123", j.GetIssueURL("test-123"))
 	assert.Equal(t, "https://acme.atlassian.net", cfg.GetString("jira.displayUrl"))
 
-	secondClient, err := NewWithHTTPClient(cfg, server.Client(), server.URL)
+	reloadedCfg := viper.New()
+	reloadedCfg.SetConfigFile(cfg.ConfigFileUsed())
+	reloadedCfg.SetConfigType("yaml")
+	require.NoError(t, reloadedCfg.ReadInConfig())
+	reloadedCfg.Set("jira.root", "https://api.atlassian.com/ex/jira/cloud-123")
+	assert.Equal(t, "https://acme.atlassian.net", reloadedCfg.GetString("jira.displayUrl"))
+
+	secondClient, err := NewWithHTTPClient(reloadedCfg, server.Client(), server.URL)
 	require.NoError(t, err)
 	assert.Equal(t, 1, requestCount, "a cached display URL should avoid another serverInfo request")
 	assert.Equal(t, "https://acme.atlassian.net/browse/TEST-456", secondClient.GetIssueURL("TEST-456"))
