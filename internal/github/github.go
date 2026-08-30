@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/cli/oauth"
-	hub "github.com/google/go-github/v84/github"
+	hub "github.com/google/go-github/v90/github"
 	"github.com/spf13/viper"
 	"github.com/tagoro9/fotingo/internal/auth"
 	"github.com/tagoro9/fotingo/internal/cache"
@@ -340,11 +340,11 @@ func (g *github) GetPullRequestUrl() (string, error) {
 
 // CreatePullRequest creates a new pull request with the given options
 func (g *github) CreatePullRequest(opts CreatePROptions) (*PullRequest, error) {
-	newPR := &hub.NewPullRequest{
+	newPR := hub.CreatePullRequest{
 		Title: &opts.Title,
 		Body:  &opts.Body,
-		Head:  &opts.Head,
-		Base:  &opts.Base,
+		Head:  opts.Head,
+		Base:  opts.Base,
 		Draft: &opts.Draft,
 	}
 
@@ -424,13 +424,13 @@ type nativeStackResponse struct {
 }
 
 func (g *github) nativeStackRequest(method, path string, body any, response any) error {
-	req, err := g.hub.NewRequest(method, path, body)
+	req, err := g.hub.NewRequest(context.Background(), method, path, body)
 	if err != nil {
 		return err
 	}
 	req.Header.Set("Accept", "application/vnd.github+json")
 	req.Header.Set("X-GitHub-Api-Version", "2026-03-10")
-	_, err = g.hub.Do(context.Background(), req, response)
+	_, err = g.hub.Do(req, response)
 	return err
 }
 
@@ -1514,13 +1514,13 @@ func (g *github) MarkPullRequestReadyForReview(prNodeID string) error {
 		Variables: map[string]string{"pullRequestId": nodeID},
 	}
 
-	req, err := g.hub.NewRequest("POST", "/graphql", request)
+	req, err := g.hub.NewRequest(context.Background(), "POST", "/graphql", request)
 	if err != nil {
 		return fmt.Errorf("failed to create ready-for-review request: %w", err)
 	}
 
 	var response markReadyForReviewGraphQLResponse
-	if _, err := g.hub.Do(context.Background(), req, &response); err != nil {
+	if _, err := g.hub.Do(req, &response); err != nil {
 		return fmt.Errorf("failed to mark pull request ready for review: %w", err)
 	}
 	if len(response.Errors) > 0 {
@@ -1656,8 +1656,8 @@ func mapPullRequest(pr *hub.PullRequest) *PullRequest {
 
 // CreateRelease creates a GitHub release
 func (g *github) CreateRelease(opts CreateReleaseOptions) (*Release, error) {
-	releaseRequest := &hub.RepositoryRelease{
-		TagName:         &opts.TagName,
+	releaseRequest := hub.CreateReleaseRequest{
+		TagName:         opts.TagName,
 		TargetCommitish: &opts.TargetCommitish,
 		Name:            &opts.Name,
 		Body:            &opts.Body,
@@ -1688,7 +1688,10 @@ func NewWithHTTPClient(g git.Git, cfg *viper.Viper, httpClient *http.Client, bas
 	}
 	configurableService := &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
 
-	client, err := hub.NewClient(wrapGitHubHTTPClient(httpClient)).WithEnterpriseURLs(baseURL, baseURL)
+	client, err := hub.NewClient(
+		hub.WithHTTPClient(wrapGitHubHTTPClient(httpClient)),
+		hub.WithEnterpriseURLs(baseURL, baseURL),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create GitHub client: %w", err)
 	}
@@ -1713,7 +1716,10 @@ func NewWithHTTPClient(g git.Git, cfg *viper.Viper, httpClient *http.Client, bas
 func NewWithHTTPClientAndRepo(g git.Git, cfg *viper.Viper, httpClient *http.Client, baseURL, owner, repo string) (Github, error) {
 	configurableService := &config.ViperConfigurableService{Config: cfg, Prefix: "github"}
 
-	client, err := hub.NewClient(wrapGitHubHTTPClient(httpClient)).WithEnterpriseURLs(baseURL, baseURL)
+	client, err := hub.NewClient(
+		hub.WithHTTPClient(wrapGitHubHTTPClient(httpClient)),
+		hub.WithEnterpriseURLs(baseURL, baseURL),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create GitHub client: %w", err)
 	}
@@ -1786,7 +1792,13 @@ func NewAuthOnlyWithOptions(cfg *viper.Viper, allowPrompt bool) (Github, error) 
 	if err != nil {
 		return nil, err
 	}
-	gh.hub = hub.NewClient(wrapGitHubHTTPClient(nil)).WithAuthToken(token)
+	gh.hub, err = hub.NewClient(
+		hub.WithHTTPClient(wrapGitHubHTTPClient(nil)),
+		hub.WithAuthToken(token),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create GitHub client: %w", err)
+	}
 	return gh, nil
 }
 
@@ -1831,7 +1843,13 @@ func NewWithOptions(git git.Git, cfg *viper.Viper, allowPrompt bool) (Github, er
 	if err != nil {
 		return nil, err
 	}
-	gh.hub = hub.NewClient(wrapGitHubHTTPClient(nil)).WithAuthToken(token)
+	gh.hub, err = hub.NewClient(
+		hub.WithHTTPClient(wrapGitHubHTTPClient(nil)),
+		hub.WithAuthToken(token),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create GitHub client: %w", err)
+	}
 
 	return gh, nil
 }
