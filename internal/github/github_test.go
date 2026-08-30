@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	hub "github.com/google/go-github/v84/github"
+	hub "github.com/google/go-github/v90/github"
 	giturl "github.com/kubescape/go-git-url"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -174,8 +174,8 @@ func (suite *GithubTestSuite) SetupTest() {
 	}))
 
 	// Create a GitHub client pointing to the mock server
-	hubClient := hub.NewClient(nil)
-	hubClient, _ = hubClient.WithEnterpriseURLs(suite.server.URL, suite.server.URL)
+	hubClient, err := hub.NewClient(hub.WithEnterpriseURLs(suite.server.URL, suite.server.URL))
+	suite.Require().NoError(err)
 
 	suite.client = &github{
 		hub:   hubClient,
@@ -196,8 +196,8 @@ func (suite *GithubTestSuite) setupMockServer(handler http.HandlerFunc) {
 	suite.server.Close()
 	suite.server = httptest.NewServer(handler)
 
-	hubClient := hub.NewClient(nil)
-	hubClient, _ = hubClient.WithEnterpriseURLs(suite.server.URL, suite.server.URL)
+	hubClient, err := hub.NewClient(hub.WithEnterpriseURLs(suite.server.URL, suite.server.URL))
+	suite.Require().NoError(err)
 	suite.client.hub = hubClient
 }
 
