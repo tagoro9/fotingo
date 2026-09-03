@@ -15,7 +15,7 @@ require (
 	github.com/kubescape/go-git-url v0.0.33
 	github.com/kyokomi/emoji/v2 v2.2.14
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
-	github.com/posthog/posthog-go v1.24.3
+	github.com/posthog/posthog-go v1.25.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
