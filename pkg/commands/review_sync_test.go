@@ -856,6 +856,21 @@ func TestRunReviewSync_OpensEditorByDefaultForChangesOnly(t *testing.T) {
 }
 
 func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
+	testReviewSyncComments(t, false, "{{.Issue.Key}}: {{.PullRequest.URL}}", false)
+}
+
+func TestRunReviewSync_CommentsWhenTransitionFails(t *testing.T) {
+	testReviewSyncComments(t, true, "{{.Issue.Key}}: {{.PullRequest.URL}}", false)
+}
+
+func TestRunReviewSync_RejectsInvalidCommentTemplateBeforeUpdate(t *testing.T) {
+	for _, body := range []string{"{{", "{{.Issue.Missing}}"} {
+		t.Run(body, func(t *testing.T) { testReviewSyncComments(t, false, body, true) })
+	}
+}
+
+func testReviewSyncComments(t *testing.T, transitionFails bool, commentTemplate string, invalidTemplate bool) {
+	t.Helper()
 	setDefaultOutputFlags(t)
 
 	restoreFlags := saveGlobalFlags()
@@ -864,7 +879,7 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 	withDefaultReviewTemplateResolver(t)
 	origConfig := fotingoConfig
 	fotingoConfig = config.NewDefaultConfig()
-	fotingoConfig.Set("tracker.comments.pullRequestCreated", "{{.Issue.Key}}: {{.PullRequest.URL}}")
+	fotingoConfig.Set("tracker.comments.pullRequestCreated", commentTemplate)
 	defer func() { fotingoConfig = origConfig }()
 
 	origNewGitClient := newGitClient
@@ -946,7 +961,16 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 	jiraClient := &mockJira{
 		issueURL:  "https://jira.example.com/browse/%s",
 		jiraIssue: &jira.Issue{Key: "FOTINGO-1", Summary: "Existing", Description: "desc"},
+		getJiraIssueFn: func(key string) (*jira.Issue, error) {
+			if key == "FOTINGO-1" {
+				return &jira.Issue{Key: key, Summary: "Existing", Description: "desc"}, nil
+			}
+			return &jira.Issue{Key: key, Summary: "Fetched summary"}, nil
+		},
 		setJiraIssueStatusFn: func(issueID string, _ jira.IssueStatus) (*jira.Issue, error) {
+			if transitionFails && issueID == "FOTINGO-2" {
+				return nil, errors.New("transition unavailable")
+			}
 			return &jira.Issue{Key: issueID, Status: "In Review"}, nil
 		},
 	}
@@ -964,6 +988,13 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 	statusCh := make(chan string, 16)
 	result := runReviewSync(&statusCh, false)
 
+	if invalidTemplate {
+		require.ErrorContains(t, result.err, "invalid issue-tracker comment template")
+		assert.NotContains(t, githubClient.calls, "update_pr")
+		assert.Empty(t, jiraClient.setJiraIssueStatusIDs)
+		assert.Empty(t, jiraClient.addCommentIssueIDs)
+		return
+	}
 	require.NoError(t, result.err)
 	assert.Equal(t, []string{"FOTINGO-2", "FOTINGO-3"}, jiraClient.setJiraIssueStatusIDs)
 	assert.Equal(t, []string{"FOTINGO-2", "FOTINGO-3"}, jiraClient.addCommentIssueIDs)
@@ -981,7 +1012,11 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 	}
 	assert.Contains(t, messages, "New linked issues detected during sync: FOTINGO-2, FOTINGO-3")
 	assert.Contains(t, messages, "Setting FOTINGO-2 status to In Review...")
-	assert.Contains(t, messages, "Issue FOTINGO-2 status updated to In Review")
+	if transitionFails {
+		assert.NotContains(t, messages, "Issue FOTINGO-2 status updated to In Review")
+	} else {
+		assert.Contains(t, messages, "Issue FOTINGO-2 status updated to In Review")
+	}
 	assert.Contains(t, messages, "Adding PR link comment to FOTINGO-2...")
 	assert.Contains(t, messages, "Comment added to FOTINGO-2")
 	assert.Contains(t, messages, "Setting FOTINGO-3 status to In Review...")

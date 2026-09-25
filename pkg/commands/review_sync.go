@@ -207,6 +207,11 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 		}
 	}
 
+	commentIssues, err := jira.PreparePullRequestComments(jiraClient, fotingoConfig, newLinkedIssueIDs, issue, pr.HTMLURL, nil)
+	if err != nil {
+		return reviewResult{err: err}
+	}
+
 	freshBody := renderReviewTemplateBodyWithOverrides(
 		branch,
 		issue,
@@ -310,20 +315,20 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 			updatedIssue, setErr := jiraClient.SetJiraIssueStatus(issueID, jira.StatusInReview)
 			if setErr != nil {
 				out.Info("warning", i18n.ReviewStatusSetInReviewWarn, setErr)
-				continue
+			} else {
+				if issue != nil && strings.EqualFold(issue.Key, issueID) {
+					issue = updatedIssue
+					jiraURL = jiraClient.GetIssueURL(issueID)
+				}
+				out.Info(commandruntime.LogEmojiCheck, i18n.ReviewStatusSetInReviewDone, issueID)
+				if err := jira.ApplyLabels(jiraClient, fotingoConfig, issueID, jira.StatusInReview, nil); err != nil {
+					out.Debugf("failed to add configured issue-tracker labels to %s: %v", issueID, err)
+				}
 			}
-			if issue != nil && strings.EqualFold(issue.Key, issueID) {
-				issue = updatedIssue
-				jiraURL = jiraClient.GetIssueURL(issueID)
-			}
-			out.Info(commandruntime.LogEmojiCheck, i18n.ReviewStatusSetInReviewDone, issueID)
-			if err := jira.ApplyLabels(jiraClient, fotingoConfig, issueID, jira.StatusInReview, nil); err != nil {
-				out.Debugf("failed to add configured issue-tracker labels to %s: %v", issueID, err)
-			}
-
-			comment, renderErr := jira.RenderPullRequestComment(fotingoConfig, updatedIssue, updatedPR.HTMLURL, nil)
+			commentIssue := commentIssues[issueID]
+			comment, renderErr := jira.RenderPullRequestComment(fotingoConfig, commentIssue, updatedPR.HTMLURL, nil)
 			if renderErr != nil {
-				out.Debugf("failed to render configured issue-tracker comment: %v", renderErr)
+				out.InfoRaw("warning", fmt.Sprintf("failed to render issue-tracker comment for %s: %v", issueID, renderErr))
 				continue
 			}
 			if comment == "" {

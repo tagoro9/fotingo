@@ -346,6 +346,7 @@ func (m *mockGitHub) SaveConfig(_ string, _ interface{}) error {
 type mockJira struct {
 	jiraIssue             *jira.Issue
 	jiraIssueErr          error
+	getJiraIssueFn        func(string) (*jira.Issue, error)
 	issueURL              string
 	trackerIssue          *tracker.Issue
 	trackerIssueErr       error
@@ -485,6 +486,9 @@ func (m *mockJira) GetIssueUrl(issueId string) (string, error) {
 }
 
 func (m *mockJira) GetJiraIssue(issueId string) (*jira.Issue, error) {
+	if m.getJiraIssueFn != nil {
+		return m.getJiraIssueFn(issueId)
+	}
 	return m.jiraIssue, m.jiraIssueErr
 }
 

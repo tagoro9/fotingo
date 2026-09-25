@@ -16,6 +16,7 @@ import "github.com/tagoro9/fotingo/internal/jira"
 - [func IsUnauthorizedError\(err error\) bool](<#IsUnauthorizedError>)
 - [func LabelsForStatus\(cfg \*viper.Viper, status IssueStatus\) \[\]string](<#LabelsForStatus>)
 - [func NormalizeRootURL\(raw string, allowHTTP bool\) \(string, error\)](<#NormalizeRootURL>)
+- [func PreparePullRequestComments\(client Jira, cfg \*viper.Viper, keys \[\]string, known \*Issue, url string, override \*string\) \(map\[string\]\*Issue, error\)](<#PreparePullRequestComments>)
 - [func RenderPullRequestComment\(cfg \*viper.Viper, issue \*Issue, pullRequestURL string, override \*string\) \(string, error\)](<#RenderPullRequestComment>)
 - [func ShouldWarnIgnoredStoredOAuthToken\(cfg \*viper.Viper\) bool](<#ShouldWarnIgnoredStoredOAuthToken>)
 - [type Issue](<#Issue>)
@@ -42,7 +43,7 @@ var (
 ```
 
 <a name="ApplyLabels"></a>
-## func [ApplyLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L23>)
+## func [ApplyLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L24>)
 
 ```go
 func ApplyLabels(client Jira, cfg *viper.Viper, issueID string, status IssueStatus, commandLabels []string) error
@@ -60,7 +61,7 @@ func IsUnauthorizedError(err error) bool
 IsUnauthorizedError returns true when the Jira API error corresponds to HTTP 401.
 
 <a name="LabelsForStatus"></a>
-## func [LabelsForStatus](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L56>)
+## func [LabelsForStatus](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L57>)
 
 ```go
 func LabelsForStatus(cfg *viper.Viper, status IssueStatus) []string
@@ -77,8 +78,17 @@ func NormalizeRootURL(raw string, allowHTTP bool) (string, error)
 
 NormalizeRootURL validates and normalizes a Jira site root URL or Atlassian Cloud Jira API root URL.
 
+<a name="PreparePullRequestComments"></a>
+## func [PreparePullRequestComments](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L107>)
+
+```go
+func PreparePullRequestComments(client Jira, cfg *viper.Viper, keys []string, known *Issue, url string, override *string) (map[string]*Issue, error)
+```
+
+PreparePullRequestComments validates comment rendering using fetched issue data before PR mutations. The supplied URL may be a placeholder when the PR has not been created yet.
+
 <a name="RenderPullRequestComment"></a>
-## func [RenderPullRequestComment](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L84>)
+## func [RenderPullRequestComment](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L85>)
 
 ```go
 func RenderPullRequestComment(cfg *viper.Viper, issue *Issue, pullRequestURL string, override *string) (string, error)

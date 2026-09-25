@@ -331,6 +331,15 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 		}
 	}
 
+	var commentIssues map[string]*jira.Issue
+	if !r.Options.Simple && jiraClient != nil {
+		commentIssues, err = jira.PreparePullRequestComments(jiraClient, r.Config, linkedIssueIDs, issue, "https://github.com/owner/repo/pull/1", r.Options.TrackerComment)
+		if err != nil {
+			result.Err = fterrors.WrapJiraError("failed to prepare issue-tracker comments", err)
+			return result
+		}
+	}
+
 	editorMode := r.Options.Description == "" && r.Deps.ShouldOpenReviewEditor(allowEditor)
 	resolvePRBodyStart := time.Now()
 	prBody, err = r.Deps.ResolvePRBody(statusCh, branch, issue, jiraClient, commits, linkedIssueIDs, allowEditor)
@@ -445,19 +454,19 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 			updatedIssue, err := jiraClient.SetJiraIssueStatus(issueID, jira.StatusInReview)
 			if err != nil {
 				out.Info("warning", i18n.ReviewStatusSetInReviewWarn, err)
-				continue
+			} else {
+				if issue != nil && strings.EqualFold(issue.Key, issueID) {
+					result.Issue = updatedIssue
+				}
+				out.Verbose(i18n.ReviewStatusSetInReviewDone, issueID)
+				if err := jira.ApplyLabels(jiraClient, r.Config, issueID, jira.StatusInReview, r.Options.TrackerLabels); err != nil {
+					out.Debugf("failed to add configured issue-tracker labels to %s: %v", issueID, err)
+				}
 			}
-			if issue != nil && strings.EqualFold(issue.Key, issueID) {
-				result.Issue = updatedIssue
-			}
-			out.Verbose(i18n.ReviewStatusSetInReviewDone, issueID)
-			if err := jira.ApplyLabels(jiraClient, r.Config, issueID, jira.StatusInReview, r.Options.TrackerLabels); err != nil {
-				out.Debugf("failed to add configured issue-tracker labels to %s: %v", issueID, err)
-			}
-
-			comment, commentErr := jira.RenderPullRequestComment(r.Config, updatedIssue, pr.HTMLURL, r.Options.TrackerComment)
+			commentIssue := commentIssues[issueID]
+			comment, commentErr := jira.RenderPullRequestComment(r.Config, commentIssue, pr.HTMLURL, r.Options.TrackerComment)
 			if commentErr != nil {
-				out.Debugf("failed to render configured issue-tracker comment: %v", commentErr)
+				out.InfoRaw("warning", fmt.Sprintf("failed to render issue-tracker comment for %s: %v", issueID, commentErr))
 				continue
 			}
 			if comment == "" {
