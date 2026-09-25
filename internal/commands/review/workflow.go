@@ -20,6 +20,8 @@ const reviewMissingBranchIssueMessage = "no issue id found in branch name"
 type WorkflowOptions struct {
 	Draft                       bool
 	Labels                      []string
+	TrackerLabels               []string
+	TrackerComment              *string
 	Reviewers                   []string
 	Assignees                   []string
 	BaseBranch                  string
@@ -438,19 +440,29 @@ func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEdi
 	}
 
 	if !r.Options.Simple && jiraClient != nil {
-		comment := t(i18n.ReviewCommentCreated, pr.HTMLURL)
 		for _, issueID := range linkedIssueIDs {
 			out.Verbose(i18n.ReviewStatusSetInReview, issueID)
 			updatedIssue, err := jiraClient.SetJiraIssueStatus(issueID, jira.StatusInReview)
 			if err != nil {
 				out.Info("warning", i18n.ReviewStatusSetInReviewWarn, err)
-			} else {
-				if issue != nil && strings.EqualFold(issue.Key, issueID) {
-					result.Issue = updatedIssue
-				}
-				out.Verbose(i18n.ReviewStatusSetInReviewDone, issueID)
+				continue
+			}
+			if issue != nil && strings.EqualFold(issue.Key, issueID) {
+				result.Issue = updatedIssue
+			}
+			out.Verbose(i18n.ReviewStatusSetInReviewDone, issueID)
+			if err := jira.ApplyLabels(jiraClient, r.Config, issueID, jira.StatusInReview, r.Options.TrackerLabels); err != nil {
+				out.Debugf("failed to add configured issue-tracker labels to %s: %v", issueID, err)
 			}
 
+			comment, commentErr := jira.RenderPullRequestComment(r.Config, updatedIssue, pr.HTMLURL, r.Options.TrackerComment)
+			if commentErr != nil {
+				out.Debugf("failed to render configured issue-tracker comment: %v", commentErr)
+				continue
+			}
+			if comment == "" {
+				continue
+			}
 			out.Verbose(i18n.ReviewStatusAddComment, issueID)
 			if err := jiraClient.AddComment(issueID, comment); err != nil {
 				out.Info("warning", i18n.ReviewStatusAddCommentWarn, err)

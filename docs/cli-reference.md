@@ -90,19 +90,20 @@ fotingo start PROJ-123 -y
 
 Flags:
 
-| Flag              | Short | Description                                         |
-| ----------------- | ----- | --------------------------------------------------- |
-| `--title`         | `-t`  | Create a new issue with this title                  |
-| `--description`   | `-d`  | Description for new issue                           |
-| `--project`       | `-p`  | Project key for new issue (required with `--title`) |
-| `--kind`          | `-k`  | Issue type: Story, Bug, Task, SubTask, Epic         |
-| `--parent`        | `-a`  | Parent issue for sub-tasks                          |
-| `--epic`          | `-e`  | Epic issue key to link                              |
-| `--labels`        | `-l`  | Labels to add (repeatable)                          |
-| `--no-branch`     | `-n`  | Set issue status without creating/switching branch  |
-| `--worktree`      |       | Create the issue branch in a new sibling worktree   |
-| `--worktree-path` |       | Parent directory for the created linked worktree    |
-| `--interactive`   | `-i`  | Interactive create flow                             |
+| Flag               | Short | Description                                         |
+| ------------------ | ----- | --------------------------------------------------- |
+| `--title`          | `-t`  | Create a new issue with this title                  |
+| `--description`    | `-d`  | Description for new issue                           |
+| `--project`        | `-p`  | Project key for new issue (required with `--title`) |
+| `--kind`           | `-k`  | Issue type: Story, Bug, Task, SubTask, Epic         |
+| `--parent`         | `-a`  | Parent issue for sub-tasks                          |
+| `--epic`           | `-e`  | Epic issue key to link                              |
+| `--labels`         | `-l`  | Labels to add (repeatable)                          |
+| `--tracker-labels` |       | Labels to add to the issue when work starts         |
+| `--no-branch`      | `-n`  | Set issue status without creating/switching branch  |
+| `--worktree`       |       | Create the issue branch in a new sibling worktree   |
+| `--worktree-path`  |       | Parent directory for the created linked worktree    |
+| `--interactive`    | `-i`  | Interactive create flow                             |
 
 Notes:
 
@@ -134,6 +135,9 @@ fotingo review --simple
 
 # Add labels/reviewers/assignees
 fotingo review -l bug -r alice -a bob
+
+# Add workflow labels to linked issues and override the tracker comment
+fotingo review --tracker-labels ready-for-review --tracker-comment '{{.Issue.Key}}: {{.PullRequest.URL}}'
 
 # Fill the default Summary and Description sections
 fotingo review --template-summary "Fix auth bug" --template-description "Why: clearer auth failures.\n\nWhat changed:\n- improve copy\n- add telemetry"
@@ -176,6 +180,8 @@ Notes:
 - Use `--template-summary` and `--template-description` to fill the default PR template sections.
 - `--template-description` expands escaped `\n`, `\r\n`, and `\t`, which makes multiline scripted descriptions reliable.
 - Use `--description` when you want to replace the entire PR body instead of filling template placeholders.
+- Use `--tracker-labels` for issues that move to `In Review`; `--labels` applies GitHub pull-request labels.
+- Use `--tracker-comment` to override the issue-tracker PR-link comment for one review. Pass an empty value only to suppress the comment.
 - Use `fotingo review sync --section ...` when you only want to refresh specific managed PR sections. Supported section values are `summary`, `description`, `fixed-issues`, and `changes`; shell completion suggests them.
 - Use `fotingo review sync -r ... --remove-reviewers ... -a ... --remove-assignee ...` to update reviewers and assignees on an existing PR.
 - Use `fotingo review sync --ready-for-review` to move an existing draft PR to ready for review without recreating it.
@@ -210,17 +216,19 @@ Notes:
 
 Flags:
 
-| Flag                     | Short | Description                                                          |
-| ------------------------ | ----- | -------------------------------------------------------------------- |
-| `--draft`                | `-d`  | Create a draft pull request                                          |
-| `--labels`               | `-l`  | Labels to add (repeatable)                                           |
-| `--reviewers`            | `-r`  | Reviewers to request (repeatable)                                    |
-| `--assignee`             | `-a`  | Assignees to add (repeatable)                                        |
-| `--simple`               | `-s`  | Skip Jira integration and create a GitHub-only PR                    |
-| `--title`                |       | Override the generated PR title                                      |
-| `--description`          |       | Override the entire PR body (`-` to read stdin)                      |
-| `--template-summary`     |       | Override the default `Summary` section placeholder                   |
-| `--template-description` |       | Override the default `Description` section; expands escaped newlines |
+| Flag                     | Short | Description                                                            |
+| ------------------------ | ----- | ---------------------------------------------------------------------- |
+| `--draft`                | `-d`  | Create a draft pull request                                            |
+| `--labels`               | `-l`  | Labels to add (repeatable)                                             |
+| `--tracker-labels`       |       | Labels to add to linked issues moved to In Review                      |
+| `--tracker-comment`      |       | Override the issue-tracker comment; pass an empty value to suppress it |
+| `--reviewers`            | `-r`  | Reviewers to request (repeatable)                                      |
+| `--assignee`             | `-a`  | Assignees to add (repeatable)                                          |
+| `--simple`               | `-s`  | Skip Jira integration and create a GitHub-only PR                      |
+| `--title`                |       | Override the generated PR title                                        |
+| `--description`          |       | Override the entire PR body (`-` to read stdin)                        |
+| `--template-summary`     |       | Override the default `Summary` section placeholder                     |
+| `--template-description` |       | Override the default `Description` section; expands escaped newlines   |
 
 ### `open`
 

@@ -768,7 +768,7 @@ type TemplateOptions struct {
 ```
 
 <a name="WorkflowDeps"></a>
-## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L58-L72>)
+## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L60-L74>)
 
 WorkflowDeps defines external dependencies used by the review workflow.
 
@@ -791,7 +791,7 @@ type WorkflowDeps struct {
 ```
 
 <a name="WorkflowEmitter"></a>
-## type [WorkflowEmitter](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L46-L51>)
+## type [WorkflowEmitter](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L48-L53>)
 
 WorkflowEmitter is the logging contract used by the review workflow.
 
@@ -805,7 +805,7 @@ type WorkflowEmitter interface {
 ```
 
 <a name="WorkflowOptions"></a>
-## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L20-L30>)
+## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L20-L32>)
 
 WorkflowOptions carries review flags required by the orchestration workflow.
 
@@ -813,6 +813,8 @@ WorkflowOptions carries review flags required by the orchestration workflow.
 type WorkflowOptions struct {
     Draft                       bool
     Labels                      []string
+    TrackerLabels               []string
+    TrackerComment              *string
     Reviewers                   []string
     Assignees                   []string
     BaseBranch                  string
@@ -824,7 +826,7 @@ type WorkflowOptions struct {
 ```
 
 <a name="WorkflowResult"></a>
-## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L33-L43>)
+## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L35-L45>)
 
 WorkflowResult contains the review execution output.
 
@@ -843,7 +845,7 @@ type WorkflowResult struct {
 ```
 
 <a name="WorkflowRunner"></a>
-## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L79-L84>)
+## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L81-L86>)
 
 WorkflowRunner executes the review command workflow.
 
@@ -857,7 +859,7 @@ type WorkflowRunner struct {
 ```
 
 <a name="WorkflowRunner.Run"></a>
-### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L87>)
+### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/review/workflow.go#L89>)
 
 ```go
 func (r WorkflowRunner) Run(statusCh *chan string, out WorkflowEmitter, allowEditor bool) WorkflowResult

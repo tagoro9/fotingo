@@ -58,6 +58,26 @@ Use the global `--branch` flag when the automation needs to target a non-default
 fotingo review -y --branch release/2026.04
 ```
 
+## Issue-Tracker Workflow Overrides In Automation
+
+Use `--tracker-labels` for labels applied when Fotingo moves an issue through
+its workflow. This is separate from `review --labels`, which applies GitHub
+pull-request labels:
+
+```bash
+fotingo start PROJ-123 -y --tracker-labels active
+fotingo review -y --tracker-labels ready-for-review
+```
+
+Use `--tracker-comment` to override the configured issue-tracker PR-link comment for one
+review. Pass an empty value only when the automation should suppress that
+comment:
+
+```bash
+fotingo review -y --tracker-comment '{{.Issue.Key}}: {{.PullRequest.URL}}'
+fotingo review -y --tracker-comment ""
+```
+
 When that base branch already has an open PR, `fotingo review -y --branch <parent-branch>` creates a stacked child PR and creates or extends the GitHub-native stack. To refresh native stack state later without prompting:
 
 ```bash

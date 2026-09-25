@@ -39,7 +39,7 @@ const (
 ```
 
 <a name="NewConfig"></a>
-## func [NewConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L111>)
+## func [NewConfig](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L114>)
 
 ```go
 func NewConfig() *viper.Viper
@@ -57,7 +57,7 @@ func NewDefaultConfig() *viper.Viper
 
 
 <a name="PersistConfigValue"></a>
-## func [PersistConfigValue](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L138>)
+## func [PersistConfigValue](<https://github.com/tagoro9/fotingo/blob/main/internal/config/config.go#L141>)
 
 ```go
 func PersistConfigValue(config *viper.Viper, key string, value any) error

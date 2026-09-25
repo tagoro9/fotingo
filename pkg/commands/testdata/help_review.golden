@@ -54,6 +54,8 @@ Flags:
       --template-description string   Override the default Description section content; expands escaped \n, \r\n, and \t
       --template-summary string       Override the default Summary section content
       --title string                  Override pull request title
+      --tracker-comment string        Override the issue-tracker comment for newly created pull requests; empty disables it
+      --tracker-labels strings        Labels to add to issues moved to In Review (can be specified multiple times)
 
 Global Flags:
   -b, --branch string   Base branch override (default: auto-detect)

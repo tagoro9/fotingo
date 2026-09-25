@@ -375,6 +375,7 @@ type mockJira struct {
 	setIssueStatusErr     error
 	setJiraIssueStatus    *jira.Issue
 	setJiraIssueStatusErr error
+	setJiraIssueStatusFn  func(string, jira.IssueStatus) (*jira.Issue, error)
 	addCommentErr         error
 	setJiraIssueStatusIDs []string
 	addCommentIssueIDs    []string
@@ -489,6 +490,9 @@ func (m *mockJira) GetJiraIssue(issueId string) (*jira.Issue, error) {
 
 func (m *mockJira) SetJiraIssueStatus(issueId string, status jira.IssueStatus) (*jira.Issue, error) {
 	m.setJiraIssueStatusIDs = append(m.setJiraIssueStatusIDs, issueId)
+	if m.setJiraIssueStatusFn != nil {
+		return m.setJiraIssueStatusFn(issueId, status)
+	}
 	return m.setJiraIssueStatus, m.setJiraIssueStatusErr
 }
 

@@ -162,7 +162,7 @@ type RunPickerFunc func(title string, items []ui.PickerItem) (*ui.PickerItem, er
 ```
 
 <a name="WorkflowDeps"></a>
-## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L45-L54>)
+## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L46-L55>)
 
 WorkflowDeps defines dependencies required by start workflow orchestration.
 
@@ -180,7 +180,7 @@ type WorkflowDeps struct {
 ```
 
 <a name="WorkflowEmitter"></a>
-## type [WorkflowEmitter](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L37-L42>)
+## type [WorkflowEmitter](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L38-L43>)
 
 WorkflowEmitter defines the status logging operations used by this workflow.
 
@@ -194,21 +194,22 @@ type WorkflowEmitter interface {
 ```
 
 <a name="WorkflowOptions"></a>
-## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L20-L25>)
+## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L20-L26>)
 
 WorkflowOptions contains flag values used by start workflow execution.
 
 ```go
 type WorkflowOptions struct {
-    Title        string
-    NoBranch     bool
-    Worktree     bool
-    WorktreePath string
+    Title         string
+    TrackerLabels []string
+    NoBranch      bool
+    Worktree      bool
+    WorktreePath  string
 }
 ```
 
 <a name="WorkflowResult"></a>
-## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L28-L34>)
+## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L29-L35>)
 
 WorkflowResult contains the structured result for non\-interactive execution paths.
 
@@ -223,7 +224,7 @@ type WorkflowResult struct {
 ```
 
 <a name="WorkflowRunner"></a>
-## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L57-L62>)
+## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L58-L63>)
 
 WorkflowRunner executes start workflow steps using configured dependencies.
 
@@ -237,7 +238,7 @@ type WorkflowRunner struct {
 ```
 
 <a name="WorkflowRunner.RunInteractive"></a>
-### func \(WorkflowRunner\) [RunInteractive](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L73>)
+### func \(WorkflowRunner\) [RunInteractive](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L74>)
 
 ```go
 func (r WorkflowRunner) RunInteractive(cmd *cobra.Command, issueID string) error
@@ -246,7 +247,7 @@ func (r WorkflowRunner) RunInteractive(cmd *cobra.Command, issueID string) error
 RunInteractive executes the interactive start flow.
 
 <a name="WorkflowRunner.RunWithResult"></a>
-### func \(WorkflowRunner\) [RunWithResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L99>)
+### func \(WorkflowRunner\) [RunWithResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/start/workflow.go#L100>)
 
 ```go
 func (r WorkflowRunner) RunWithResult(cmd *cobra.Command, statusCh *chan string, issueID string, out WorkflowEmitter) WorkflowResult

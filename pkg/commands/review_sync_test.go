@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	internalreview "github.com/tagoro9/fotingo/internal/commands/review"
+	"github.com/tagoro9/fotingo/internal/config"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
 	"github.com/tagoro9/fotingo/internal/jira"
@@ -861,6 +862,10 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 	defer restoreFlags()
 	defer resetReviewFlags()
 	withDefaultReviewTemplateResolver(t)
+	origConfig := fotingoConfig
+	fotingoConfig = config.NewDefaultConfig()
+	fotingoConfig.Set("tracker.comments.pullRequestCreated", "{{.Issue.Key}}: {{.PullRequest.URL}}")
+	defer func() { fotingoConfig = origConfig }()
 
 	origNewGitClient := newGitClient
 	origNewGitHubClient := newGitHubClient
@@ -939,9 +944,11 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 		},
 	}
 	jiraClient := &mockJira{
-		issueURL:           "https://jira.example.com/browse/%s",
-		jiraIssue:          &jira.Issue{Key: "FOTINGO-1", Summary: "Existing", Description: "desc"},
-		setJiraIssueStatus: &jira.Issue{Key: "FOTINGO-2", Status: "In Review"},
+		issueURL:  "https://jira.example.com/browse/%s",
+		jiraIssue: &jira.Issue{Key: "FOTINGO-1", Summary: "Existing", Description: "desc"},
+		setJiraIssueStatusFn: func(issueID string, _ jira.IssueStatus) (*jira.Issue, error) {
+			return &jira.Issue{Key: issueID, Status: "In Review"}, nil
+		},
 	}
 
 	newGitClient = func(cfg *viper.Viper, messages *chan string) (git.Git, error) {
@@ -960,8 +967,10 @@ func TestRunReviewSync_TransitionsOnlyNewlyDetectedIssues(t *testing.T) {
 	require.NoError(t, result.err)
 	assert.Equal(t, []string{"FOTINGO-2", "FOTINGO-3"}, jiraClient.setJiraIssueStatusIDs)
 	assert.Equal(t, []string{"FOTINGO-2", "FOTINGO-3"}, jiraClient.addCommentIssueIDs)
-	require.Len(t, jiraClient.addCommentBodies, 2)
-	assert.Contains(t, jiraClient.addCommentBodies[0], "https://github.com/test/repo/pull/22")
+	assert.Equal(t, []string{
+		"FOTINGO-2: https://github.com/test/repo/pull/22",
+		"FOTINGO-3: https://github.com/test/repo/pull/22",
+	}, jiraClient.addCommentBodies)
 
 	close(statusCh)
 	messages := []string{}

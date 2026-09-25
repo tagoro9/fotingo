@@ -199,6 +199,10 @@ func TestStartFlags(t *testing.T) {
 	assert.NotNil(t, labelsFlag, "labels flag should exist")
 	assert.Equal(t, "l", labelsFlag.Shorthand)
 
+	trackerLabelsFlag := flags.Lookup("tracker-labels")
+	assert.NotNil(t, trackerLabelsFlag, "tracker-labels flag should exist")
+	assert.Equal(t, "", trackerLabelsFlag.Shorthand)
+
 	noBranchFlag := flags.Lookup("no-branch")
 	assert.NotNil(t, noBranchFlag, "no-branch flag should exist")
 	assert.Equal(t, "n", noBranchFlag.Shorthand)

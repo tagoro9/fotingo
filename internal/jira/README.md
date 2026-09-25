@@ -12,8 +12,11 @@ import "github.com/tagoro9/fotingo/internal/jira"
 ## Index
 
 - [Variables](<#variables>)
+- [func ApplyLabels\(client Jira, cfg \*viper.Viper, issueID string, status IssueStatus, commandLabels \[\]string\) error](<#ApplyLabels>)
 - [func IsUnauthorizedError\(err error\) bool](<#IsUnauthorizedError>)
+- [func LabelsForStatus\(cfg \*viper.Viper, status IssueStatus\) \[\]string](<#LabelsForStatus>)
 - [func NormalizeRootURL\(raw string, allowHTTP bool\) \(string, error\)](<#NormalizeRootURL>)
+- [func RenderPullRequestComment\(cfg \*viper.Viper, issue \*Issue, pullRequestURL string, override \*string\) \(string, error\)](<#RenderPullRequestComment>)
 - [func ShouldWarnIgnoredStoredOAuthToken\(cfg \*viper.Viper\) bool](<#ShouldWarnIgnoredStoredOAuthToken>)
 - [type Issue](<#Issue>)
   - [func \(i \*Issue\) Info\(\) string](<#Issue.Info>)
@@ -38,6 +41,15 @@ var (
 )
 ```
 
+<a name="ApplyLabels"></a>
+## func [ApplyLabels](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L23>)
+
+```go
+func ApplyLabels(client Jira, cfg *viper.Viper, issueID string, status IssueStatus, commandLabels []string) error
+```
+
+ApplyLabels adds configured and command\-supplied labels for a status transition when the Jira client supports label updates.
+
 <a name="IsUnauthorizedError"></a>
 ## func [IsUnauthorizedError](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L573>)
 
@@ -47,14 +59,32 @@ func IsUnauthorizedError(err error) bool
 
 IsUnauthorizedError returns true when the Jira API error corresponds to HTTP 401.
 
+<a name="LabelsForStatus"></a>
+## func [LabelsForStatus](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L56>)
+
+```go
+func LabelsForStatus(cfg *viper.Viper, status IssueStatus) []string
+```
+
+LabelsForStatus returns the configured labels for an issue\-tracker workflow transition.
+
 <a name="NormalizeRootURL"></a>
-## func [NormalizeRootURL](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1574>)
+## func [NormalizeRootURL](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1603>)
 
 ```go
 func NormalizeRootURL(raw string, allowHTTP bool) (string, error)
 ```
 
 NormalizeRootURL validates and normalizes a Jira site root URL or Atlassian Cloud Jira API root URL.
+
+<a name="RenderPullRequestComment"></a>
+## func [RenderPullRequestComment](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/automation.go#L84>)
+
+```go
+func RenderPullRequestComment(cfg *viper.Viper, issue *Issue, pullRequestURL string, override *string) (string, error)
+```
+
+RenderPullRequestComment renders the configured issue\-tracker comment for a newly created pull request. An empty template disables the automatic issue\-tracker comment.
 
 <a name="ShouldWarnIgnoredStoredOAuthToken"></a>
 ## func [ShouldWarnIgnoredStoredOAuthToken](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L565>)
@@ -164,7 +194,7 @@ type Jira interface {
 ```
 
 <a name="New"></a>
-### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1386>)
+### func [New](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1415>)
 
 ```go
 func New(cfg *viper.Viper) (Jira, error)
@@ -173,7 +203,7 @@ func New(cfg *viper.Viper) (Jira, error)
 New returns a new instance of an authenticated Jira client
 
 <a name="NewWithHTTPClient"></a>
-### func [NewWithHTTPClient](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1354>)
+### func [NewWithHTTPClient](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1383>)
 
 ```go
 func NewWithHTTPClient(cfg *viper.Viper, httpClient *http.Client, baseURL string) (Jira, error)
@@ -182,7 +212,7 @@ func NewWithHTTPClient(cfg *viper.Viper, httpClient *http.Client, baseURL string
 NewWithHTTPClient returns a new Jira client using the provided HTTP client and base URL. This bypasses OAuth authentication and is intended for testing with mock servers.
 
 <a name="NewWithOptions"></a>
-### func [NewWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1391>)
+### func [NewWithOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L1420>)
 
 ```go
 func NewWithOptions(cfg *viper.Viper, allowPrompt bool) (Jira, error)
