@@ -18,10 +18,11 @@ import (
 
 // WorkflowOptions contains flag values used by start workflow execution.
 type WorkflowOptions struct {
-	Title        string
-	NoBranch     bool
-	Worktree     bool
-	WorktreePath string
+	Title         string
+	TrackerLabels []string
+	NoBranch      bool
+	Worktree      bool
+	WorktreePath  string
 }
 
 // WorkflowResult contains the structured result for non-interactive execution paths.
@@ -148,6 +149,7 @@ func (r WorkflowRunner) RunWithResult(cmd *cobra.Command, statusCh *chan string,
 	}
 	result.Issue = issue
 	out.Info("jira", i18n.StartStatusIssueSet, issueID)
+	r.applyInProgressLabels(out, jiraClient, issueID)
 
 	if r.Options.NoBranch {
 		resolveAssigneeStart := time.Now()
@@ -290,6 +292,7 @@ func (r WorkflowRunner) progressStartWorkflow(jiraClient jira.Jira, issue *jira.
 			return fterrors.WrapJiraError(r.localize(i18n.StartWrapSetStatus), err)
 		}
 		out.Info("jira", i18n.StartStatusIssueSet, issueID)
+		r.applyInProgressLabels(out, jiraClient, issueID)
 
 		if r.Options.NoBranch {
 			resolveAssigneeStart := time.Now()
@@ -361,6 +364,12 @@ func (r WorkflowRunner) progressStartWorkflow(jiraClient jira.Jira, issue *jira.
 		out.Info("success", i18n.StartStatusSuccess, issueID)
 		return nil
 	})
+}
+
+func (r WorkflowRunner) applyInProgressLabels(out WorkflowEmitter, jiraClient jira.Jira, issueID string) {
+	if err := jira.ApplyLabels(jiraClient, r.Config, issueID, jira.StatusInProgress, r.Options.TrackerLabels); err != nil {
+		out.DebugRaw(fmt.Sprintf("failed to add configured issue-tracker labels to %s: %v", issueID, err))
+	}
 }
 
 func logStartPhaseTiming(out WorkflowEmitter, phase string, start time.Time) {

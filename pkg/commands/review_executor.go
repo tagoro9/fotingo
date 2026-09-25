@@ -50,6 +50,8 @@ func (e reviewExecutor) runWithOptions(statusCh *chan string, allowEditor bool) 
 		Options: internalreview.WorkflowOptions{
 			Draft:                       reviewCmdFlags.draft,
 			Labels:                      append([]string(nil), reviewCmdFlags.labels...),
+			TrackerLabels:               append([]string(nil), reviewCmdFlags.trackerLabels...),
+			TrackerComment:              reviewTrackerCommentOverride(),
 			Reviewers:                   append([]string(nil), reviewCmdFlags.reviewers...),
 			Assignees:                   append([]string(nil), reviewCmdFlags.assignees...),
 			BaseBranch:                  Global.Branch,
@@ -87,6 +89,14 @@ func (e reviewExecutor) runWithOptions(statusCh *chan string, allowEditor bool) 
 		existed:       result.Existed,
 		err:           result.Err,
 	}
+}
+
+func reviewTrackerCommentOverride() *string {
+	if !reviewCmdFlags.trackerCommentSet {
+		return nil
+	}
+	comment := reviewCmdFlags.trackerComment
+	return &comment
 }
 
 type reviewWorkflowEmitter struct {

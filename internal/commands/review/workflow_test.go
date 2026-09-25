@@ -645,17 +645,32 @@ func (workflowNoIssuesGit) GetIssueId() (string, error) {
 
 type workflowRecordingJira struct {
 	workflowSuccessMockJira
-	statusCalls  []string
-	commentCalls []string
+	statusCalls     []string
+	commentCalls    []string
+	commentsByIssue map[string]string
+	labelCalls      []string
+	statusErrors    map[string]error
 }
 
 func (j *workflowRecordingJira) SetJiraIssueStatus(issueID string, _ jira.IssueStatus) (*jira.Issue, error) {
 	j.statusCalls = append(j.statusCalls, issueID)
+	if err := j.statusErrors[issueID]; err != nil {
+		return nil, err
+	}
 	return &jira.Issue{Key: issueID, Status: "In Review"}, nil
 }
 
-func (j *workflowRecordingJira) AddComment(issueID string, _ string) error {
+func (j *workflowRecordingJira) AddComment(issueID string, comment string) error {
 	j.commentCalls = append(j.commentCalls, issueID)
+	if j.commentsByIssue == nil {
+		j.commentsByIssue = make(map[string]string)
+	}
+	j.commentsByIssue[issueID] = comment
+	return nil
+}
+
+func (j *workflowRecordingJira) AddLabels(issueID string, _ []string) error {
+	j.labelCalls = append(j.labelCalls, issueID)
 	return nil
 }
 
@@ -668,8 +683,10 @@ func TestWorkflowRunnerRun_UpdatesAllLinkedIssues(t *testing.T) {
 	}
 
 	var receivedLinkedIssues []string
+	cfg := config.NewDefaultConfig()
+	cfg.Set("tracker.comments.pullRequestCreated", "{{.Issue.Key}}: {{.PullRequest.URL}}")
 	runner := WorkflowRunner{
-		Config:  viper.New(),
+		Config:  cfg,
 		Options: WorkflowOptions{Simple: false},
 		Deps: WorkflowDeps{
 			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) {
@@ -719,8 +736,50 @@ func TestWorkflowRunnerRun_UpdatesAllLinkedIssues(t *testing.T) {
 	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, receivedLinkedIssues)
 	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, recordingJira.statusCalls)
 	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, recordingJira.commentCalls)
+	assert.Equal(t, map[string]string{
+		"FOTINGO-10": "FOTINGO-10: https://github.com/tagoro9/fotingo/pull/42",
+		"FOTINGO-1":  "FOTINGO-1: https://github.com/tagoro9/fotingo/pull/42",
+		"FOTINGO-2":  "FOTINGO-2: https://github.com/tagoro9/fotingo/pull/42",
+	}, recordingJira.commentsByIssue)
 	require.NotNil(t, result.Issue)
 	assert.Equal(t, "FOTINGO-10", result.Issue.Key)
+}
+
+func TestWorkflowRunnerRun_SkipsLabelsAndCommentsWhenStatusTransitionFails(t *testing.T) {
+	recordingJira := &workflowRecordingJira{statusErrors: map[string]error{"FOTINGO-1": errors.New("transition unavailable")}}
+	pr := &github.PullRequest{Number: 42, HTMLURL: "https://github.com/tagoro9/fotingo/pull/42"}
+
+	runner := WorkflowRunner{
+		Config:  config.NewDefaultConfig(),
+		Options: WorkflowOptions{Simple: false, TrackerLabels: []string{"ready-for-review"}},
+		Deps: WorkflowDeps{
+			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return workflowLinkedIssuesGit{}, nil },
+			NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+				return &workflowSuccessMockGitHub{pr: pr}, nil
+			},
+			NewJiraClient: func(*viper.Viper) (jira.Jira, error) { return recordingJira, nil },
+			FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+				return &jira.Issue{Key: "FOTINGO-10", Summary: "Linked issue branch"}, nil
+			},
+			ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error) {
+				return "body", nil
+			},
+			ResolveLabels:          func(github.Github, []string) ([]string, []string, error) { return nil, nil, nil },
+			ResolveReviewers:       func(github.Github, []string) ([]string, []string, []string, error) { return nil, nil, nil, nil },
+			ResolveAssignees:       func(github.Github, []string) ([]string, []string, error) { return nil, nil, nil },
+			SplitEditorContent:     SplitEditorContent,
+			DerivePRTitle:          func(string, *jira.Issue, string, bool) string { return "title" },
+			ToTeamSlugs:            ToTeamSlugs,
+			FormatReviewersWarning: func(err error) string { return err.Error() },
+			ShouldOpenReviewEditor: func(bool) bool { return false },
+		},
+	}
+
+	result := runner.Run(nil, &reviewCollectingEmitter{}, false)
+
+	require.NoError(t, result.Err)
+	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-2"}, recordingJira.labelCalls)
+	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-2"}, recordingJira.commentCalls)
 }
 
 func TestWorkflowRunnerRun_UsesCommitLinkedIssuesWithoutBranchIssue(t *testing.T) {

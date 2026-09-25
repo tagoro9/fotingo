@@ -18,17 +18,18 @@ import (
 
 // startFlags holds the flags for the start command
 type startFlags struct {
-	title        string
-	description  string
-	project      string
-	kind         string
-	parent       string
-	epic         string
-	labels       []string
-	worktreePath string
-	noBranch     bool
-	worktree     bool
-	interactive  bool
+	title         string
+	description   string
+	project       string
+	kind          string
+	parent        string
+	epic          string
+	labels        []string
+	trackerLabels []string
+	worktreePath  string
+	noBranch      bool
+	worktree      bool
+	interactive   bool
 }
 
 var startCmdFlags = startFlags{}
@@ -136,6 +137,7 @@ func init() {
 	startCmd.Flags().StringVarP(&startCmdFlags.parent, "parent", "a", "", localizer.T(i18n.StartFlagParent))
 	startCmd.Flags().StringVarP(&startCmdFlags.epic, "epic", "e", "", localizer.T(i18n.StartFlagEpic))
 	startCmd.Flags().StringSliceVarP(&startCmdFlags.labels, "labels", "l", []string{}, localizer.T(i18n.StartFlagLabels))
+	startCmd.Flags().StringSliceVar(&startCmdFlags.trackerLabels, "tracker-labels", []string{}, localizer.T(i18n.StartFlagTrackerLabels))
 	startCmd.Flags().StringVar(&startCmdFlags.worktreePath, "worktree-path", "", localizer.T(i18n.StartFlagWorktreePath))
 	startCmd.Flags().BoolVarP(&startCmdFlags.noBranch, "no-branch", "n", false, localizer.T(i18n.StartFlagNoBranch))
 	startCmd.Flags().BoolVar(&startCmdFlags.worktree, "worktree", false, localizer.T(i18n.StartFlagWorktree))

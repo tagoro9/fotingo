@@ -35,6 +35,9 @@ type reviewResult struct {
 type reviewFlags struct {
 	draft               bool
 	labels              []string
+	trackerLabels       []string
+	trackerComment      string
+	trackerCommentSet   bool
 	reviewers           []string
 	assignees           []string
 	simple              bool
@@ -72,6 +75,8 @@ func init() {
 
 	reviewCmd.Flags().BoolVarP(&reviewCmdFlags.draft, "draft", "d", false, localizer.T(i18n.ReviewFlagDraft))
 	reviewCmd.Flags().StringSliceVarP(&reviewCmdFlags.labels, "labels", "l", []string{}, localizer.T(i18n.ReviewFlagLabels))
+	reviewCmd.Flags().StringSliceVar(&reviewCmdFlags.trackerLabels, "tracker-labels", []string{}, localizer.T(i18n.ReviewFlagTrackerLabels))
+	reviewCmd.Flags().StringVar(&reviewCmdFlags.trackerComment, "tracker-comment", "", localizer.T(i18n.ReviewFlagTrackerComment))
 	reviewCmd.Flags().StringSliceVarP(&reviewCmdFlags.reviewers, "reviewers", "r", []string{}, localizer.T(i18n.ReviewFlagReviewers))
 	reviewCmd.Flags().StringSliceVarP(&reviewCmdFlags.assignees, "assignee", "a", []string{}, localizer.T(i18n.ReviewFlagAssignees))
 	reviewCmd.Flags().BoolVarP(&reviewCmdFlags.simple, "simple", "s", false, localizer.T(i18n.ReviewFlagSimple))
@@ -89,6 +94,7 @@ var reviewCmd = &cobra.Command{
 	Short: i18n.T(i18n.ReviewShort),
 	Long:  i18n.T(i18n.ReviewLong),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		reviewCmdFlags.trackerCommentSet = cmd.Flags().Changed("tracker-comment")
 		if !reviewCmdFlags.simple {
 			if err := ensureJiraRootConfigured(); err != nil {
 				return err

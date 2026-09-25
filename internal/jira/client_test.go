@@ -620,6 +620,31 @@ func (suite *JiraTestSuite) TestAddComment() {
 	}
 }
 
+func (suite *JiraTestSuite) TestAddLabels_UsesAtomicAddOperations() {
+	var updateRequest map[string]any
+	requestCount := 0
+	suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		assert.Equal(suite.T(), http.MethodPut, r.Method)
+		assert.Equal(suite.T(), "/rest/api/2/issue/TEST-123", r.URL.Path)
+		require.NoError(suite.T(), json.NewDecoder(r.Body).Decode(&updateRequest))
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	err := suite.client.AddLabels("TEST-123", []string{"active", " Active ", "backend", ""})
+
+	require.NoError(suite.T(), err)
+	assert.Equal(suite.T(), 1, requestCount)
+	assert.Equal(suite.T(), map[string]any{
+		"update": map[string]any{
+			"labels": []any{
+				map[string]any{"add": "active"},
+				map[string]any{"add": "backend"},
+			},
+		},
+	}, updateRequest)
+}
+
 // TestSetIssueStatus tests transitioning issue status
 func (suite *JiraTestSuite) TestSetIssueStatus() {
 	tests := []struct {

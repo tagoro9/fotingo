@@ -35,30 +35,53 @@ github:
 
 jira:
   root: https://yourcompany.atlassian.net
+
+tracker:
+  labels:
+    inProgress: ""
+    inReview: ""
+  comments:
+    pullRequestCreated: "Pull request created: {{.PullRequest.URL}}"
 ```
 
 ## Key Properties
 
-| Path                            | Description                                    |
-| ------------------------------- | ---------------------------------------------- |
-| `git.branchTemplate`            | Template for branch names                      |
-| `git.remote`                    | Git remote name                                |
-| `git.worktree.enabled`          | Create `start` branches in sibling worktrees   |
-| `git.worktree.path`             | Parent directory for `start` worktrees         |
-| `github.token`                  | GitHub OAuth token or classic PAT              |
-| `github.cache.labelsTTL`        | Labels cache TTL                               |
-| `github.cache.collaboratorsTTL` | Collaborators cache TTL                        |
-| `github.cache.orgMembersTTL`    | Organization members cache TTL                 |
-| `github.cache.teamsTTL`         | Organization teams cache TTL                   |
-| `github.cache.userProfilesTTL`  | GitHub user profile cache TTL                  |
-| `jira.root`                     | Jira site URL or Atlassian Cloud API root      |
-| `jira.user.login`               | Jira username; not used with service accounts  |
-| `jira.user.token`               | Jira API token or scoped service-account token |
-| `jira.cache.issueTypesTTL`      | Jira issue types cache TTL                     |
-| `cache.path`                    | Override cache DB path                         |
-| `telemetry.enabled`             | Enable anonymous telemetry (`true` by default) |
+| Path                                  | Description                                          |
+| ------------------------------------- | ---------------------------------------------------- |
+| `git.branchTemplate`                  | Template for branch names                            |
+| `git.remote`                          | Git remote name                                      |
+| `git.worktree.enabled`                | Create `start` branches in sibling worktrees         |
+| `git.worktree.path`                   | Parent directory for `start` worktrees               |
+| `github.token`                        | GitHub OAuth token or classic PAT                    |
+| `github.cache.labelsTTL`              | Labels cache TTL                                     |
+| `github.cache.collaboratorsTTL`       | Collaborators cache TTL                              |
+| `github.cache.orgMembersTTL`          | Organization members cache TTL                       |
+| `github.cache.teamsTTL`               | Organization teams cache TTL                         |
+| `github.cache.userProfilesTTL`        | GitHub user profile cache TTL                        |
+| `jira.root`                           | Jira site URL or Atlassian Cloud API root            |
+| `tracker.labels.inProgress`           | Comma-separated labels applied by `start`            |
+| `tracker.labels.inReview`             | Comma-separated labels applied by `review`           |
+| `tracker.comments.pullRequestCreated` | Issue-tracker comment template for new pull requests |
+| `jira.user.login`                     | Jira username; not used with service accounts        |
+| `jira.user.token`                     | Jira API token or scoped service-account token       |
+| `jira.cache.issueTypesTTL`            | Jira issue types cache TTL                           |
+| `cache.path`                          | Override cache DB path                               |
+| `telemetry.enabled`                   | Enable anonymous telemetry (`true` by default)       |
 
 Jira OAuth site metadata (`siteId`) is derived internally and cached by `jira.root`; it is not a user-managed config key.
+
+Set `tracker.comments.pullRequestCreated` to an empty string to suppress Fotingo's
+automatic issue-tracker comment. The template supports `{{.Issue.Key}}`,
+`{{.Issue.Summary}}`, and `{{.PullRequest.URL}}`.
+
+For one-off workflows, command arguments supplement configured labels:
+
+```bash
+fotingo start PROJ-123 --tracker-labels active
+fotingo review --tracker-labels ready-for-review --tracker-comment '{{.Issue.Key}}: {{.PullRequest.URL}}'
+```
+
+`--tracker-comment ""` suppresses the automatic issue-tracker comment for that pull request.
 
 ## Telemetry Opt-Out
 

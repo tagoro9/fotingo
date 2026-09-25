@@ -58,6 +58,12 @@ Create a pull request with defaults:
 {{EXAMPLE_REVIEW_DEFAULT}}
 ```
 
+Add issue-tracker workflow labels or override the issue-tracker pull-request comment for one review:
+
+```bash
+fotingo review -y --tracker-labels ready-for-review --tracker-comment '{{.Issue.Key}}: {{.PullRequest.URL}}'
+```
+
 Create a pull request against a non-default base branch:
 
 ```bash
@@ -130,6 +136,9 @@ Rebase stack branches in their existing local worktrees:
 - `fotingo start` refreshes only the default branch during branch preflight, skips the fetch when the local tracking ref is already current, and does not use shallow fetches for that refresh.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
+- Use `fotingo start --tracker-labels <label> ...` to add labels to the issue when it moves to `In Progress`. These labels supplement `tracker.labels.inProgress`; `start --labels` applies only when creating a new issue.
+- Use `fotingo review --tracker-labels <label> ...` to add labels to linked issues when they move to `In Review`. These labels supplement `tracker.labels.inReview`; `review --labels` applies GitHub pull-request labels.
+- Use `fotingo review --tracker-comment '<template>'` to override the configured issue-tracker comment for one newly created pull request. Pass `--tracker-comment ""` only when the user explicitly wants to suppress Fotingo's automatic issue-tracker comment.
 - For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
 - For current-branch PR context, run `fotingo inspect --json` and read the `pullRequest` fields before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - For current-branch PR discussion context, run `fotingo inspect pr --json` and read `pullRequest`, top-level `comments`, and `reviews[].conversations[].comments` before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.

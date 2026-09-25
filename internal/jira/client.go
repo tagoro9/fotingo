@@ -791,6 +791,35 @@ func (j *jira) SetJiraIssueStatus(issueId string, targetStatus IssueStatus) (*Is
 	return j.GetJiraIssue(issueId)
 }
 
+// AddLabels atomically appends the supplied labels to an issue.
+func (j *jira) AddLabels(issueID string, labels []string) error {
+	updates := make([]map[string]string, 0, len(labels))
+	seen := make(map[string]struct{}, len(labels))
+	for _, label := range labels {
+		label = strings.TrimSpace(label)
+		if label == "" {
+			continue
+		}
+		key := strings.ToLower(label)
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		updates = append(updates, map[string]string{"add": label})
+	}
+	if len(updates) == 0 {
+		return nil
+	}
+
+	_, err := j.client.Issue.UpdateIssue(issueID, map[string]interface{}{
+		"update": map[string]interface{}{"labels": updates},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to add labels to issue %s: %w", issueID, err)
+	}
+	return nil
+}
+
 // GetUserOpenIssues returns all open issues assigned to the current user.
 // This implements the tracker.Tracker interface.
 func (j *jira) GetUserOpenIssues() ([]tracker.Issue, error) {

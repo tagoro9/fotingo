@@ -42,6 +42,14 @@ func TestReviewFlags(t *testing.T) {
 	assert.NotNil(t, labelsFlag, "labels flag should exist")
 	assert.Equal(t, "l", labelsFlag.Shorthand)
 
+	trackerLabelsFlag := flags.Lookup("tracker-labels")
+	assert.NotNil(t, trackerLabelsFlag, "tracker-labels flag should exist")
+	assert.Equal(t, "", trackerLabelsFlag.Shorthand)
+
+	trackerCommentFlag := flags.Lookup("tracker-comment")
+	assert.NotNil(t, trackerCommentFlag, "tracker-comment flag should exist")
+	assert.Equal(t, "", trackerCommentFlag.Shorthand)
+
 	reviewersFlag := flags.Lookup("reviewers")
 	assert.NotNil(t, reviewersFlag, "reviewers flag should exist")
 	assert.Equal(t, "r", reviewersFlag.Shorthand)

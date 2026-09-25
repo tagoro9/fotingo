@@ -305,20 +305,30 @@ func runReviewSync(statusCh *chan string, allowEditor bool) reviewResult {
 			"New linked issues detected during sync: %s",
 			strings.Join(newLinkedIssueIDs, ", "),
 		))
-		comment := localizer.T(i18n.ReviewCommentCreated, updatedPR.HTMLURL)
 		for _, issueID := range newLinkedIssueIDs {
 			out.Info(commandruntime.LogEmojiProgress, i18n.ReviewStatusSetInReview, issueID)
 			updatedIssue, setErr := jiraClient.SetJiraIssueStatus(issueID, jira.StatusInReview)
 			if setErr != nil {
 				out.Info("warning", i18n.ReviewStatusSetInReviewWarn, setErr)
-			} else {
-				if issue != nil && strings.EqualFold(issue.Key, issueID) {
-					issue = updatedIssue
-					jiraURL = jiraClient.GetIssueURL(issueID)
-				}
-				out.Info(commandruntime.LogEmojiCheck, i18n.ReviewStatusSetInReviewDone, issueID)
+				continue
+			}
+			if issue != nil && strings.EqualFold(issue.Key, issueID) {
+				issue = updatedIssue
+				jiraURL = jiraClient.GetIssueURL(issueID)
+			}
+			out.Info(commandruntime.LogEmojiCheck, i18n.ReviewStatusSetInReviewDone, issueID)
+			if err := jira.ApplyLabels(jiraClient, fotingoConfig, issueID, jira.StatusInReview, nil); err != nil {
+				out.Debugf("failed to add configured issue-tracker labels to %s: %v", issueID, err)
 			}
 
+			comment, renderErr := jira.RenderPullRequestComment(fotingoConfig, updatedIssue, updatedPR.HTMLURL, nil)
+			if renderErr != nil {
+				out.Debugf("failed to render configured issue-tracker comment: %v", renderErr)
+				continue
+			}
+			if comment == "" {
+				continue
+			}
 			out.Info(commandruntime.LogEmojiProgress, i18n.ReviewStatusAddComment, issueID)
 			if commentErr := jiraClient.AddComment(issueID, comment); commentErr != nil {
 				out.Info("warning", i18n.ReviewStatusAddCommentWarn, commentErr)
