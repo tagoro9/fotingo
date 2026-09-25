@@ -302,7 +302,9 @@ func (workflowSuccessMockJira) SetFixVersion([]string, *tracker.Release) error {
 func (workflowSuccessMockJira) IsValidIssueID(string) bool                     { return true }
 func (workflowSuccessMockJira) GetIssueURL(string) string                      { return "" }
 func (workflowSuccessMockJira) GetIssueUrl(string) (string, error)             { return "", nil }
-func (workflowSuccessMockJira) GetJiraIssue(string) (*jira.Issue, error)       { return nil, nil }
+func (workflowSuccessMockJira) GetJiraIssue(key string) (*jira.Issue, error) {
+	return &jira.Issue{Key: key, Summary: "Fetched summary"}, nil
+}
 func (workflowSuccessMockJira) SetJiraIssueStatus(string, jira.IssueStatus) (*jira.Issue, error) {
 	return nil, nil
 }
@@ -745,12 +747,14 @@ func TestWorkflowRunnerRun_UpdatesAllLinkedIssues(t *testing.T) {
 	assert.Equal(t, "FOTINGO-10", result.Issue.Key)
 }
 
-func TestWorkflowRunnerRun_SkipsLabelsAndCommentsWhenStatusTransitionFails(t *testing.T) {
+func TestWorkflowRunnerRun_CommentsWhenStatusTransitionFails(t *testing.T) {
 	recordingJira := &workflowRecordingJira{statusErrors: map[string]error{"FOTINGO-1": errors.New("transition unavailable")}}
+	cfg := config.NewDefaultConfig()
+	cfg.Set("tracker.comments.pullRequestCreated", "{{.Issue.Key}}: {{.Issue.Summary}} {{.PullRequest.URL}}")
 	pr := &github.PullRequest{Number: 42, HTMLURL: "https://github.com/tagoro9/fotingo/pull/42"}
 
 	runner := WorkflowRunner{
-		Config:  config.NewDefaultConfig(),
+		Config:  cfg,
 		Options: WorkflowOptions{Simple: false, TrackerLabels: []string{"ready-for-review"}},
 		Deps: WorkflowDeps{
 			NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return workflowLinkedIssuesGit{}, nil },
@@ -779,7 +783,8 @@ func TestWorkflowRunnerRun_SkipsLabelsAndCommentsWhenStatusTransitionFails(t *te
 
 	require.NoError(t, result.Err)
 	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-2"}, recordingJira.labelCalls)
-	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-2"}, recordingJira.commentCalls)
+	assert.Equal(t, []string{"FOTINGO-10", "FOTINGO-1", "FOTINGO-2"}, recordingJira.commentCalls)
+	assert.Equal(t, "FOTINGO-1: Fetched summary https://github.com/tagoro9/fotingo/pull/42", recordingJira.commentsByIssue["FOTINGO-1"])
 }
 
 func TestWorkflowRunnerRun_UsesCommitLinkedIssuesWithoutBranchIssue(t *testing.T) {
@@ -917,4 +922,67 @@ func TestWorkflowRunnerRun_SkipsJiraWhenNoIssuesExist(t *testing.T) {
 	assert.Nil(t, receivedJiraClient)
 	assert.Empty(t, receivedLinkedIssues)
 	assert.Nil(t, result.Issue)
+}
+
+func TestWorkflowRunnerRun_HandlesCommentTemplateErrors(t *testing.T) {
+	malformed := "{{"
+	for _, test := range []struct {
+		name, body string
+		override   *string
+		late       bool
+	}{
+		{name: "malformed configured template", body: "{{"},
+		{name: "invalid field", body: "{{.Issue.Missing}}"},
+		{name: "malformed command override", body: "valid", override: &malformed},
+		{name: "late rendering error", body: `{{if eq .PullRequest.URL "https://github.com/tagoro9/fotingo/pull/42"}}{{.Issue.Missing}}{{end}}`, late: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			recordingJira := &workflowRecordingJira{statusErrors: map[string]error{"FOTINGO-1": errors.New("transition unavailable")}}
+			cfg := config.NewDefaultConfig()
+			cfg.Set("tracker.comments.pullRequestCreated", test.body)
+			pr := &github.PullRequest{Number: 42, HTMLURL: "https://github.com/tagoro9/fotingo/pull/42"}
+
+			ghClient := &workflowSuccessMockGitHub{pr: pr}
+			runner := WorkflowRunner{
+				Config:  cfg,
+				Options: WorkflowOptions{Simple: false, TrackerComment: test.override},
+				Deps: WorkflowDeps{
+					NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return workflowLinkedIssuesGit{}, nil },
+					NewGitHubClient: func(git.Git, *viper.Viper) (github.Github, error) {
+						return ghClient, nil
+					},
+					NewJiraClient: func(*viper.Viper) (jira.Jira, error) { return recordingJira, nil },
+					FetchBranchIssue: func(jira.Jira, string, func(string, ...any)) (*jira.Issue, error) {
+						return &jira.Issue{Key: "FOTINGO-10", Summary: "Linked issue branch"}, nil
+					},
+					ResolvePRBody: func(*chan string, string, *jira.Issue, jira.Jira, []git.Commit, []string, bool) (string, error) {
+						return "body", nil
+					},
+					ResolveLabels:          func(github.Github, []string) ([]string, []string, error) { return nil, nil, nil },
+					ResolveReviewers:       func(github.Github, []string) ([]string, []string, []string, error) { return nil, nil, nil, nil },
+					ResolveAssignees:       func(github.Github, []string) ([]string, []string, error) { return nil, nil, nil },
+					SplitEditorContent:     SplitEditorContent,
+					DerivePRTitle:          func(string, *jira.Issue, string, bool) string { return "title" },
+					ToTeamSlugs:            ToTeamSlugs,
+					FormatReviewersWarning: func(err error) string { return err.Error() },
+					ShouldOpenReviewEditor: func(bool) bool { return false },
+				},
+			}
+
+			emitter := &reviewCollectingEmitter{}
+			result := runner.Run(nil, emitter, false)
+			if test.late {
+				require.NoError(t, result.Err)
+				require.NotEmpty(t, emitter.rawEvents)
+				event := emitter.rawEvents[len(emitter.rawEvents)-1]
+				assert.Contains(t, event.message, "failed to render issue-tracker comment")
+				assert.Equal(t, "warning", event.emoji)
+			} else {
+				require.ErrorContains(t, result.Err, "invalid issue-tracker comment template")
+				assert.Empty(t, ghClient.createPROptions)
+				assert.Empty(t, recordingJira.statusCalls)
+			}
+			assert.Empty(t, recordingJira.commentCalls)
+		})
+	}
 }
