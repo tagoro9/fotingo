@@ -1,7 +1,5 @@
 charm.land/bubbles/v2 v2.2.1 h1:Fq1+qm5hV6GkvzLQDhCBpXXE5tLgvh1PRriCLwSvIQU=
 charm.land/bubbles/v2 v2.2.1/go.mod h1:wdMgn+sje1KNXdwFizIWjbf328fIUBxqEmJ/vYPo8yc=
-charm.land/bubbletea/v2 v2.0.9 h1:DpJCMWKgzQK8SJv4zbKKFHAI10ymWy/evClPFk0k0f8=
-charm.land/bubbletea/v2 v2.0.9/go.mod h1:2SkdgoTXluXJHOUwAoRlRXF/28vklb1rFl6GcgV1/ss=
 charm.land/bubbletea/v2 v2.0.10 h1:oolvo20VBpI0PfqE7iFjkZ1bx0WpmXGfnKz5Yldjq5o=
 charm.land/bubbletea/v2 v2.0.10/go.mod h1:QOatcnhOjYIfxzUSTz6raF7Ex4R/rIuHa3SnBdCCpMc=
 charm.land/lipgloss/v2 v2.0.6 h1:EaGKeuA8FvF+v2BT5VmZd2LoYLaMZJXA5n34th8nCIQ=
@@ -154,8 +152,6 @@ github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c/go.mod h1:7rwL4CYBLnjL
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/posthog/posthog-go v1.24.3 h1:EMWkrhXODtjFI7lUCxS4gzkNe/zaFeeS2oyS06MvfTo=
-github.com/posthog/posthog-go v1.24.3/go.mod h1:seY9mmw3mYGT9i2Wr5Dn3JXWPiAkZ6aolwH/5l8eVQE=
 github.com/posthog/posthog-go v1.27.0 h1:a0VAqgePEzN/vaQ+sqNzYvcV529my9J8QH9A31RVer4=
 github.com/posthog/posthog-go v1.27.0/go.mod h1:rN0C9Urenhytgo3KQ/QVorGkyGfpouquDTSs2Ujzr+g=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
@@ -217,8 +213,6 @@ golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f/go.mod h1:J1xhfL/vlindoeF/aI
 golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
 golang.org/x/net v0.56.0 h1:Rw8j/hFzGvJUZwNBXnAtf5sVDVt+65SK2C7IxCxZt5o=
 golang.org/x/net v0.56.0/go.mod h1:D3Ku6r+V6JROoZK144D2XfMHFcMq/0zSfLelVTCFKec=
-golang.org/x/oauth2 v0.36.0 h1:peZ/1z27fi9hUOFCAZaHyrpWG5lwe0RJEEEeH0ThlIs=
-golang.org/x/oauth2 v0.36.0/go.mod h1:YDBUJMTkDnJS+A4BP4eZBjCqtokkg1hODuPjwiGPO7Q=
 golang.org/x/oauth2 v0.37.0 h1:JUlcxA8oAtauLfiH8FX2/FkAWHAdi0QtGCGc+hofE98=
 golang.org/x/oauth2 v0.37.0/go.mod h1:IxwZNxUULJmpBFf9K/9NTMSIfZZuvuTy1gGxhigP/58=
 golang.org/x/sync v0.22.0 h1:SZjpbeLmrCk4xhRSZFNZW5gFUeCeFgjekvI/+gfScek=
