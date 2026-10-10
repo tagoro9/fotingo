@@ -12,6 +12,7 @@ require (
 	github.com/dgraph-io/badger/v4 v4.9.6
 	github.com/go-git/go-git/v5 v5.19.2
 	github.com/google/go-github/v90 v90.0.0
+	github.com/google/go-github/v91 v91.0.0
 	github.com/kubescape/go-git-url v0.0.33
 	github.com/kyokomi/emoji/v2 v2.2.14
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
