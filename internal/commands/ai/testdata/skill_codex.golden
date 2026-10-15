@@ -1,23 +1,24 @@
 ---
 name: fotingo
-description: Use fotingo as the default workflow for starting issue work and submitting work for review.
+description: Use fotingo for Jira issue workflows, standalone issue comments and labels, and submitting work for review.
 license: MIT
 compatibility: Requires fotingo CLI.
 metadata:
   author: fotingo
-  version: "1.16.0"
+  version: "1.17.0"
   generatedBy: "dev"
 ---
 
 # Fotingo Workflow Skill
 
-This skill configures Codex to use fotingo as the primary workflow interface for issue start, review submission, and supporting context operations.
+This skill configures Codex to use fotingo as the primary workflow interface for issue start, issue comments and labels, review submission, and supporting context operations.
 
 ## Core Intent
 
 Use these patterns as the default way of working with issues:
 
 - starting work on an issue
+- commenting on or labeling an issue by key
 - submitting work for review
 - checking context before taking workflow actions
 
@@ -25,7 +26,7 @@ When this skill is installed, prefer fotingo for end-to-end issue and review wor
 
 ## Preflight
 
-When branch or issue context is unclear, inspect first:
+For repository workflows, inspect first when branch or issue context is unclear:
 
 ```bash
 fotingo inspect --json
@@ -56,6 +57,29 @@ Create the branch in a linked worktree under an explicit parent and capture the 
 ```bash
 fotingo start PROJ-123 --worktree-path .claude/worktrees -y --json
 ```
+
+## Issue Comments and Labels
+
+When asked to post a clarification or progress note to a known Jira issue, use an
+explicit key. These commands work outside a Git repository with only Jira
+credentials; skip branch/PR inspection when it is not needed for the request.
+
+```bash
+fotingo issue comment -i PROJ-123 'Which repository should contain this change?' --json
+fotingo issue comment -i PROJ-123 --body-file note.txt --json
+fotingo issue comment -i PROJ-123 --body-file - --json <<'NOTE'
+Which repository should contain this change?
+
+Please include the expected behavior and any constraints.
+NOTE
+fotingo issue label -i PROJ-123 --add ai --add needs-clarification --json
+```
+
+- Keys must match `^[A-Z][A-Z0-9]+-\d+$`. Use the supplied issue key; do not infer a branch key for these commands.
+- Supply exactly one text argument or `--body-file`; `-` reads stdin. Text is literal, including `{{...}}`. Blank lines separate paragraphs and single newlines are preserved.
+- Comment JSON returns `issueKey`, `commentId`, and `url`. Label JSON returns `issueKey` and all resulting `labels`. Failures exit non-zero with a JSON error.
+- Labels are additive and idempotent; repeat `--add` for multiple labels. Comment creation is not idempotent: verify uncertain outcomes on Jira before retrying.
+- Use `issue label` for standalone Jira labels. `review --labels` sets GitHub labels; `--tracker-labels` applies Jira labels during workflow transitions. Do not run `start` or `review sync` merely to label or comment: the issue commands do not change status or PR bodies.
 
 ## Review Workflows
 
@@ -142,7 +166,7 @@ fotingo review stacks rebase --json
 
 ## Workflow Guide
 
-- Start from `fotingo inspect --json` when branch or issue context is unclear.
+- Start from `fotingo inspect --json` when repository branch or issue context is unclear; explicit `issue comment` and `issue label` requests do not require repository inspection.
 - `fotingo inspect --json` returns branch context, linked issue context, commit history, and `pullRequest` metadata including title, description, and URL when the inspected branch already has an open PR.
 - Use `fotingo inspect pr --json` when you need pull request discussion context before editing, syncing, or responding to review feedback.
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
@@ -154,7 +178,8 @@ fotingo review stacks rebase --json
 - Use `fotingo start --tracker-labels <label> ...` to add labels to the issue when it moves to `In Progress`. These labels supplement `tracker.labels.inProgress`; `start --labels` applies only when creating a new issue.
 - Use `fotingo review --tracker-labels <label> ...` to add labels to linked issues when they move to `In Review`. These labels supplement `tracker.labels.inReview`; `review --labels` applies GitHub pull-request labels.
 - Use `fotingo review --tracker-comment '<template>'` to override the configured issue-tracker comment for one newly created pull request. Pass `--tracker-comment ""` only when the user explicitly wants to suppress Fotingo's automatic issue-tracker comment.
-- For reviewers, assignees, and labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
+- Review comment templates are validated before PR creation or sync updates. A failed status transition does not suppress the PR-link comment; late rendering failures produce visible warnings.
+- For GitHub reviewers, assignees, and PR labels, run `fotingo search ... --json` first and pass the resolved values into `fotingo review`.
 - For current-branch PR context, run `fotingo inspect --json` and read the `pullRequest` fields before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - For current-branch PR discussion context, run `fotingo inspect pr --json` and read `pullRequest`, top-level `comments`, and `reviews[].conversations[].comments` before deciding whether to call `fotingo review sync`, `fotingo open pr`, or `fotingo review`.
 - Prefer `fotingo review -y` for the standard Jira-backed flow. Use `fotingo review -y --simple` only when you intentionally want a GitHub-only PR flow.
@@ -173,7 +198,7 @@ fotingo review stacks rebase --json
 - Use `--title` only when the generated PR title is wrong or incomplete.
 - Use `fotingo open issue` when you need the linked Jira URL for the current branch context. Interactive runs can disambiguate between multiple linked issues; automation should prefer `--json` and handle ambiguity errors that list the candidate issue IDs.
 - Use `fotingo --help` (and `<command> --help`) to discover additional workflow actions.
-- If required data is missing, run inspect and retry with explicit values.
+- For repository workflows with missing context, run inspect and retry with explicit values. Standalone issue actions need an explicit issue key and Jira credentials.
 
 ## Ticket And PR Etiquette
 

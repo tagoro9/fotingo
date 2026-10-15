@@ -21,6 +21,8 @@ fotingo review stacks sync --json
 fotingo open pr --json
 fotingo inspect
 fotingo inspect pr --json
+fotingo issue comment -i PROJ-123 --body-file note.txt --json
+fotingo issue label -i PROJ-123 --add ai --json
 ```
 
 When `start` runs with `--worktree`, `--worktree-path`, or `git.worktree.enabled=true`, automation should read both `branch.name` and `branch.worktreePath` from the JSON result.
@@ -35,6 +37,35 @@ When `start` runs with `--worktree`, `--worktree-path`, or `git.worktree.enabled
 | `-y` / `--yes` | Skip prompts                |
 | `--quiet`      | Reduce non-essential output |
 | `--no-color`   | Disable ANSI color codes    |
+
+## Standalone Jira Comments and Labels
+
+Use explicit issue keys to comment or add labels before a repository is available,
+or when taking over a PR without running `fotingo review`. These commands need
+only Jira credentials and do not resolve Git or PR context. Do not run `start` or
+`review sync` merely to post a comment or label an issue: those workflows have
+additional status or PR-body effects.
+
+```bash
+fotingo issue comment -i PROJ-123 --body-file - --json <<'NOTE'
+Which repository should contain this change?
+
+Please include the expected behavior and any constraints.
+NOTE
+fotingo issue label -i PROJ-123 --add ai --add needs-clarification --json
+```
+
+Use `--body-file -` for multiline input and `--body-file path` for saved text.
+Comment text is literal, so template expressions are preserved rather than
+expanded. Exactly one text argument or `--body-file` is required. Issue keys must
+match `^[A-Z][A-Z0-9]+-\d+$`; invalid keys fail before Jira initialization.
+
+Label updates preserve existing labels and can be repeated safely. Comment creation
+is not idempotent: if a request has an uncertain outcome, verify whether the comment
+was posted before retrying. Success objects for these two commands have no
+`success` wrapper; failures exit non-zero and use the standard JSON error format.
+HTTP 403 errors report permission denied, while HTTP 404 errors report an issue
+that is missing or not visible to the account.
 
 ## Review Body Overrides In Automation
 
@@ -112,6 +143,27 @@ Automation should run stack rebase only when it is prepared to handle conflicts.
     "created": true,
     "worktreePath": "/workspace/repo/.claude/worktrees/fotingo-wt-b-proj-123_fix_login_bug"
   }
+}
+```
+
+### `issue comment` success
+
+```json
+{
+  "issueKey": "PROJ-123",
+  "commentId": "10234",
+  "url": "https://jira.example.com/browse/PROJ-123?focusedCommentId=10234"
+}
+```
+
+### `issue label` success
+
+The labels array includes both pre-existing and newly added labels.
+
+```json
+{
+  "issueKey": "PROJ-123",
+  "labels": ["existing", "ai", "backend"]
 }
 ```
 
