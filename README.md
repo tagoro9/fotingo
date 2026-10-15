@@ -88,11 +88,31 @@ fotingo open pr
 
 For full authentication setup details, see [docs/authentication.md](./docs/authentication.md).
 
+## Issue comments and labels
+
+These commands use only Jira credentials and work outside a Git repository. Issue
+keys must match `^[A-Z][A-Z0-9]+-\d+$`.
+
+```bash
+fotingo issue comment -i FOTINGO-123 'A question or progress note'
+fotingo issue comment -i FOTINGO-123 --body-file note.txt --json
+fotingo issue comment -i FOTINGO-123 --body-file - < note.txt
+fotingo issue label -i FOTINGO-123 --add ai --add backend --json
+```
+
+Comment text is literal: blank lines separate paragraphs and single newlines are
+preserved. Supply either one text argument or `--body-file` (`-` reads stdin).
+Comment JSON contains `issueKey`, `commentId`, and `url`. Label updates are additive
+and idempotent; their JSON contains `issueKey` and the complete resulting `labels`
+list. Neither command changes status or interacts with branches or pull requests.
+
 ## Common Commands
 
 | Command                 | What it does                                                                                 |
 | ----------------------- | -------------------------------------------------------------------------------------------- |
 | `fotingo start`         | Creates or checks out a Jira-backed branch, optionally in a dedicated worktree               |
+| `fotingo issue comment` | Posts a literal comment to a Jira issue key without Git context                              |
+| `fotingo issue label`   | Adds Jira issue labels without status changes or Git context                                 |
 | `fotingo review`        | Creates a pull request with issue context, labels, reviewers, and optional base overrides    |
 | `fotingo review sync`   | Refreshes managed PR sections, reviewers, assignees, title, and draft readiness              |
 | `fotingo review stacks` | Lists, syncs, and rebases linear stacked PR chains, including branches in separate worktrees |

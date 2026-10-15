@@ -19,10 +19,14 @@ import "github.com/tagoro9/fotingo/internal/jira"
 - [func PreparePullRequestComments\(client Jira, cfg \*viper.Viper, keys \[\]string, known \*Issue, url string, override \*string\) \(map\[string\]\*Issue, error\)](<#PreparePullRequestComments>)
 - [func RenderPullRequestComment\(cfg \*viper.Viper, issue \*Issue, pullRequestURL string, override \*string\) \(string, error\)](<#RenderPullRequestComment>)
 - [func ShouldWarnIgnoredStoredOAuthToken\(cfg \*viper.Viper\) bool](<#ShouldWarnIgnoredStoredOAuthToken>)
+- [func ValidateIssueKey\(key string\) error](<#ValidateIssueKey>)
 - [type Issue](<#Issue>)
   - [func \(i \*Issue\) Info\(\) string](<#Issue.Info>)
   - [func \(i \*Issue\) SanitizedSummary\(\) string](<#Issue.SanitizedSummary>)
   - [func \(i \*Issue\) ShortName\(\) string](<#Issue.ShortName>)
+- [type IssueActions](<#IssueActions>)
+- [type IssueCommentResult](<#IssueCommentResult>)
+- [type IssueLabelResult](<#IssueLabelResult>)
 - [type IssueStatus](<#IssueStatus>)
 - [type Jira](<#Jira>)
   - [func New\(cfg \*viper.Viper\) \(Jira, error\)](<#New>)
@@ -105,6 +109,15 @@ func ShouldWarnIgnoredStoredOAuthToken(cfg *viper.Viper) bool
 
 ShouldWarnIgnoredStoredOAuthToken reports when a stored OAuth token will be ignored because the current binary is not OAuth\-capable.
 
+<a name="ValidateIssueKey"></a>
+## func [ValidateIssueKey](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/issue_actions.go#L16>)
+
+```go
+func ValidateIssueKey(key string) error
+```
+
+ValidateIssueKey validates an explicit issue key without consulting Git or Jira.
+
 <a name="Issue"></a>
 ## type [Issue](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L37-L47>)
 
@@ -150,6 +163,43 @@ func (i *Issue) ShortName() string
 ```
 
 ShortName returns a short prefix for the issue type
+
+<a name="IssueActions"></a>
+## type [IssueActions](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/issue_actions.go#L24-L27>)
+
+IssueActions provides issue mutations independent of repository context.
+
+```go
+type IssueActions interface {
+    CommentOnIssue(key, body string) (*IssueCommentResult, error)
+    LabelIssue(key string, labels []string) (*IssueLabelResult, error)
+}
+```
+
+<a name="IssueCommentResult"></a>
+## type [IssueCommentResult](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/issue_actions.go#L30-L34>)
+
+IssueCommentResult identifies the newly created Jira comment.
+
+```go
+type IssueCommentResult struct {
+    IssueKey  string `json:"issueKey"`
+    CommentID string `json:"commentId"`
+    URL       string `json:"url"`
+}
+```
+
+<a name="IssueLabelResult"></a>
+## type [IssueLabelResult](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/issue_actions.go#L37-L40>)
+
+IssueLabelResult contains all labels present after an additive update.
+
+```go
+type IssueLabelResult struct {
+    IssueKey string   `json:"issueKey"`
+    Labels   []string `json:"labels"`
+}
+```
 
 <a name="IssueStatus"></a>
 ## type [IssueStatus](<https://github.com/tagoro9/fotingo/blob/main/internal/jira/client.go#L35>)

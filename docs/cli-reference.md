@@ -113,6 +113,55 @@ Notes:
 - `start` resolves and refreshes only the repository default branch during branch preflight. If the local remote-tracking ref is already current, fotingo skips the fetch; when a refresh is needed, it uses a targeted non-shallow fetch.
 - `--worktree-path` implies worktree mode and overrides `git.worktree.path` for one invocation.
 
+### `issue comment`
+
+Post a literal plain-text comment to an explicit Jira issue key. This command uses
+only Jira credentials and works outside a Git repository; it does not resolve a
+branch, remote, or pull request, or change the issue status.
+
+```bash
+fotingo issue comment -i PROJ-123 'A question or progress note'
+fotingo issue comment -i PROJ-123 --body-file note.txt --json
+fotingo issue comment -i PROJ-123 --body-file - --json < note.txt
+```
+
+| Flag          | Short | Description                                        |
+| ------------- | ----- | -------------------------------------------------- |
+| `--issue`     | `-i`  | Required issue key matching `^[A-Z][A-Z0-9]+-\d+$` |
+| `--body-file` |       | Read comment text from a file; `-` reads stdin     |
+
+Supply exactly one text argument or `--body-file`. Empty or whitespace-only bodies
+are rejected. Text is literal, including `{{...}}`: it is not rendered as a Go
+template or interpreted as Markdown or Jira wiki markup. Blank lines separate ADF
+paragraphs, and single newlines are preserved as line breaks.
+
+With `--json`, success returns `issueKey`, `commentId`, and a `url` focused on the
+new comment. Failures exit non-zero and return a JSON error. A 403 reports permission
+denied; a 404 reports that the issue is missing or not visible to the account.
+Invalid keys are rejected before initializing Jira.
+
+### `issue label`
+
+Add labels to an explicit Jira issue key without changing status or posting a
+comment. This command also works outside a Git repository and does not interact
+with branches or pull requests.
+
+```bash
+fotingo issue label -i PROJ-123 --add ai --add backend --json
+```
+
+| Flag      | Short | Description                                        |
+| --------- | ----- | -------------------------------------------------- |
+| `--issue` | `-i`  | Required issue key matching `^[A-Z][A-Z0-9]+-\d+$` |
+| `--add`   |       | Label to add; repeat for multiple labels           |
+
+At least one `--add` is required. Labels must be non-empty and contain no whitespace.
+Updates are additive and idempotent: existing labels remain, and adding an existing
+label is a no-op. JSON success returns `issueKey` and the complete `labels` list
+after the update. Key validation and JSON error behavior match `issue comment`.
+Use this command for standalone Jira labels; `review --labels` sets GitHub labels,
+and `start` or `review --tracker-labels` applies labels during status transitions.
+
 ### `review`
 
 Create a pull request for the current branch.
@@ -182,6 +231,7 @@ Notes:
 - Use `--description` when you want to replace the entire PR body instead of filling template placeholders.
 - Use `--tracker-labels` for issues that move to `In Review`; `--labels` applies GitHub pull-request labels.
 - Use `--tracker-comment` to override the issue-tracker PR-link comment for one review. Pass an empty value only to suppress the comment.
+- Comment templates are checked against linked issue data before PR creation or sync updates. A failed status transition does not prevent posting the PR-link comment; labels still require a successful transition. Late rendering failures produce visible warnings.
 - Use `fotingo review sync --section ...` when you only want to refresh specific managed PR sections. Supported section values are `summary`, `description`, `fixed-issues`, and `changes`; shell completion suggests them.
 - Use `fotingo review sync -r ... --remove-reviewers ... -a ... --remove-assignee ...` to update reviewers and assignees on an existing PR.
 - Use `fotingo review sync --ready-for-review` to move an existing draft PR to ready for review without recreating it.
