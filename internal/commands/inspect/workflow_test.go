@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tagoro9/fotingo/internal/auth"
+	fterrors "github.com/tagoro9/fotingo/internal/errors"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
 	"github.com/tagoro9/fotingo/internal/jira"
@@ -436,4 +437,16 @@ func TestWorkflowRunnerRunPullRequest_NoOpenPullRequest(t *testing.T) {
 	assert.Contains(t, err.Error(), "no open pull request found for branch feature/missing")
 	assert.Nil(t, result.PullRequest)
 	assert.Empty(t, ghStub.prNumbers)
+}
+
+func TestWorkflowRunnerRun_PropagatesIncompleteHistoryError(t *testing.T) {
+	expected := fmt.Errorf("shallow comparison is still incomplete after 5 fetches")
+	gitStub := &inspectGitStub{currentBranch: "feature/test", defaultBranch: "main", commitsSinceDefaultErr: expected}
+	runner := WorkflowRunner{Config: viper.New(), Deps: WorkflowDeps{
+		NewGitClient: func(*viper.Viper, *chan string) (git.Git, error) { return gitStub, nil },
+	}}
+	result, err := runner.Run()
+	require.ErrorIs(t, err, expected)
+	assert.Equal(t, fterrors.ExitGit, fterrors.GetExitCode(err))
+	assert.Empty(t, result.Commits)
 }

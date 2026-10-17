@@ -264,6 +264,7 @@ type github struct {
 	allowPrompt             bool
 	promptAuth              func() (string, error)
 	promptToken             func() (string, error)
+	profiles                *userProfileMemo
 	metadataCache           cache.Store
 	cacheInitErr            error
 	metadataFetchInfoLogger func(string)
@@ -289,10 +290,11 @@ type cachedUserProfileName struct {
 }
 
 type userNameEnrichmentStats struct {
-	Changed        bool
-	CacheHits      int
-	NetworkLookups int
-	RemainingEmpty int
+	Changed         bool
+	CacheHits       int
+	NetworkLookups  int
+	NetworkRequests int
+	RemainingEmpty  int
 }
 
 var newMetadataCacheStore = func(cfg *viper.Viper) (cache.Store, error) {
@@ -824,7 +826,7 @@ func (g *github) GetCollaborators() ([]User, error) {
 		return nil, err
 	}
 
-	if g.metadataCache != nil {
+	if g.metadataCache != nil && g.profiles.canCacheLists() {
 		ttl := g.metadataTTL("cache.collaboratorsTTL", defaultCollaboratorsCacheTTL)
 		_ = g.metadataCache.SetWithTTL(cacheKey, collaborators, ttl)
 	}
@@ -923,7 +925,7 @@ func (g *github) GetOrgMembers() ([]User, error) {
 		return nil, err
 	}
 
-	if g.metadataCache != nil {
+	if g.metadataCache != nil && g.profiles.canCacheLists() {
 		ttl := g.metadataTTL("cache.orgMembersTTL", defaultOrgMembersCacheTTL)
 		_ = g.metadataCache.SetWithTTL(cacheKey, members, ttl)
 	}
@@ -985,93 +987,6 @@ func (g *github) logMetadataFetchInfo(message string) {
 		return
 	}
 	g.metadataFetchInfoLogger(strings.TrimSpace(message))
-}
-
-func (g *github) enrichUsersWithProfileNames(
-	users []User,
-	maxLookups int,
-	allowNetworkLookup bool,
-) ([]User, userNameEnrichmentStats) {
-	stats := userNameEnrichmentStats{}
-	if maxLookups <= 0 {
-		stats.RemainingEmpty = countUsersMissingNames(users)
-		return users, stats
-	}
-
-	remainingLookups := maxLookups
-	for index := range users {
-		login := strings.TrimSpace(users[index].Login)
-		if login == "" || strings.TrimSpace(users[index].Name) != "" {
-			continue
-		}
-
-		if resolvedName, hit := g.cachedUserProfileName(login); hit {
-			stats.CacheHits++
-			if strings.TrimSpace(resolvedName) == "" {
-				continue
-			}
-			users[index].Name = strings.TrimSpace(resolvedName)
-			stats.Changed = true
-			continue
-		}
-
-		if !allowNetworkLookup || remainingLookups == 0 {
-			continue
-		}
-
-		remainingLookups--
-		stats.NetworkLookups++
-		resolvedName, err := g.fetchUserProfileName(login)
-		if err != nil {
-			continue
-		}
-		resolvedName = strings.TrimSpace(resolvedName)
-		if resolvedName == "" {
-			continue
-		}
-
-		users[index].Name = resolvedName
-		stats.Changed = true
-	}
-
-	stats.RemainingEmpty = countUsersMissingNames(users)
-	return users, stats
-}
-
-func (g *github) fetchUserProfileName(login string) (string, error) {
-	profile, err := g.fetchUserProfile(login)
-	if err != nil {
-		return "", err
-	}
-
-	return profile.Name, nil
-}
-
-func (g *github) fetchUserProfile(login string) (User, error) {
-	trimmedLogin := strings.TrimSpace(login)
-	if trimmedLogin == "" {
-		return User{}, fmt.Errorf("login is required")
-	}
-
-	if cachedProfile, hit := g.cachedUserProfile(trimmedLogin); hit {
-		return cachedProfile, nil
-	}
-
-	user, _, err := g.hub.Users.Get(context.Background(), trimmedLogin)
-	if err != nil {
-		return User{}, err
-	}
-
-	profile := User{
-		Login: strings.TrimSpace(user.GetLogin()),
-		Name:  strings.TrimSpace(user.GetName()),
-	}
-	if profile.Login == "" {
-		profile.Login = trimmedLogin
-	}
-	g.cacheUserProfile(profile)
-
-	return profile, nil
 }
 
 // GetTeams returns organization teams for team reviewer selection.
@@ -1230,12 +1145,19 @@ func normalizeMetadataLogin(login string) string {
 }
 
 func (g *github) cachedUserProfile(login string) (User, bool) {
-	if g == nil || g.metadataCache == nil {
+	if g == nil {
 		return User{}, false
 	}
 
 	trimmedLogin := strings.TrimSpace(login)
 	if trimmedLogin == "" {
+		return User{}, false
+	}
+
+	if profile, hit := g.profiles.get(trimmedLogin); hit {
+		return profile, true
+	}
+	if g.metadataCache == nil {
 		return User{}, false
 	}
 
@@ -1274,7 +1196,7 @@ func (g *github) cachedUserProfileName(login string) (string, bool) {
 }
 
 func (g *github) cacheUserProfile(profile User) {
-	if g == nil || g.metadataCache == nil {
+	if g == nil {
 		return
 	}
 
@@ -1284,6 +1206,10 @@ func (g *github) cacheUserProfile(profile User) {
 	}
 
 	ttl := g.metadataTTL("cache.userProfilesTTL", defaultUserProfilesCacheTTL)
+	g.profiles.set(profile, ttl)
+	if g.metadataCache == nil {
+		return
+	}
 	_ = g.metadataCache.SetWithTTL(
 		g.metadataUserProfileCacheKey(login),
 		cachedUserProfile{
@@ -1321,8 +1247,9 @@ func (g *github) logUserNameEnrichment(
 	if allowNetworkLookup && stats.NetworkLookups > 0 {
 		g.logMetadataFetchInfo(
 			fmt.Sprintf(
-				"Fetched %d GitHub user profiles to enrich %s for %s",
+				"Requested %d GitHub user profiles in %d GraphQL batches to enrich %s for %s",
 				stats.NetworkLookups,
+				stats.NetworkRequests,
 				kind,
 				scope,
 			),
@@ -1359,6 +1286,9 @@ func formatMetadataDuration(duration time.Duration) string {
 }
 
 func (g *github) metadataTTL(configKey string, fallback time.Duration) time.Duration {
+	if g == nil || g.ViperConfigurableService == nil || g.Config == nil {
+		return fallback
+	}
 	raw := strings.TrimSpace(g.GetConfigString(configKey))
 	if raw == "" {
 		return fallback
@@ -1707,6 +1637,7 @@ func NewWithHTTPClient(g git.Git, cfg *viper.Viper, httpClient *http.Client, bas
 		hub:                      client,
 		owner:                    remote.GetOwnerName(),
 		repo:                     remote.GetRepoName(),
+		profiles:                 newUserProfileMemo(),
 		metadataCache:            metadataCache,
 		cacheInitErr:             cacheInitErr,
 	}, nil
@@ -1735,6 +1666,7 @@ func NewWithHTTPClientAndRepo(g git.Git, cfg *viper.Viper, httpClient *http.Clie
 		hub:                      client,
 		owner:                    owner,
 		repo:                     repo,
+		profiles:                 newUserProfileMemo(),
 		metadataCache:            metadataCache,
 		cacheInitErr:             cacheInitErr,
 	}, nil
@@ -1777,6 +1709,7 @@ func NewAuthOnlyWithOptions(cfg *viper.Viper, allowPrompt bool) (Github, error) 
 		hub:         nil,
 		owner:       "",
 		repo:        "",
+		profiles:    newUserProfileMemo(),
 		allowPrompt: allowPrompt,
 		promptAuth:  promptGitHubAuthMethod,
 		promptToken: promptGitHubToken,
@@ -1828,6 +1761,7 @@ func NewWithOptions(git git.Git, cfg *viper.Viper, allowPrompt bool) (Github, er
 		hub:         nil,
 		owner:       remote.GetOwnerName(),
 		repo:        remote.GetRepoName(),
+		profiles:    newUserProfileMemo(),
 		allowPrompt: allowPrompt,
 		promptAuth:  promptGitHubAuthMethod,
 		promptToken: promptGitHubToken,

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/viper"
+	fterrors "github.com/tagoro9/fotingo/internal/errors"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
 	"github.com/tagoro9/fotingo/internal/jira"
@@ -139,17 +140,14 @@ func (r WorkflowRunner) Run() (WorkflowResult, error) {
 
 	if defaultBranch != "" && branchName != defaultBranch {
 		commits, err := gitClient.GetCommitsSinceDefaultBranch()
-		if err == nil {
-			output.Commits = make([]CommitInfo, len(commits))
-			for i, c := range commits {
-				output.Commits[i] = CommitInfo{
-					Hash:    c.Hash,
-					Message: c.Message,
-					Author:  c.Author,
-				}
-			}
-			output.IssueIDs = ExtractIssueIDsFromCommits(commits)
+		if err != nil {
+			return WorkflowResult{}, fterrors.WrapGitError("failed to inspect branch commits", err)
 		}
+		output.Commits = make([]CommitInfo, len(commits))
+		for i, c := range commits {
+			output.Commits[i] = CommitInfo{Hash: c.Hash, Message: c.Message, Author: c.Author}
+		}
+		output.IssueIDs = ExtractIssueIDsFromCommits(commits)
 	}
 
 	if output.Branch.IssueID != "" {

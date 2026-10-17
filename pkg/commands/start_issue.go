@@ -55,82 +55,12 @@ func resolveStartIssueAssignee(out commandruntime.LocalizedEmitter, jiraClient j
 
 // createNewIssue creates a new Jira issue based on the provided flags.
 func createNewIssue(out commandruntime.LocalizedEmitter, jiraClient jira.Jira) (*jira.Issue, error) {
-	if startCmdFlags.project == "" {
-		return nil, errors.New(localizer.T(i18n.StartErrProjectRequired))
-	}
-
-	issueType, err := parseIssueKind(startCmdFlags.kind)
-	if err != nil {
-		return nil, err
-	}
-
-	if startCmdFlags.parent != "" {
-		issueType = tracker.IssueTypeSubTask
-	}
-
-	resolvedParent := strings.TrimSpace(startCmdFlags.parent)
-	resolvedEpic := strings.TrimSpace(startCmdFlags.epic)
-	isInteractiveResolution := startCmdFlags.interactive
-
-	if issueType == tracker.IssueTypeSubTask {
-		if resolvedParent == "" {
-			return nil, errors.New(localizer.T(i18n.StartErrParentRequired))
-		}
-
-		parent, err := resolveIssueLink(
-			jiraClient,
-			startCmdFlags.project,
-			resolvedParent,
-			[]tracker.IssueType{},
-			isInteractiveResolution,
-			localizer.T(i18n.StartPickerParentTitle),
-		)
-		if err != nil {
-			return nil, fmt.Errorf(localizer.T(i18n.StartErrResolveParent), err)
-		}
-		resolvedParent = parent
-		resolvedEpic = ""
-	} else if resolvedEpic != "" {
-		epic, err := resolveIssueLink(
-			jiraClient,
-			startCmdFlags.project,
-			resolvedEpic,
-			[]tracker.IssueType{tracker.IssueTypeEpic},
-			isInteractiveResolution,
-			localizer.T(i18n.StartPickerEpicTitle),
-		)
-		if err != nil {
-			return nil, fmt.Errorf(localizer.T(i18n.StartErrResolveEpic), err)
-		}
-		resolvedEpic = epic
-	}
-
-	out.Debug(i18n.StartStatusCreateIssue, startCmdFlags.kind, startCmdFlags.project)
-
-	createInput := tracker.CreateIssueInput{
-		Title:       startCmdFlags.title,
-		Description: startCmdFlags.description,
-		Project:     strings.ToUpper(startCmdFlags.project),
-		Type:        issueType,
-		TypeName:    strings.TrimSpace(startCmdFlags.kind),
-		ParentID:    resolvedParent,
-		EpicID:      resolvedEpic,
-		Labels:      startCmdFlags.labels,
-	}
-
-	trackerIssue, err := jiraClient.CreateIssue(createInput)
-	if err != nil {
-		return nil, fmt.Errorf(localizer.T(i18n.StartErrCreateIssue), err)
-	}
-
-	out.Info(commandruntime.LogEmojiIssue, i18n.StartStatusIssueCreated, trackerIssue.Key, trackerIssue.Summary)
-
-	issue, err := jiraClient.GetJiraIssue(trackerIssue.Key)
-	if err != nil {
-		return nil, fmt.Errorf(localizer.T(i18n.StartErrGetCreatedIssue), err)
-	}
-
-	return issue, nil
+	return createIssue(out, jiraClient, issueCreateOptions{
+		title: startCmdFlags.title, description: startCmdFlags.description,
+		project: startCmdFlags.project, kind: startCmdFlags.kind,
+		parent: startCmdFlags.parent, epic: startCmdFlags.epic,
+		labels: startCmdFlags.labels, interactive: startCmdFlags.interactive,
+	})
 }
 
 // parseIssueKind converts the kind flag value to a tracker.IssueType.

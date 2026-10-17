@@ -29,6 +29,11 @@ Properties include command identity, global mode flags, safe option metadata (bo
 
 Properties include service (`github`/`jira`), stable operation name, duration, status bucket, and success.
 
+GitHub profile-name batches are recorded as `get_user_profiles`; individual REST
+profile lookups use `get_user_profile`, and authenticated-user lookup uses
+`get_current_user`. One batch event represents one HTTP request, without login or
+query values.
+
 ### UI events
 
 - `fotingo.ui.update_banner.shown`

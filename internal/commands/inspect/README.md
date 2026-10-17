@@ -46,7 +46,7 @@ func IssueIDPattern() *regexp.Regexp
 IssueIDPattern returns the compiled Jira\-style issue key matcher.
 
 <a name="BranchInfo"></a>
-## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L20-L24>)
+## type [BranchInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L21-L25>)
 
 BranchInfo represents branch\-related inspect command output.
 
@@ -59,7 +59,7 @@ type BranchInfo struct {
 ```
 
 <a name="CommitInfo"></a>
-## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L13-L17>)
+## type [CommitInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L14-L18>)
 
 CommitInfo represents one commit in inspect command output.
 
@@ -72,7 +72,7 @@ type CommitInfo struct {
 ```
 
 <a name="IssueInfo"></a>
-## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L38-L47>)
+## type [IssueInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L39-L48>)
 
 IssueInfo represents issue\-related inspect command output.
 
@@ -90,7 +90,7 @@ type IssueInfo struct {
 ```
 
 <a name="PullRequestInfo"></a>
-## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L27-L35>)
+## type [PullRequestInfo](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L28-L36>)
 
 PullRequestInfo represents pull\-request\-related inspect command output.
 
@@ -107,7 +107,7 @@ type PullRequestInfo struct {
 ```
 
 <a name="PullRequestInspector"></a>
-## type [PullRequestInspector](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L66-L69>)
+## type [PullRequestInspector](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L67-L70>)
 
 PullRequestInspector resolves pull requests and discussion context for inspect pr.
 
@@ -119,7 +119,7 @@ type PullRequestInspector interface {
 ```
 
 <a name="WorkflowDeps"></a>
-## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L72-L77>)
+## type [WorkflowDeps](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L73-L78>)
 
 WorkflowDeps are inspect workflow dependencies.
 
@@ -133,7 +133,7 @@ type WorkflowDeps struct {
 ```
 
 <a name="WorkflowOptions"></a>
-## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L60-L63>)
+## type [WorkflowOptions](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L61-L64>)
 
 WorkflowOptions controls inspect workflow selection behavior.
 
@@ -145,7 +145,7 @@ type WorkflowOptions struct {
 ```
 
 <a name="WorkflowResult"></a>
-## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L50-L57>)
+## type [WorkflowResult](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L51-L58>)
 
 WorkflowResult is the internal inspect workflow result.
 
@@ -161,7 +161,7 @@ type WorkflowResult struct {
 ```
 
 <a name="WorkflowRunner"></a>
-## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L80-L84>)
+## type [WorkflowRunner](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L81-L85>)
 
 WorkflowRunner executes the inspect workflow.
 
@@ -174,7 +174,7 @@ type WorkflowRunner struct {
 ```
 
 <a name="WorkflowRunner.Run"></a>
-### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L87>)
+### func \(WorkflowRunner\) [Run](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L88>)
 
 ```go
 func (r WorkflowRunner) Run() (WorkflowResult, error)
@@ -183,7 +183,7 @@ func (r WorkflowRunner) Run() (WorkflowResult, error)
 Run executes inspect workflow and returns structured result data.
 
 <a name="WorkflowRunner.RunPullRequest"></a>
-### func \(WorkflowRunner\) [RunPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L200>)
+### func \(WorkflowRunner\) [RunPullRequest](<https://github.com/tagoro9/fotingo/blob/main/internal/commands/inspect/workflow.go#L198>)
 
 ```go
 func (r WorkflowRunner) RunPullRequest() (WorkflowResult, error)

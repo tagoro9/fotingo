@@ -26,7 +26,7 @@ var newIssueActions = func() (jira.IssueActions, error) {
 func init() { Fotingo.AddCommand(newIssueCommand()) }
 
 func newIssueCommand() *cobra.Command {
-	issue := &cobra.Command{Use: "issue", Short: "Comment on or label Jira issues without Git context"}
+	issue := &cobra.Command{Use: "issue", Short: "Create, comment on, or label Jira issues without Git context"}
 	var key, bodyFile string
 	comment := &cobra.Command{
 		Use: "comment [text]", Short: "Add a literal plain-text comment to a Jira issue",
@@ -77,7 +77,7 @@ func newIssueCommand() *cobra.Command {
 	}
 	comment.Flags().StringVarP(&key, "issue", "i", "", "Jira issue key (required)")
 	comment.Flags().StringVar(&bodyFile, "body-file", "", "Read literal text from a file, or - for stdin")
-	issue.AddCommand(comment, newIssueLabelCommand())
+	issue.AddCommand(newIssueCreateCommand(), comment, newIssueLabelCommand())
 	return issue
 }
 
