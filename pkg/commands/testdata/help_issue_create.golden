@@ -1,0 +1,26 @@
+Create a Jira issue without starting work or requiring Git
+
+Usage:
+  fotingo issue create [flags]
+
+Examples:
+  fotingo issue create -p PROJ -k Task -t "Plan follow-up" -y --json
+
+Flags:
+  -d, --description string   Description for new issue
+  -e, --epic string          Epic issue to link the created issue to
+  -h, --help                 help for create
+  -k, --kind string          Issue type: Story, Bug, Task (default: Task) (default "Task")
+  -l, --labels strings       Labels to add to created issue
+  -a, --parent string        Parent issue for sub-tasks
+  -p, --project string       Project key for new issue (required with --title)
+  -t, --title string         Create new issue with this title
+
+Global Flags:
+  -b, --branch string   Base branch override (default: auto-detect)
+      --debug           Show diagnostic output (includes verbose)
+      --json            Output results as JSON
+      --no-color        Disable colored output
+      --quiet           Suppress non-essential output
+  -v, --verbose         Show step-level progress output
+  -y, --yes             Accept defaults without prompting

@@ -29,6 +29,20 @@ When `start` runs with `--worktree`, `--worktree-path`, or `git.worktree.enabled
 `start` auto-stashes only tracked or staged changes; untracked-only files and directories remain untouched.
 `start` refreshes only the default branch when needed and avoids shallow-fetch side effects during that preflight step.
 
+Create tickets without starting work using `fotingo issue create`. This command
+requires only Jira access, preserves the initial status and assignment, and does
+not apply in-progress labels or create branches:
+
+```bash
+fotingo issue create -p PROJ -k Task -t "Plan follow-up" -y --json
+```
+
+Optional flags: `--description` (`-d`), `--labels` (`-l`), `--parent` (`-a`), and
+`--epic` (`-e`). Parent and epic links use the same resolution as `start`;
+`--parent` implies a sub-task. JSON returns `issueKey`, `summary`, `status`,
+`type`, and `url` without a success wrapper. Use `start -t ... -p ...` when
+creation should also begin work.
+
 ## Recommended Flags for Automation
 
 | Flag           | Purpose                     |

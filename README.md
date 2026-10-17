@@ -86,6 +86,20 @@ fotingo open pr
 
 `fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place. When branch creation needs a base refresh, fotingo checks only the default branch and does not use shallow fetches during that preflight step.
 
+Create tickets without starting work using `fotingo issue create`. This command
+requires only Jira access, preserves the initial status and assignment, and does
+not apply in-progress labels or create branches:
+
+```bash
+fotingo issue create -p PROJ -k Task -t "Plan follow-up" -y --json
+```
+
+Optional flags: `--description` (`-d`), `--labels` (`-l`), `--parent` (`-a`), and
+`--epic` (`-e`). Parent and epic links use the same resolution as `start`;
+`--parent` implies a sub-task. JSON returns `issueKey`, `summary`, `status`,
+`type`, and `url` without a success wrapper. Use `start -t ... -p ...` when
+creation should also begin work.
+
 For full authentication setup details, see [docs/authentication.md](./docs/authentication.md).
 
 ## Issue comments and labels
@@ -111,6 +125,7 @@ list. Neither command changes status or interacts with branches or pull requests
 | Command                 | What it does                                                                                 |
 | ----------------------- | -------------------------------------------------------------------------------------------- |
 | `fotingo start`         | Creates or checks out a Jira-backed branch, optionally in a dedicated worktree               |
+| `fotingo issue create`  | Creates a Jira ticket without starting work or requiring Git                                 |
 | `fotingo issue comment` | Posts a literal comment to a Jira issue key without Git context                              |
 | `fotingo issue label`   | Adds Jira issue labels without status changes or Git context                                 |
 | `fotingo review`        | Creates a pull request with issue context, labels, reviewers, and optional base overrides    |
