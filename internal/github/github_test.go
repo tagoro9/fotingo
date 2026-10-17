@@ -745,9 +745,8 @@ func (suite *GithubTestSuite) TestGetCollaborators_EnrichesMissingNameFromProfil
 				},
 			})
 			return
-		case r.URL.Path == "/api/v3/users/yprk" && r.Method == http.MethodGet:
-			w.WriteHeader(http.StatusOK)
-			_ = json.NewEncoder(w).Encode(mockUser("yprk", "YoungJun Park", "https://avatars.githubusercontent.com/u/1"))
+		case r.URL.Path == "/api/graphql" && r.Method == http.MethodPost:
+			writeProfileBatch(suite.T(), w, r, func(string) string { return "YoungJun Park" })
 			return
 		default:
 			w.WriteHeader(http.StatusNotFound)
@@ -1004,7 +1003,7 @@ func (suite *GithubTestSuite) TestGetOrgMembers_EnrichesMissingNameFromLegacyCac
 func (suite *GithubTestSuite) TestGetOrgMembers_LimitsColdFetchProfileLookups() {
 	const totalMembers = maxNameLookupPerFetch + 20
 
-	profileLookupCalls := 0
+	profileLookupCalls, batchCalls := 0, 0
 	suite.setupMockServer(func(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case r.URL.Path == "/api/v3/orgs/testowner/members" && r.Method == http.MethodGet:
@@ -1019,11 +1018,9 @@ func (suite *GithubTestSuite) TestGetOrgMembers_LimitsColdFetchProfileLookups() 
 			w.WriteHeader(http.StatusOK)
 			_ = json.NewEncoder(w).Encode(members)
 			return
-		case strings.HasPrefix(r.URL.Path, "/api/v3/users/member-") && r.Method == http.MethodGet:
-			profileLookupCalls++
-			login := strings.TrimPrefix(r.URL.Path, "/api/v3/users/")
-			w.WriteHeader(http.StatusOK)
-			_ = json.NewEncoder(w).Encode(mockUser(login, fmt.Sprintf("Name %s", login), "https://avatars.githubusercontent.com/u/1"))
+		case r.URL.Path == "/api/graphql" && r.Method == http.MethodPost:
+			batchCalls++
+			profileLookupCalls += writeProfileBatch(suite.T(), w, r, func(login string) string { return "Name " + login })
 			return
 		default:
 			w.WriteHeader(http.StatusNotFound)
@@ -1034,6 +1031,7 @@ func (suite *GithubTestSuite) TestGetOrgMembers_LimitsColdFetchProfileLookups() 
 	assert.NoError(suite.T(), err)
 	assert.Len(suite.T(), members, totalMembers)
 	assert.Equal(suite.T(), maxNameLookupPerFetch, profileLookupCalls)
+	assert.Equal(suite.T(), 10, batchCalls)
 	for index, member := range members {
 		if index < maxNameLookupPerFetch {
 			assert.Equal(suite.T(), fmt.Sprintf("Name %s", member.Login), member.Name)
@@ -1145,9 +1143,8 @@ func (suite *GithubTestSuite) TestGetCollaborators_CachesFetchedUserProfilesWith
 				},
 			})
 			return
-		case r.URL.Path == "/api/v3/users/yprk" && r.Method == http.MethodGet:
-			w.WriteHeader(http.StatusOK)
-			_ = json.NewEncoder(w).Encode(mockUser("yprk", "YoungJun Park", "https://avatars.githubusercontent.com/u/1"))
+		case r.URL.Path == "/api/graphql" && r.Method == http.MethodPost:
+			writeProfileBatch(suite.T(), w, r, func(string) string { return "YoungJun Park" })
 			return
 		default:
 			w.WriteHeader(http.StatusNotFound)

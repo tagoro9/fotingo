@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires fotingo CLI.
 metadata:
   author: fotingo
-  version: "1.20.0"
+  version: "1.21.0"
   generatedBy: "dev"
 ---
 
@@ -177,6 +177,7 @@ fotingo review stacks rebase --json
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
 - Use `fotingo issue create -p PROJ -k Task -t "Plan follow-up" -y --json` to create a ticket without starting work or requiring Git. Creation preserves the initial status and assignment and skips workflow labels. Supports description, creation labels, parent, and epic flags; JSON returns `issueKey`, `summary`, `status`, `type`, and `url`. Use `start -t ... -p ...` when creation should also begin work.
+- Reviewer and assignee full-name enrichment batches up to 50 missing profiles per GraphQL request, including cold stateless runs. Existing cached names and per-client memory reuse reduce repeated lookups. If GraphQL enrichment is unavailable, match by login; do not compensate with individual profile calls for the entire candidate list.
 - Use `fotingo start --tracker-labels <label> ...` to add labels to the issue when it moves to `In Progress`. These labels supplement `tracker.labels.inProgress`; `start --labels` applies only when creating a new issue.
 - Use `fotingo review --tracker-labels <label> ...` to add labels to linked issues when they move to `In Review`. These labels supplement `tracker.labels.inReview`; `review --labels` applies GitHub pull-request labels.
 - Use `fotingo review --tracker-comment '<template>'` to override the configured issue-tracker comment for one newly created pull request. Pass `--tracker-comment ""` only when the user explicitly wants to suppress Fotingo's automatic issue-tracker comment.
