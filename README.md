@@ -86,6 +86,8 @@ fotingo open pr
 
 `fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place. When branch creation needs a base refresh, fotingo checks only the default branch and does not use shallow fetches during that preflight step.
 
+Commit detection reuses local history and incrementally deepens relevant shallow history only when needed. Automatic recovery is bounded and reports an error if the comparison remains incomplete; see [shallow clone behavior](docs/automation-and-json.md#shallow-clone-history).
+
 Create tickets without starting work using `fotingo issue create`. This command
 requires only Jira access, preserves the initial status and assignment, and does
 not apply in-progress labels or create branches:

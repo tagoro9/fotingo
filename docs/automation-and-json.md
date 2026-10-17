@@ -332,3 +332,26 @@ The labels array includes both pre-existing and newly added labels.
   "type": "Git error"
 }
 ```
+
+## Shallow Clone History
+
+Commit detection first checks whether local history is sufficient for the requested
+comparison. A shallow clone can return results without any fetch when the complete
+comparison range is already present. For branch comparisons, a missing default-branch
+tracking reference is fetched at depth one.
+
+If the range is truncated, fotingo deepens only relevant shallow boundary commits
+from the configured Git remote, in batches of 32, 64, 128, 256, and 512 ancestry
+levels. It stops as soon as the comparison is complete, including merged side
+branches. Finding a merge base alone does not prove completeness. Comparison tips
+stay pinned, and unpushed local commits are supported.
+
+Automatic recovery is limited to five deepening fetches (992 additional ancestry
+levels), does not fetch unrelated tags, and never falls back to `--unshallow`.
+Older history can remain shallow. If fetching fails, supplies no additional history,
+or reaches the limit before the comparison is complete, fotingo returns an actionable
+error instead of a partial change list. Deepen the relevant branch or reference
+history manually and retry.
+
+`fotingo inspect --json` reports commit-history failures as an error with a non-zero
+exit code; incomplete recovery is never presented as an empty commit list.

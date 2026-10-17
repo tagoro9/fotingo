@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires fotingo CLI.
 metadata:
   author: fotingo
-  version: "1.18.0"
+  version: "1.20.0"
   generatedBy: "dev"
 ---
 
@@ -172,6 +172,7 @@ fotingo review stacks rebase --json
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
 - Use `fotingo start --worktree-path <parent> ... --json` when you want an isolated checkout under a specific parent; automation should read `branch.name` and `branch.worktreePath` from the JSON result. Worktree directory names use the hardcoded `fotingo-wt-<branch>` format.
 - `fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place.
+- Commit detection first uses available local history, then deepens only relevant shallow boundaries in batches of 32, 64, 128, 256, and 512 ancestry levels when needed. Missing default-branch tracking refs are fetched at depth one. Recovery checks merged side branches, stops once the comparison is complete, and never falls back to `--unshallow`. If fetching fails or the five-fetch deepening limit is reached, deepen the required history manually and retry instead of treating the change list as empty.
 - `fotingo start` refreshes only the default branch during branch preflight, skips the fetch when the local tracking ref is already current, and does not use shallow fetches for that refresh.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
