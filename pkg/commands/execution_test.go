@@ -445,8 +445,7 @@ func (s *ExecutionTestSuite) TestInspect_WithNonExistentIssue() {
 
 	output := captureStdout(t, func() {
 		Fotingo.SetArgs([]string{"inspect", "--issue", "NOPE-999"})
-		err := Fotingo.Execute()
-		assert.NoError(t, err) // inspect doesn't return errors via RunE
+		assert.NotZero(t, ExecuteWithExitCode())
 	})
 
 	// Should contain error JSON

@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires fotingo CLI.
 metadata:
   author: fotingo
-  version: "1.17.0"
+  version: "1.20.0"
   generatedBy: "dev"
 ---
 
@@ -172,9 +172,11 @@ fotingo review stacks rebase --json
 - Use `fotingo start ... -y` to begin work from an existing issue or a newly created issue.
 - Use `fotingo start --worktree-path <parent> ... --json` when you want an isolated checkout under a specific parent; automation should read `branch.name` and `branch.worktreePath` from the JSON result. Worktree directory names use the hardcoded `fotingo-wt-<branch>` format.
 - `fotingo start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place.
+- Commit detection first uses available local history, then deepens only relevant shallow boundaries in batches of 32, 64, 128, 256, and 512 ancestry levels when needed. Missing default-branch tracking refs are fetched at depth one. Recovery checks merged side branches, stops once the comparison is complete, and never falls back to `--unshallow`. If fetching fails or the five-fetch deepening limit is reached, deepen the required history manually and retry instead of treating the change list as empty.
 - `fotingo start` refreshes only the default branch during branch preflight, skips the fetch when the local tracking ref is already current, and does not use shallow fetches for that refresh.
 - Prefer non-interactive flags (`-y`, `--json`) in automated runs.
 - Use explicit flags rather than prompts in non-interactive environments.
+- Use `fotingo issue create -p PROJ -k Task -t "Plan follow-up" -y --json` to create a ticket without starting work or requiring Git. Creation preserves the initial status and assignment and skips workflow labels. Supports description, creation labels, parent, and epic flags; JSON returns `issueKey`, `summary`, `status`, `type`, and `url`. Use `start -t ... -p ...` when creation should also begin work.
 - Use `fotingo start --tracker-labels <label> ...` to add labels to the issue when it moves to `In Progress`. These labels supplement `tracker.labels.inProgress`; `start --labels` applies only when creating a new issue.
 - Use `fotingo review --tracker-labels <label> ...` to add labels to linked issues when they move to `In Review`. These labels supplement `tracker.labels.inReview`; `review --labels` applies GitHub pull-request labels.
 - Use `fotingo review --tracker-comment '<template>'` to override the configured issue-tracker comment for one newly created pull request. Pass `--tracker-comment ""` only when the user explicitly wants to suppress Fotingo's automatic issue-tracker comment.

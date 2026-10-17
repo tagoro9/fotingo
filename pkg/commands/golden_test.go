@@ -75,6 +75,11 @@ func TestHelpOutput(t *testing.T) {
 			goldenFile: "help_root.golden",
 		},
 		{
+			name:       "issue create help",
+			args:       []string{"fotingo", "issue", "create", "--help"},
+			goldenFile: "help_issue_create.golden",
+		},
+		{
 			name:       "start help",
 			args:       []string{"fotingo", "start", "--help"},
 			goldenFile: "help_start.golden",
