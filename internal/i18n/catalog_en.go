@@ -79,7 +79,7 @@ var catalogs = map[string]map[Key]string{
 		StartStatusCreateIssue:             "Creating new %s in project %s...",
 		StartStatusIssueCreated:            "Created issue %s: %s",
 		StartErrCreateIssue:                "failed to create issue: %w",
-		StartErrGetCreatedIssue:            "failed to get created issue: %w",
+		StartErrGetCreatedIssue:            "failed to get created issue %s: %w",
 		StartErrInvalidType:                "invalid issue type '%s'. Valid types: Story, Bug, Task, SubTask, Epic",
 		StartIssueTypeStory:                "[Story]",
 		StartIssueTypeBug:                  "[Bug]",

@@ -94,7 +94,7 @@ func createIssue(out commandruntime.LocalizedEmitter, jiraClient jira.Jira, opti
 
 	issue, err := jiraClient.GetJiraIssue(trackerIssue.Key)
 	if err != nil {
-		return nil, fmt.Errorf(localizer.T(i18n.StartErrGetCreatedIssue), err)
+		return nil, fmt.Errorf(localizer.T(i18n.StartErrGetCreatedIssue), trackerIssue.Key, err)
 	}
 
 	return issue, nil

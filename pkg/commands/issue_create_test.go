@@ -141,3 +141,26 @@ func TestIssueCreateEpic(t *testing.T) {
 	assert.Equal(t, "TEST-200", client.createIssueInput.EpicID)
 	assert.Empty(t, client.setJiraIssueStatusIDs)
 }
+
+func TestIssueCreateFetchFailureIncludesCreatedKey(t *testing.T) {
+	oldClient, oldConfig, oldGlobal := newJiraClient, fotingoConfig, Global
+	t.Cleanup(func() { newJiraClient, fotingoConfig, Global = oldClient, oldConfig, oldGlobal })
+	Global.JSON = true
+	fotingoConfig = viper.New()
+	fotingoConfig.Set("jira.root", "https://jira.example.com")
+	fetchErr := errors.New("temporary fetch failure")
+	client := &mockJira{
+		createIssue:  &tracker.Issue{Key: "TEST-123", Summary: "Plan"},
+		jiraIssueErr: fetchErr,
+	}
+	newJiraClient = func(*viper.Viper) (jira.Jira, error) { return client, nil }
+	cmd := newIssueCreateCommand()
+	cmd.SilenceErrors, cmd.SilenceUsage = true, true
+	var output bytes.Buffer
+	cmd.SetOut(&output)
+	cmd.SetArgs([]string{"-p", "TEST", "-t", "Plan"})
+	err := cmd.Execute()
+	require.ErrorIs(t, err, fetchErr)
+	assert.Contains(t, err.Error(), "failed to get created issue TEST-123")
+	assert.Empty(t, output.String(), "do not report success when retrieving the created issue failed")
+}
