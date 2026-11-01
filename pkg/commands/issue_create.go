@@ -74,8 +74,8 @@ func newIssueCreateCommand() *cobra.Command {
 	}
 	command.Flags().StringVarP(&options.title, "title", "t", "", localizer.T(i18n.StartFlagTitle))
 	command.Flags().StringVarP(&options.description, "description", "d", "", localizer.T(i18n.StartFlagDescription))
-	command.Flags().StringVarP(&options.project, "project", "p", "", localizer.T(i18n.StartFlagProject))
-	command.Flags().StringVarP(&options.kind, "kind", "k", "Task", localizer.T(i18n.StartFlagKind))
+	command.Flags().StringVarP(&options.project, "project", "p", "", localizer.T(i18n.IssueCreateFlagProject))
+	command.Flags().StringVarP(&options.kind, "kind", "k", "Task", localizer.T(i18n.IssueCreateFlagKind))
 	command.Flags().StringVarP(&options.parent, "parent", "a", "", localizer.T(i18n.StartFlagParent))
 	command.Flags().StringVarP(&options.epic, "epic", "e", "", localizer.T(i18n.StartFlagEpic))
 	command.Flags().StringSliceVarP(&options.labels, "labels", "l", nil, localizer.T(i18n.StartFlagLabels))

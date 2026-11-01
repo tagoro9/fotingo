@@ -18,6 +18,9 @@ var catalogs = map[string]map[Key]string{
 		RootErrConfigFile:   "Error creating Config file, %s",
 		RootErrEncodingJSON: "Error encoding JSON: %v",
 
+		IssueCreateFlagProject: "Project key for new issue (required)",
+		IssueCreateFlagKind:    "Issue type: Story, Bug, Task, SubTask, Epic (SubTask requires --parent)",
+
 		StartUse:                           "start [issueId]",
 		StartShort:                         "Start working on a Jira issue",
 		StartLong:                          "Start working on a Jira issue by setting it to \"In Progress\" and creating a feature branch.\n\nThe start command will:\n1. Set the issue status to \"In Progress\" in Jira\n2. Create a new branch based on the issue key and summary\n3. Switch to the newly created branch\n\nIf no issue ID is provided, you will be presented with a list of your open issues to choose from.\n\nYou can also create a new issue on the fly using the --title and --project flags.\n\nExamples:\n  # Start working on an existing issue\n  fotingo start PROJ-123\n\n  # Select from your open issues interactively\n  fotingo start\n\n  # Create a new issue and start working on it\n  fotingo start -t \"Fix login bug\" -p PROJ -k Bug\n\n  # Create a sub-task under a parent issue\n  fotingo start -t \"Implement feature\" -p PROJ -a PROJ-100\n\n  # Start an issue without creating a branch (just set status)\n  fotingo start PROJ-123 --no-branch\n\n  # Start in a new sibling worktree\n  fotingo start PROJ-123 --worktree\n\n  # Start with labels on a new issue\n  fotingo start -t \"New feature\" -p PROJ -l frontend -l priority",

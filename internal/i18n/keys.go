@@ -19,6 +19,9 @@ const (
 	RootErrConfigFile   Key = "root.error.config_file"
 	RootErrEncodingJSON Key = "root.error.encoding_json"
 
+	IssueCreateFlagProject Key = "issue.create.flag.project"
+	IssueCreateFlagKind    Key = "issue.create.flag.kind"
+
 	StartUse                           Key = "start.use"
 	StartShort                         Key = "start.short"
 	StartLong                          Key = "start.long"

@@ -10,10 +10,10 @@ Flags:
   -d, --description string   Description for new issue
   -e, --epic string          Epic issue to link the created issue to
   -h, --help                 help for create
-  -k, --kind string          Issue type: Story, Bug, Task (default: Task) (default "Task")
+  -k, --kind string          Issue type: Story, Bug, Task, SubTask, Epic (SubTask requires --parent) (default "Task")
   -l, --labels strings       Labels to add to created issue
   -a, --parent string        Parent issue for sub-tasks
-  -p, --project string       Project key for new issue (required with --title)
+  -p, --project string       Project key for new issue (required)
   -t, --title string         Create new issue with this title
 
 Global Flags:
