@@ -78,7 +78,7 @@ var inspectCmd = &cobra.Command{
 	Use:   i18n.T(i18n.InspectUse),
 	Short: i18n.T(i18n.InspectShort),
 	Long:  i18n.T(i18n.InspectLong),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		runner := internalinspect.WorkflowRunner{
 			Config: fotingoConfig,
 			Options: internalinspect.WorkflowOptions{
@@ -99,8 +99,9 @@ var inspectCmd = &cobra.Command{
 
 		result, err := runner.Run()
 		if err != nil {
-			outputError(err)
-			return
+			// Preserve inspect's JSON error output while allowing a non-zero exit.
+			Global.JSON = true
+			return err
 		}
 
 		output := InspectOutput{
@@ -143,6 +144,7 @@ var inspectCmd = &cobra.Command{
 		}
 
 		outputJSON(output)
+		return nil
 	},
 }
 

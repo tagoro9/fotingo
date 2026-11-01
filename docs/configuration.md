@@ -139,3 +139,7 @@ Repository templates can use the same marker pairs:
 - `<!-- fotingo:start changes -->` / `<!-- fotingo:end changes -->`
 
 Legacy managed placeholders such as `{summary}`, `{description}`, `{fixedIssues}`, and `{changes}` are still supported for backward compatibility, but they are deprecated.
+
+GitHub display-name enrichment uses batched GraphQL requests and a per-client memory
+cache even when disk caching is unavailable. See [profile lookup efficiency](github-profile-lookups.md)
+for cold-start behavior, request counts, and fallback behavior.

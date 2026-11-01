@@ -28,6 +28,7 @@ repos:
       - id: go-fmt
       - id: go-build
       - id: gomarkdoc
+        pass_filenames: false
   - repo: https://github.com/golangci/golangci-lint
     rev: v2.14.0
     hooks:

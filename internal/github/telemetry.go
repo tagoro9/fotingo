@@ -9,6 +9,8 @@ import (
 
 const githubServiceName = "github"
 
+type githubOperationContextKey struct{}
+
 // wrapGitHubHTTPClient returns a shallow client clone with telemetry instrumentation attached.
 func wrapGitHubHTTPClient(client *http.Client) *http.Client {
 	if client == nil {
@@ -28,6 +30,10 @@ func wrapGitHubHTTPClient(client *http.Client) *http.Client {
 func resolveGitHubOperation(req *http.Request) string {
 	if req == nil || req.URL == nil {
 		return "other"
+	}
+
+	if operation, ok := req.Context().Value(githubOperationContextKey{}).(string); ok && operation != "" {
+		return operation
 	}
 
 	method := strings.ToUpper(strings.TrimSpace(req.Method))

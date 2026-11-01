@@ -1256,7 +1256,8 @@ func TestCreateNewIssue_GetJiraIssueFails(t *testing.T) {
 	issue, err := createNewIssue(commandruntime.NewLocalizedEmitter(statusCh, shouldEmitCommandLevel, localizer.T), j)
 	assert.Error(t, err)
 	assert.Nil(t, issue)
-	assert.Contains(t, err.Error(), "failed to get created issue")
+	assert.Contains(t, err.Error(), "failed to get created issue TEST-999")
+	assert.ErrorIs(t, err, j.jiraIssueErr)
 }
 
 // ---------------------------------------------------------------------------

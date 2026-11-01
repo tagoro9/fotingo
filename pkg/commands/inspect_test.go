@@ -1,9 +1,11 @@
 package commands
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	internalinspect "github.com/tagoro9/fotingo/internal/commands/inspect"
 	"github.com/tagoro9/fotingo/internal/git"
 	"github.com/tagoro9/fotingo/internal/github"
@@ -349,4 +351,18 @@ func TestIssueIDPattern(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestInspectCommandReportsFailure(t *testing.T) {
+	t.Chdir(t.TempDir())
+	restore := saveGlobalFlags()
+	defer restore()
+	Fotingo.SetArgs([]string{"inspect"})
+	t.Cleanup(func() { Fotingo.SetArgs(nil) })
+	output := captureStdout(t, func() { require.NotZero(t, ExecuteWithExitCode()) })
+	var result struct {
+		Error string `json:"error"`
+	}
+	require.NoError(t, json.Unmarshal([]byte(output), &result))
+	require.Contains(t, result.Error, "no Git repository found")
 }

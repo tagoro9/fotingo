@@ -1395,6 +1395,14 @@ func (g *git) GetCommitsSince(ref string) ([]Commit, error) {
 		return nil, fmt.Errorf("failed to resolve reference %s: %w", ref, err)
 	}
 
+	shallow, err := g.repo.Storer.Shallow()
+	if err != nil {
+		return nil, fmt.Errorf("failed to inspect shallow history: %w", err)
+	}
+	if len(shallow) > 0 {
+		return g.getShallowCommitsSince(head.Hash(), *refHash)
+	}
+
 	// Get commit iterator starting from HEAD
 	commitIter, err := g.repo.Log(&gogit.LogOptions{
 		From: head.Hash(),
@@ -1478,6 +1486,10 @@ func (g *git) DoesBranchExistInRemote(branch string) (bool, error) {
 
 // GetCommitsSinceDefaultBranch returns commits since the current branch diverged from the default branch
 func (g *git) GetCommitsSinceDefaultBranch() ([]Commit, error) {
+	shallow, err := g.repo.Storer.Shallow()
+	if err != nil {
+		return nil, fmt.Errorf("failed to inspect shallow history: %w", err)
+	}
 	defaultBranch, err := g.GetDefaultBranch()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get default branch: %w", err)
@@ -1486,6 +1498,16 @@ func (g *git) GetCommitsSinceDefaultBranch() ([]Commit, error) {
 	remote := g.GetConfigString("remote")
 	remoteRef := fmt.Sprintf("%s/%s", remote, defaultBranch)
 	remoteHash, err := g.repo.ResolveRevision(plumbing.Revision(remoteRef))
+	if err != nil && errors.Is(err, plumbing.ErrReferenceNotFound) {
+		if len(shallow) > 0 {
+			if fetchErr := g.fetchShallowDefaultBranch(remote, defaultBranch); fetchErr != nil {
+				return nil, fetchErr
+			}
+		} else if fetchErr := g.fetchDefaultBranchRef(remote, defaultBranch); fetchErr != nil {
+			return nil, fetchErr
+		}
+		remoteHash, err = g.repo.ResolveRevision(plumbing.Revision(remoteRef))
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to resolve remote reference %s: %w", remoteRef, err)
 	}
@@ -1493,6 +1515,10 @@ func (g *git) GetCommitsSinceDefaultBranch() ([]Commit, error) {
 	head, err := g.repo.Head()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get HEAD: %w", normalizeRepositoryStateError(err))
+	}
+
+	if len(shallow) > 0 {
+		return g.getShallowCommitsSince(head.Hash(), *remoteHash)
 	}
 
 	headCommit, err := g.repo.CommitObject(head.Hash())

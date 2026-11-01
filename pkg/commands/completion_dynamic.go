@@ -201,7 +201,7 @@ func completeStartIssueTypeFlag(
 	toComplete string,
 ) ([]string, cobra.ShellCompDirective) {
 	project := strings.ToUpper(strings.TrimSpace(startCmdFlags.project))
-	if project == "" && cmd != nil && cmd.Flags() != nil {
+	if cmd != nil && cmd.Flags() != nil {
 		if value, err := cmd.Flags().GetString("project"); err == nil {
 			project = strings.ToUpper(strings.TrimSpace(value))
 		}

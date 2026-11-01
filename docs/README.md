@@ -21,3 +21,4 @@ Detailed project documentation lives here.
 ## Maintainer Docs
 
 - [AI Skill Versioning](./ai-skill-versioning.md)
+- [GitHub Profile Lookup Efficiency](./github-profile-lookups.md)

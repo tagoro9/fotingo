@@ -1367,3 +1367,192 @@ func (s *GitCredentialTestSuite) TestNewWithCredentialProvider_NilProvider() {
 func TestGitCredentialSuite(t *testing.T) {
 	suite.Run(t, new(GitCredentialTestSuite))
 }
+
+func TestShallowHistoryChangeDetection(t *testing.T) {
+	for _, mode := range []string{"default", "reference", "available", "unpushed", "offline"} {
+		t.Run(mode, func(t *testing.T) {
+			root := t.TempDir()
+			source := filepath.Join(root, "source")
+			target := filepath.Join(root, "target")
+			runGitCommand(t, "", "init", "--initial-branch=main", source)
+			runGitCommand(t, source, "config", "user.name", "Test User")
+			runGitCommand(t, source, "config", "user.email", "test@example.com")
+			commit := func(name, message string) {
+				require.NoError(t, os.WriteFile(filepath.Join(source, name), []byte(name+"\n"), 0644))
+				runGitCommand(t, source, "add", name)
+				runGitCommand(t, source, "commit", "--no-verify", "-m", message)
+			}
+			commit("base", "chore: base")
+			commitEmptyHistory(t, source, 70, "chore: older history")
+			runGitCommand(t, source, "tag", "v1.0.0")
+			runGitCommand(t, source, "checkout", "-b", "feature")
+			commit("one", "feat: TEST-100 first change")
+			commit("two", "fix: TEST-101 second change")
+			runGitCommand(t, source, "checkout", "main")
+			commit("main-only", "chore: TEST-999 unrelated change")
+			depth := "1"
+			if mode == "available" {
+				depth = "16"
+			}
+			runGitCommand(t, "", "clone", "--depth="+depth, "--branch=feature", "file://"+source, target)
+			if mode != "default" {
+				runGitCommand(t, target, "fetch", "--depth="+depth, "origin", "tag", "v1.0.0")
+			}
+			if mode == "unpushed" {
+				runGitCommand(t, target, "config", "user.name", "Test User")
+				runGitCommand(t, target, "config", "user.email", "test@example.com")
+				require.NoError(t, os.WriteFile(filepath.Join(target, "local"), []byte("local\n"), 0644))
+				runGitCommand(t, target, "add", "local")
+				runGitCommand(t, target, "commit", "--no-verify", "-m", "feat: local unpushed change")
+			}
+			t.Chdir(target)
+			cfg := config.NewDefaultConfig()
+			messages := make(chan string, 100)
+			client, err := NewWithCredentialProvider(cfg, &messages, &mockCredentialProvider{})
+			require.NoError(t, err)
+			if mode == "offline" || mode == "available" {
+				runGitCommand(t, target, "remote", "set-url", "origin", "file://"+filepath.Join(root, "missing"))
+			}
+			beforeHead, err := client.(*git).repo.Head()
+			require.NoError(t, err)
+			beforeRemote, err := client.(*git).repo.Reference(plumbing.NewRemoteReferenceName("origin", "feature"), true)
+			require.NoError(t, err)
+			originalExec := execGitCommand
+			var fetches [][]string
+			execGitCommand = func(dir string, env []string, args ...string) (string, string, error) {
+				if args[0] == "fetch" {
+					fetches = append(fetches, append([]string(nil), args...))
+				}
+				return originalExec(dir, env, args...)
+			}
+			t.Cleanup(func() { execGitCommand = originalExec })
+			var commits []Commit
+			if mode == "default" {
+				commits, err = client.GetCommitsSinceDefaultBranch()
+			} else {
+				commits, err = client.GetCommitsSince("v1.0.0")
+			}
+			if mode == "offline" {
+				require.ErrorContains(t, err, "failed to deepen shallow history")
+				assert.Nil(t, commits)
+				return
+			}
+			require.NoError(t, err)
+			if mode == "unpushed" {
+				require.Len(t, commits, 3)
+				assert.Equal(t, "feat: local unpushed change", commits[0].Message)
+				commits = commits[1:]
+			}
+			require.Len(t, commits, 2)
+			if mode == "available" {
+				assert.Empty(t, fetches)
+			} else {
+				assert.NotEmpty(t, fetches)
+			}
+			for _, args := range fetches {
+				assert.NotContains(t, args, "--unshallow")
+				assert.Contains(t, args, "--no-tags")
+				assert.True(t, args[1] == "--depth=1" || strings.HasPrefix(args[1], "--deepen="), "fetch must be bounded: %v", args)
+			}
+			afterHead, err := client.(*git).repo.Head()
+			require.NoError(t, err)
+			afterRemote, err := client.(*git).repo.Reference(plumbing.NewRemoteReferenceName("origin", "feature"), true)
+			require.NoError(t, err)
+			assert.Equal(t, beforeHead.Hash(), afterHead.Hash())
+			assert.Equal(t, beforeRemote.Hash(), afterRemote.Hash())
+			assert.Equal(t, "fix: TEST-101 second change", commits[0].Message)
+			assert.Equal(t, "feat: TEST-100 first change", commits[1].Message)
+			assert.Equal(t, 1, commits[0].Additions)
+			assert.Equal(t, 1, commits[1].Additions)
+			shallow, err := client.(*git).repo.Storer.Shallow()
+			require.NoError(t, err)
+			assert.NotEmpty(t, shallow, "recovery should leave older history shallow")
+		})
+	}
+}
+
+func TestShallowHistoryMergedBranchAndLimit(t *testing.T) {
+	root := t.TempDir()
+	source := filepath.Join(root, "source")
+	runGitCommand(t, "", "init", "--initial-branch=main", source)
+	runGitCommand(t, source, "config", "user.name", "Test User")
+	runGitCommand(t, source, "config", "user.email", "test@example.com")
+	commitEmptyHistory(t, source, 70, "chore: older history")
+	runGitCommand(t, source, "tag", "v1.0.0")
+	runGitCommand(t, source, "checkout", "-b", "side")
+	commitEmptyHistory(t, source, 40, "feat: side branch change")
+	runGitCommand(t, source, "checkout", "-b", "feature", "v1.0.0")
+	commitEmptyHistory(t, source, 2, "feat: feature change")
+	runGitCommand(t, source, "merge", "--no-ff", "side", "-m", "feat: merge side branch")
+
+	for _, mode := range []string{"merged", "limited"} {
+		t.Run(mode, func(t *testing.T) {
+			target := filepath.Join(t.TempDir(), "target")
+			branch, depth := "feature", "4"
+			if mode == "limited" {
+				branch, depth = "side", "1"
+			}
+			runGitCommand(t, "", "clone", "--depth="+depth, "--branch="+branch, "file://"+source, target)
+			runGitCommand(t, target, "fetch", "--depth=1", "origin", "tag", "v1.0.0")
+			t.Chdir(target)
+			messages := make(chan string, 100)
+			client, err := NewWithCredentialProvider(config.NewDefaultConfig(), &messages, &mockCredentialProvider{})
+			require.NoError(t, err)
+			if mode == "merged" {
+				base, stderr, err := execGitCommand(target, gitNonInteractiveEnv(), "merge-base", "HEAD", "v1.0.0")
+				require.NoError(t, err, stderr)
+				require.NotEmpty(t, base, "a merge base alone must not stop recovery")
+			} else {
+				oldSteps := shallowDeepenSteps
+				shallowDeepenSteps = [...]int{1, 1, 1, 1, 1}
+				t.Cleanup(func() { shallowDeepenSteps = oldSteps })
+			}
+			before, err := client.(*git).repo.Head()
+			require.NoError(t, err)
+			originalExec := execGitCommand
+			var fetches [][]string
+			execGitCommand = func(dir string, env []string, args ...string) (string, string, error) {
+				if args[0] == "fetch" {
+					fetches = append(fetches, append([]string(nil), args...))
+				}
+				return originalExec(dir, env, args...)
+			}
+			t.Cleanup(func() { execGitCommand = originalExec })
+			commits, err := client.GetCommitsSince("v1.0.0")
+			if mode == "limited" {
+				require.ErrorContains(t, err, "still incomplete after 5 fetches")
+				assert.Nil(t, commits)
+				assert.Len(t, fetches, 5)
+			} else {
+				require.NoError(t, err)
+				assert.Len(t, commits, 43, "include the merge, both feature commits, and all side commits")
+				require.Len(t, fetches, 2)
+				assert.Contains(t, fetches[0], "--deepen=32")
+				assert.Contains(t, fetches[1], "--deepen=64")
+			}
+			for _, args := range fetches {
+				assert.NotContains(t, args, "--unshallow")
+				assert.Contains(t, args, "--no-tags")
+			}
+			after, err := client.(*git).repo.Head()
+			require.NoError(t, err)
+			assert.Equal(t, before.Hash(), after.Hash())
+			shallow, err := client.(*git).repo.Storer.Shallow()
+			require.NoError(t, err)
+			assert.NotEmpty(t, shallow)
+		})
+	}
+}
+
+// Build ancestry fixtures in process to keep shallow-recovery tests inexpensive.
+func commitEmptyHistory(t *testing.T, dir string, count int, message string) {
+	t.Helper()
+	repo, err := gogit.PlainOpen(dir)
+	require.NoError(t, err)
+	worktree, err := repo.Worktree()
+	require.NoError(t, err)
+	for range count {
+		_, err = worktree.Commit(message, &gogit.CommitOptions{AllowEmptyCommits: true, Author: &object.Signature{Name: "Test User", Email: "test@example.com", When: time.Now()}})
+		require.NoError(t, err)
+	}
+}

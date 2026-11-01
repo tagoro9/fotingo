@@ -100,7 +100,7 @@ Flags:
 | `--epic`           | `-e`  | Epic issue key to link                              |
 | `--labels`         | `-l`  | Labels to add (repeatable)                          |
 | `--tracker-labels` |       | Labels to add to the issue when work starts         |
-| `--no-branch`      | `-n`  | Set issue status without creating/switching branch  |
+| `--no-branch`      | `-n`  | Skip branch creation or checkout                    |
 | `--worktree`       |       | Create the issue branch in a new sibling worktree   |
 | `--worktree-path`  |       | Parent directory for the created linked worktree    |
 | `--interactive`    | `-i`  | Interactive create flow                             |
@@ -112,6 +112,22 @@ Notes:
 - `start` auto-stashes only tracked or staged changes. Untracked-only files and directories stay in place.
 - `start` resolves and refreshes only the repository default branch during branch preflight. If the local remote-tracking ref is already current, fotingo skips the fetch; when a refresh is needed, it uses a targeted non-shallow fetch.
 - `--worktree-path` implies worktree mode and overrides `git.worktree.path` for one invocation.
+
+### `issue create`
+
+Create tickets without starting work using `fotingo issue create`. This command
+requires only Jira access, preserves the initial status and assignment, and does
+not apply in-progress labels or create branches:
+
+```bash
+fotingo issue create -p PROJ -k Task -t "Plan follow-up" -y --json
+```
+
+Optional flags: `--description` (`-d`), `--labels` (`-l`), `--parent` (`-a`), and
+`--epic` (`-e`). Parent and epic links use the same resolution as `start`;
+`--parent` implies a sub-task. JSON returns `issueKey`, `summary`, `status`,
+`type`, and `url` without a success wrapper. Use `start -t ... -p ...` when
+creation should also begin work.
 
 ### `issue comment`
 

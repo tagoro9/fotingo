@@ -1,6 +1,7 @@
 package github
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -30,4 +31,15 @@ func TestResolveGitHubOperation(t *testing.T) {
 			assert.Equal(t, tt.operation, resolveGitHubOperation(req))
 		})
 	}
+}
+
+func TestProfileBatchTelemetryOperation(t *testing.T) {
+	for _, path := range []string{"/graphql", "/api/graphql"} {
+		request, err := http.NewRequestWithContext(context.WithValue(context.Background(), githubOperationContextKey{}, "get_user_profiles"), http.MethodPost, "https://github.example"+path, nil)
+		assert.NoError(t, err)
+		assert.Equal(t, "get_user_profiles", resolveGitHubOperation(request))
+	}
+	request, err := http.NewRequest(http.MethodGet, "https://api.github.com/users/alice", nil)
+	assert.NoError(t, err)
+	assert.Equal(t, "get_user_profile", resolveGitHubOperation(request))
 }

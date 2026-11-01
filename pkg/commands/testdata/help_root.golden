@@ -56,7 +56,7 @@ Available Commands:
   config      View and update fotingo configuration values
   help        Help about any command
   inspect     Output information about the current context
-  issue       Comment on or label Jira issues without Git context
+  issue       Create, comment on, or label Jira issues without Git context
   login       Log into all the services that need authentication
   open        Open a URL in your browser
   release     Create a release with associated issues
