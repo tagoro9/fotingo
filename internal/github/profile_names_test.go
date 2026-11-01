@@ -186,6 +186,46 @@ func TestProfileBatchKeepsPartialDataWithoutNegativeCachingErrors(t *testing.T) 
 	assert.Equal(t, 1, stats.NetworkLookups)
 }
 
+func TestProfileBatchRetriesFailedNameFields(t *testing.T) {
+	for _, persistent := range []bool{false, true} {
+		t.Run(fmt.Sprintf("persistent=%t", persistent), func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				if calls == 1 {
+					_, _ = w.Write([]byte(`{"data":{"p0":{"login":"alice","name":"Alice"},"p1":{"login":"bob","name":null}},"errors":[{"message":"temporary name resolver failure","path":["p1","name"]}]}`))
+					return
+				}
+				writeProfileBatch(t, w, r, func(login string) string {
+					assert.Equal(t, "bob", login, "retain successful profiles from the partial response")
+					return "Bob"
+				})
+			}))
+			defer server.Close()
+			g := newStatelessProfileClient(t, server)
+			if persistent {
+				store, err := cache.New(cache.WithPath(filepath.Join(t.TempDir(), "cache.db")), cache.WithLogger(nil))
+				require.NoError(t, err)
+				defer func() { require.NoError(t, store.Close()) }()
+				g.metadataCache, g.cacheInitErr = store, nil
+			}
+			users, _ := g.enrichUsersWithProfileNames([]User{{Login: "alice"}, {Login: "bob"}}, 500, true)
+			assert.Equal(t, "Alice", users[0].Name)
+			assert.Empty(t, users[1].Name)
+			_, hit := g.cachedUserProfileName("bob")
+			assert.False(t, hit, "a failed name field must not become a resolved empty profile")
+			if persistent {
+				// A new invocation must also retry after sharing the successful disk entries.
+				g.profiles = newUserProfileMemo()
+			}
+			users, stats := g.enrichUsersWithProfileNames([]User{{Login: "alice"}, {Login: "bob"}}, 500, true)
+			assert.Equal(t, []User{{Login: "alice", Name: "Alice"}, {Login: "bob", Name: "Bob"}}, users)
+			assert.Equal(t, 1, stats.NetworkLookups)
+			assert.Equal(t, 2, calls)
+		})
+	}
+}
+
 func TestProfileMemoExpiry(t *testing.T) {
 	memo := newUserProfileMemo()
 	memo.set(User{Login: "alice", Name: "Old"}, -time.Second)

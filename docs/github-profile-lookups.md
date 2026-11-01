@@ -50,7 +50,9 @@ size, cached data, and overlap.
 
 GraphQL errors do not trigger an individual REST fallback. Unresolved users remain
 selectable by login, successful partial results are preserved, and failed requests
-are not cached as successfully resolved empty profiles. A request-wide failure
+are not cached as successfully resolved empty profiles. When a partial response
+contains errors, empty names remain retryable because a nullable name field may
+have failed; error-free empty names are still cached. A request-wide failure
 stops additional enrichment attempts on that client. Incomplete inventories are
 not written to the persistent candidate cache after enrichment errors, so a fresh
 invocation can retry without waiting for the inventory TTL to expire.

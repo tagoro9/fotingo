@@ -188,8 +188,14 @@ func (g *github) fetchUserProfileBatch(logins []string) (map[string]User, error)
 		if profile == nil || strings.TrimSpace(profile.Login) == "" {
 			continue
 		}
+		name := strings.TrimSpace(profile.Name)
+		// A nullable name may be empty because its resolver failed. Keep it retryable
+		// when the response contains errors, while retaining successful named profiles.
+		if name == "" && len(response.Errors) > 0 {
+			continue
+		}
 		// Cache by the requested login, also when GitHub returns its renamed canonical login.
-		profiles[normalizeMetadataLogin(login)] = User{Login: login, Name: strings.TrimSpace(profile.Name)}
+		profiles[normalizeMetadataLogin(login)] = User{Login: login, Name: name}
 	}
 	if len(profiles) == 0 && (len(response.Errors) > 0 || len(response.Data) == 0) {
 		return profiles, fmt.Errorf("GitHub profile-name query returned no usable data")
