@@ -1404,9 +1404,11 @@ func (g *git) GetCommitsSince(ref string) ([]Commit, error) {
 	}
 
 	var commits []Commit
+	reachedRef := false
 	err = commitIter.ForEach(func(c *object.Commit) error {
 		// Stop when we reach the reference commit
 		if c.Hash == *refHash {
+			reachedRef = true
 			return storer.ErrStop
 		}
 
@@ -1424,6 +1426,13 @@ func (g *git) GetCommitsSince(ref string) ([]Commit, error) {
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to iterate commits: %w", err)
+	}
+
+	// A ref that is not an ancestor of HEAD (e.g. a stale local copy of a
+	// force-pushed branch) is never reached, and the walk would return the
+	// whole history.
+	if !reachedRef {
+		return nil, fmt.Errorf("reference %s (%s) is not an ancestor of HEAD", ref, refHash)
 	}
 
 	return commits, nil

@@ -785,6 +785,34 @@ func (suite *GitTestSuite) TestFindClosestRepository_Subdirectory() {
 	assert.NotNil(suite.T(), repo)
 }
 
+func (suite *GitTestSuite) TestGetCommitsSince_RefNotAncestorOfHead() {
+	head, err := suite.repo.Head()
+	assert.NoError(suite.T(), err)
+
+	worktree, err := suite.repo.Worktree()
+	assert.NoError(suite.T(), err)
+
+	file, err := worktree.Filesystem.Create("diverged.txt")
+	assert.NoError(suite.T(), err)
+	_, err = file.Write([]byte("diverged"))
+	assert.NoError(suite.T(), err)
+	assert.NoError(suite.T(), file.Close())
+	_, err = worktree.Add("diverged.txt")
+	assert.NoError(suite.T(), err)
+	divergedHash, err := worktree.Commit("feat: diverged commit", &gogit.CommitOptions{
+		Author: &object.Signature{Name: "Test User", Email: "test@example.com", When: time.Now()},
+	})
+	assert.NoError(suite.T(), err)
+
+	// Move HEAD back so the diverged commit is no longer in its history.
+	assert.NoError(suite.T(), worktree.Reset(&gogit.ResetOptions{Commit: head.Hash(), Mode: gogit.HardReset}))
+
+	commits, err := suite.git.GetCommitsSince(divergedHash.String())
+	assert.Error(suite.T(), err)
+	assert.Contains(suite.T(), err.Error(), "is not an ancestor of HEAD")
+	assert.Nil(suite.T(), commits)
+}
+
 func (suite *GitTestSuite) TestGetCommitsSince_InvalidReference() {
 	_, err := suite.git.GetCommitsSince("refs/heads/nonexistent")
 	assert.Error(suite.T(), err)
